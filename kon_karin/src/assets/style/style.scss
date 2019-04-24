@@ -46,7 +46,7 @@ h1 {
   letter-spacing: .1em;
 }
 h2 {
-  margin-top: 1.5em;
+  margin-top: 1em;
   margin-bottom: 0.5em;
   text-align: left;
   font-size: 2.8rem;
@@ -54,33 +54,33 @@ h2 {
 }
 h3 {
   margin-top: 0.5em;
-  margin-bottom: 0.5em;
   text-align: left;
   font-size: 2.2rem;
 }
 p {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  margin-left: 1em;
+  margin: 0.5em;
 }
 a {
   color: $link;
   text-decoration: none;
 }
-
+@media (max-width: $pc) {
+  h2 {
+    margin-top: 0.5em;
+  }
+}
 /* app */
 #app {
   background-color: #f9f9f9;
-  height: 100vh;
+  height: 100%;
+  font-family: 'Lato','Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-overflow-scrolling: touch;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     display: none;
   }
-  // height: 100vh;
-  // position: fixed;
-  font-family: 'Lato','Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 /* header */
@@ -154,6 +154,11 @@ a {
   margin: 100px auto 0;
   text-align: center;
 }
+@media (max-width: $pc) {
+  .wrapper {
+    margin: 60px auto 0;
+  }
+}
 
 /* about*/
 .profile {
@@ -168,6 +173,14 @@ a {
 @media (max-width: $pc) {
   .profile{
     display: block;
+    width: 100%;
+    padding-left: 15px;
+    h3 {
+      font-size: 1.2em;
+    }
+    p {
+      font-size: 0.9em;
+    }
   }
 }
 
