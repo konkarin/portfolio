@@ -155,7 +155,7 @@ a {
   margin: 100px auto 0;
   text-align: center;
 }
-@media (max-width: $pc) {
+@media (max-width: $sp) {
   .wrapper {
     margin: 60px auto 0;
   }
@@ -255,4 +255,12 @@ a {
 /* font awesome */
 .fa-fw {
   margin: 10px;
+}
+
+/* imguploader */
+label {
+
+  input {
+    display: none;
+  }
 }
