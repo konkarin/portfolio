@@ -2,7 +2,7 @@
   <transition name="modal">
     <div class="modal-mask" @click="$emit('close')">
       <div class="modal-body">
-        <img :src="path" class="modal-img">
+        <img :src="thumbPath" class="modal-img">
         <!-- <div class="modal-img" :style="{ backgroundImage: `url(${path})` }"></div> -->
       </div>
     </div>
@@ -11,6 +11,6 @@
 
 <script>
 export default {
-  props: ["path"]
+  props: ["thumbPath"]
 };
 </script>

@@ -4,40 +4,52 @@
       <div
         class="photo-box"
         v-for="(photo, index) in myPhoto"
-        :key="photo.id"
+        :key="photo.fileName"
         :index="index"
-        @click="openModal(photo.path)"
+        @click="openModal(photo.url)"
         :style="{
           transitionDelay: `${index * 100}ms`
         }"
       >
-        <img class="thumb-box" :src="photo.thumb">
+        <img class="thumb-box" :src="photo.thumburl">
       </div>
     </transition-group>
-    <modal v-if="modal" :path="path" @close="closeModal"></modal>
+    <modal v-if="modal" :thumbPath="thumbPath" @close="closeModal"></modal>
   </div>
 </template>
 
 <script>
 import modal from "./parts/Modal";
-import myPhoto from "../assets/photo.json";
+import firebase from "../firebase.js"
+
 export default {
   components: { modal },
   data() {
     return {
-      myPhoto: myPhoto,
+      myPhoto: [],
       modal: false,
-      path: ""
+      thumbPath: ""
     };
   },
   methods: {
-    openModal(path) {
+    openModal(thumbPath) {
       this.modal = true;
-      this.path = path;
+      this.thumbPath = thumbPath;
     },
     closeModal() {
       this.modal = false;
     }
+  },
+  mounted() {
+    firebase.firestore().collection("images")
+      .get()
+      .then(snapshot => {
+        const array = [];
+        snapshot.forEach(doc => {
+          array.push(doc.data());
+        });
+        this.myPhoto = array;
+      });
   }
 };
 </script>
