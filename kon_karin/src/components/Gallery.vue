@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <h1>Gallery</h1>
     <transition-group appear name="fade" tag="div" class="gallery">
       <div
         class="photo-box"
@@ -14,7 +15,9 @@
         <img class="thumb-box" :src="photo.thumburl">
       </div>
     </transition-group>
-    <modal v-if="modal" :thumbPath="thumbPath" @close="closeModal"></modal>
+    <transition name="fade-modal">
+      <modal v-if="modal" :thumbPath="thumbPath" @close="closeModal"></modal>
+    </transition>
   </div>
 </template>
 

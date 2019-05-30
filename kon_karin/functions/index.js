@@ -14,14 +14,14 @@ exports.saveFileToDb = functions.storage.object().onFinalize(async (object) => {
 
   // Exit if this is triggered on a file that is not an image.
   if (!contentType.startsWith('image/')) {
-    console.log('This is not an image.');
+    console.log('This is not an image.'); // eslint-disable-line no-console
     return null;
   }
   // Get the file name.
   const fileName = path.basename(filePath);
   // Exit if the image is already a thumbnail.
   if (fileName.startsWith('thumb_')) {
-    console.log('Already a Thumbnail.');
+    console.log('Already a Thumbnail.'); // eslint-disable-line no-console
     return null;
   }
   // Download file from bucket.
@@ -31,10 +31,10 @@ exports.saveFileToDb = functions.storage.object().onFinalize(async (object) => {
     contentType: contentType,
   };
   await bucket.file(filePath).download({ destination: tempFilePath });
-  console.log('Image downloaded locally to', tempFilePath);
+  console.log('Image downloaded locally to', tempFilePath); // eslint-disable-line no-console
   // Generate a thumbnail using ImageMagick.
   await spawn('convert', [tempFilePath, '-thumbnail', '300x300>', tempFilePath]);
-  console.log('Thumbnail created at', tempFilePath);
+  console.log('Thumbnail created at', tempFilePath);  // eslint-disable-line no-console
   // We add a 'thumb_' prefix to thumbnails file name. That's where we'll upload the thumbnail.
   const thumbFileName = `thumb_${fileName}`;
   const thumbFilePath = path.join(path.dirname(filePath), thumbFileName);
@@ -53,7 +53,7 @@ exports.saveFileToDb = functions.storage.object().onFinalize(async (object) => {
     fileName,
     url: `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${encodeURIComponent(filePath)}?alt=media`,
     thumbFileName,
-    thumburl:`https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${encodeURIComponent(thumbFilePath)}?alt=media`,
+    thumburl: `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${encodeURIComponent(thumbFilePath)}?alt=media`,
     date,
   }).then(() => console.log('Done')); // eslint-disable-line no-console
 });
