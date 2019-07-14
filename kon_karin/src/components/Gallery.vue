@@ -12,7 +12,9 @@
           transitionDelay: `${index * 100}ms`
         }"
       >
-        <img class="thumb-box" :src="photo.thumburl">
+        <div class="thumb-box">
+          <img class="thumb-img" :src="photo.thumburl">
+        </div>
       </div>
     </transition-group>
     <transition name="fade-modal">
