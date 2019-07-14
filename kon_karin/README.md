@@ -1,3 +1,3 @@
 # kon_karin
 
-[https://konkarin-portfolio.firebaseapp.com/]
+https://konkarin-portfolio.firebaseapp.com/
