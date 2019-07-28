@@ -57,3 +57,23 @@ exports.saveFileToDb = functions.storage.object().onFinalize(async (object) => {
     date,
   }).then(() => console.log('Done')); // eslint-disable-line no-console
 });
+
+exports.deleteFileFromStorage = functions.firestore.document('images/{imageId}').onDelete((snap, context) => {
+  const bucketName = 'konkarin-portfolio.appspot.com';
+  const bucket = admin.storage().bucket(bucketName);
+  const deletedValue = snap.data().fileName;
+
+  bucket.file(deletedValue).delete().then(() => {
+    console.log(`gs://${bucketName}/${deletedValue} deleted.`); // eslint-disable-line no-console
+  })
+    .catch(err => {
+      console.error('ERROR:', err); // eslint-disable-line no-console
+    });
+
+  bucket.file(`thumb_${deletedValue}`).delete().then(() => {
+    console.log(`gs://${bucketName}/thumb_${deletedValue} deleted.`); // eslint-disable-line no-console
+  })
+    .catch(err => {
+      console.error('ERROR:', err); // eslint-disable-line no-console
+    });
+});
