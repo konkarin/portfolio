@@ -161,7 +161,8 @@ export default {
     },
     uploadFile () {
       const storageRef = firebase.storage().ref()
-      const uploadRef = storageRef.child(this.imageFile.name)
+      const currentDate = new Date().getTime().toString
+      const uploadRef = storageRef.child(this.imageFile.name + currentDate)
 
       uploadRef
         .put(this.imageFile)
