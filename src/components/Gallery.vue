@@ -1,60 +1,74 @@
 <template>
   <div class="wrapper">
     <h1>Gallery</h1>
-    <transition-group appear name="fade" tag="div" class="gallery">
+    <transition-group
+      appear
+      name="fade"
+      tag="div"
+      class="gallery"
+    >
       <div
-        class="photo-box"
-        v-for="(photo, index) in myPhoto"
+        v-for="(photo, index) in photoList"
         :key="photo.fileName"
+        class="photo-box"
         :index="index"
-        @click="openModal(photo.url)"
         :style="{
           transitionDelay: `${index * 100}ms`
         }"
+        @click="openModal(photo.url)"
       >
         <div class="thumb-box">
-          <img class="thumb-img" :src="photo.thumburl">
+          <img
+            class="thumb-img"
+            :src="photo.thumburl"
+          >
         </div>
       </div>
     </transition-group>
     <transition name="fade-modal">
-      <modal v-if="modal" :thumbPath="thumbPath" @close="closeModal"></modal>
+      <modal
+        v-if="showModal"
+        :thumb-path="thumbPath"
+        @close="closeModal"
+      />
     </transition>
   </div>
 </template>
 
 <script>
-import modal from "./parts/Modal";
-import firebase from "../firebase.js"
+import modal from './parts/Modal'
+import firebase from '../firebase.js'
 
 export default {
   components: { modal },
-  data() {
+  data () {
     return {
-      myPhoto: [],
-      modal: false,
-      thumbPath: ""
-    };
-  },
-  methods: {
-    openModal(thumbPath) {
-      this.modal = true;
-      this.thumbPath = thumbPath;
-    },
-    closeModal() {
-      this.modal = false;
+      photoList: [],
+      showModal: false,
+      thumbPath: ''
     }
   },
-  mounted() {
-    firebase.firestore().collection("images")
+  mounted () {
+    firebase
+      .firestore()
+      .collection('images')
       .get()
       .then(snapshot => {
-        const array = [];
+        const array = []
         snapshot.forEach(doc => {
-          array.push(doc.data());
-        });
-        this.myPhoto = array;
-      });
+          array.push(doc.data())
+        })
+        this.photoList = array
+      })
+  },
+  methods: {
+    openModal (thumbPath) {
+      this.showModal = true
+      this.thumbPath = thumbPath
+    },
+    closeModal () {
+      this.showModal = false
+    }
   }
-};
+}
 </script>
