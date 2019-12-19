@@ -5,7 +5,7 @@ import Gallery from './components/Gallery'
 import Contact from './components/Contact'
 import About from './components/About'
 import PageNotFound from './components/PageNotFound'
-import ImgUploader from './components/ImgUploader'
+import MyPage from './components/MyPage'
 
 Vue.use(Router)
 
@@ -40,9 +40,9 @@ export default new Router({
       title: 'Not Found'
     },
     {
-      path: '/imguploader',
-      name: 'ImgUploader',
-      component: ImgUploader
+      path: '/mypage',
+      name: 'MyPage',
+      component: MyPage
     }
   ]
 })
