@@ -17,6 +17,8 @@
         }"
         @click="openModal(photo.url)"
       >
+        <!-- ims.srcが404の時、Modalを非表示にしたい
+        @error="substituteSrc(index)" -->
         <div class="thumb-box">
           <img
             class="thumb-img"
@@ -28,7 +30,7 @@
     <transition name="fade-modal">
       <modal
         v-if="showModal"
-        :thumb-path="thumbPath"
+        :img-src="imgSrc"
         @close="closeModal"
       />
     </transition>
@@ -45,7 +47,7 @@ export default {
     return {
       photoList: [],
       showModal: false,
-      thumbPath: ''
+      imgSrc: ''
     }
   },
   mounted () {
@@ -62,13 +64,18 @@ export default {
       })
   },
   methods: {
-    openModal (thumbPath) {
+    openModal (url) {
+      // ims.srcが404の時、Modalを非表示にしたい
       this.showModal = true
-      this.thumbPath = thumbPath
+      this.imgSrc = url
     },
     closeModal () {
       this.showModal = false
     }
+    // ims.srcが404の時、Modalを非表示にしたい
+    // substituteSrc (index) {
+    //   this.photoList[index].thumburl = 'https://pbs.twimg.com/profile_images/1211962587442642944/iOxDr-Ba_400x400.jpg'
+    // }
   }
 }
 </script>

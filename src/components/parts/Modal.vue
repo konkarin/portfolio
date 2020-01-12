@@ -11,7 +11,7 @@
       <transition name="fade-modal">
         <div v-show="!isLoading">
           <img
-            :src="thumbPath"
+            :src="imgSrc"
             class="modal-img"
             @load="loaded"
           >
@@ -24,7 +24,7 @@
 <script>
 export default {
   props: {
-    thumbPath: {
+    imgSrc: {
       type: String,
       default: ''
     }
