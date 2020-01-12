@@ -1,5 +1,11 @@
 <template>
   <div class="wrapper">
+    <div
+      v-show="isUploading"
+      class="overlay"
+    >
+      <div class="loader" />
+    </div>
     <h1>MyPage</h1>
     <div class="auth-area">
       <div v-if="isAuth">
@@ -37,7 +43,7 @@
         <button
           class="upload-button"
           :disabled="file === null"
-          @click="uploadFile"
+          @click="uploadFile()"
         >
           <font-awesome-icon
             :icon="['fas', 'upload']"
@@ -90,6 +96,7 @@ export default {
   data () {
     return {
       isAuth: false,
+      isUploading: false,
       file: null,
       imageFile: null,
       exifInfo: null,
@@ -166,22 +173,22 @@ export default {
         type: fileType || 'image/jpg'
       })
     },
-    uploadFile () {
-      const storageRef = firebase.storage().ref()
+    async uploadFile () {
+      // ローディングを表示
+      this.isUploading = true
       const currentDate = new Date().getTime()
       // ファイル名に現在時刻を付与
-      const uploadRef = storageRef.child(`${currentDate}_${this.imageFile.name}`)
+      const storageRef = firebase.storage().ref().child(`${currentDate}_${this.imageFile.name}`)
 
-      uploadRef
+      await storageRef
         .put(this.imageFile)
-        .then(snapshot => {
+        .then(() => {
           alert('Uploaded successfully')
-          this.imageFile = null
-          this.$router.go({ name: 'MyPage' })
         })
         .catch(e => {
           alert('Error', e)
         })
+      this.$router.go({ name: 'MyPage' })
     },
     deleteImg () {
       if (this.selectValueList.length === 0) {
