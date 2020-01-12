@@ -1,11 +1,20 @@
 <template>
-  <div class="modal-mask" @click="$emit('close')">
+  <div
+    class="modal-mask"
+    @click="$emit('close')"
+  >
     <div class="modal-container">
-      <div v-show="isLoading" class="loader">
-      </div>
+      <div
+        v-show="isLoading"
+        class="loader"
+      />
       <transition name="fade-modal">
         <div v-show="!isLoading">
-          <img @load="loaded" :src="thumbPath" class="modal-img" />
+          <img
+            :src="imgSrc"
+            class="modal-img"
+            @load="loaded"
+          >
         </div>
       </transition>
     </div>
@@ -13,19 +22,22 @@
 </template>
 
 <script>
-
-
 export default {
-  props: ["thumbPath"],
-  data() {
+  props: {
+    imgSrc: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
     return {
       isLoading: true
     }
   },
   methods: {
-    loaded() {
+    loaded () {
       this.isLoading = !this.isLoading
     }
   }
-};
+}
 </script>
