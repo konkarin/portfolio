@@ -36,11 +36,13 @@
         </label>
         <button
           class="upload-button"
+          :disabled="file === null"
           @click="uploadFile"
         >
           <font-awesome-icon
             :icon="['fas', 'upload']"
-            class="fa-3x fa-fw fa-color fa-button"
+            class="fa-3x fa-fw  fa-button"
+            :class="{'fa-color' : file !== null}"
           />
         </button>
       </div>
@@ -48,7 +50,7 @@
       <h3>Gallery Editor</h3>
       <button
         class="flat-button edit-button"
-        @click="deleteImg(selectValueList)"
+        @click="deleteImg()"
       >
         Delete
       </button>
@@ -88,6 +90,7 @@ export default {
   data () {
     return {
       isAuth: false,
+      file: null,
       imageFile: null,
       exifInfo: null,
       photoList: [],
@@ -123,9 +126,13 @@ export default {
       firebase.auth().signOut()
     },
     resizeImg (e) {
-      const file = e.target.files[0]
+      this.file = e.target.files[0]
+      if (this.file === null) {
+        alert('Please select a file')
+        return
+      }
 
-      loadImage.parseMetaData(file, data => {
+      loadImage.parseMetaData(this.file, data => {
         const options = {
           maxWidth: 3840,
           maxHeight: 3840,
@@ -135,12 +142,12 @@ export default {
         console.log(this.exifInfo) // eslint-disable-line no-console
 
         loadImage(
-          file,
+          this.file,
           async canvas => {
-            const data = canvas.toDataURL(file.type)
-            const blob = this.base64ToBlob(data, file.type)
-            this.imageFile = new File([blob], file.name, {
-              type: file.type
+            const data = canvas.toDataURL(this.file.type)
+            const blob = this.base64ToBlob(data, this.file.type)
+            this.imageFile = new File([blob], this.file.name, {
+              type: this.file.type
             })
           },
           options
@@ -161,8 +168,9 @@ export default {
     },
     uploadFile () {
       const storageRef = firebase.storage().ref()
-      const currentDate = new Date().getTime().toString
-      const uploadRef = storageRef.child(this.imageFile.name + currentDate)
+      const currentDate = new Date().getTime()
+      // ファイル名に現在時刻を付与
+      const uploadRef = storageRef.child(`${currentDate}_${this.imageFile.name}`)
 
       uploadRef
         .put(this.imageFile)
@@ -175,14 +183,14 @@ export default {
           alert('Error', e)
         })
     },
-    deleteImg (selectValues) {
-      if (this.selectValues.length === 0) {
+    deleteImg () {
+      if (this.selectValueList.length === 0) {
         alert('Please select images')
         return
       }
       if (confirm('Remove your images?')) {
         const db = firebase.firestore().collection('images')
-        selectValues.forEach(value => {
+        this.selectValueList.forEach(value => {
           db.where('fileName', '==', value)
             .get()
             .then(snapshot => {
@@ -194,7 +202,7 @@ export default {
                   })
               })
               alert('Remove successfully')
-              this.selectValues = []
+              this.selectValueList = []
               this.$router.go({ name: 'MyPage' })
             })
             .catch(e => {
