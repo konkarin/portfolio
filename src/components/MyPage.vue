@@ -105,7 +105,7 @@ export default {
     }
   },
   watch: {
-    isAuth: function (val) {
+    isAuth (val) {
       if (val) {
         firebase
           .firestore()
@@ -188,6 +188,7 @@ export default {
         .catch(e => {
           alert('Error', e)
         })
+      // 画面更新
       this.$router.go({ name: 'MyPage' })
     },
     deleteImg () {
