@@ -56,7 +56,7 @@
       <h3>Gallery Editor</h3>
       <button
         class="flat-button edit-button"
-        @click="deleteImg()"
+        @click="deleteImgs()"
       >
         Delete
       </button>
@@ -191,32 +191,31 @@ export default {
       // 画面更新
       this.$router.go({ name: 'MyPage' })
     },
-    deleteImg () {
+    // 選択した画像のFirestoreドキュメントを削除する
+    async deleteImgs () {
+      // 画像が選択されてない場合アラートを表示
       if (this.selectValueList.length === 0) {
         alert('Please select images')
         return
       }
+      // 確認ダイアログを表示
       if (confirm('Remove your images?')) {
+        // 参照先を指定
         const db = firebase.firestore().collection('images')
-        this.selectValueList.forEach(value => {
-          db.where('fileName', '==', value)
-            .get()
-            .then(snapshot => {
-              snapshot.forEach(doc => {
-                db.doc(doc.id)
-                  .delete()
-                  .catch(e => {
-                    alert('Error', e)
-                  })
+
+        for (const item of this.selectValueList) {
+          // 選択した画像名と一致するドキュメントを取得
+          await db.where('fileName', '==', item).get().then(snapshot => {
+            snapshot.forEach(document => {
+              // ドキュメントを削除
+              db.doc(document.id).delete().catch(e => {
+                alert('Error', e)
               })
-              alert('Remove successfully')
-              this.selectValueList = []
-              this.$router.go({ name: 'MyPage' })
             })
-            .catch(e => {
-              alert('Error', e)
-            })
-        })
+          })
+        }
+        alert('Remove successfully')
+        this.$router.go({ name: 'MyPage' })
       }
     }
   }
