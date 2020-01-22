@@ -1,5 +1,11 @@
 <template>
   <div class="wrapper">
+    <div
+      v-show="isUploading"
+      class="overlay"
+    >
+      <div class="loader" />
+    </div>
     <h1>MyPage</h1>
     <div class="auth-area">
       <div v-if="isAuth">
@@ -36,11 +42,13 @@
         </label>
         <button
           class="upload-button"
-          @click="uploadFile"
+          :disabled="file === null"
+          @click="uploadFile()"
         >
           <font-awesome-icon
             :icon="['fas', 'upload']"
-            class="fa-3x fa-fw fa-color fa-button"
+            class="fa-3x fa-fw  fa-button"
+            :class="{'fa-color' : file !== null}"
           />
         </button>
       </div>
@@ -48,7 +56,7 @@
       <h3>Gallery Editor</h3>
       <button
         class="flat-button edit-button"
-        @click="deleteImg(selectValueList)"
+        @click="deleteImgs()"
       >
         Delete
       </button>
@@ -88,6 +96,8 @@ export default {
   data () {
     return {
       isAuth: false,
+      isUploading: false,
+      file: null,
       imageFile: null,
       exifInfo: null,
       photoList: [],
@@ -95,7 +105,7 @@ export default {
     }
   },
   watch: {
-    isAuth: function (val) {
+    isAuth (val) {
       if (val) {
         firebase
           .firestore()
@@ -123,9 +133,13 @@ export default {
       firebase.auth().signOut()
     },
     resizeImg (e) {
-      const file = e.target.files[0]
+      this.file = e.target.files[0]
+      if (this.file === null) {
+        alert('Please select a file')
+        return
+      }
 
-      loadImage.parseMetaData(file, data => {
+      loadImage.parseMetaData(this.file, data => {
         const options = {
           maxWidth: 3840,
           maxHeight: 3840,
@@ -135,12 +149,12 @@ export default {
         console.log(this.exifInfo) // eslint-disable-line no-console
 
         loadImage(
-          file,
+          this.file,
           async canvas => {
-            const data = canvas.toDataURL(file.type)
-            const blob = this.base64ToBlob(data, file.type)
-            this.imageFile = new File([blob], file.name, {
-              type: file.type
+            const data = canvas.toDataURL(this.file.type)
+            const blob = this.base64ToBlob(data, this.file.type)
+            this.imageFile = new File([blob], this.file.name, {
+              type: this.file.type
             })
           },
           options
@@ -159,48 +173,49 @@ export default {
         type: fileType || 'image/jpg'
       })
     },
-    uploadFile () {
-      const storageRef = firebase.storage().ref()
-      const currentDate = new Date().getTime().toString
-      const uploadRef = storageRef.child(this.imageFile.name + currentDate)
+    async uploadFile () {
+      // ローディングを表示
+      this.isUploading = true
+      const currentDate = new Date().getTime()
+      // ファイル名に現在時刻を付与
+      const storageRef = firebase.storage().ref().child(`${currentDate}_${this.imageFile.name}`)
 
-      uploadRef
+      await storageRef
         .put(this.imageFile)
-        .then(snapshot => {
+        .then(() => {
           alert('Uploaded successfully')
-          this.imageFile = null
-          this.$router.go({ name: 'MyPage' })
         })
         .catch(e => {
           alert('Error', e)
         })
+      // 画面更新
+      this.$router.go({ name: 'MyPage' })
     },
-    deleteImg (selectValues) {
-      if (this.selectValues.length === 0) {
+    // 選択した画像のFirestoreドキュメントを削除する
+    async deleteImgs () {
+      // 画像が選択されてない場合アラートを表示
+      if (this.selectValueList.length === 0) {
         alert('Please select images')
         return
       }
+      // 確認ダイアログを表示
       if (confirm('Remove your images?')) {
+        // 参照先を指定
         const db = firebase.firestore().collection('images')
-        selectValues.forEach(value => {
-          db.where('fileName', '==', value)
-            .get()
-            .then(snapshot => {
-              snapshot.forEach(doc => {
-                db.doc(doc.id)
-                  .delete()
-                  .catch(e => {
-                    alert('Error', e)
-                  })
+
+        for (const item of this.selectValueList) {
+          // 選択した画像名と一致するドキュメントを取得
+          await db.where('fileName', '==', item).get().then(snapshot => {
+            snapshot.forEach(document => {
+              // ドキュメントを削除
+              db.doc(document.id).delete().catch(e => {
+                alert('Error', e)
               })
-              alert('Remove successfully')
-              this.selectValues = []
-              this.$router.go({ name: 'MyPage' })
             })
-            .catch(e => {
-              alert('Error', e)
-            })
-        })
+          })
+        }
+        alert('Remove successfully')
+        this.$router.go({ name: 'MyPage' })
       }
     }
   }
