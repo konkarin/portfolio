@@ -95,7 +95,6 @@ import 'firebase/storage'
 import loadImage from 'blueimp-load-image'
 
 export default {
-  name: 'MyPage',
   data () {
     return {
       isAuth: false,
@@ -149,7 +148,7 @@ export default {
           canvas: true
         }
         this.exifInfo = data.exif.getAll()
-        console.log(this.exifInfo) // eslint-disable-line no-console
+        // console.log(this.exifInfo) // eslint-disable-line no-console
 
         loadImage(
           this.file,
