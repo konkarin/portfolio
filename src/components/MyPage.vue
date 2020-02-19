@@ -88,11 +88,13 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
+import 'firebase/storage'
 import loadImage from 'blueimp-load-image'
 
 export default {
-  name: 'MyPage',
   data () {
     return {
       isAuth: false,
@@ -146,7 +148,7 @@ export default {
           canvas: true
         }
         this.exifInfo = data.exif.getAll()
-        console.log(this.exifInfo) // eslint-disable-line no-console
+        // console.log(this.exifInfo) // eslint-disable-line no-console
 
         loadImage(
           this.file,
@@ -168,27 +170,25 @@ export default {
       for (let i = 0; i < bin.length; i++) {
         buffer[i] = bin.charCodeAt(i)
       }
-
       return new Blob([buffer.buffer], {
         type: fileType || 'image/jpg'
       })
     },
+    // 画像をアップロード
     async uploadFile () {
       // ローディングを表示
       this.isUploading = true
+      // 現在時刻を取得
       const currentDate = new Date().getTime()
-      // ファイル名に現在時刻を付与
+      // 保存するファイル名に現在時刻を指定
       const storageRef = firebase.storage().ref().child(`${currentDate}_${this.imageFile.name}`)
-
+      // ストレージに保存
       await storageRef
         .put(this.imageFile)
-        .then(() => {
-          alert('Uploaded successfully')
-        })
         .catch(e => {
           alert('Error', e)
         })
-      // 画面更新
+      alert('Uploaded successfully')
       this.$router.go({ name: 'MyPage' })
     },
     // 選択した画像のFirestoreドキュメントを削除する

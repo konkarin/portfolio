@@ -1,3 +1,3 @@
 <template>
-  <div class="home-image"/>
+  <div class="home-image" />
 </template>
