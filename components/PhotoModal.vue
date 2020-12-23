@@ -1,20 +1,10 @@
 <template>
-  <div
-    class="modal-mask"
-    @click="$emit('close')"
-  >
+  <div class="modal-mask" @click="$emit('close')">
     <div class="modal-container">
-      <div
-        v-show="isLoading"
-        class="loader"
-      />
+      <div v-show="isLoading" class="loader" />
       <transition name="fade-modal">
         <div v-show="!isLoading">
-          <img
-            :src="imgSrc"
-            class="modal-img"
-            @load="loaded"
-          >
+          <img :src="imgSrc" class="modal-img" @load="loaded" />
         </div>
       </transition>
     </div>
@@ -26,18 +16,18 @@ export default {
   props: {
     imgSrc: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
-  data () {
+  data() {
     return {
-      isLoading: true
+      isLoading: true,
     }
   },
   methods: {
-    loaded () {
+    loaded() {
       this.isLoading = !this.isLoading
-    }
-  }
+    },
+  },
 }
 </script>

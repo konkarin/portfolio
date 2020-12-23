@@ -1,5 +1,5 @@
 @charset 'utf-8';
-@import "_reset.css";
+@import "@/assets/css/_reset.css";
 @import url("https://fonts.googleapis.com/css?family=Poiret+One");
 
 /* Variables */
@@ -46,14 +46,18 @@ h2 {
   letter-spacing: 0.3em;
 }
 h3 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
   text-align: left;
   font-size: 2.2rem;
-  margin: 1rem 2rem;
+  margin-top: 1rem ;
+  margin-bottom: 1rem;
+  margin-right: 2rem;
+  margin-left: 2rem;
 }
 p {
-  margin: 1rem 4rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-left: 4rem;
+  margin-right: 4rem;
 }
 a {
   color: $link;
@@ -67,6 +71,7 @@ a {
     margin-top: 0.5em;
   }
 }
+
 /* app */
 #app {
   background-color: #f9f9f9;
@@ -90,7 +95,7 @@ a {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 9999;
+  z-index: 99;
   background-color: #fff;
 }
 .header-nav {
@@ -141,27 +146,27 @@ a {
     }
   }
 }
-.router-link-exact-active {
+.NuxtLink-exact-active {
   background-color: rgb(240, 240, 240);
 }
 
 /* home */
 .home-image {
-  background-image: url("../HomeImg.jpg");
+  background-image: url('~assets/images/HomeImg.jpg');
   background-size: cover;
   background-position: 50%;
   height: 100vh;
 }
 
 /* transition */
-.fade-enter-active {
+.page-enter-active {
   transition: opacity 0.5s ease-in;
 }
-.fade-leave-active {
+.page-leave-active {
   transition: opacity 0.1s ease-out;
 }
-.fade-enter,
-.fade-leave-to {
+.page-enter,
+.page-leave-to {
   opacity: 0;
 }
 
@@ -178,7 +183,7 @@ a {
   }
 }
 
-/* about*/
+/* about */
 .profile {
   display: inline-block;
   vertical-align: top;
@@ -246,7 +251,7 @@ a {
 .modal-mask {
   display: block;
   position: fixed;
-  z-index: 9998;
+  z-index: 998;
   top: 0;
   bottom: 0;
   left: 0;
@@ -282,6 +287,7 @@ a {
   border: 10px solid #fff;
   border-right-color: transparent;
   animation: spin 1s linear infinite;
+  z-index: 999;
 }
 @keyframes spin {
   0% {
@@ -312,15 +318,14 @@ a {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 9999;
+  z-index: 999;
   height: 100%;
   width: 100%;
   background: rgba(65, 65, 65, 0.8);
   justify-content: center;
-  width: 100%;
-  height: 100%;
   align-items: center;
 }
+
 .auth-area {
   margin-top: 1em;
 }
@@ -339,8 +344,8 @@ a {
     color: #fff;
   }
 }
-.sign-in {
-}
+// .sign-in {
+// }
 .sign-out {
   display: block;
   margin: 0 0 0 auto;
