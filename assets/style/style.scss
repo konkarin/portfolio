@@ -1,5 +1,5 @@
 @charset 'utf-8';
-@import "@/assets/css/_reset.css";
+@import "@/assets/style/_reset.css";
 @import url("https://fonts.googleapis.com/css?family=Poiret+One");
 
 /* Variables */
@@ -343,6 +343,12 @@ a {
     background: $link;
     color: #fff;
   }
+  &:disabled {
+    cursor: default;
+    color: #cbcbcb;
+    border-color: #cbcbcb;
+    background-color: #f9f9f9;
+  }
 }
 // .sign-in {
 // }
@@ -360,14 +366,10 @@ a {
     display: none;
   }
 }
-.upload-button {
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  appearance: none;
-  &:disabled {
-    cursor: default;
+.btn {
+  color: $link;
+  &--large {
+    font-size: 3em;
   }
 }
 .img-checkbox {

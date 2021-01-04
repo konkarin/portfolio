@@ -1,19 +1,42 @@
 export default {
-  ssr: false,
-
   target: 'static',
-
   head: {
-    title: 'portfolio-nuxt-ts',
+    titleTemplate: "%s - kon_karin's portfolio",
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: "kon_karin's portfolio",
+      },
+      {
+        hid: 'og:site_name',
+        property: 'og:site_name',
+        content: "kon_karin's portfolio",
+      },
+      { hid: 'og:type', property: 'og:type', content: 'website' },
+      {
+        hid: 'og:url',
+        property: 'og:url',
+        content: 'https://konkarin-portfolio.firebaseapp.com/',
+      },
+      {
+        hid: 'og:description',
+        property: 'og:description',
+        content: 'kon_karinのポートフォリオサイト',
+      },
+      {
+        hid: 'og:image',
+        property: 'og:image',
+        content:
+          'https://konkarin-portfolio.firebaseapp.com/img/HomeImg.97109707.jpg',
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  css: ['@/assets/css/style.scss'],
+  css: ['@/assets/style/style.scss'],
 
   plugins: [],
 
@@ -28,6 +51,7 @@ export default {
   ],
 
   build: {
+    // npm run build -aでAnalyze結果を出力
     // analyze: {
     //   analyzerMode: 'static',
     // },
@@ -47,22 +71,13 @@ export default {
     },
   },
   router: {
-    // // 共通のmiddlewareの実行
-    // middleware: ['auth', 'preview', 'notification'],
-    // // /loginを/にリダイレクト
-    // extendRoutes(routes) {
-    //   routes.push({
-    //     path: '/login',
-    //     redirect: '/',
-    //   })
-    // },
+    extendRoutes(routes) {
+      routes.push({
+        path: '*',
+        redirect: '/',
+      })
+    },
   },
   // プログレスバーの非表示
   loading: false,
-  // stagingはdevtoolを有効化
-  // vue: {
-  //   config: {
-  //     devtools: process.env.APP_ENV !== 'production',
-  //   },
-  // },
 }
