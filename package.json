@@ -16,6 +16,7 @@
     "@nuxt/typescript-runtime": "^2.0.0",
     "blueimp-load-image": "^5.14.0",
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.2",
     "firebase": "^8.2.1",
     "nuxt": "^2.14.6"
   },

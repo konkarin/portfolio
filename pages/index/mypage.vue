@@ -26,14 +26,18 @@ import firebase from '@/plugins/firebase'
 export default Vue.extend({
   data() {
     return {
-      isAuth: false,
       isLoading: true,
       isUploading: false,
     }
   },
+  computed: {
+    isAuth() {
+      return this.$store.state.isAuth
+    },
+  },
   created() {
     firebase.auth().onAuthStateChanged(async (user) => {
-      this.isAuth = !!user
+      this.$store.commit('updateAuth', !!user)
       this.isLoading = false
 
       if (this.isAuth) {
