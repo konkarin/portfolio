@@ -13,7 +13,12 @@ const firebaseConfig = {
   appId: '1:479537245330:web:0bc8bd2dffad3b63',
 }
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig)
+
+// Initialize Firebase
+// NOTE: SSGだとこれいれないと複数回初期化されるっぽい
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig)
+}
 
 // firebase.firestore().settings({ timestampsInSnapshots: true })
 
