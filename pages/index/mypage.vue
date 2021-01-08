@@ -19,39 +19,40 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import firebase from '@/plugins/firebase'
 
+type Data = {
+  isLoading: boolean
+  isUploading: boolean
+}
+
 export default Vue.extend({
-  data() {
+  data(): Data {
     return {
       isLoading: true,
       isUploading: false,
     }
   },
   computed: {
-    isAuth() {
+    isAuth(): boolean {
       return this.$store.state.isAuth
     },
   },
-  created() {
-    firebase.auth().onAuthStateChanged(async (user) => {
+  created(): void {
+    firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit('updateAuth', !!user)
       this.isLoading = false
-
-      if (this.isAuth) {
-        await this.getImages()
-      }
     })
   },
   methods: {
-    signIn() {
+    signIn(): void {
       const provider = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(provider)
     },
 
-    async signOut() {
+    async signOut(): Promise<void> {
       this.isLoading = true
       await firebase.auth().signOut()
       this.isLoading = false

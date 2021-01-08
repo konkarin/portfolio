@@ -1,19 +1,14 @@
 <template>
-  <div v-if="isAuth">
+  <div>
     <ImgUploader />
     <GalleryEditor />
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
-  computed: {
-    isAuth() {
-      return this.$store.state.isAuth
-    },
-  },
   head() {
     return {
       title: 'GalleryEdit',

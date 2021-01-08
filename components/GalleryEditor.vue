@@ -32,8 +32,8 @@ import Vue from 'vue'
 import firebase from '@/plugins/firebase'
 
 type Data = {
-  photoList: Object[]
-  selectValueList: Object[]
+  photoList: object[]
+  selectValueList: object[]
 }
 
 export default Vue.extend({
@@ -43,17 +43,21 @@ export default Vue.extend({
       selectValueList: [],
     }
   },
-  async created() {
+  async created(): Promise<void> {
     await this.getImages()
   },
   methods: {
-    async getImages() {
+    /**
+     *
+     */
+    async getImages(): Promise<void> {
       const snapshot = await firebase.firestore().collection('images').get()
 
       this.photoList = snapshot.docs.map((doc) => doc.data())
     },
+
     // 選択した画像のFirestoreドキュメントを削除する
-    deleteImgs() {
+    deleteImgs(): void {
       // 画像が選択されてない場合アラートを表示
       if (this.selectValueList.length === 0) {
         alert('Please select images')

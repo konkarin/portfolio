@@ -6,7 +6,6 @@
         v-for="(photo, index) in photoList"
         :key="photo.fileName"
         class="photo-box"
-        :index="index"
         :style="{
           transitionDelay: `${index * 100}ms`,
         }"
@@ -25,37 +24,41 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 
 import firebase from '@/plugins/firebase'
-import PhotoModal from '@/components/PhotoModal'
+
+type Data = {
+  photoList: object[]
+  showModal: boolean
+  imgSrc: string
+}
 
 export default Vue.extend({
   transition: 'page',
-  components: { PhotoModal },
-  data() {
+  data(): Data {
     return {
       photoList: [],
       showModal: false,
       imgSrc: '',
     }
   },
-  mounted() {
+  mounted(): void {
     this.getImages()
   },
   methods: {
-    async getImages() {
+    async getImages(): Promise<void> {
       const snapshot = await firebase.firestore().collection('images').get()
 
       this.photoList = snapshot.docs.map((doc) => doc.data())
     },
-    openModal(url) {
+    openModal(url: string): void {
       // ims.srcが404の時、Modalを非表示にしたい
       this.showModal = true
       this.imgSrc = url
     },
-    closeModal() {
+    closeModal(): void {
       this.showModal = false
     },
     // ims.srcが404の時、Modalを非表示にしたい

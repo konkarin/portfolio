@@ -23,8 +23,12 @@ import firebase from '@/plugins/firebase'
 import { getUnixMS } from '@/utils/day'
 
 type Data = {
-  isUploading: Boolean
+  isUploading: boolean
   file: any
+}
+
+interface HTMLInputEvent extends Event {
+  target: HTMLInputElement & EventTarget
 }
 
 export default Vue.extend({
@@ -35,13 +39,15 @@ export default Vue.extend({
     }
   },
   methods: {
-    setFile(e: any) {
-      this.file = e.target.files[0]
+    // TODO: 後で調べる
+    setFile(e: HTMLInputEvent) {
+      this.file = e.target.files![0]
 
       if (this.file === null) {
         alert('Please select a file')
       }
     },
+
     // 画像をアップロード
     async uploadFile(): Promise<void> {
       // ローディングを表示
@@ -50,7 +56,7 @@ export default Vue.extend({
       const currentDate: number = getUnixMS()
 
       // 保存するファイル名に現在時刻を指定
-      const storageRef = firebase
+      const storageRef: firebase.storage.Reference = firebase
         .storage()
         .ref()
         .child(`${currentDate}_${this.file.name}`)
