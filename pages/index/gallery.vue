@@ -4,7 +4,7 @@
     <div v-if="isGettingImg" class="overlay">
       <div class="loader" />
     </div>
-    <transition-group v-else appear name="page" tag="div" class="gallery">
+    <transition-group v-else appear name="gallery" tag="div" class="gallery">
       <div
         v-for="(photo, index) in photoList"
         :key="photo.fileName"

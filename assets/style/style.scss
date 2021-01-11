@@ -219,6 +219,12 @@ a {
   flex-direction: row;
   justify-content: center;
 }
+.gallery-enter-active {
+  transition: opacity 0.5s ease-in;
+}
+.gallery-enter {
+  opacity: 0;
+}
 .photo-box {
   box-sizing: border-box;
   top: 0;
