@@ -5,6 +5,7 @@
       <div class="loader" />
     </div>
     <transition-group v-else appear name="gallery" tag="div" class="gallery">
+      <!-- TODO: 最初の数枚をプリロードする -->
       <div
         v-for="(photo, index) in photoList"
         :key="photo.fileName"
@@ -28,10 +29,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-import firebase from '@/plugins/firebase'
-
 type Data = {
-  photoList: object[]
   showModal: boolean
   imgSrc: string
   isGettingImg: boolean
@@ -41,24 +39,21 @@ export default Vue.extend({
   transition: 'page',
   data(): Data {
     return {
-      photoList: [],
       showModal: false,
       imgSrc: '',
       isGettingImg: false,
     }
   },
-  async mounted(): Promise<void> {
+  computed: {
+    photoList() {
+      return this.$store.state.imgList
+    },
+  },
+  mounted(): void {
     this.isGettingImg = true
-    await this.getImages()
     this.isGettingImg = false
   },
   methods: {
-    async getImages(): Promise<void> {
-      const snapshot = await firebase.firestore().collection('images').get()
-
-      this.photoList = snapshot.docs.map((doc) => doc.data())
-    },
-
     openModal(url: string): void {
       // ims.srcが404の時、Modalを非表示にしたい
       this.showModal = true

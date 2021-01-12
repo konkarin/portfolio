@@ -14,5 +14,8 @@ export default Vue.extend({
   components: {
     HeaderNav,
   },
+  created() {
+    this.$store.dispatch('getImgList')
+  },
 })
 </script>
