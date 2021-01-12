@@ -15,6 +15,15 @@
     "noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
+
+    // 頑張らないTSの設定
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "strictBindCallApply": false,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": false,
+
     "paths": {
       "~/*": [
         "./*"
