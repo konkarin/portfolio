@@ -1,30 +1,20 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "es6": true
-    },
-    "extends": [
-        // JavaScript Standard Styleの適用
-        "standard",
-        // Vue公式スタイルガイド
-        // 優先度Aのみ
-        // "plugin:vue/essential"
-        // 優先度A、B
-        // "plugin:vue/strongly-recommended"
-        // 優先度A～C
-        "plugin:vue/recommended"
-    ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "vue"
-    ],
-    "rules": {
-    }
-};
+  root: true,
+  env: {
+    browser: true,
+    node: true,
+  },
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
+  },
+  extends: [
+    '@nuxtjs/eslint-config-typescript',
+    'prettier',
+    'prettier/vue',
+    'plugin:prettier/recommended',
+    'plugin:nuxt/recommended',
+  ],
+  plugins: ['prettier'],
+  // add your custom rules here
+  rules: {},
+}
