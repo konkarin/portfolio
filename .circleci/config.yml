@@ -13,7 +13,7 @@ jobs:
           command: npm run generate
       - run:
           name: deploy to Firebase Hosting
-          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --project=$FIREBASE_PJ
+          command: firebase deploy --token=$FIREBASE_TOKEN --project=$FIREBASE_PJ
 
 workflows:
   version: 2
