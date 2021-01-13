@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <h1>Gallery</h1>
-    <div v-if="isGettingImg" class="overlay">
+    <div v-if="isLoadingImg" class="overlay">
       <div class="loader" />
     </div>
     <transition-group v-else appear name="gallery" tag="div" class="gallery">
@@ -10,7 +10,7 @@
         v-for="(photo, index) in photoList"
         :key="photo.fileName"
         class="photo-box"
-        :style="{ transitionDelay: `${index * 100}ms` }"
+        :style="{ transitionDelay: `${index * 100 + 100}ms` }"
         @click="openModal(photo.url)"
       >
         <!-- ims.srcが404の時、Modalを非表示にしたい
@@ -32,7 +32,6 @@ import Vue from 'vue'
 type Data = {
   showModal: boolean
   imgSrc: string
-  isGettingImg: boolean
 }
 
 export default Vue.extend({
@@ -41,17 +40,15 @@ export default Vue.extend({
     return {
       showModal: false,
       imgSrc: '',
-      isGettingImg: false,
     }
   },
   computed: {
     photoList() {
       return this.$store.state.imgList
     },
-  },
-  mounted(): void {
-    this.isGettingImg = true
-    this.isGettingImg = false
+    isLoadingImg() {
+      return this.$store.state.isLoadingImg
+    },
   },
   methods: {
     openModal(url: string): void {
