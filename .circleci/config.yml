@@ -13,6 +13,7 @@ jobs:
           command: npm run generate
       - run:
           name: deploy to Firebase Hosting
+          # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --project=$FIREBASE_PJ
 
 workflows:
