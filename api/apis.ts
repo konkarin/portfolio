@@ -1,11 +1,11 @@
 import firebase from '@/plugins/firebase'
 
-export type imgList = firebase.firestore.DocumentData[]
+export type DocumentData = firebase.firestore.DocumentData[]
 
 /**
  * firestoreから取得した画像をロードする
  */
-export const preloadImgList = async () => {
+export const loadImgList = async () => {
   const snapshot = await firebase.firestore().collection('images').get()
 
   const imgList = snapshot.docs.map((doc) => doc.data())

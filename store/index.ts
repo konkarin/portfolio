@@ -1,8 +1,8 @@
-import { preloadImgList, imgList } from '@/api/apis'
+import { loadImgList, DocumentData } from '@/api/apis'
 
 type State = {
   isAuth: boolean
-  imgList: imgList
+  imgList: DocumentData
   isLoadingImg: boolean
 }
 
@@ -17,7 +17,7 @@ export const mutations = {
     state.isAuth = payload
   },
 
-  setImgList(state: State, payload: imgList): void {
+  setImgList(state: State, payload: DocumentData): void {
     state.imgList = payload
   },
 
@@ -28,9 +28,9 @@ export const mutations = {
 
 export const actions = {
   async getImgList({ commit }): Promise<void> {
-    const imgs = await preloadImgList()
+    const loadedImgList = await loadImgList()
 
-    commit('setImgList', imgs)
+    commit('setImgList', loadedImgList)
     commit('updateLoadingImg')
   },
 }
