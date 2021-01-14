@@ -4,15 +4,14 @@ import 'firebase/firestore'
 import 'firebase/storage'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAG4zByFes5G0FAozQ9qpjrpLTLOdZTAqI',
-  authDomain: 'konkarin-portfolio.firebaseapp.com',
-  databaseURL: 'https://konkarin-portfolio.firebaseio.com',
-  projectId: 'konkarin-portfolio',
-  storageBucket: 'konkarin-portfolio.appspot.com',
-  messagingSenderId: '479537245330',
-  appId: '1:479537245330:web:0bc8bd2dffad3b63',
+  apiKey: 'AIzaSyAt8ffI7KUuvEaRE1QW9KusqxyX7aTIqoo',
+  authDomain: 'portfolio-4edf5.firebaseapp.com',
+  projectId: 'portfolio-4edf5',
+  storageBucket: 'portfolio-4edf5.appspot.com',
+  messagingSenderId: '650799587992',
+  appId: '1:650799587992:web:6d9782f875a691b924a6ed',
+  measurementId: 'G-T5WYPMSG80',
 }
-// Initialize Firebase
 
 // Initialize Firebase
 // NOTE: SSGだとこれいれないと複数回初期化されるっぽい
