@@ -55,6 +55,14 @@ export default {
     // analyze: {
     //   analyzerMode: 'static',
     // },
+    terser: {
+      terserOptions: {
+        // console.x を production時に削除
+        compress: {
+          drop_console: process.env.NODE_ENV === 'production',
+        },
+      },
+    },
     extend(config, ctx) {
       // npm run dev時に自動fix
       if (ctx.isDev && ctx.isClient) {
