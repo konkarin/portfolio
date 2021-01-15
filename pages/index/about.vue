@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="profile">
+      <!-- TODO: markedで編集できるようにする -->
       <h1>
         About
         <a href="https://twitter.com/k0n_karin" target="_blank">こんかりん</a>
