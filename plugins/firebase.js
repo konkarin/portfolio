@@ -4,13 +4,13 @@ import 'firebase/firestore'
 import 'firebase/storage'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAt8ffI7KUuvEaRE1QW9KusqxyX7aTIqoo',
-  authDomain: 'portfolio-4edf5.firebaseapp.com',
-  projectId: 'portfolio-4edf5',
-  storageBucket: 'portfolio-4edf5.appspot.com',
-  messagingSenderId: '650799587992',
-  appId: '1:650799587992:web:6d9782f875a691b924a6ed',
-  measurementId: 'G-T5WYPMSG80',
+  apiKey: 'AIzaSyAeEviiI6BRwheQrmiXpBeztb_XcUdZw8E',
+  authDomain: 'konkarin-photo.firebaseapp.com',
+  projectId: 'konkarin-photo',
+  storageBucket: 'konkarin-photo.appspot.com',
+  messagingSenderId: '631852417771',
+  appId: '1:631852417771:web:46ff2edb9660c9906534ae',
+  measurementId: 'G-YGDY0HJSYV',
 }
 
 // Initialize Firebase
