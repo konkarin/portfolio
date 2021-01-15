@@ -1,9 +1,14 @@
-import * as functions from 'firebase-functions';
+const functions = require('firebase-functions')
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const saveFileToDb = require('saveFileToDb')
+const deleteFileFromStorage = require('deleteFileFromStorage')
+
+exports.saveFileToDb = functions.storage.object().onFinalize(async (object) => {
+  await saveFileToDb(object)
+})
+
+exports.deleteFileFromStorage = functions.firestore
+  .document('images/{imageId}')
+  .onDelete((snap) => {
+    deleteFileFromStorage(snap)
+  })
