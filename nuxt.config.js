@@ -1,5 +1,6 @@
 export default {
   target: 'static',
+  srcDir: 'app',
   head: {
     titleTemplate: "%s - kon_karin's portfolio",
     meta: [
