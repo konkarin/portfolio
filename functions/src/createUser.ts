@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin'
+export type UserRecord = admin.auth.UserRecord
 
-export const createUser = async (user: admin.auth.UserRecord) => {
+export const createUser = async (user: UserRecord) => {
   const data = {
     name: user.displayName,
     email: user.email,
