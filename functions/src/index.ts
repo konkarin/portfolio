@@ -13,7 +13,7 @@ exports.saveFileToDb = functions.storage.object().onFinalize((object) => {
 })
 
 exports.deleteFileFromStorage = functions.firestore
-  .document('images/{imageId}')
+  .document('/users/{uid}/images/{imageId}')
   .onDelete((snap) => deleteFileFromStorage(snap))
 
 exports.createUser = functions.auth.user().onCreate((user) => createUser(user))

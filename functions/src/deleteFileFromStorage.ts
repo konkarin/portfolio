@@ -1,32 +1,25 @@
-const functions = require('firebase-functions')
-const admin = require('firebase-admin')
-admin.initializeApp(functions.config().firebase)
+import * as path from 'path'
+import * as admin from 'firebase-admin'
+import * as functions from 'firebase-functions'
 
-export const deleteFileFromStorage = (snap) => {
-  // TODO:バケット確認
+export type QueryDocumentSnapshot = functions.firestore.QueryDocumentSnapshot
+
+export const deleteFileFromStorage = async (snap: QueryDocumentSnapshot) => {
   const bucketName = 'konkarin-photo.appspot.com'
   const bucket = admin.storage().bucket(bucketName)
-  const deletedValue = snap.data().fileName
+  // /users/{uid}/images/{imageId}/original/hoge.jpg
+  const deletedPath = snap.data().originalFilePath
 
-  bucket
-    .file(deletedValue)
-    .delete()
-    .then(() => {
-      console.log(`gs://${bucketName}/${deletedValue} deleted.`)
-    })
-    .catch((err) => {
-      console.error('ERROR:', err)
-    })
+  // /users/{uid}/images/{imageId}
+  const target = path.join(path.dirname(deletedPath), '../')
 
-  bucket
-    .file(`thumb_${deletedValue}`)
-    .delete()
-    .then(() => {
-      console.log(`gs://${bucketName}/thumb_${deletedValue} deleted.`)
-    })
-    .catch((err) => {
-      console.error('ERROR:', err)
-    })
+  try {
+    // NOTE: bucket.file(target).delete()だとディレクトリは消せない
+    await bucket.deleteFiles({ prefix: target })
+    console.log('Delete Completed: ', target)
+  } catch (e) {
+    console.error(e)
+  }
 
-  console.log('Delete Completed')
+  return null
 }
