@@ -6,7 +6,11 @@ export type DocumentData = firebase.firestore.DocumentData[]
  * firestoreから取得した画像をロードする
  */
 export const loadImgList = async () => {
-  const snapshot = await firebase.firestore().collection('images').get()
+  const collectionRef = firebase
+    .firestore()
+    .collection(`/users/y6VxBfC6TPPWTRvV5siYr1wzfBx2/images`)
+
+  const snapshot = await collectionRef.get()
 
   const imgList = snapshot.docs.map((doc) => doc.data())
   const urls: string[] = imgList.map((img) => img.thumburl)
