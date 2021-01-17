@@ -10,3 +10,11 @@ typings/
 
 # Node.js dependency directory
 node_modules/
+
+libs/
+
+# nodenvのバージョン指定
+.node-version
+
+# log
+*.log
