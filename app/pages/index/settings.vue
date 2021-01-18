@@ -29,6 +29,7 @@ type Data = {
 }
 
 export default Vue.extend({
+  name: 'Settings',
   data(): Data {
     return {
       isLoading: true,
@@ -43,6 +44,7 @@ export default Vue.extend({
   created(): void {
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit('updateAuth', !!user)
+      this.$store.commit('updateUser', { uid: user.uid })
       this.isLoading = false
     })
   },

@@ -5,6 +5,7 @@
       Delete
     </button>
     <div class="gallery">
+      <div v-if="photoList.length === 0">No Photos</div>
       <div
         v-for="(photo, index) in photoList"
         :key="photo.fileName"
@@ -19,7 +20,7 @@
             :value="photo.fileName"
           />
           <div class="thumb-box">
-            <img class="select-img" :src="photo.thumburl" />
+            <img class="select-img" :src="photo.thumbUrl" />
           </div>
         </label>
       </div>
@@ -32,9 +33,10 @@ import Vue from 'vue'
 import firebase from '@/plugins/firebase'
 
 type Data = {
-  photoList: object[]
-  selectValueList: object[]
+  photoList: firebase.firestore.DocumentData[]
+  selectValueList: string[]
 }
+type User = firebase.User
 
 export default Vue.extend({
   data(): Data {
@@ -43,17 +45,32 @@ export default Vue.extend({
       selectValueList: [],
     }
   },
-  async created(): Promise<void> {
-    await this.getImages()
+  computed: {
+    user(): User {
+      return this.$store.state.user
+    },
+  },
+  watch: {
+    user(user: User) {
+      if (user != null) this.setImgs()
+    },
+  },
+  mounted() {
+    if (this.user) this.setImgs()
   },
   methods: {
-    /**
-     *
-     */
-    async getImages(): Promise<void> {
-      const snapshot = await firebase.firestore().collection('images').get()
+    async setImgs(): Promise<void> {
+      const collectionRef = firebase
+        .firestore()
+        .collection(`users/${this.user.uid}/images`)
 
-      this.photoList = snapshot.docs.map((doc) => doc.data())
+      try {
+        const snapshot = await collectionRef.get()
+
+        this.photoList = snapshot.docs.map((doc) => doc.data())
+      } catch (e) {
+        console.error(e)
+      }
     },
 
     // 選択した画像のFirestoreドキュメントを削除する
@@ -75,8 +92,6 @@ export default Vue.extend({
             .get()
             .then((snapshot) => {
               snapshot.forEach((document) => {
-                // ドキュメントを削除
-                // TODO: クライアントで消すべきじゃないかも
                 db.doc(document.id)
                   .delete()
                   .catch((e) => {

@@ -8,15 +8,15 @@
       <!-- TODO: 最初の数枚をプリロードする -->
       <div
         v-for="(photo, index) in photoList"
-        :key="photo.fileName"
+        :key="photo.originalFileName"
         class="photo-box"
         :style="{ transitionDelay: `${index * 100 + 100}ms` }"
-        @click="openModal(photo.url)"
+        @click="openModal(photo.originalUrl)"
       >
         <!-- ims.srcが404の時、Modalを非表示にしたい
         @error="substituteSrc(index)" -->
         <div class="thumb-box">
-          <img class="thumb-img" :src="photo.thumburl" />
+          <img class="thumb-img" :src="photo.thumbUrl" />
         </div>
       </div>
     </transition-group>

@@ -13,7 +13,7 @@ export const loadImgList = async () => {
   const snapshot = await collectionRef.get()
 
   const imgList = snapshot.docs.map((doc) => doc.data())
-  const urls: string[] = imgList.map((img) => img.thumburl)
+  const urls: string[] = imgList.map((img) => img.thumbUrl)
 
   for (const url of urls) {
     const img = new Image()

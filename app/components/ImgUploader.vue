@@ -4,7 +4,7 @@
     <div>
       <label class="input-item">
         <Photo class="btn btn--large" />
-        <input type="file" accept=".jpeg, .jpg, .png" @change="setFile(e)" />
+        <input type="file" accept=".jpeg, .jpg, .png" @change="setFile" />
       </label>
       <button
         class="flat-button upload-button"
@@ -20,7 +20,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import firebase from '@/plugins/firebase'
-import { getUnixMS } from '@/utils/day'
+import { v4 as uuidv4 } from 'uuid'
+
+type User = firebase.User
 
 type Data = {
   isUploading: boolean
@@ -38,10 +40,15 @@ export default Vue.extend({
       file: null,
     }
   },
+  computed: {
+    user(): User {
+      return this.$store.state.user
+    },
+  },
   methods: {
     // TODO: 後で調べる
     setFile(e: HTMLInputEvent) {
-      this.file = e.target.files![0]
+      this.file = e.target.files[0]
 
       if (this.file === null) {
         alert('Please select a file')
@@ -52,14 +59,13 @@ export default Vue.extend({
     async uploadFile(): Promise<void> {
       // ローディングを表示
       this.isUploading = true
-      // 現在時刻を取得
-      const currentDate: number = getUnixMS()
+
+      const target = `users/${this.user.uid}/${uuidv4()}/original/${
+        this.file.name
+      }`
 
       // 保存するファイル名に現在時刻を指定
-      const storageRef: firebase.storage.Reference = firebase
-        .storage()
-        .ref()
-        .child(`${currentDate}_${this.file.name}`)
+      const storageRef = firebase.storage().ref().child(target)
 
       // ストレージに保存
       try {
@@ -70,7 +76,7 @@ export default Vue.extend({
         // this.getImages()
       } catch (e) {
         alert(e)
-        this.$router.go({ name: 'MyPage' } as any)
+        this.$router.go({ name: 'Settings' } as any)
       }
     },
   },
