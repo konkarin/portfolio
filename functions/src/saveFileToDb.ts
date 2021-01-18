@@ -11,7 +11,7 @@ export type EventContext = functions.EventContext
 
 const spawn = require('child-process-promise').spawn
 
-const BUCKET_NAME = 'konkarin-portfolio.appspot.com'
+const BUCKET_NAME = 'konkarin-photo.appspot.com'
 
 // TODO: sharpかnode-imagemagickでexifとwidth, heightをcanvasとか使って引っこ抜いてfirestoreに書き込む
 // https://github.com/rsms/node-imagemagick
