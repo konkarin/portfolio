@@ -24,7 +24,7 @@ export const mutations = {
     state.user = payload
   },
 
-  setImgList(state: State, payload: DocumentData): void {
+  updateImgList(state: State, payload: DocumentData): void {
     state.imgList = payload
   },
 
@@ -34,10 +34,10 @@ export const mutations = {
 }
 
 export const actions = {
-  async getImgList({ commit }): Promise<void> {
+  async preloadImgList({ commit }): Promise<void> {
     const loadedImgList = await loadImgList()
 
-    commit('setImgList', loadedImgList)
+    commit('updateImgList', loadedImgList)
     commit('updateLoadingImg')
   },
 }

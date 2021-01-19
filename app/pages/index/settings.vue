@@ -14,7 +14,6 @@
         <button class="flat-button sign-in" @click="signIn()">Sign in</button>
       </div>
     </div>
-
     <NuxtChild v-if="isAuth" />
   </div>
 </template>

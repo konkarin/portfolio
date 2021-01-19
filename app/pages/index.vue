@@ -15,7 +15,7 @@ export default Vue.extend({
     HeaderNav,
   },
   created() {
-    this.$store.dispatch('getImgList')
+    this.$store.dispatch('preloadImgList')
   },
 })
 </script>

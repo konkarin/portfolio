@@ -7,16 +7,16 @@
     <transition-group v-else appear name="gallery" tag="div" class="gallery">
       <!-- TODO: 最初の数枚をプリロードする -->
       <div
-        v-for="(photo, index) in photoList"
-        :key="photo.originalFileName"
+        v-for="(img, index) in imgList"
+        :key="img.originalUrl"
         class="photo-box"
         :style="{ transitionDelay: `${index * 100 + 100}ms` }"
-        @click="openModal(photo.originalUrl)"
+        @click="openModal(img.originalUrl)"
       >
         <!-- ims.srcが404の時、Modalを非表示にしたい
         @error="substituteSrc(index)" -->
         <div class="thumb-box">
-          <img class="thumb-img" :src="photo.thumbUrl" />
+          <img class="thumb-img" :src="img.thumbUrl" />
         </div>
       </div>
     </transition-group>
@@ -43,7 +43,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    photoList() {
+    imgList() {
       return this.$store.state.imgList
     },
     isLoadingImg() {
@@ -63,7 +63,7 @@ export default Vue.extend({
 
     // ims.srcが404の時、Modalを非表示にしたい
     // substituteSrc (index) {
-    //   this.photoList[index].thumburl = 'https://pbs.twimg.com/profile_images/1211962587442642944/iOxDr-Ba_400x400.jpg'
+    //   this.imgList[index].thumburl = 'https://pbs.twimg.com/profile_images/1211962587442642944/iOxDr-Ba_400x400.jpg'
     // }
   },
   head() {
