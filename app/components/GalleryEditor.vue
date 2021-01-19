@@ -1,26 +1,26 @@
 <template>
   <div>
     <h3>Gallery Editor</h3>
-    <button class="flat-button edit-button" @click="deleteImgs()">
+    <button class="flat-button edit-button" @click="deleteImgList()">
       Delete
     </button>
     <div class="gallery">
-      <div v-if="photoList.length === 0">No Photos</div>
+      <div v-if="imgList.length === 0">No Photos</div>
       <div
-        v-for="(photo, index) in photoList"
-        :key="photo.fileName"
+        v-for="(img, index) in imgList"
+        :key="img.originalUrl"
         class="photo-box"
       >
         <label>
           <input
             :id="index"
-            v-model="selectValueList"
+            v-model="selectedImgList"
             type="checkbox"
             class="img-checkbox"
-            :value="photo.fileName"
+            :value="img.originalFilePath"
           />
           <div class="thumb-box">
-            <img class="select-img" :src="photo.thumbUrl" />
+            <img class="select-img" :src="img.thumbUrl" />
           </div>
         </label>
       </div>
@@ -33,16 +33,18 @@ import Vue from 'vue'
 import firebase from '@/plugins/firebase'
 
 type Data = {
-  photoList: firebase.firestore.DocumentData[]
-  selectValueList: string[]
+  imgList: firebase.firestore.DocumentData[]
+  selectedImgList: string[]
+  deletingImgListId: string[]
 }
 type User = firebase.User
 
 export default Vue.extend({
   data(): Data {
     return {
-      photoList: [],
-      selectValueList: [],
+      imgList: [],
+      selectedImgList: [],
+      deletingImgListId: [],
     }
   },
   computed: {
@@ -51,15 +53,15 @@ export default Vue.extend({
     },
   },
   watch: {
-    user(user: User) {
-      if (user != null) this.setImgs()
+    async user(user: User) {
+      if (user != null) this.imgList = await this.getImgList()
     },
   },
-  mounted() {
-    if (this.user) this.setImgs()
+  async mounted() {
+    if (this.user) this.imgList = await this.getImgList()
   },
   methods: {
-    async setImgs(): Promise<void> {
+    async getImgList(): Promise<firebase.firestore.DocumentData[]> {
       const collectionRef = firebase
         .firestore()
         .collection(`users/${this.user.uid}/images`)
@@ -67,43 +69,47 @@ export default Vue.extend({
       try {
         const snapshot = await collectionRef.get()
 
-        this.photoList = snapshot.docs.map((doc) => doc.data())
+        return snapshot.docs.map((doc) => doc.data())
       } catch (e) {
         console.error(e)
       }
     },
 
     // 選択した画像のFirestoreドキュメントを削除する
-    deleteImgs(): void {
+    async deleteImgList(): Promise<void> {
       // 画像が選択されてない場合アラートを表示
-      if (this.selectValueList.length === 0) {
+      if (this.selectedImgList.length === 0) {
         alert('Please select images')
         return
       }
 
-      // 確認ダイアログを表示
-      if (confirm('Remove your images?')) {
-        // 参照先を指定
-        const db = firebase.firestore().collection('images')
+      const collectionRef = firebase
+        .firestore()
+        .collection(`users/${this.user.uid}/images`)
 
-        for (const item of this.selectValueList) {
-          // 選択した画像名と一致するドキュメントを取得
-          db.where('fileName', '==', item)
-            .get()
-            .then((snapshot) => {
-              snapshot.forEach((document) => {
-                db.doc(document.id)
-                  .delete()
-                  .catch((e) => {
-                    alert(e)
-                  })
-              })
-            })
-        }
+      const selectedImgList: string[] = this.selectedImgList
 
-        alert('Remove successfully')
-        this.$router.go({ name: 'MyPage' } as any)
-      }
+      // 選択した画像のdocumentを取得
+      const snapshots = await Promise.all(
+        selectedImgList.map((path) =>
+          collectionRef.where('originalFilePath', '==', path).get()
+        )
+      )
+      snapshots.forEach((snapshot) =>
+        snapshot.forEach((document) => this.deletingImgListId.push(document.id))
+      )
+
+      // まとめて削除
+      await Promise.all(
+        this.deletingImgListId.map((id: string) =>
+          collectionRef.doc(id).delete()
+        )
+      )
+
+      // TODO: ポップアップにする
+      alert('Remove successfully')
+
+      this.imgList = await this.getImgList()
     },
   },
 })
