@@ -2,6 +2,10 @@ import firebase from '@/plugins/firebase'
 
 export type DocumentData = firebase.firestore.DocumentData[]
 
+type ProfileData = {
+  profile: string
+}
+
 /**
  * firestoreから取得した画像をロードする
  */
@@ -22,4 +26,13 @@ export const loadImgList = async () => {
   }
 
   return imgList
+}
+
+export const saveProfile = async (data: ProfileData) => {
+  try {
+    const fn = firebase.functions().httpsCallable('saveProfile')
+    return await fn(data)
+  } catch (e) {
+    return e
+  }
 }

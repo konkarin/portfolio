@@ -11,6 +11,7 @@
 import Vue from 'vue'
 import firebase from '@/plugins/firebase'
 import { convertTextToMarkdown } from '@/utils/markdown'
+import { saveProfile } from '@/api/apis'
 
 type Data = {
   inputText: string
@@ -50,12 +51,13 @@ export default Vue.extend({
 
     async saveProfile() {
       const data = {
-        profile: this.inputText,
+        profile: this.inputText as string,
       }
 
-      const collectionRef = firebase.firestore().collection('users')
       try {
-        await collectionRef.doc(`${this.user.uid}`).update(data)
+        const result = await saveProfile(data)
+
+        if (result.data !== 'success') throw new Error(result.data)
         // TODO: ポップアップにする
         alert('Saved')
       } catch (e) {
