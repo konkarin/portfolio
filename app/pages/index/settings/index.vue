@@ -10,7 +10,7 @@
       <NuxtLink to="/settings/post"> Post </NuxtLink>
     </li>
     <li>
-      <NuxtLink to="/settings/profile"> profile </NuxtLink>
+      <NuxtLink to="/settings/profile">Profile </NuxtLink>
     </li>
   </ul>
 </template>

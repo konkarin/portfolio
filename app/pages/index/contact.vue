@@ -1,7 +1,9 @@
 <template>
   <div class="wrapper">
-    <h1>Contact</h1>
-    <p>ご質問、ご意見、お仕事のご依頼等は以下よりお願いいたします。</p>
+    <PageTitle>Contact</PageTitle>
+    <div class="textMessage">
+      ご質問、ご意見、お仕事のご依頼等は以下よりお願いいたします。
+    </div>
     <a href="https://twitter.com/k0n_karin" target="_blank">
       <Twitter />
     </a>

@@ -3,7 +3,7 @@
     <div v-show="isUploading || isLoading" class="overlay">
       <div class="loader" />
     </div>
-    <h1>MyPage</h1>
+    <PageTitle>MyPage</PageTitle>
     <div v-if="!isLoading" class="auth-area">
       <div v-if="isAuth">
         <button class="flat-button sign-out" @click="signOut()">

@@ -3,7 +3,7 @@
     <HeaderNav />
     <div class="wrapper">
       <main>
-        <h1>ページが見つかりません</h1>
+        <PageTitle>ページが見つかりません</PageTitle>
       </main>
     </div>
   </div>

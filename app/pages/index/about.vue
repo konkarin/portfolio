@@ -2,10 +2,10 @@
   <div class="wrapper">
     <div class="profile">
       <!-- TODO: markedで編集できるようにする -->
-      <h1>
+      <PageTitle>
         About
         <a href="https://twitter.com/k0n_karin" target="_blank">こんかりん</a>
-      </h1>
+      </PageTitle>
       <h2>History</h2>
       <h3>大学(~2018.03)</h3>
       <p>
