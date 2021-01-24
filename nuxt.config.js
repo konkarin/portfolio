@@ -1,4 +1,8 @@
+const env = process.env.NODE_ENV
+const envSettings = require(`./env/${env}.ts`)
+
 export default {
+  env: envSettings,
   target: 'static',
   srcDir: 'app',
   head: {
