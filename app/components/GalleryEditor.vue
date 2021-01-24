@@ -14,7 +14,7 @@
         <label>
           <input
             :id="index"
-            v-model="selectedImgList"
+            v-model="selectedImgPathList"
             type="checkbox"
             class="img-checkbox"
             :value="img.originalFilePath"
@@ -34,7 +34,7 @@ import firebase from '@/plugins/firebase'
 
 type Data = {
   imgList: firebase.firestore.DocumentData[]
-  selectedImgList: string[]
+  selectedImgPathList: string[]
   deletingImgListId: string[]
 }
 type User = firebase.User
@@ -43,7 +43,7 @@ export default Vue.extend({
   data(): Data {
     return {
       imgList: [],
-      selectedImgList: [],
+      selectedImgPathList: [],
       deletingImgListId: [],
     }
   },
@@ -78,7 +78,7 @@ export default Vue.extend({
     // 選択した画像のFirestoreドキュメントを削除する
     async deleteImgList(): Promise<void> {
       // 画像が選択されてない場合アラートを表示
-      if (this.selectedImgList.length === 0) {
+      if (this.selectedImgPathList.length === 0) {
         alert('Please select images')
         return
       }
@@ -87,12 +87,12 @@ export default Vue.extend({
         .firestore()
         .collection(`users/${this.user.uid}/images`)
 
-      const selectedImgList: string[] = this.selectedImgList
+      const selectedImgPathList: string[] = this.selectedImgPathList
 
       // 選択した画像のdocumentを取得
       const snapshots = await Promise.all(
-        selectedImgList.map((path) =>
-          collectionRef.where('originalFilePath', '==', path).get()
+        selectedImgPathList.map((imgPath) =>
+          collectionRef.where('originalFilePath', '==', imgPath).get()
         )
       )
       snapshots.forEach((snapshot) =>
