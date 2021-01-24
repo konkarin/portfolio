@@ -1,4 +1,5 @@
 import firebase from '@/plugins/firebase'
+import Firestore from '@/api/firestore'
 
 export type DocumentData = firebase.firestore.DocumentData[]
 
@@ -35,4 +36,8 @@ export const saveProfile = async (data: ProfileData) => {
   } catch (e) {
     return e
   }
+}
+
+export default {
+  Db: new Firestore(),
 }
