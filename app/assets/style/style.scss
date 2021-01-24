@@ -26,39 +26,22 @@ body {
   font-size: 1.6rem;
   line-height: 1.8;
 }
-h1,
-h2,
-h3 {
+
+.pageTitle {
   line-height: 1.4;
-}
-h1 {
   font-weight: bold;
   text-align: center;
   font-size: 3.2rem;
   letter-spacing: 0.1em;
 }
-h2 {
-  font-weight: bold;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  text-align: left;
-  font-size: 2.8rem;
-  letter-spacing: 0.3em;
-}
-h3 {
-  text-align: left;
-  font-size: 2.2rem;
-  margin-top: 1rem ;
-  margin-bottom: 1rem;
-  margin-right: 2rem;
-  margin-left: 2rem;
-}
-p {
+
+.textMessage {
   margin-top: 1rem;
   margin-bottom: 1rem;
   margin-left: 4rem;
   margin-right: 4rem;
 }
+
 a {
   color: $link;
   text-decoration: none;
