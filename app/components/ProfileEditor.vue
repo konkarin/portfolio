@@ -8,7 +8,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import firebase from '@/plugins/firebase'
-import apis, { saveProfile } from '@/api/apis'
+import apis from '@/api/apis'
 
 type Data = {
   plainText: string
@@ -46,9 +46,8 @@ export default Vue.extend({
       }
 
       try {
-        const result = await saveProfile(data)
+        await apis.Db.updateDoc('users', this.user.uid, data)
 
-        if (result.data !== 'success') throw new Error(result.data)
         // TODO: ポップアップにする
         alert('Saved')
       } catch (e) {

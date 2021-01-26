@@ -5,7 +5,6 @@ import { saveFileToDb } from './saveFileToDb'
 import { deleteFileFromStorage } from './deleteFileFromStorage'
 import { createUser } from './createUser'
 import { deleteUser } from './deleteUser'
-import { saveProfile } from './saveProfile'
 
 admin.initializeApp()
 
@@ -20,7 +19,3 @@ exports.deleteFileFromStorage = functions.firestore
 exports.createUser = functions.auth.user().onCreate((user) => createUser(user))
 
 exports.deleteUser = functions.auth.user().onDelete((user) => deleteUser(user))
-
-exports.saveProfile = functions.https.onCall((data, ctx) =>
-  saveProfile(data, ctx)
-)

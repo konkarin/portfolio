@@ -19,4 +19,8 @@ export default class Firestore {
       .where(queries.filePath, queries.opStr, queries.value)
       .get()
   }
+
+  async updateDoc(path, docId, data) {
+    await this.db.collection(path).doc(docId).update(data)
+  }
 }
