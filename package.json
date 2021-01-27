@@ -6,7 +6,8 @@
     "dev": "nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
-    "generate": "nuxt-ts generate",
+    "generate:sta": "cross-env NODE_ENV=\"staging\" nuxt-ts generate",
+    "generate:prod": "cross-env NODE_ENV=\"production\" nuxt-ts generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "lint": "npm run lint:js && npm run lint:style",
@@ -16,9 +17,14 @@
     "@nuxt/typescript-runtime": "^2.0.0",
     "blueimp-load-image": "^5.14.0",
     "core-js": "^3.6.5",
+    "cross-env": "^7.0.3",
     "dayjs": "^1.10.2",
     "firebase": "^8.2.1",
-    "nuxt": "^2.14.6"
+    "nuxt": "^2.14.6",
+    "remark": "^13.0.0",
+    "remark-html": "^13.0.1",
+    "remark-preset-lint-recommended": "^5.0.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.6",
