@@ -8,8 +8,8 @@ import { deleteUser } from './deleteUser'
 
 admin.initializeApp()
 
-exports.saveFileToDb = functions.storage.object().onFinalize((object) => {
-  saveFileToDb(object)
+exports.saveFileToDb = functions.storage.object().onFinalize((object, ctx) => {
+  saveFileToDb(object, ctx)
 })
 
 exports.deleteFileFromStorage = functions.firestore
