@@ -10,7 +10,7 @@ jobs:
           command: npm ci
       - run:
           name: build
-          command: npm run generate
+          command: npm run generate:prod
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
