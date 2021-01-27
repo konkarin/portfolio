@@ -10,7 +10,8 @@ export default class Firestore {
   private db = firebase.firestore()
 
   async getDocById(collectionPath: string, docId: string) {
-    return await this.db.collection(collectionPath).doc(docId).get()
+    const snap = await this.db.collection(collectionPath).doc(docId).get()
+    return snap.data()
   }
 
   async getDocByQueries(collectionPath: string, queries: Queries) {

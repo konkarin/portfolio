@@ -3,9 +3,9 @@
     <div class="textEditor">
       <textarea :value="plainText" @input="inputText" />
     </div>
-    <div class="markdownPreview">
+    <div class="markdownContainer">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <div class="markdwonPreviewInner" v-html="markdownText" />
+      <MarkdownPreview class="markdwonContent" v-html="markdownText" />
     </div>
   </div>
 </template>
@@ -81,46 +81,16 @@ textarea {
   background-color: #fbfcff;
 }
 
-.markdownPreview {
+.markdownContainer {
   padding: 10px;
   text-align: left;
   width: 50%;
   border-left: 1px solid #cbcbcb;
 }
 
-.markdwonPreviewInner {
+.markdwonContent {
   padding-left: 1em;
   height: 50vh;
   overflow: scroll;
-}
-
-.markdwonPreviewInner >>> h1 {
-  font-weight: bold;
-  font-size: 3.2rem;
-}
-
-.markdwonPreviewInner >>> h2 {
-  font-weight: bold;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  font-size: 2.8rem;
-}
-
-.markdwonPreviewInner >>> h3 {
-  text-align: left;
-  font-size: 2.2rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-right: 2rem;
-}
-
-.markdwonPreviewInner >>> ul {
-  padding-left: 1em;
-  list-style-type: disc;
-}
-
-.markdwonPreviewInner >>> ol {
-  padding-left: 1em;
-  list-style-type: decimal;
 }
 </style>

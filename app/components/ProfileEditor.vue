@@ -35,9 +35,9 @@ export default Vue.extend({
       this.plainText = val
     },
     async getProfile() {
-      const snap = await apis.Db.getDocById('users', this.user.uid)
+      const data = await apis.Db.getDocById('users', this.user.uid)
 
-      return snap.get('profile') as string
+      return data.profile as string
     },
 
     async saveProfile() {

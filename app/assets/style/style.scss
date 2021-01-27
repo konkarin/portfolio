@@ -5,8 +5,8 @@
 /* Variables */
 $text: hsl(50, 20%, 20%);
 $link: hsl(51, 95%, 44%);
-$sp: 480px;
-$tab: 768px;
+$sp: 520px;
+$tab: 960px;
 $pc: 1200px;
 
 /* v-cloak */
@@ -47,11 +47,6 @@ a {
   text-decoration: none;
   &:hover {
     text-decoration: underline;
-  }
-}
-@media (max-width: $pc) {
-  h2 {
-    margin-top: 0.5em;
   }
 }
 
@@ -97,7 +92,6 @@ a {
 }
 @media (min-width: $pc) {
   .header-nav {
-
     a {
       // &:hover {
         // background-color: rgb(240, 240, 240);
@@ -172,11 +166,11 @@ a {
   vertical-align: top;
   box-sizing: border-box;
   max-width: 700px;
-  padding: 0 20px;
+  padding: 0 2rem 5rem;
   margin: 0 auto;
   text-align: left;
 }
-@media (max-width: $pc) {
+@media (max-width: $sp) {
   .profile {
     display: block;
     width: 100%;
