@@ -2,15 +2,15 @@ version: 2
 jobs:
   deploy_dev:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:10
     steps:
       - checkout
       - run:
           name: npm ci
-          command: npm ci
+          command: npm ci && cd functions && npm ci
       - run:
           name: build
-          command: npm run generate:prod
+          command: npm run generate:prod && cd functions && npm run build
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
