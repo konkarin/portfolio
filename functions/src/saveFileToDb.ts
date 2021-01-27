@@ -16,7 +16,10 @@ const BUCKET_NAME = 'konkarin-photo.appspot.com'
 // TODO: sharpかnode-imagemagickでexifとwidth, heightをcanvasとか使って引っこ抜いてfirestoreに書き込む
 // https://github.com/rsms/node-imagemagick
 // https://sharp.pixelplumbing.com/
-export const saveFileToDb = async (object: ObjectMetadata) => {
+export const saveFileToDb = async (
+  object: ObjectMetadata,
+  ctx: EventContext
+) => {
   const fileBucket: string = object.bucket
   // /images/{uid}/{imageId: uuid}/original/hogehoge.jpg
   const originalFilePath: string = object.name
@@ -86,8 +89,7 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
     // exif,
   }
 
-  // DEBUG:
-  const uid = 'y6VxBfC6TPPWTRvV5siYr1wzfBx2'
+  const uid = ctx.auth.uid
   const collectionRef = admin.firestore().collection(`users/${uid}/images`)
 
   try {
