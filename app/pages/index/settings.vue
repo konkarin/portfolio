@@ -40,10 +40,13 @@ export default Vue.extend({
       return this.$store.state.isAuth
     },
   },
-  created(): void {
+  mounted(): void {
     firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit('updateAuth', !!user)
-      this.$store.commit('updateUser', { uid: user.uid })
+      if (user) {
+        this.$store.commit('updateUser', { uid: user.uid })
+      }
+
       this.isLoading = false
     })
   },
