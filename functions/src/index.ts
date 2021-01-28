@@ -8,14 +8,24 @@ import { deleteUser } from './deleteUser'
 
 admin.initializeApp()
 
-exports.saveFileToDb = functions.storage.object().onFinalize((object, ctx) => {
-  saveFileToDb(object, ctx)
-})
+exports.saveFileToDb = functions
+  .region('asia-northeast1')
+  .storage.object()
+  .onFinalize((object, ctx) => {
+    saveFileToDb(object, ctx)
+  })
 
-exports.deleteFileFromStorage = functions.firestore
-  .document('/users/{uid}/images/{imageId}')
+exports.deleteFileFromStorage = functions
+  .region('asia-northeast1')
+  .firestore.document('/users/{uid}/images/{imageId}')
   .onDelete((snap) => deleteFileFromStorage(snap))
 
-exports.createUser = functions.auth.user().onCreate((user) => createUser(user))
+exports.createUser = functions
+  .region('asia-northeast1')
+  .auth.user()
+  .onCreate((user) => createUser(user))
 
-exports.deleteUser = functions.auth.user().onDelete((user) => deleteUser(user))
+exports.deleteUser = functions
+  .region('asia-northeast1')
+  .auth.user()
+  .onDelete((user) => deleteUser(user))
