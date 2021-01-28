@@ -11,8 +11,8 @@ admin.initializeApp()
 exports.saveFileToDb = functions
   .region('asia-northeast1')
   .storage.object()
-  .onFinalize((object, ctx) => {
-    saveFileToDb(object, ctx)
+  .onFinalize((object) => {
+    saveFileToDb(object)
   })
 
 exports.deleteFileFromStorage = functions
