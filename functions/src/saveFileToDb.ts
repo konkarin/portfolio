@@ -18,7 +18,7 @@ const BUCKET_NAME = 'konkarin-photo.appspot.com'
 // https://sharp.pixelplumbing.com/
 export const saveFileToDb = async (object: ObjectMetadata) => {
   const fileBucket: string = object.bucket
-  // /images/{uid}/{imageId: uuid}/original/hogehoge.jpg
+  // images/{uid}/{imageId: uuid}/original/hogehoge.jpg
   const originalFilePath: string = object.name
   const contentType: string = object.contentType
 
@@ -87,7 +87,7 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
   }
 
   // NOTE: StorageのonFinalizeはauthにuidを持たないためファイルパスから取得
-  const uid = originalFilePath.split('/')[2]
+  const uid = originalFilePath.split('/')[1]
   const collectionRef = admin.firestore().collection(`users/${uid}/images`)
 
   try {
