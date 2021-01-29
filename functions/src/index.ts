@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions'
+import * as fn from 'firebase-functions'
 import * as admin from 'firebase-admin'
 
 import { saveFileToDb } from './saveFileToDb'
@@ -8,24 +8,16 @@ import { deleteUser } from './deleteUser'
 
 admin.initializeApp()
 
-exports.saveFileToDb = functions
-  .region('asia-northeast1')
-  .storage.object()
-  .onFinalize((object) => {
-    saveFileToDb(object)
-  })
+const functions = fn.region('asia-northeast1')
 
-exports.deleteFileFromStorage = functions
-  .region('asia-northeast1')
-  .firestore.document('/users/{uid}/images/{imageId}')
+exports.saveFileToDb = functions.storage
+  .object()
+  .onFinalize((object) => saveFileToDb(object))
+
+exports.deleteFileFromStorage = functions.firestore
+  .document('/users/{uid}/images/{imageId}')
   .onDelete((snap) => deleteFileFromStorage(snap))
 
-exports.createUser = functions
-  .region('asia-northeast1')
-  .auth.user()
-  .onCreate((user) => createUser(user))
+exports.createUser = functions.auth.user().onCreate((user) => createUser(user))
 
-exports.deleteUser = functions
-  .region('asia-northeast1')
-  .auth.user()
-  .onDelete((user) => deleteUser(user))
+exports.deleteUser = functions.auth.user().onDelete((user) => deleteUser(user))
