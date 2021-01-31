@@ -1,3 +1,6 @@
+import Sass from 'sass'
+import Fiber from 'fibers'
+
 const env = process.env.NODE_ENV
 const envSettings = require(`./env/${env}.ts`)
 
@@ -65,6 +68,14 @@ export default {
         // console.x を production時に削除
         compress: {
           drop_console: process.env.NODE_ENV === 'production',
+        },
+      },
+    },
+    loaders: {
+      scss: {
+        implementation: Sass,
+        sassOptions: {
+          fiber: Fiber,
         },
       },
     },
