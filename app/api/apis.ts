@@ -1,8 +1,6 @@
 import firebase from '@/plugins/firebase'
 import Firestore from '@/api/firestore'
 
-export type DocumentData = firebase.firestore.DocumentData[]
-
 type ProfileData = {
   profile: string
 }

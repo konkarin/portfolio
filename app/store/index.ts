@@ -1,10 +1,11 @@
-import { loadImgList, DocumentData } from '@/api/apis'
+import { loadImgList } from '@/api/apis'
 import firebase from '@/plugins/firebase'
+import { FirebaseUser, DocumentData } from '@/types/firebase'
 
 type State = {
   isAuth: boolean
-  user: firebase.User
-  imgList: DocumentData
+  user: FirebaseUser
+  imgList: DocumentData[]
   isLoadingImg: boolean
 }
 
@@ -24,7 +25,7 @@ export const mutations = {
     state.user = payload
   },
 
-  updateImgList(state: State, payload: DocumentData): void {
+  updateImgList(state: State, payload: DocumentData[]): void {
     state.imgList = payload
   },
 
