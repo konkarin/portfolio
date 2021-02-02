@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
+    "dev": "cross-env NODE_ENV=\"staging\" nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "generate:sta": "cross-env NODE_ENV=\"staging\" nuxt-ts generate",
