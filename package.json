@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
+    "dev": "cross-env NODE_ENV=\"staging\" nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "generate:sta": "cross-env NODE_ENV=\"staging\" nuxt-ts generate",
@@ -11,7 +11,9 @@
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "lint": "npm run lint:js && npm run lint:style",
-    "test": "jest"
+    "test": "jest",
+    "deploy:sta": "npm run generate:sta && firebase deploy --only hosting --project=sta",
+    "deploy:prod": "npm run generate:prod && firebase deploy --only hosting --project=prod"
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",

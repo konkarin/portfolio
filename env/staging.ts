@@ -1,9 +1,9 @@
 export const firebaseConfig = {
-  apiKey: 'AIzaSyAeEviiI6BRwheQrmiXpBeztb_XcUdZw8E',
-  authDomain: 'konkarin-photo.firebaseapp.com',
-  projectId: 'konkarin-photo',
-  storageBucket: 'konkarin-photo.appspot.com',
-  messagingSenderId: '631852417771',
-  appId: '1:631852417771:web:46ff2edb9660c9906534ae',
-  measurementId: 'G-YGDY0HJSYV',
+  apiKey: 'AIzaSyAZUlX7Qx63lE5IAp9mfjEPfGvn6v-Hwjs',
+  authDomain: 'staging-konkarin-photo.firebaseapp.com',
+  projectId: 'staging-konkarin-photo',
+  storageBucket: 'staging-konkarin-photo.appspot.com',
+  messagingSenderId: '607311000326',
+  appId: '1:607311000326:web:ffd640d8859113a35a6487',
+  measurementId: 'G-5QD17SVXWZ',
 }
