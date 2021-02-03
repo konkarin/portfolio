@@ -26,10 +26,7 @@ export default Vue.extend({
     }
   },
   async mounted() {
-    const data = await apis.Db.getDocById(
-      'users',
-      'y6VxBfC6TPPWTRvV5siYr1wzfBx2'
-    )
+    const data = await apis.Db.getDocById('users', process.env.authorId)
 
     this.profile = await convertTextToMarkdown(data.profile)
   },

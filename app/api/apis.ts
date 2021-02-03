@@ -11,7 +11,7 @@ type ProfileData = {
 export const loadImgList = async () => {
   const collectionRef = firebase
     .firestore()
-    .collection(`/users/y6VxBfC6TPPWTRvV5siYr1wzfBx2/images`)
+    .collection(`/users/${process.env.authorId}/images`)
 
   const snapshot = await collectionRef.get()
 
