@@ -5,14 +5,13 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 
 import dayjs from 'dayjs'
+import * as sharp from 'sharp'
+import * as exifReader from 'exif-reader'
 
 export type ObjectMetadata = functions.storage.ObjectMetadata
 
 const spawn = require('child-process-promise').spawn
 
-// TODO: sharpかnode-imagemagickでexifとwidth, heightをcanvasとか使って引っこ抜いてfirestoreに書き込む
-// https://github.com/rsms/node-imagemagick
-// https://sharp.pixelplumbing.com/
 export const saveFileToDb = async (object: ObjectMetadata) => {
   const fileBucket: string = object.bucket
   // images/{uid}/{imageId: uuid}/original/hogehoge.jpg
@@ -38,16 +37,13 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
   const bucket = admin.storage().bucket(fileBucket)
   const tempFilePath = path.join(os.tmpdir(), originalFileName)
 
-  // キャッシュ max-age: 24時間, s-maxage: ３日
-  const cacheControl = 'public,max-age=86400,s-maxage=2592000'
-
-  const metadata = {
-    contentType,
-    cacheControl,
-  }
-
   await bucket.file(originalFilePath).download({ destination: tempFilePath })
   console.log('Image downloaded locally to', tempFilePath)
+
+  // Get Exif info.
+  const meta = await sharp(tempFilePath).metadata()
+  const exif = exifReader(meta.exif)
+  console.log('Get Exif: ', exif)
 
   // Generate a thumbnail using ImageMagick.
   await spawn('convert', [tempFilePath, '-thumbnail', '300x300>', tempFilePath])
@@ -60,6 +56,12 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
     '../thumb',
     originalFileName
   )
+
+  const metadata = {
+    contentType,
+    // キャッシュ max-age: 24時間, s-maxage: ３日
+    cacheControl: 'public,max-age=86400,s-maxage=2592000',
+  }
 
   // Uploading the thumbnail.
   await bucket.upload(tempFilePath, {
@@ -84,6 +86,7 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
     )}?alt=media`,
     thumbFilePath,
     date,
+    exif,
   }
 
   // NOTE: StorageのonFinalizeはauthにuidを持たないためファイルパスから取得
