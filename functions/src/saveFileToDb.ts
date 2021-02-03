@@ -10,8 +10,6 @@ export type ObjectMetadata = functions.storage.ObjectMetadata
 
 const spawn = require('child-process-promise').spawn
 
-const BUCKET_NAME = 'konkarin-photo.appspot.com'
-
 // TODO: sharpかnode-imagemagickでexifとwidth, heightをcanvasとか使って引っこ抜いてfirestoreに書き込む
 // https://github.com/rsms/node-imagemagick
 // https://sharp.pixelplumbing.com/
@@ -77,11 +75,11 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
   const data = {
     originalFileName,
     // NOTE: bucketのgetSignedUrlだと有効期限切れたら死ぬから下記で回避
-    originalUrl: `https://firebasestorage.googleapis.com/v0/b/${BUCKET_NAME}/o/${encodeURIComponent(
+    originalUrl: `https://firebasestorage.googleapis.com/v0/b/${fileBucket}/o/${encodeURIComponent(
       originalFilePath
     )}?alt=media`,
     originalFilePath,
-    thumbUrl: `https://firebasestorage.googleapis.com/v0/b/${BUCKET_NAME}/o/${encodeURIComponent(
+    thumbUrl: `https://firebasestorage.googleapis.com/v0/b/${fileBucket}/o/${encodeURIComponent(
       thumbFilePath
     )}?alt=media`,
     thumbFilePath,
