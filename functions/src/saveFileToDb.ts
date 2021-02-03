@@ -5,8 +5,7 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 
 import dayjs from 'dayjs'
-import * as exifReader from 'exif-reader'
-
+const exifReader = require('exif-reader')
 const sharp = require('sharp')
 
 export type ObjectMetadata = functions.storage.ObjectMetadata
