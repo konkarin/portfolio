@@ -43,7 +43,7 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
   // Get Exif info.
   const img = sharp(tempFilePath)
   const meta = await img.metadata()
-  const exif = exifReader(meta.exif)
+  const exif = meta.exif != null ? exifReader(meta.exif) : null
   console.log('Get Exif: ', exif)
 
   // Generate a thumbnail using ImageMagick.
