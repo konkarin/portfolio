@@ -41,7 +41,8 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
   console.log('Image downloaded locally to', tempFilePath)
 
   // Get Exif info.
-  const meta = await sharp(tempFilePath).metadata()
+  const img = sharp(tempFilePath)
+  const meta = await img.metadata()
   const exif = exifReader(meta.exif)
   console.log('Get Exif: ', exif)
 
