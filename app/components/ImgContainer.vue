@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="imgContainer">
     <ImgColumn
       v-for="(column, index) in imgColumns"
       :key="index"
@@ -21,19 +21,23 @@ export default Vue.extend({
   },
   data() {
     return {
-      columnsLength: 3,
+      columnsLength: 4,
     }
   },
   computed: {
     imgColumns() {
-      const columns = this.createImgColumns(this.imgList, this.columnsLength)
-      return columns
+      return this.createImgColumns(this.imgList, this.columnsLength)
     },
   },
   methods: {
     createImgColumns(imgList: DocumentData[], columnsLength: number) {
-      // [imgList[], imgList[], ...]の配列
-      const columns: DocumentData[][] = Array(columnsLength).fill([])
+      // [column[], column[], ...]の配列
+      // NOTE: .mapがないと、push時にfillの引数の[]が参照され、同じ配列が生成される
+      const columns: DocumentData[][] = new Array(columnsLength)
+        .fill([])
+        .map((_i) => [])
+      console.log(columns, Array(columnsLength).fill([]))
+
       const columnsHeightList: number[] = Array(columnsLength).fill(0)
 
       // 全体ループ
@@ -43,8 +47,10 @@ export default Vue.extend({
 
         // カラムの高さが最も小さいindexの配列に画像を追加
         columns[minHeightIndex].push(img)
+
+        const heightRate = img.exif.ImageHeight / img.exif.ImageWidth
         // カラムの高さを更新
-        columnsHeightList[minHeightIndex] += img.height
+        columnsHeightList[minHeightIndex] += heightRate
       })
 
       return columns
@@ -71,3 +77,10 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.imgContainer {
+  display: flex;
+  justify-content: center;
+}
+</style>
