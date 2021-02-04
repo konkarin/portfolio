@@ -5,8 +5,8 @@ import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
 
 import dayjs from 'dayjs'
-const exifReader = require('exif-reader')
-const sharp = require('sharp')
+
+import { getExif } from './getExif'
 
 export type ObjectMetadata = functions.storage.ObjectMetadata
 
@@ -41,10 +41,7 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
   console.log('Image downloaded locally to', tempFilePath)
 
   // Get Exif info.
-  const img = sharp(tempFilePath)
-  const meta = await img.metadata()
-  const exif = meta.exif != null ? exifReader(meta.exif) : null
-  console.log('Get Exif: ', exif)
+  const exif = await getExif(tempFilePath)
 
   // Generate a thumbnail using ImageMagick.
   await spawn('convert', [tempFilePath, '-thumbnail', '300x300>', tempFilePath])
