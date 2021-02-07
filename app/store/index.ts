@@ -7,6 +7,10 @@ type State = {
   user: FirebaseUser
   imgList: DocumentData[]
   isLoadingImg: boolean
+  photoModal: {
+    url: string
+    show: boolean
+  }
 }
 
 export const state = (): State => ({
@@ -14,6 +18,10 @@ export const state = (): State => ({
   user: null,
   imgList: [],
   isLoadingImg: true,
+  photoModal: {
+    url: '',
+    show: false,
+  },
 })
 
 export const mutations = {
@@ -31,6 +39,10 @@ export const mutations = {
 
   updateLoadingImg(state: State) {
     state.isLoadingImg = !state.isLoadingImg
+  },
+
+  switchPhotoModal(state: State, payload: State['photoModal']) {
+    state.photoModal = payload
   },
 }
 

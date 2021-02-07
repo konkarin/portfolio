@@ -11,6 +11,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { DocumentData } from '@/types/firebase'
+import debounce from 'lodash.debounce'
 
 export default Vue.extend({
   props: {
@@ -25,25 +26,42 @@ export default Vue.extend({
     }
   },
   computed: {
-    imgColumns() {
+    imgColumns(): DocumentData[][] {
       return this.createImgColumns(this.imgList, this.columnsLength)
     },
   },
+  mounted() {
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize)
+  },
   methods: {
+    updateColumnsLength() {
+      // スマホは2カラム固定
+      this.columnsLength =
+        window.innerWidth <= 520 ? 2 : Math.floor(window.innerWidth / 250)
+    },
+
+    handleResize: debounce(function () {
+      this.updateColumnsLength()
+    }, 300),
+
     createImgColumns(imgList: DocumentData[], columnsLength: number) {
       // [column[], column[], ...]の配列
       // NOTE: .mapがないと、push時にfillの引数の[]が参照され、同じ配列が生成される
       const columns: DocumentData[][] = new Array(columnsLength)
         .fill([])
         .map((_i) => [])
-      console.log(columns, Array(columnsLength).fill([]))
 
       const columnsHeightList: number[] = Array(columnsLength).fill(0)
 
       // 全体ループ
       imgList.forEach((img) => {
         // カラムの高さが最も小さいindexを取得
-        const minHeightIndex = this.findMinHeightIndex(columnsHeightList)
+        const minHeightIndex: number = this.findMinHeightIndex(
+          columnsHeightList
+        )
 
         // カラムの高さが最も小さいindexの配列に画像を追加
         columns[minHeightIndex].push(img)
@@ -56,7 +74,7 @@ export default Vue.extend({
       return columns
     },
 
-    findMinHeightIndex(columnsHeightList: number[]) {
+    findMinHeightIndex(columnsHeightList: number[]): number {
       let minHeight = 100000
       let minIndex = 0
 
@@ -68,18 +86,13 @@ export default Vue.extend({
       })
       return minIndex
     },
-
-    updateColumnsLength() {},
-
-    openModal(url: string) {
-      this.$emit('open', url)
-    },
   },
 })
 </script>
 
 <style lang="scss" scoped>
 .imgContainer {
+  margin-top: 2rem;
   display: flex;
   justify-content: center;
 }
