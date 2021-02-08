@@ -3,14 +3,13 @@ import * as os from 'os'
 import * as fs from 'fs'
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
-
 import dayjs from 'dayjs'
+import exifr from 'exifr'
 
-import { getExif } from './getExif'
+const imageSize = require('image-size')
+const spawn = require('child-process-promise').spawn
 
 export type ObjectMetadata = functions.storage.ObjectMetadata
-
-const spawn = require('child-process-promise').spawn
 
 export const saveFileToDb = async (object: ObjectMetadata) => {
   const fileBucket: string = object.bucket
@@ -39,6 +38,9 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
 
   await bucket.file(originalFilePath).download({ destination: tempFilePath })
   console.log('Image downloaded locally to', tempFilePath)
+
+  // Get image size
+  const size = getSize(tempFilePath)
 
   // Get Exif info.
   const exif = await getExif(tempFilePath)
@@ -85,9 +87,11 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
     thumbFilePath,
     date,
     exif,
+    width: size.width,
+    height: size.height,
   }
 
-  // NOTE: StorageのonFinalizeはauthにuidを持たないためファイルパスから取得
+  // NOTE: StorageのonFinalizeはcontextのauthにuidを持たないため、ファイルパスから取得
   const uid = originalFilePath.split('/')[1]
   const collectionRef = admin.firestore().collection(`users/${uid}/images`)
 
@@ -97,4 +101,34 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
   } catch (e) {
     console.error(e)
   }
+}
+
+const getSize = (tempFilePath: string): { width: number; height: number } => {
+  const image = imageSize(tempFilePath)
+
+  return {
+    width: image.width,
+    height: image.height,
+  }
+}
+
+const getExif = async (tempFilePath: string) => {
+  const options = {
+    gps: false,
+    xmp: true,
+    translateKeys: true,
+    translateValues: true,
+    reviveValues: true,
+    sanitize: true,
+    mergeOutput: false,
+    silentErrors: true,
+  }
+
+  const data = await exifr.parse(tempFilePath, options).catch((e) => {
+    console.error(e)
+    return null
+  })
+
+  console.log('Get Exif')
+  return data.exif
 }
