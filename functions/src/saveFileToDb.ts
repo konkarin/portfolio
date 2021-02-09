@@ -20,13 +20,13 @@ export const saveFileToDb = async (object: ObjectMetadata) => {
   // Exit if this is triggered on a file that is not an image.
   if (!contentType.startsWith('image/')) {
     console.log('This is not an image.')
-    return null
+    return
   }
 
   // Exit if the image is already a thumbnail.
   if (path.dirname(originalFilePath).includes('thumb')) {
     console.log('Already a Thumbnail.')
-    return null
+    return
   }
 
   // Get the file name.
@@ -126,9 +126,9 @@ const getExif = async (tempFilePath: string) => {
 
   const data = await exifr.parse(tempFilePath, options).catch((e) => {
     console.error(e)
-    return null
+    return {}
   })
 
   console.log('Get Exif')
-  return data.exif
+  return data
 }
