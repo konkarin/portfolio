@@ -4,9 +4,13 @@
     <div v-if="isLoadingImg" class="overlay">
       <div class="loader" />
     </div>
-    <ImgContainer :img-list="imgList" @open="openModal" />
+    <ImgContainer :img-list="imgList" />
     <transition name="fade-modal">
-      <PhotoModal v-if="showModal" :img-src="imgSrc" @close="closeModal" />
+      <PhotoModal
+        v-if="photoModal.show"
+        :img-src="photoModal.url"
+        @close="closeModal"
+      />
     </transition>
   </div>
 </template>
@@ -15,20 +19,12 @@
 import Vue from 'vue'
 import { DocumentData } from '@/types/firebase'
 
-type Data = {
-  showModal: boolean
-  imgSrc: string
-}
-
 export default Vue.extend({
   transition: 'page',
-  data(): Data {
-    return {
-      showModal: false,
-      imgSrc: '',
-    }
-  },
   computed: {
+    photoModal() {
+      return this.$store.state.photoModal
+    },
     imgList() {
       return this.$store.state.imgList as DocumentData[]
     },
@@ -37,14 +33,13 @@ export default Vue.extend({
     },
   },
   methods: {
-    openModal(url: string): void {
-      // ims.srcが404の時、Modalを非表示にしたい
-      this.showModal = true
-      this.imgSrc = url
-    },
-
     closeModal(): void {
-      this.showModal = false
+      const payload = {
+        url: '',
+        show: false,
+      }
+
+      this.$store.commit('switchPhotoModal', payload)
     },
 
     // ims.srcが404の時、Modalを非表示にしたい

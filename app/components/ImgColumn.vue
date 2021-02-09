@@ -1,6 +1,11 @@
 <template>
   <div class="imgColumn">
-    <div v-for="img in column" :key="img.originalFilePath" class="imgBox">
+    <div
+      v-for="img in column"
+      :key="img.originalFilePath"
+      class="imgBox"
+      @click="openModal(img.originalUrl)"
+    >
       <img :src="img.thumbUrl" class="img" />
     </div>
   </div>
@@ -17,6 +22,15 @@ export default Vue.extend({
       required: true,
     },
   },
+  methods: {
+    openModal(url: string) {
+      const payload = {
+        url,
+        show: true,
+      }
+      this.$store.commit('switchPhotoModal', payload)
+    },
+  },
 })
 </script>
 
@@ -25,15 +39,23 @@ export default Vue.extend({
   // NOTE: flexだとmarginの相殺が起きない
   display: flex;
   flex-direction: column;
-  max-width: 20rem;
+  max-width: 25rem;
 }
 .imgBox {
   margin: 0.25rem;
+  overflow: hidden;
 }
 .img {
-  // NOTE: max-widthを親要素の100%にして画像のはみ出しを抑制
-  max-width: 100%;
+  // NOTE: max-width: 100%だと画像自体の大きさ以上に拡大されない
+  width: 100%;
   // NOTE: 画像下の余白を除去
   vertical-align: bottom;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  &:hover {
+    transform: scale(1.1);
+    transition-duration: 0.3s;
+    opacity: 0.6;
+  }
 }
 </style>

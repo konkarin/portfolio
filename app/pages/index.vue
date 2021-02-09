@@ -14,7 +14,7 @@ export default Vue.extend({
   components: {
     HeaderNav,
   },
-  created() {
+  mounted() {
     this.$store.dispatch('preloadImgList')
   },
 })
