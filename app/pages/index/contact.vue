@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <main class="wrapper">
     <PageTitle>Contact</PageTitle>
     <div class="textMessage">
       ご質問、ご意見、お仕事のご依頼等は以下よりお願いいたします。
@@ -13,14 +13,13 @@
     <a href="https://github.com/konkarin" target="_blank">
       <Github />
     </a>
-  </div>
+  </main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
 export default Vue.extend({
-  // transition: 'page'
   head() {
     return {
       title: 'Contact',

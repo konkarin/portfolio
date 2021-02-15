@@ -1,15 +1,15 @@
 <template>
-  <div class="wrapper">
+  <main class="wrapper">
+    <!-- TODO: markedで編集できるようにする -->
+    <PageTitle>
+      About
+      <a href="https://twitter.com/k0n_karin" target="_blank">こんかりん</a>
+    </PageTitle>
     <div class="profile">
-      <!-- TODO: markedで編集できるようにする -->
-      <PageTitle>
-        About
-        <a href="https://twitter.com/k0n_karin" target="_blank">こんかりん</a>
-      </PageTitle>
       <!-- eslint-disable-next-line vue/no-v-html -->
       <MarkdownPreview v-html="profile" />
     </div>
-  </div>
+  </main>
 </template>
 
 <script lang="ts">
