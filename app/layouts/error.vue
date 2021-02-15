@@ -1,11 +1,9 @@
 <template>
   <div>
     <HeaderNav />
-    <div class="wrapper">
-      <main>
-        <PageTitle>ページが見つかりません</PageTitle>
-      </main>
-    </div>
+    <main class="wrapper">
+      <PageTitle>ページが見つかりません</PageTitle>
+    </main>
   </div>
 </template>
 
