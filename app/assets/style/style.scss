@@ -3,11 +3,11 @@
 @import url("https://fonts.googleapis.com/css?family=Poiret+One");
 
 /* Variables */
-$text: hsl(50, 20%, 20%);
-$link: hsl(51, 95%, 44%);
+$text: rgb(26, 26, 26);
+$inactiveText: rgb(179, 179, 179);
+$link: rgb(218, 186, 5);
 $sp: 520px;
 $tab: 960px;
-$pc: 1200px;
 
 /* v-cloak */
 [v-cloak] {
@@ -16,22 +16,38 @@ $pc: 1200px;
 
 /* common */
 html {
-  height: 100%;
   color: $text;
-  font-size: 62.5%;
   -webkit-text-size-adjust: 100%;
+  // font-family: "Lato", "Avenir", Helvetica, Arial, sans-serif;
 }
-body {
-  height: 100%;
-  font-size: 1.6rem;
-  line-height: 1.8;
+
+@media (max-width: $tab) {
+  html {
+    font-size: 15px;
+  }
+}
+
+h1 {
+  font-size: 1.7rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+h4 {
+  font-size: 1.1rem;
 }
 
 .pageTitle {
   line-height: 1.4;
   font-weight: bold;
   text-align: center;
-  font-size: 3.2rem;
+  // font-size: 3.2rem;
   letter-spacing: 0.1em;
 }
 
@@ -50,81 +66,54 @@ a {
   }
 }
 
-/* app */
-#app {
-  background-color: #f9f9f9;
-  height: 100%;
-  font-family: "Lato", "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-overflow-scrolling: touch;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 /* header */
-.header-outer {
+.headerNav {
   display: flex;
   justify-content: center;
-  border-bottom: 1px solid #eee;
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
   z-index: 99;
   background-color: #fff;
 }
-.header-nav {
-  li {
-    display: inline-block;
-  }
-  a {
-    position: relative;
-    display: inline-block;
+
+.headerNav__item {
+  position: relative;
+  display: inline-block;
+  color: $inactiveText;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  &--active {
     color: $text;
-    font-size: 1.8rem;
-    letter-spacing: 0.1em;
-    padding: 16px 24px;
-    text-decoration: none;
+    &::after {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: $text;
+      content: "";
+    }
   }
 }
-@media (min-width: $pc) {
-  .header-nav {
-    a {
-      // &:hover {
-        // background-color: rgb(240, 240, 240);
-        // transition: opacity 0.4s
-      // }
-      &::after {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: #000;
-        opacity: 0;
-        content: "";
-        transition: opacity 0.4s, transform 0.4s;
-      }
-      &:hover::after {
-        opacity: 0.5;
-        transform: translateY(-10px);
-      }
+
+@media (min-width: $tab) {
+  .headerNav__item {
+    transition: color 0.2s;
+    &:hover {
+      color: $text;
+      text-decoration: none;
     }
   }
 }
 @media (max-width: $sp) {
-  .header-nav {
-    a {
-      font-size: 1.6rem;
-      padding: 8px 16px;
-    }
+  .headerNav__item {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
   }
-}
-.NuxtLink-exact-active {
-  background-color: rgb(240, 240, 240);
 }
 
 /* home */
@@ -132,7 +121,13 @@ a {
   background-image: url('~assets/images/HomeImg.jpg');
   background-size: cover;
   background-position: 50%;
-  height: 100vh;
+  height: calc(100vh - 61px);
+}
+
+@media (max-width: $tab) {
+  .home-image {
+    height: calc(100vh - 38px);
+  }
 }
 
 /* transition */
@@ -149,14 +144,15 @@ a {
 
 /* wrapper */
 .wrapper {
-  max-width: $pc;
+  max-width: 1200px;
   width: 100%;
-  margin: 100px auto;
+  margin: 0 auto;
   text-align: center;
+  padding: 3rem 4rem;
 }
 @media (max-width: $sp) {
   .wrapper {
-    margin: 60px auto;
+    margin: 0 auto;
   }
 }
 
@@ -166,7 +162,7 @@ a {
   vertical-align: top;
   box-sizing: border-box;
   max-width: 700px;
-  padding: 0 2rem 5rem;
+  padding: 2rem 2rem;
   margin: 0 auto;
   text-align: left;
 }
@@ -245,7 +241,7 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: $pc;
+  max-width: 1200px;
   width: 100%;
   height: 100%;
   margin: 0 auto;
