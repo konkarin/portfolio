@@ -10,6 +10,7 @@ type State = {
   photoModal: {
     url: string
     show: boolean
+    exif: object
   }
 }
 
@@ -21,6 +22,7 @@ export const state = (): State => ({
   photoModal: {
     url: '',
     show: false,
+    exif: {},
   },
 })
 

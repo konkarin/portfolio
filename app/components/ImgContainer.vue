@@ -65,10 +65,8 @@ export default Vue.extend({
 
         // カラムの高さが最も小さいindexの配列に画像を追加
         columns[minHeightIndex].push(img)
-
-        const heightRate = img.exif.ImageHeight / img.exif.ImageWidth
         // カラムの高さを更新
-        columnsHeightList[minHeightIndex] += heightRate
+        columnsHeightList[minHeightIndex] += img.height
       })
 
       return columns
