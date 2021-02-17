@@ -3,9 +3,13 @@
 @import url("https://fonts.googleapis.com/css?family=Poiret+One");
 
 /* Variables */
-$text: rgb(26, 26, 26);
-$inactiveText: rgb(179, 179, 179);
-$link: rgb(218, 186, 5);
+$black: rgb(26, 26, 26);
+$gray: rgb(179, 179, 179);
+$yellow: rgb(255, 219, 74);
+$whiteYellow: rgba(255, 236, 156, 0.5);
+$darkYellow: rgb(240, 195, 14);
+$white: rgb(255,255,255);
+
 $sp: 520px;
 $tab: 960px;
 
@@ -16,7 +20,7 @@ $tab: 960px;
 
 /* common */
 html {
-  color: $text;
+  color: $black;
   -webkit-text-size-adjust: 100%;
   // font-family: "Lato", "Avenir", Helvetica, Arial, sans-serif;
 }
@@ -44,11 +48,7 @@ h4 {
 }
 
 .pageTitle {
-  line-height: 1.4;
-  font-weight: bold;
   text-align: center;
-  // font-size: 3.2rem;
-  letter-spacing: 0.1em;
 }
 
 .textMessage {
@@ -59,7 +59,7 @@ h4 {
 }
 
 a {
-  color: $link;
+  color: $yellow;
   text-decoration: none;
   &:hover {
     text-decoration: underline;
@@ -81,20 +81,20 @@ a {
 .headerNav__item {
   position: relative;
   display: inline-block;
-  color: $inactiveText;
+  color: $gray;
   font-size: 1.2rem;
   letter-spacing: 0.1em;
   padding: 1rem 1.5rem;
   text-decoration: none;
   &--active {
-    color: $text;
+    color: $black;
     &::after {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
       height: 2px;
-      background-color: $text;
+      background-color: $black;
       content: "";
     }
   }
@@ -104,7 +104,7 @@ a {
   .headerNav__item {
     transition: color 0.2s;
     &:hover {
-      color: $text;
+      color: $black;
       text-decoration: none;
     }
   }
@@ -147,13 +147,7 @@ a {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  text-align: center;
   padding: 3rem 4rem;
-}
-@media (max-width: $sp) {
-  .wrapper {
-    margin: 0 auto;
-  }
 }
 
 /* about */
@@ -288,7 +282,7 @@ a {
   margin: 10px;
 }
 .fa-color {
-  color: $link;
+  color: $yellow;
 }
 
 /* MyPage */
@@ -306,61 +300,135 @@ a {
 }
 
 .auth-area {
-  margin-top: 1em;
+  margin-top: 1rem;
+  margin-right: 1rem;
 }
-.flat-button {
+
+.btn {
   font-size: 1em;
+  font-weight: bold;
+  height: 38px;
   padding: 0.3em 1em;
   text-decoration: none;
-  background-color: #f9f9f9;
-  color: $link;
-  border: solid 2px $link;
-  border-radius: 3px;
+  background-color: $yellow;
+  color: $white;
+  border: 0;
+  border-radius: 0.5em;
   transition: 0.4s;
+  &--large {
+    font-size: 3em;
+  }
   &:hover {
     cursor: pointer;
-    background: $link;
-    color: #fff;
+    background: $darkYellow;
   }
   &:disabled {
     cursor: default;
-    color: #cbcbcb;
-    border-color: #cbcbcb;
-    background-color: #f9f9f9;
+    opacity: 0.5;
+    &:hover {
+      background-color: $yellow;
+    }
   }
 }
-// .sign-in {
-// }
+
+.selectBtn {
+  color: $yellow;
+  font-size: 3em;
+}
+
 .sign-out {
   display: block;
   margin: 0 0 0 auto;
 }
+
 .edit-button {
   display: block;
   margin: 0 0 0 auto;
 }
+
 .input-item {
   cursor: pointer;
   input {
     display: none;
   }
 }
-.btn {
-  color: $link;
-  &--large {
-    font-size: 3em;
-  }
-}
+
 .img-checkbox {
   display: none;
   &:checked + div {
-    outline: 5px solid $link;
+    outline: 5px solid $yellow;
     outline-offset: -5px;
   }
 }
+
 .select-img {
   cursor: pointer;
   width: 100%;
   height: 100%;
   display: block;
+}
+
+/* settings */
+.dashboard {
+  display: flex;
+  flex-direction: row;
+}
+
+.dashboard__nav {
+  position: fixed;
+}
+
+.dashboard__navItem {
+  display: flex;
+  padding: 0.5rem 1.5rem;
+  font-weight: bold;
+  font-size: 1.1em;
+  &:hover {
+    text-decoration: none;
+  }
+  &--active {
+    background-color: $whiteYellow;
+    border-radius: 2.5em;
+  }
+}
+
+.dashboard__content {
+  padding-left: 200px;
+  width: 100%;
+}
+
+.dashboard__title {
+  display: flex;
+}
+
+.dashboard__articleList {
+  margin-top: 1rem;
+}
+
+.dashboard__article {
+  margin-top: 2rem;
+}
+
+.dashboard__articleItemContainer {
+  padding: 1rem 0;
+}
+
+.dashboard__articleItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.dashboard__articleTitle {
+  color: $black;
+  font-weight: bold;
+}
+
+.dashboard__articleEdit {
+  display: flex;
+}
+
+
+.dashboard__articleFooter {
+  margin-top: 0.5em;
 }

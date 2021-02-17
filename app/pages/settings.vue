@@ -5,28 +5,43 @@
     </div>
     <div v-if="!isLoading" class="auth-area">
       <template v-if="isAuth">
-        <button class="flat-button sign-out" @click="signOut()">
-          Sign out
-        </button>
+        <button class="btn sign-out" @click="signOut()">Sign out</button>
       </template>
       <template v-else>
-        <button class="flat-button sign-in" @click="signIn()">Sign in</button>
+        <button class="btn sign-in" @click="signIn()">Sign in</button>
       </template>
     </div>
-    <main class="wrapper">
-      <div class="dashboardTab">
-        <NuxtLink to="/settings/gallery" class="dashboardTab__item">
-          Gallery
-        </NuxtLink>
-        <NuxtLink to="/settings/articles" class="dashboardTab__item">
-          Articles
-        </NuxtLink>
-        <NuxtLink to="/settings/post" class="dashboardTab__item">Post</NuxtLink>
-        <NuxtLink to="/settings/profile" class="dashboardTab__item">
+    <main v-if="isAuth" class="wrapper dashboard">
+      <div class="dashboard__nav">
+        <NuxtLink
+          to="/settings/profile"
+          class="dashboard__navItem"
+          :class="{
+            'dashboard__navItem--active': $route.path === '/settings/profile',
+          }"
+        >
           Profile
         </NuxtLink>
+        <NuxtLink
+          to="/settings/gallery"
+          class="dashboard__navItem"
+          :class="{
+            'dashboard__navItem--active': $route.path === '/settings/gallery',
+          }"
+        >
+          Gallery
+        </NuxtLink>
+        <NuxtLink
+          to="/settings/articles"
+          class="dashboard__navItem"
+          :class="{
+            'dashboard__navItem--active': $route.path === '/settings/articles',
+          }"
+        >
+          Articles
+        </NuxtLink>
       </div>
-      <NuxtChild v-if="isAuth" />
+      <NuxtChild />
     </main>
   </div>
 </template>
