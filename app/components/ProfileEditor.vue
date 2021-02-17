@@ -1,7 +1,7 @@
 <template>
   <div>
     <MarkdownEditor :plain-text="plainText" @input="setPlainText" />
-    <button class="flat-button" @click="saveProfile">保存</button>
+    <button class="btn" @click="saveProfile">保存</button>
   </div>
 </template>
 

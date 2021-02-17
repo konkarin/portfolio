@@ -1,9 +1,7 @@
 <template>
   <div>
     <h3>Gallery Editor</h3>
-    <button class="flat-button edit-button" @click="deleteImgList()">
-      Delete
-    </button>
+    <button class="btn edit-button" @click="deleteImgList()">Delete</button>
     <div class="gallery">
       <div v-if="imgList.length === 0">No Photos</div>
       <div

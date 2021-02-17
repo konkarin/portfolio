@@ -3,14 +3,10 @@
     <h3>ImgUploader</h3>
     <div>
       <label class="input-item">
-        <Photo class="btn btn--large" />
+        <Photo class="selectBtn selectBtn--large" />
         <input type="file" accept=".jpeg, .jpg, .png" @change="setFile" />
       </label>
-      <button
-        class="flat-button upload-button"
-        :disabled="file === null"
-        @click="uploadFile()"
-      >
+      <button class="btn" :disabled="file === null" @click="uploadFile()">
         upload
       </button>
     </div>
