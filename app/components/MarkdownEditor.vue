@@ -1,5 +1,5 @@
 <template>
-  <div class="MarkdownEditor">
+  <div class="markdownEditor">
     <div class="textEditor">
       <textarea :value="plainText" @input="inputText" />
     </div>
@@ -55,11 +55,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.MarkdownEditor {
+.markdownEditor {
   display: flex;
   text-align: center;
-  width: 80%;
-  margin: 0 auto 1em;
+  width: 100%;
   background-color: #fbfcff;
   border: 1px solid #cbcbcb;
 }

@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <section class="dashboard__content">
     <MarkdownEditor :plain-text="plainText" @input="setPlainText" />
-    <button class="btn" @click="saveProfile">保存</button>
-  </div>
+    <button class="dashboard__btn btn" @click="saveProfile">保存</button>
+  </section>
 </template>
 
 <script lang="ts">

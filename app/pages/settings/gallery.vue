@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <section class="dashboard__content">
     <ImgUploader />
     <GalleryEditor />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
