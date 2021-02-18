@@ -12,10 +12,11 @@
             {{ article }}
           </NuxtLink>
           <div class="dashboard__articleEdit">
-            <ToggleBtn :toggle-btn="isPublished" @toggle="updatePublishing">
+            <div class="dashboard__articleToggleBtn">
+              <ToggleBtn :toggle-btn="isPublished" @toggle="updatePublishing" />
               公開する
-            </ToggleBtn>
-            <div>編集</div>
+            </div>
+            <button class="btn">編集</button>
           </div>
         </div>
         <div class="dashboard__articleFooter">tag date</div>
@@ -31,11 +32,13 @@ export default Vue.extend({
   data() {
     return {
       articles: ['hoge', 'fuga', 'piyo'],
-      isPublished: false,
+      isPublished: true,
     }
   },
   methods: {
-    updatePublishing() {},
+    updatePublishing() {
+      this.isPublished = !this.isPublished
+    },
   },
 })
 </script>

@@ -372,63 +372,73 @@ a {
 .dashboard {
   display: flex;
   flex-direction: row;
-}
 
-.dashboard__nav {
-  position: fixed;
-}
-
-.dashboard__navItem {
-  display: flex;
-  padding: 0.5rem 1.5rem;
-  font-weight: bold;
-  font-size: 1.1em;
-  &:hover {
-    text-decoration: none;
+  &__nav {
+    position: fixed;
   }
-  &--active {
-    background-color: $whiteYellow;
-    border-radius: 2.5em;
+
+  &__navItem {
+    display: flex;
+    padding: 0.5rem 1.5rem;
+    font-weight: bold;
+    font-size: 1.1em;
+    &:hover {
+      text-decoration: none;
+    }
+    &--active {
+      background-color: $whiteYellow;
+      border-radius: 2.5em;
+    }
   }
-}
 
-.dashboard__content {
-  padding-left: 200px;
-  width: 100%;
-}
+  &__content {
+    padding-left: 200px;
+    width: 100%;
+  }
 
-.dashboard__title {
-  display: flex;
-}
+  &__btn {
+    display: flex;
+    margin: 1rem auto 0;
+  }
 
-.dashboard__articleList {
-  margin-top: 1rem;
-}
+  &__title {
+    display: flex;
+  }
 
-.dashboard__article {
-  margin-top: 2rem;
-}
+  &__articleList {
+    margin-top: 1rem;
+  }
 
-.dashboard__articleItemContainer {
-  padding: 1rem 0;
-}
+  &__article {
+    margin-top: 2rem;
+  }
 
-.dashboard__articleItem {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
+  &__articleItemContainer {
+    padding: 1rem 0;
+  }
 
-.dashboard__articleTitle {
-  color: $black;
-  font-weight: bold;
-}
+  &__articleItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
-.dashboard__articleEdit {
-  display: flex;
-}
+  &__articleTitle {
+    color: $black;
+    font-weight: bold;
+  }
 
+  &__articleEdit {
+    display: flex;
+  }
 
-.dashboard__articleFooter {
-  margin-top: 0.5em;
+  &__articleFooter {
+    margin-top: 0.5em;
+  }
+
+  &__articleToggleBtn {
+    display: flex;
+    align-items: center;
+    padding: 0 1em;
+  }
 }
