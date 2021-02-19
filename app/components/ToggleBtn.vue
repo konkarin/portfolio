@@ -8,10 +8,6 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 
-interface HTMLInputEvent extends Event {
-  target: HTMLInputElement & EventTarget
-}
-
 export default Vue.extend({
   props: {
     toggleBtn: {
