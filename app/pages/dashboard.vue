@@ -14,28 +14,28 @@
     <main v-if="isAuth" class="wrapper dashboard">
       <div class="dashboard__nav">
         <NuxtLink
-          to="/settings/profile"
+          to="/dashboard/profile"
           class="dashboard__navItem"
           :class="{
-            'dashboard__navItem--active': $route.path === '/settings/profile',
+            'dashboard__navItem--active': $route.path === '/dashboard/profile',
           }"
         >
           Profile
         </NuxtLink>
         <NuxtLink
-          to="/settings/gallery"
+          to="/dashboard/gallery"
           class="dashboard__navItem"
           :class="{
-            'dashboard__navItem--active': $route.path === '/settings/gallery',
+            'dashboard__navItem--active': $route.path === '/dashboard/gallery',
           }"
         >
           Gallery
         </NuxtLink>
         <NuxtLink
-          to="/settings/articles"
+          to="/dashboard/articles"
           class="dashboard__navItem"
           :class="{
-            'dashboard__navItem--active': $route.path === '/settings/articles',
+            'dashboard__navItem--active': $route.path === '/dashboard/articles',
           }"
         >
           Articles
@@ -50,7 +50,7 @@
 import Vue from 'vue'
 import firebase from '@/plugins/firebase'
 
-type Data = {
+interface Data {
   isLoading: boolean
   isUploading: boolean
 }
