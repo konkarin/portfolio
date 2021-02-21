@@ -1,5 +1,5 @@
 <template>
-  <GalleryEditor />
+  <DashboardGallery />
 </template>
 
 <script lang="ts">
