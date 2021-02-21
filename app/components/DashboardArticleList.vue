@@ -1,6 +1,7 @@
 <template>
   <section class="dashboard__content">
     <h1 class="dashboard__title">Articles</h1>
+    <button class="dashboard__btn btn" @click="addArticle">Add new</button>
     <div class="dashboard__articleList">
       <DashboardArticle
         v-for="(article, index) in articles"
@@ -14,8 +15,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 import Day from '@/utils/day'
-import dayjs from 'dayjs'
 
 const day = new Day()
 
@@ -55,13 +56,10 @@ export default Vue.extend({
       ],
     }
   },
-  computed: {
-    day() {
-      console.log(dayjs().date())
-      return dayjs().date()
-    },
-  },
   methods: {
+    addArticle() {
+      this.$router.push({ path: `/articles/${uuidv4()}` })
+    },
     updatePublishing(index: number) {
       this.articles[index].isPublished = !this.articles[index].isPublished
     },

@@ -92,7 +92,7 @@ export default Vue.extend({
   },
   head() {
     return {
-      title: 'Mypage',
+      title: 'Dashboard',
     }
   },
 })

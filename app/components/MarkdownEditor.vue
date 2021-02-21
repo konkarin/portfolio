@@ -1,11 +1,11 @@
 <template>
-  <div class="markdownEditor">
-    <div class="textEditor">
-      <textarea :value="plainText" @input="inputText" />
+  <div class="markdownEdit">
+    <div class="markdownEdit__textEditContainer">
+      <textarea class="textEdit" :value="plainText" @input="inputText" />
     </div>
-    <div class="markdownContainer">
+    <div class="markdownEdit__container">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview class="markdwonContent" v-html="markdownText" />
+      <MarkdownPreview class="markdownEdit__content" v-html="markdownText" />
     </div>
   </div>
 </template>
@@ -54,42 +54,40 @@ export default Vue.extend({
 })
 </script>
 
-<style scoped>
-.markdownEditor {
+<style lang="scss" scoped>
+.markdownEdit {
   display: flex;
   text-align: center;
   width: 100%;
   background-color: #fbfcff;
   border: 1px solid #cbcbcb;
-}
-
-.textEditor {
-  padding: 10px;
-  width: 50%;
+  margin-top: 1rem;
+  &__textEditContainer {
+    padding: 10px;
+    width: 50%;
+  }
+  &__container {
+    padding: 10px;
+    text-align: left;
+    width: 50%;
+    border-left: 1px solid #cbcbcb;
+  }
+  &__content {
+    padding-left: 1em;
+    height: 50vh;
+    overflow: scroll;
+  }
 }
 
 textarea {
   width: 100%;
   height: 50vh;
-  padding: 0;
   border: 0;
+  padding: 0;
   outline: 0;
   resize: none;
   font-size: 16px;
   line-height: inherit;
   background-color: #fbfcff;
-}
-
-.markdownContainer {
-  padding: 10px;
-  text-align: left;
-  width: 50%;
-  border-left: 1px solid #cbcbcb;
-}
-
-.markdwonContent {
-  padding-left: 1em;
-  height: 50vh;
-  overflow: scroll;
 }
 </style>

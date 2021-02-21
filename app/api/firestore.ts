@@ -21,7 +21,7 @@ export default class Firestore {
       .get()
   }
 
-  async updateDoc(path, docId, data) {
-    await this.db.collection(path).doc(docId).update(data)
+  async updateDoc(path: string, docId: string, data: any) {
+    await this.db.collection(path).doc(docId).set(data)
   }
 }

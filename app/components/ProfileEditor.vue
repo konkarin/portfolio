@@ -1,7 +1,13 @@
 <template>
   <section class="dashboard__content">
+    <h1>Profile</h1>
     <MarkdownEditor :plain-text="plainText" @input="setPlainText" />
-    <button class="dashboard__btn btn" @click="saveProfile">保存</button>
+    <button
+      class="dashboard__btn dashboard__btn--center btn"
+      @click="saveProfile"
+    >
+      保存
+    </button>
   </section>
 </template>
 
@@ -27,7 +33,7 @@ export default Vue.extend({
       return this.$store.state.user
     },
   },
-  async created() {
+  async mounted() {
     this.plainText = await this.getProfile()
   },
   methods: {

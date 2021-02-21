@@ -1,5 +1,5 @@
-import Sass from 'sass'
 import Fiber from 'fibers'
+import Sass from 'sass'
 
 const env = process.env.NODE_ENV
 const envSettings = require(`./env/${env}.ts`)
@@ -44,7 +44,7 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  css: ['@/assets/style/style.scss'],
+  css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
 
   plugins: [],
 
