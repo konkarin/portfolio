@@ -1,19 +1,12 @@
 <template>
-  <div class="dashboard__articleItem">
+  <div class="articleItem">
     <div class="articleItem__container">
-      <NuxtLink :to="`/articles/${article.id}`" class="articleItem__title">
+      <NuxtLink :to="`/articles/edit/${article.id}`" class="articleItem__title">
         {{ article.title }}
       </NuxtLink>
       <div class="articleItem__actionContainer">
-        <div class="articleItem__toggleBtn">
-          <ToggleBtn
-            :toggle-btn="article.isPublished"
-            @toggle="updatePublishing"
-          />
-          公開する
-        </div>
         <NuxtLink
-          :to="`/articles/${article.id}`"
+          :to="`/articles/edit/${article.id}`"
           class="articleItem__edit edit"
         >
           <Pencil />
@@ -21,17 +14,22 @@
         </NuxtLink>
       </div>
     </div>
-    <div class="articleItem__footer">{{ article.date }}</div>
+    <div class="articleItem__footer">
+      {{ relativeTime(article.updatedDate) }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
+import Day from '@/utils/day'
 
 interface Article {
   title: string
   isPublished: boolean
 }
+
+const day = new Day()
 
 export default Vue.extend({
   props: {
@@ -41,8 +39,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    updatePublishing() {
-      this.$emit('toggle')
+    relativeTime(date: string) {
+      return day.relativeTime(date)
     },
   },
 })

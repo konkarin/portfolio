@@ -1,8 +1,16 @@
 <template>
-  <label class="toggleBtn">
-    <input type="checkbox" :checked="toggleBtn" @change="toggle" />
-    <span class="toggleBtn__slider" />
-  </label>
+  <div class="toggleBtn">
+    <label class="toggleBtn__label">
+      <input
+        type="checkbox"
+        :checked="toggleBtn"
+        class="toggleBtn__input"
+        @change="toggle"
+      />
+      <span class="toggleBtn__slider" />
+    </label>
+    <slot />
+  </div>
 </template>
 
 <script lang="ts">
@@ -26,11 +34,17 @@ export default Vue.extend({
 <style lang="scss" scoped>
 // https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_switch
 .toggleBtn {
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 27px;
-  margin: 0 0.5em;
+  display: flex;
+  align-items: center;
+
+  &__label {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 27px;
+    margin: 0 0.5em;
+  }
+
   &__slider {
     position: absolute;
     cursor: pointer;
@@ -53,14 +67,14 @@ export default Vue.extend({
       transition: 0.3s;
     }
   }
-}
 
-input {
-  display: none;
-  &:checked + .toggleBtn__slider {
-    background-color: #4bd865;
-    &::before {
-      transform: translateX(18px);
+  &__input {
+    display: none;
+    &:checked + .toggleBtn__slider {
+      background-color: #4bd865;
+      &::before {
+        transform: translateX(18px);
+      }
     }
   }
 }

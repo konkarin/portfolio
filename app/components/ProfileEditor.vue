@@ -2,10 +2,7 @@
   <section class="dashboard__content">
     <h1>Profile</h1>
     <MarkdownEditor :plain-text="plainText" @input="setPlainText" />
-    <button
-      class="dashboard__btn dashboard__btn--center btn"
-      @click="saveProfile"
-    >
+    <button class="dashboard__btn btn btn--center" @click="saveProfile">
       保存
     </button>
   </section>
@@ -41,7 +38,7 @@ export default Vue.extend({
       this.plainText = val
     },
     async getProfile() {
-      const data = await apis.Db.getDocById('users', this.user.uid)
+      const data = await apis.db.getDocById('users', this.user.uid)
 
       return data.profile as string
     },
@@ -52,7 +49,7 @@ export default Vue.extend({
       }
 
       try {
-        await apis.Db.updateDoc('users', this.user.uid, data)
+        await apis.db.updateDoc('users', this.user.uid, data)
 
         // TODO: ポップアップにする
         alert('Saved')

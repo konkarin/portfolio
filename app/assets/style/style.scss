@@ -314,6 +314,9 @@ a {
   border: 0;
   border-radius: 0.5em;
   transition: 0.4s;
+  &--center {
+    margin: 1rem auto 0;
+  }
   &--large {
     font-size: 3em;
   }
@@ -424,14 +427,12 @@ a {
   &__articleList {
     margin-top: 1rem;
   }
-
-  &__articleItem {
-    padding: 1rem 0 1.4rem;
-    border-bottom: 1px solid var(--lightBlack);
-  }
 }
 
 .articleItem {
+  padding: 1rem 0 1.4rem;
+  border-bottom: 1px solid var(--lightBlack);
+
   &__container {
     display: flex;
     flex-direction: row;
@@ -445,12 +446,6 @@ a {
 
   &__actionContainer {
     display: flex;
-  }
-
-  &__toggleBtn {
-    display: flex;
-    align-items: center;
-    padding: 0 1em;
   }
 
   &__edit {

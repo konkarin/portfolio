@@ -4,10 +4,9 @@
     <button class="dashboard__btn btn" @click="addArticle">Add new</button>
     <div class="dashboard__articleList">
       <DashboardArticle
-        v-for="(article, index) in articles"
+        v-for="article in articles"
         :key="article.title"
         :article="article"
-        @toggle="updatePublishing(index)"
       />
     </div>
   </section>
@@ -16,9 +15,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import Day from '@/utils/day'
-
-const day = new Day()
+import apis from '@/api/apis'
 
 interface Article {
   id: string
@@ -34,34 +31,28 @@ interface Data {
 export default Vue.extend({
   data(): Data {
     return {
-      articles: [
-        {
-          id: 'hoge',
-          title: 'hoge',
-          isPublished: true,
-          date: day.relativeTime('2021-02-18'),
-        },
-        {
-          id: 'fuga',
-          title: 'fuga',
-          isPublished: true,
-          date: day.relativeTime('2021-02-15'),
-        },
-        {
-          id: 'piyo',
-          title: 'piyo',
-          isPublished: true,
-          date: day.relativeTime('2021-02-10'),
-        },
-      ],
+      articles: [],
     }
   },
+  mounted() {
+    this.setArticles()
+  },
   methods: {
-    addArticle() {
-      this.$router.push({ path: `/articles/${uuidv4()}` })
+    async getArticles() {
+      const collectionPath = `users/${this.$store.state.user.uid}/articles`
+
+      const article = await apis.db.getDocs(collectionPath)
+
+      return article
     },
-    updatePublishing(index: number) {
-      this.articles[index].isPublished = !this.articles[index].isPublished
+
+    async setArticles() {
+      const articles = await this.getArticles()
+      this.articles = articles
+    },
+
+    addArticle() {
+      this.$router.push({ path: `/articles/edit/${uuidv4()}` })
     },
   },
 })
