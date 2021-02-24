@@ -44,6 +44,8 @@ export default Vue.extend({
     },
 
     handleResize: debounce(function () {
+      // FIXME: 動いてるけどなんでtsでエラーになるかわからん
+      // @ts-ignore
       this.updateColumnsLength()
     }, 300),
 
