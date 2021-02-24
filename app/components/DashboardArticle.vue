@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="articleItem__footer">
-      {{ relativeTime(article.updatedDate) }}
+      {{ relativeTime }}
     </div>
   </div>
 </template>
@@ -23,13 +23,17 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import Day from '@/utils/day'
+import firebase from '@/plugins/firebase'
+
+type Timestamp = firebase.firestore.Timestamp
 
 interface Article {
+  id: string
   title: string
+  text: string
   isPublished: boolean
+  updatedDate: Timestamp
 }
-
-const day = new Day()
 
 export default Vue.extend({
   props: {
@@ -38,9 +42,9 @@ export default Vue.extend({
       required: true,
     },
   },
-  methods: {
-    relativeTime(date: string) {
-      return day.relativeTime(date)
+  computed: {
+    relativeTime() {
+      return Day.relativeTime((this.article.updatedDate as Timestamp).toDate())
     },
   },
 })
