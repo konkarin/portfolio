@@ -13,9 +13,8 @@ const db = new Firestore()
 export const loadImgList = async () => {
   const collectionPath = `/users/${process.env.authorId}/images`
 
-  const docs = await db.getDocs(collectionPath)
+  const imgList = await db.getDocs(collectionPath)
 
-  const imgList = docs.map((doc) => doc.data())
   const urls: string[] = imgList.map((img) => img.thumbUrl)
 
   for (const url of urls) {

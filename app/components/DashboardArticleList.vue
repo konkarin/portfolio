@@ -5,7 +5,7 @@
     <div class="dashboard__articleList">
       <DashboardArticle
         v-for="article in articles"
-        :key="article.title"
+        :key="article.id"
         :article="article"
       />
     </div>
@@ -20,8 +20,9 @@ import apis from '@/api/apis'
 interface Article {
   id: string
   title: string
+  text: string
   isPublished: boolean
-  date: string
+  updatedDate: any
 }
 
 interface Data {
@@ -41,14 +42,18 @@ export default Vue.extend({
     async getArticles() {
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
-      const article = await apis.db.getDocs(collectionPath)
+      const article = await apis.db.getOrderDocs(
+        collectionPath,
+        'updatedDate',
+        'desc'
+      )
 
       return article
     },
 
     async setArticles() {
       const articles = await this.getArticles()
-      this.articles = articles
+      this.articles = articles as Article[]
     },
 
     addArticle() {

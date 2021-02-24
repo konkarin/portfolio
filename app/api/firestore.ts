@@ -1,16 +1,37 @@
 import firebase from '@/plugins/firebase'
 
-type Queries = {
-  filePath: string
-  opStr: firebase.firestore.WhereFilterOp
+export interface Queries {
+  fieldPath: string
+  filterStr: firebase.firestore.WhereFilterOp
   value: any
 }
+
+export type OrderByDirection = firebase.firestore.OrderByDirection
+
+export type FieldValue = firebase.firestore.FieldValue
 
 export default class Firestore {
   private db = firebase.firestore()
 
+  getTimestamp() {
+    return firebase.firestore.FieldValue.serverTimestamp()
+  }
+
   async getDocs(collectionPath: string) {
     const snap = await this.db.collection(collectionPath).get()
+
+    return snap.docs.map((doc) => doc.data())
+  }
+
+  async getOrderDocs(
+    collectionPath: string,
+    fieldPath: string,
+    direction?: OrderByDirection
+  ) {
+    const snap = await this.db
+      .collection(collectionPath)
+      .orderBy(fieldPath, direction)
+      .get()
 
     return snap.docs.map((doc) => doc.data())
   }
@@ -24,7 +45,7 @@ export default class Firestore {
   async getDocByQueries(collectionPath: string, queries: Queries) {
     const snap = await this.db
       .collection(collectionPath)
-      .where(queries.filePath, queries.opStr, queries.value)
+      .where(queries.fieldPath, queries.filterStr, queries.value)
       .get()
 
     return snap.docs.map((doc) => doc.data())

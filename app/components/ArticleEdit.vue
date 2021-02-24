@@ -25,7 +25,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
-import Day from '@/utils/day'
 
 interface Article {
   id: string
@@ -34,8 +33,6 @@ interface Article {
   isPublished: boolean
   updatedDate: string
 }
-
-const day = new Day()
 
 export default Vue.extend({
   data(): Article {
@@ -70,18 +67,20 @@ export default Vue.extend({
     },
 
     async getArticle() {
-      const collectionPath = `users/${this.$store.state.user.uid}/articles`
+      const uid: string = this.$store.state.user.uid
 
-      const article = await apis.db.getDocById(
+      const collectionPath = `users/${uid}/articles`
+
+      const article = (await apis.db.getDocById(
         collectionPath,
-        this.$route.params.article
-      )
+        this.id
+      )) as Article
 
       return article
     },
 
     async setArticle() {
-      const article: Article = await this.getArticle()
+      const article = await this.getArticle()
 
       if (article == null) return
 
@@ -93,19 +92,19 @@ export default Vue.extend({
     async updateArticle() {
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
-      const article: Article = {
+      const article = {
         id: this.id,
         title: this.title,
         text: this.text,
         isPublished: this.isPublished,
-        updatedDate: day.now(),
+        updatedDate: apis.db.getTimestamp(),
       }
 
       await apis.db.updateDoc(collectionPath, article.id, article)
       alert('Completed')
     },
   },
-  head() {
+  head(): { title: string } {
     return {
       title: `Editing ${this.articleTitle}`,
     }
