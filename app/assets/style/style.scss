@@ -15,6 +15,8 @@
   --white: rgb(255, 255, 255);
   --sm: 520px;
   --md: 960px;
+  --font: -apple-system, 'BlinkMacSystemFont', 'Hiragino Kaku Gothic ProN',
+    'Hiragino Sans', meiryo, sans-serif, 'Segoe UI Emoji';
 }
 
 /* v-cloak */
@@ -26,7 +28,7 @@
 html {
   color: var(--black);
   -webkit-text-size-adjust: 100%;
-  // font-family: "Lato", "Avenir", Helvetica, Arial, sans-serif;
+  font-family: var(--font);
 }
 
 @media (max-width: var(--md)) {
