@@ -166,7 +166,24 @@ a {
   max-width: 700px;
   padding: 2rem 2rem;
   margin: 0 auto;
+  &__sns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    font-size: 4rem;
+  }
 }
+
+.sns {
+  &__icon {
+    margin-right: 0.5rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
 @media screen and (max-width: $sm) {
   .profile {
     display: block;
@@ -381,8 +398,16 @@ a {
   height: 100%;
   display: block;
 }
+.articleListWrapper {
+  display: flex;
+  justify-content: space-between;
+}
 
-/* settings */
+.articleList {
+  width: calc(100% - 300px);
+}
+
+/* dashboard */
 .dashboard {
   display: flex;
   flex-direction: row;
@@ -509,19 +534,5 @@ a {
     opacity: 1;
     visibility: visible;
     transition: 0.3s ease-in 0.2s;
-  }
-}
-
-.contact {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  &__message {
-    margin-top: 1.5rem;
-  }
-  &__sns {
-    margin-top: 1rem;
-    font-size: 4rem;
   }
 }

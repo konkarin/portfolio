@@ -16,14 +16,7 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import apis from '@/api/apis'
-
-interface Article {
-  id: string
-  title: string
-  text: string
-  isPublished: boolean
-  updatedDate: any
-}
+import { Article } from '@/components/DashboardArticle.vue'
 
 interface Data {
   articles: Array<Article>
@@ -57,7 +50,7 @@ export default Vue.extend({
     },
 
     addArticle() {
-      this.$router.push({ path: `/articles/edit/${uuidv4()}` })
+      this.$router.push({ path: `/dashboard/articles/${uuidv4()}` })
     },
   },
 })

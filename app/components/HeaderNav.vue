@@ -22,11 +22,11 @@
       Gallery
     </NuxtLink>
     <NuxtLink
-      to="/contact"
+      to="/articles"
       class="headerNav__item"
-      :class="{ 'headerNav__item--active': $route.path === '/contact' }"
+      :class="{ 'headerNav__item--active': $route.path === '/articles' }"
     >
-      Contact
+      Articles
     </NuxtLink>
   </nav>
 </template>

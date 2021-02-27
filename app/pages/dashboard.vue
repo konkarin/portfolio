@@ -12,7 +12,7 @@
       </template>
     </header>
     <main v-if="isAuth" class="wrapper dashboard">
-      <nav class="dashboard__nav">
+      <nav v-if="!$route.params.article" class="dashboard__nav">
         <NuxtLink
           to="/dashboard/profile"
           class="dashboard__navItem"

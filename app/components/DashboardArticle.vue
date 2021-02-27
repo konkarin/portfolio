@@ -1,12 +1,15 @@
 <template>
   <div class="articleItem">
     <div class="articleItem__container">
-      <NuxtLink :to="`/articles/edit/${article.id}`" class="articleItem__title">
+      <NuxtLink
+        :to="`/dashboard/articles/${article.id}`"
+        class="articleItem__title"
+      >
         {{ article.title }}
       </NuxtLink>
       <div class="articleItem__actionContainer">
         <NuxtLink
-          :to="`/articles/edit/${article.id}`"
+          :to="`/dashboard/articles/${article.id}`"
           class="articleItem__edit edit"
         >
           <Pencil />
@@ -23,11 +26,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import Day from '@/utils/day'
-import firebase from '@/plugins/firebase'
+import { Timestamp } from '@/types/firebase'
 
-type Timestamp = firebase.firestore.Timestamp
-
-interface Article {
+export interface Article {
   id: string
   title: string
   text: string

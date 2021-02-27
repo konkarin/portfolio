@@ -25,13 +25,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
+import { FieldValue } from '@/types/firebase'
 
 interface Article {
   id: string
   title: string
   text: string
   isPublished: boolean
-  updatedDate: string
+  updatedDate: FieldValue
 }
 
 export default Vue.extend({
@@ -41,7 +42,7 @@ export default Vue.extend({
       title: '',
       text: '',
       isPublished: false,
-      updatedDate: '',
+      updatedDate: apis.db.getTimestamp(),
     }
   },
   computed: {
@@ -90,9 +91,14 @@ export default Vue.extend({
     },
 
     async updateArticle() {
+      if (this.title.length === 0) {
+        alert('Titleは必須です。')
+        return
+      }
+
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
-      const article = {
+      const article: Article = {
         id: this.id,
         title: this.title,
         text: this.text,

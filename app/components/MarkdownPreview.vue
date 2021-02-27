@@ -7,6 +7,10 @@
   margin-top: 0;
 }
 
+.markdown ::v-deep a:hover {
+  text-decoration: underline;
+}
+
 .markdown ::v-deep h1 {
   margin-top: 2em;
   border-bottom: 1px solid #ddd;
