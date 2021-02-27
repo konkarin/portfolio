@@ -440,8 +440,10 @@ a {
   }
 
   &__title {
+    width: 100%;
     color: var(--black);
     font-weight: bold;
+    text-decoration: none;
   }
 
   &__actionContainer {
