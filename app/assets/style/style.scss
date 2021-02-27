@@ -32,7 +32,7 @@ html {
   font-family: var(--font);
 }
 
-@media (max-width: $md) {
+@media screen and (max-width: $md) {
   html {
     font-size: 15px;
   }
@@ -57,20 +57,18 @@ h4 {
 a {
   color: var(--yellow);
   text-decoration: none;
-  &:hover {
+}
+
+.pageTitle {
+  font-size: 2rem;
+  text-align: center;
+  &__link:hover {
     text-decoration: underline;
   }
 }
 
-.pageTitle {
-  text-align: center;
-}
-
 .textMessage {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-left: 4rem;
-  margin-right: 4rem;
+  margin: 1rem 4rem;
 }
 
 /* header */
@@ -107,7 +105,7 @@ a {
   }
 }
 
-@media (min-width: $md) {
+@media screen and (min-width: $md) {
   .headerNav__item {
     transition: color 0.2s;
     &:hover {
@@ -117,9 +115,8 @@ a {
   }
 }
 
-@media (max-width: $sm) {
+@media screen and (max-width: $sm) {
   .headerNav__item {
-    font-size: 1rem;
     padding: 0.5rem 1rem;
   }
 }
@@ -132,7 +129,7 @@ a {
   height: calc(100vh - 61px);
 }
 
-@media (max-width: $md) {
+@media screen and (max-width: $md) {
   .home-image {
     height: calc(100vh - 38px);
   }
@@ -157,7 +154,7 @@ a {
   margin: 0 auto;
   padding: 3rem 4rem;
 }
-@media (max-width: $sm) {
+@media screen and (max-width: $sm) {
   .wrapper {
     margin: 0;
     padding: 2rem 1rem;
@@ -170,7 +167,7 @@ a {
   padding: 2rem 2rem;
   margin: 0 auto;
 }
-@media (max-width: $sm) {
+@media screen and (max-width: $sm) {
   .profile {
     display: block;
     width: 100%;
@@ -224,7 +221,7 @@ a {
     opacity: 0.6;
   }
 }
-@media (max-width: $sm) {
+@media screen and (max-width: $sm) {
   .photo-box {
     width: 50%;
   }
