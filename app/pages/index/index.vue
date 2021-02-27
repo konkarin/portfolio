@@ -1,5 +1,5 @@
 <template>
-  <section class="home-image" />
+  <main class="home-image" />
 </template>
 
 <script lang="ts">

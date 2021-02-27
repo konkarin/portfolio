@@ -1,11 +1,11 @@
 <template>
-  <div class="imgContainer">
+  <section class="imgContainer">
     <ImgColumn
       v-for="(column, index) in imgColumns"
       :key="index"
       :column="column"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">

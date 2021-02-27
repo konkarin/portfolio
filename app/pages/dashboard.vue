@@ -3,16 +3,16 @@
     <div v-show="isUploading || isLoading" class="overlay">
       <div class="loader" />
     </div>
-    <div v-if="!isLoading" class="auth-area">
+    <header v-if="!isLoading" class="auth-area">
       <template v-if="isAuth">
         <button class="btn sign-out" @click="signOut()">Sign out</button>
       </template>
       <template v-else>
         <button class="btn sign-in" @click="signIn()">Sign in</button>
       </template>
-    </div>
+    </header>
     <main v-if="isAuth" class="wrapper dashboard">
-      <div class="dashboard__nav">
+      <nav class="dashboard__nav">
         <NuxtLink
           to="/dashboard/profile"
           class="dashboard__navItem"
@@ -40,7 +40,7 @@
         >
           Articles
         </NuxtLink>
-      </div>
+      </nav>
       <NuxtChild />
     </main>
   </div>

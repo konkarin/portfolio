@@ -3,7 +3,13 @@
     <!-- TODO: markedで編集できるようにする -->
     <PageTitle>
       About
-      <a href="https://twitter.com/k0n_karin" target="_blank">こんかりん</a>
+      <a
+        href="https://twitter.com/k0n_karin"
+        class="pageTitle__link"
+        target="_blank"
+      >
+        こんかりん
+      </a>
     </PageTitle>
     <div class="profile">
       <!-- eslint-disable-next-line vue/no-v-html -->
@@ -16,11 +22,13 @@
 import Vue from 'vue'
 import apis from '@/api/apis'
 import { convertTextToMarkdown } from '@/utils/markdown'
-import MarkdownPreview from '~/components/MarkdownPreview.vue'
+
+interface Data {
+  profile: string
+}
 
 export default Vue.extend({
-  components: { MarkdownPreview },
-  data() {
+  data(): Data {
     return {
       profile: '',
     }
