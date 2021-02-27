@@ -13,11 +13,12 @@
   --darkYellow: rgb(230, 156, 28);
   --yellow: rgb(255, 173, 31);
   --white: rgb(255, 255, 255);
-  --sm: 520px;
-  --md: 960px;
   --font: -apple-system, 'BlinkMacSystemFont', 'Hiragino Kaku Gothic ProN',
     'Hiragino Sans', meiryo, sans-serif, 'Segoe UI Emoji';
 }
+
+$sm: 520px;
+$md: 960px;
 
 /* v-cloak */
 [v-cloak] {
@@ -31,7 +32,7 @@ html {
   font-family: var(--font);
 }
 
-@media (max-width: var(--md)) {
+@media (max-width: $md) {
   html {
     font-size: 15px;
   }
@@ -106,7 +107,7 @@ a {
   }
 }
 
-@media (min-width: var(--md)) {
+@media (min-width: $md) {
   .headerNav__item {
     transition: color 0.2s;
     &:hover {
@@ -115,7 +116,8 @@ a {
     }
   }
 }
-@media (max-width: var(--sm)) {
+
+@media (max-width: $sm) {
   .headerNav__item {
     font-size: 1rem;
     padding: 0.5rem 1rem;
@@ -130,7 +132,7 @@ a {
   height: calc(100vh - 61px);
 }
 
-@media (max-width: var(--md)) {
+@media (max-width: $md) {
   .home-image {
     height: calc(100vh - 38px);
   }
@@ -155,7 +157,7 @@ a {
   margin: 0 auto;
   padding: 3rem 4rem;
 }
-@media (max-width: var(--sm)) {
+@media (max-width: $sm) {
   .wrapper {
     margin: 0;
     padding: 2rem 1rem;
@@ -168,7 +170,7 @@ a {
   padding: 2rem 2rem;
   margin: 0 auto;
 }
-@media (max-width: var(--sm)) {
+@media (max-width: $sm) {
   .profile {
     display: block;
     width: 100%;
@@ -222,7 +224,7 @@ a {
     opacity: 0.6;
   }
 }
-@media (max-width: var(--sm)) {
+@media (max-width: $sm) {
   .photo-box {
     width: 50%;
   }
@@ -445,7 +447,9 @@ a {
     width: 100%;
     color: var(--black);
     font-weight: bold;
-    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   &__actionContainer {
