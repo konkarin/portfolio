@@ -14,6 +14,25 @@
     <div class="profile">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <MarkdownPreview v-html="profile" />
+      <div class="profile__sns sns">
+        <a
+          href="https://twitter.com/k0n_karin"
+          class="sns__icon"
+          target="_blank"
+        >
+          <Twitter />
+        </a>
+        <a
+          href="https://www.instagram.com/k0n_karin/"
+          class="sns__icon"
+          target="_blank"
+        >
+          <Instagram />
+        </a>
+        <a href="https://github.com/konkarin" class="sns__icon" target="_blank">
+          <Github />
+        </a>
+      </div>
     </div>
   </main>
 </template>
