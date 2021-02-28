@@ -9,7 +9,7 @@
           :article="article"
         />
       </div>
-      <aside>サイドメニュー</aside>
+      <ArticlesSideMenu />
     </div>
   </main>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="articleItem">
-    <div class="articleItem__container">
+    <div class="articleItem__titleContainer">
       <NuxtLink
         :to="`/dashboard/articles/${article.id}`"
         class="articleItem__title"

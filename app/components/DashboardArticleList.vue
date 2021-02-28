@@ -2,7 +2,7 @@
   <section class="dashboard__content">
     <h1 class="dashboard__title">Articles</h1>
     <button class="dashboard__btn btn" @click="addArticle">Add new</button>
-    <div class="dashboard__articleList">
+    <div class="dashboard__item">
       <DashboardArticle
         v-for="article in articles"
         :key="article.id"
