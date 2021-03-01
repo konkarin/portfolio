@@ -17,7 +17,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
-import { Article } from '@/components/ArticleItem.vue'
+import { Article } from '@/types/index'
 
 interface Data {
   articles: Article[]
@@ -35,20 +35,20 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.setArticles()
+    this.articles = this.$store.state.articles
   },
   methods: {
     async getArticles() {
       const collectionPath = `users/${process.env.authorId}/articles`
 
-      const article = await apis.db.getOrderDocs(
+      const articles = await apis.db.getOrderDocs(
         collectionPath,
         'updatedDate',
         'desc',
         10
       )
 
-      return article
+      return articles
     },
 
     async setArticles() {

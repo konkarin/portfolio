@@ -9,7 +9,7 @@ class Day {
     return dayjs().format(formatStr)
   }
 
-  getDate(date: string | Date, formatStr?: string) {
+  getDate(date: dayjs.ConfigType, formatStr?: string) {
     return dayjs(date).format(formatStr)
   }
 
@@ -17,8 +17,8 @@ class Day {
     return dayjs(date).fromNow()
   }
 
-  getUnixMS() {
-    return dayjs().valueOf()
+  getUnixMS(date?: dayjs.ConfigType) {
+    return dayjs(date).valueOf()
   }
 }
 

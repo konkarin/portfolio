@@ -25,16 +25,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
-import { FieldValue } from '@/types/firebase'
-
-interface Article {
-  id: string
-  title: string
-  text: string
-  isPublished: boolean
-  updatedDate: FieldValue
-  createdDate: FieldValue
-}
+import { Article } from '@/types/index'
+import day from '~/utils/day'
 
 export default Vue.extend({
   data(): Article {
@@ -44,7 +36,7 @@ export default Vue.extend({
       text: '',
       isPublished: false,
       updatedDate: null,
-      createdDate: apis.db.getTimestamp(),
+      createdDate: null,
     }
   },
   computed: {
@@ -106,8 +98,8 @@ export default Vue.extend({
         title: this.title,
         text: this.text,
         isPublished: this.isPublished,
-        updatedDate: apis.db.getTimestamp(),
-        createdDate: this.createdDate,
+        updatedDate: day.getUnixMS(),
+        createdDate: this.createdDate || day.getUnixMS(),
       }
 
       await apis.db.updateDoc(collectionPath, article.id, article)

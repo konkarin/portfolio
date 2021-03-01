@@ -14,16 +14,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import Day from '@/utils/day'
-import { Timestamp } from '@/types/firebase'
-
-export interface Article {
-  id: string
-  title: string
-  text: string
-  isPublished: boolean
-  updatedDate: Timestamp
-  createdDate: Timestamp
-}
+import { Article } from '@/types/index'
 
 export default Vue.extend({
   props: {
@@ -36,7 +27,7 @@ export default Vue.extend({
     articleDate(): string {
       const format = 'YYYY-MM-DD'
 
-      return Day.getDate(this.article.updatedDate.toDate(), format)
+      return Day.getDate(this.article.updatedDate, format)
     },
   },
   head() {

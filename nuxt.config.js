@@ -66,9 +66,9 @@ export default {
     terser: {
       terserOptions: {
         // console.x を production時に削除
-        compress: {
-          drop_console: process.env.NODE_ENV === 'production',
-        },
+        // compress: {
+        //   drop_console: process.env.NODE_ENV === 'production',
+        // },
       },
     },
     loaders: {
@@ -102,6 +102,15 @@ export default {
       })
     },
   },
+  server: {
+    port: 3001, // デフォルト: 3000
+  },
   // プログレスバーの非表示
   loading: false,
+  // stagingはdevtoolを有効化
+  vue: {
+    config: {
+      devtools: process.env.authorId !== 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2',
+    },
+  },
 }

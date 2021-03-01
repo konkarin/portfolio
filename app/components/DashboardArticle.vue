@@ -24,15 +24,14 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import Day from '@/utils/day'
-import { Timestamp } from '@/types/firebase'
 
 export interface Article {
   id: string
   title: string
   text: string
   isPublished: boolean
-  updatedDate: Timestamp
-  createdDate: Timestamp
+  updatedDate: number
+  createdDate: number
 }
 
 export default Vue.extend({
@@ -44,7 +43,7 @@ export default Vue.extend({
   },
   computed: {
     relativeTime() {
-      return Day.relativeTime((this.article.createdDate as Timestamp).toDate())
+      return Day.relativeTime(Day.getDate(this.article.createdDate))
     },
   },
 })

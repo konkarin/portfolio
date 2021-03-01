@@ -17,16 +17,7 @@
 import Vue from 'vue'
 import apis from '@/api/apis'
 import { convertTextToMarkdown } from '@/utils/markdown'
-import { Timestamp } from '@/types/firebase'
-
-export interface Article {
-  id: string
-  title: string
-  text: string
-  isPublished: boolean
-  updatedDate: Timestamp
-  createdDate: Timestamp
-}
+import { Article } from '@/types/index'
 
 interface Data {
   article: Article

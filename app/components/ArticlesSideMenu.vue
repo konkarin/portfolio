@@ -22,7 +22,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
-import { Article } from '@/components/ArticleItem.vue'
+import { Article } from '@/types/index'
 
 interface Data {
   recentArticles: Article[]
