@@ -1,6 +1,6 @@
 import { loadImgList } from '@/api/apis'
 import firebase from '@/plugins/firebase'
-import { FirebaseUser, DocumentData } from '@/types/firebase'
+import { DocumentData, FirebaseUser } from '@/types/firebase'
 
 type State = {
   isAuth: boolean

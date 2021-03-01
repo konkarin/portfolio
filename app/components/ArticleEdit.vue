@@ -33,6 +33,7 @@ interface Article {
   text: string
   isPublished: boolean
   updatedDate: FieldValue
+  createdDate: FieldValue
 }
 
 export default Vue.extend({
@@ -42,7 +43,8 @@ export default Vue.extend({
       title: '',
       text: '',
       isPublished: false,
-      updatedDate: apis.db.getTimestamp(),
+      updatedDate: null,
+      createdDate: apis.db.getTimestamp(),
     }
   },
   computed: {
@@ -88,6 +90,7 @@ export default Vue.extend({
       this.title = article.title
       this.text = article.text
       this.isPublished = article.isPublished
+      this.createdDate = article.createdDate
     },
 
     async updateArticle() {
@@ -104,6 +107,7 @@ export default Vue.extend({
         text: this.text,
         isPublished: this.isPublished,
         updatedDate: apis.db.getTimestamp(),
+        createdDate: this.createdDate,
       }
 
       await apis.db.updateDoc(collectionPath, article.id, article)

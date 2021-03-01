@@ -13,35 +13,61 @@ export type FieldValue = firebase.firestore.FieldValue
 export default class Firestore {
   private db = firebase.firestore()
 
+  /**
+   * Firestoreのサーバータイムスタンプを取得
+   */
   getTimestamp() {
     return firebase.firestore.FieldValue.serverTimestamp()
   }
 
+  /**
+   * コレクション内のすべてのドキュメントを取得
+   * @param collectionPath
+   */
   async getDocs(collectionPath: string) {
     const snap = await this.db.collection(collectionPath).get()
 
     return snap.docs.map((doc) => doc.data())
   }
 
+  /**
+   * 指定した数の並べ替えたドキュメントを取得
+   * @param collectionPath
+   * @param fieldPath
+   * @param direction
+   * @param limit
+   */
   async getOrderDocs(
     collectionPath: string,
     fieldPath: string,
-    direction?: OrderByDirection
+    direction?: OrderByDirection,
+    limit?: number
   ) {
     const snap = await this.db
       .collection(collectionPath)
       .orderBy(fieldPath, direction)
+      .limit(limit)
       .get()
 
     return snap.docs.map((doc) => doc.data())
   }
 
+  /**
+   * 指定したドキュメントIDを取得
+   * @param collectionPath
+   * @param docId
+   */
   async getDocById(collectionPath: string, docId: string) {
     const snap = await this.db.collection(collectionPath).doc(docId).get()
 
     return snap.data()
   }
 
+  /**
+   * 指定したクエリでドキュメントを取得
+   * @param collectionPath
+   * @param queries
+   */
   async getDocByQueries(collectionPath: string, queries: Queries) {
     const snap = await this.db
       .collection(collectionPath)
@@ -51,6 +77,12 @@ export default class Firestore {
     return snap.docs.map((doc) => doc.data())
   }
 
+  /**
+   * 指定したドキュメントIDを更新
+   * @param path
+   * @param docId
+   * @param data
+   */
   async updateDoc(path: string, docId: string, data: any) {
     await this.db.collection(path).doc(docId).set(data)
   }

@@ -4,10 +4,10 @@
     <NuxtLink :to="`/articles/${article.id}`" class="articleItem__title">
       {{ article.title }}
     </NuxtLink>
-    <div class="articleItem__footer">
+    <!-- <div class="articleItem__footer">
       タグが入る
-      <!-- {{ article.tag }} -->
-    </div>
+      {{ article.tag }}
+    </div> -->
   </div>
 </template>
 
@@ -22,6 +22,7 @@ export interface Article {
   text: string
   isPublished: boolean
   updatedDate: Timestamp
+  createdDate: Timestamp
 }
 
 export default Vue.extend({
@@ -35,10 +36,7 @@ export default Vue.extend({
     articleDate(): string {
       const format = 'YYYY-MM-DD'
 
-      return Day.getDate(
-        (this.article.updatedDate as Timestamp).toDate(),
-        format
-      )
+      return Day.getDate(this.article.updatedDate.toDate(), format)
     },
   },
   head() {

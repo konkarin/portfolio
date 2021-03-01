@@ -1,9 +1,9 @@
 <template>
   <main class="wrapper">
     <PageTitle>Articles</PageTitle>
-    <div class="articleListWrapper">
-      <div class="articleList">
-        <Article
+    <div class="articleList">
+      <div class="articleList__inner">
+        <ArticleItem
           v-for="article in articles"
           :key="article.id"
           :article="article"
@@ -17,7 +17,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
-import { Article } from '@/components/Article.vue'
+import { Article } from '@/components/ArticleItem.vue'
 
 interface Data {
   articles: Article[]
@@ -29,6 +29,11 @@ export default Vue.extend({
       articles: [],
     }
   },
+  computed: {
+    recentArticles(): Article[] {
+      return this.articles.slice(0, 2)
+    },
+  },
   mounted() {
     this.setArticles()
   },
@@ -39,7 +44,8 @@ export default Vue.extend({
       const article = await apis.db.getOrderDocs(
         collectionPath,
         'updatedDate',
-        'desc'
+        'desc',
+        10
       )
 
       return article

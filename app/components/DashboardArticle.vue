@@ -17,9 +17,7 @@
         </NuxtLink>
       </div>
     </div>
-    <div class="articleItem__footer">
-      {{ relativeTime }}
-    </div>
+    <div class="articleItem__footer">{{ relativeTime }}に作成</div>
   </div>
 </template>
 
@@ -34,6 +32,7 @@ export interface Article {
   text: string
   isPublished: boolean
   updatedDate: Timestamp
+  createdDate: Timestamp
 }
 
 export default Vue.extend({
@@ -45,7 +44,7 @@ export default Vue.extend({
   },
   computed: {
     relativeTime() {
-      return Day.relativeTime((this.article.updatedDate as Timestamp).toDate())
+      return Day.relativeTime((this.article.createdDate as Timestamp).toDate())
     },
   },
 })
