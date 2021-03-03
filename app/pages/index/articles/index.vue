@@ -1,15 +1,17 @@
 <template>
-  <ArticleList />
+  <ArticleList :articles="articles" />
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue, { PropType } from 'vue'
+import { Article } from '@/types/index'
 
 export default Vue.extend({
-  head() {
-    return {
-      title: 'Articles',
-    }
+  props: {
+    articles: {
+      type: Array as PropType<Article[]>,
+      required: true,
+    },
   },
 })
 </script>

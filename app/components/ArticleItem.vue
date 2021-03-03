@@ -30,10 +30,5 @@ export default Vue.extend({
       return Day.getDate(this.article.updatedDate, format)
     },
   },
-  head() {
-    return {
-      title: 'Articles',
-    }
-  },
 })
 </script>

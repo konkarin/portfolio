@@ -1,5 +1,5 @@
-import Firestore from '@/api/firestore'
-import firebase from '@/plugins/firebase'
+import firebase from '../plugins/firebase'
+import Firestore from './firestore'
 
 interface ProfileData {
   profile: string

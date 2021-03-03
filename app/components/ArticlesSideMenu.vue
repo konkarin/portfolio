@@ -20,43 +20,24 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import apis from '@/api/apis'
+import Vue, { PropType } from 'vue'
 import { Article } from '@/types/index'
 
 interface Data {
-  recentArticles: Article[]
   tags: string[]
 }
 
 export default Vue.extend({
+  props: {
+    recentArticles: {
+      type: Array as PropType<Article[]>,
+      required: true,
+    },
+  },
   data(): Data {
     return {
-      recentArticles: [],
       tags: [],
     }
-  },
-  mounted() {
-    this.setRecentArticles()
-  },
-  methods: {
-    async getRecentArticles() {
-      const collectionPath = `users/${process.env.authorId}/articles`
-
-      const article = await apis.db.getOrderDocs(
-        collectionPath,
-        'updatedDate',
-        'desc',
-        3
-      )
-
-      return article
-    },
-
-    async setRecentArticles() {
-      const articles = await this.getRecentArticles()
-      this.recentArticles = articles as Article[]
-    },
   },
 })
 </script>
