@@ -18,8 +18,7 @@ export default Vue.extend({
     const articles = (await apis.db.getOrderDocs(
       collectionPath,
       'updatedDate',
-      'desc',
-      10
+      'desc'
     )) as Article[]
 
     return {
@@ -31,14 +30,17 @@ export default Vue.extend({
       articles: [],
     }
   },
-  mounted() {
+  async mounted() {
     // asyncDataのフォールバック処理
     if (this.articles.length === 0) {
-      // this.articles
-    }
+      const collectionPath = `users/${process.env.authorId}/articles`
 
-    //
-    this.$store.commit('saveRecentArticles', this.articles)
+      this.articles = (await apis.db.getOrderDocs(
+        collectionPath,
+        'updatedDate',
+        'desc'
+      )) as Article[]
+    }
   },
   head() {
     return {

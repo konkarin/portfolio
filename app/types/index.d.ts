@@ -5,4 +5,5 @@ export interface Article {
   isPublished: boolean
   updatedDate: number | null
   createdDate: number | null
+  tags: string[]
 }

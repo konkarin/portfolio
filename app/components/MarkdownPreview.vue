@@ -7,8 +7,12 @@
   margin-top: 0;
 }
 
-.markdown ::v-deep a:hover {
-  text-decoration: underline;
+.markdown ::v-deep a {
+  color: var(--yellow);
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .markdown ::v-deep h1 {

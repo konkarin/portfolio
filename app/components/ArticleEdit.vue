@@ -2,19 +2,23 @@
   <section class="wrapper">
     <div class="articleEdit">
       <textarea
-        v-model="title"
+        v-model="article.title"
         placeholder="Title"
         class="articleEdit__title"
         maxlength="64"
       />
       <ToggleBtn
-        :toggle-btn="isPublished"
+        :toggle-btn="article.isPublished"
         class="articleEdit__toggleBtn"
         @toggle="updatePublishing"
       >
         公開する
       </ToggleBtn>
-      <MarkdownEditor :plain-text="text" @input="setText" />
+      <MarkdownEditor :plain-text="article.text" @input="setText" />
+      <div class="articleEdit__tagContainer">
+        <b>Tags:</b>
+        <input v-model="tag" class="articleEdit__tag" type="text" />
+      </div>
       <button class="articleEdit__btn btn btn--center" @click="updateArticle">
         保存
       </button>
@@ -28,20 +32,29 @@ import apis from '@/api/apis'
 import { Article } from '@/types/index'
 import day from '~/utils/day'
 
+interface Data {
+  article: Article
+  tag: string
+}
+
 export default Vue.extend({
-  data(): Article {
+  data(): Data {
     return {
-      id: this.$route.params.article,
-      title: '',
-      text: '',
-      isPublished: false,
-      updatedDate: null,
-      createdDate: null,
+      article: {
+        id: this.$route.params.article,
+        title: '',
+        text: '',
+        isPublished: false,
+        updatedDate: null,
+        createdDate: null,
+        tags: [],
+      },
+      tag: '',
     }
   },
   computed: {
     articleTitle(): string {
-      return this.title
+      return this.article.title
     },
   },
   async mounted() {
@@ -51,14 +64,15 @@ export default Vue.extend({
     }
 
     await this.setArticle()
+    this.tag = this.article.tags.join()
   },
   methods: {
     updatePublishing() {
-      this.isPublished = !this.isPublished
+      this.article.isPublished = !this.article.isPublished
     },
 
     setText(val: string) {
-      this.text = val
+      this.article.text = val
     },
 
     async getArticle() {
@@ -68,7 +82,7 @@ export default Vue.extend({
 
       const article = (await apis.db.getDocById(
         collectionPath,
-        this.id
+        this.article.id
       )) as Article
 
       return article
@@ -79,14 +93,15 @@ export default Vue.extend({
 
       if (article == null) return
 
-      this.title = article.title
-      this.text = article.text
-      this.isPublished = article.isPublished
-      this.createdDate = article.createdDate
+      this.article.title = article.title
+      this.article.text = article.text
+      this.article.isPublished = article.isPublished
+      this.article.createdDate = article.createdDate
+      this.article.tags = article.tags
     },
 
     async updateArticle() {
-      if (this.title.length === 0) {
+      if (this.article.title.length === 0) {
         alert('Titleは必須です。')
         return
       }
@@ -94,12 +109,13 @@ export default Vue.extend({
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
       const article: Article = {
-        id: this.id,
-        title: this.title,
-        text: this.text,
-        isPublished: this.isPublished,
+        id: this.article.id,
+        title: this.article.title,
+        text: this.article.text,
+        isPublished: this.article.isPublished,
         updatedDate: day.getUnixMS(),
-        createdDate: this.createdDate || day.getUnixMS(),
+        createdDate: this.article.createdDate || day.getUnixMS(),
+        tags: this.tag.split(','),
       }
 
       await apis.db.updateDoc(collectionPath, article.id, article)
@@ -113,30 +129,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss" scoped>
-.articleEdit {
-  &__title {
-    width: 100%;
-    height: 2.5rem;
-    border: 0;
-    padding: 0;
-    outline: 0;
-    resize: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-    line-height: 1.6;
-    background-color: #fbfcff;
-  }
-
-  &__toggleBtn {
-    justify-content: flex-end;
-    margin-top: 0.5rem;
-  }
-
-  &__btn {
-    display: flex;
-    margin-top: 1rem;
-  }
-}
-</style>

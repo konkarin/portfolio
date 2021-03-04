@@ -24,7 +24,7 @@
     <NuxtLink
       to="/articles"
       class="headerNav__item"
-      :class="{ 'headerNav__item--active': $route.path === '/articles' }"
+      :class="{ 'headerNav__item--active': $route.path.includes('/articles') }"
     >
       Articles
     </NuxtLink>

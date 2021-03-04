@@ -61,7 +61,9 @@ export default Vue.extend({
   width: 100%;
   background-color: #fbfcff;
   border: 1px solid #cbcbcb;
+  border-radius: 8px;
   margin-top: 1rem;
+
   &__textEditContainer {
     padding: 10px;
     width: 50%;
@@ -73,10 +75,13 @@ export default Vue.extend({
     border-left: 1px solid #cbcbcb;
   }
   &__content {
-    padding-left: 1em;
+    padding: 0 0.5rem;
     height: 50vh;
     overflow: scroll;
   }
+}
+.textEdit {
+  padding: 0 0.5rem;
 }
 
 textarea {

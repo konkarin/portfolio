@@ -1,14 +1,15 @@
 <template>
-  <div class="articleItem">
+  <NuxtLink :to="`/articles/${article.id}`" class="articleItem">
     <div class="articleItem__subTitle">{{ articleDate }}</div>
-    <NuxtLink :to="`/articles/${article.id}`" class="articleItem__title">
+    <div class="articleItem__title">
       {{ article.title }}
-    </NuxtLink>
-    <!-- <div class="articleItem__footer">
-      タグが入る
-      {{ article.tag }}
-    </div> -->
-  </div>
+    </div>
+    <div class="articleItem__footer">
+      <div v-for="tag in article.tags" :key="tag" class="articleItem__tag">
+        {{ tag }}
+      </div>
+    </div>
+  </NuxtLink>
 </template>
 
 <script lang="ts">
