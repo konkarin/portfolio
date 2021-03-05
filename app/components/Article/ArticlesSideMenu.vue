@@ -1,13 +1,13 @@
 <template>
-  <aside class="sideMenu">
-    <div class="sideMenu__content">
+  <div class="sideMenu">
+    <aside class="sideMenu__content">
       <div class="sideMenu__title">最新記事</div>
-      <ArticleSideMenuItem
+      <ArticlesSideMenuItem
         v-for="article in recentArticles"
         :key="article.id"
         :article="article"
       />
-    </div>
+    </aside>
     <!-- <div class="sideMenu__content">
       <div class="sideMenu__title">タグ</div>
       <div v-for="tag in tags" :key="tag" class="sideMenu__item">
@@ -16,7 +16,7 @@
         </NuxtLink>
       </div>
     </div> -->
-  </aside>
+  </div>
 </template>
 
 <script lang="ts">

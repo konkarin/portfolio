@@ -5,7 +5,11 @@
       {{ article.title }}
     </div>
     <div class="articleItem__footer">
-      <div v-for="tag in article.tags" :key="tag" class="articleItem__tag">
+      <div
+        v-for="tag in article.tags"
+        :key="tag"
+        class="articleItem__tag articleTag"
+      >
         {{ tag }}
       </div>
     </div>

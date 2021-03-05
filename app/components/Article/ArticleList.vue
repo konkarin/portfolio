@@ -1,5 +1,5 @@
 <template>
-  <div class="articleList__inner">
+  <div class="article__list">
     <ArticleItem
       v-for="article in articles"
       :key="article.id"
