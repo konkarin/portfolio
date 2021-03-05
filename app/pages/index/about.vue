@@ -17,19 +17,23 @@
       <div class="profile__sns sns">
         <a
           href="https://twitter.com/k0n_karin"
-          class="sns__icon"
+          class="sns__icon shareBtn shareBtn--lg"
           target="_blank"
         >
           <Twitter />
         </a>
         <a
           href="https://www.instagram.com/k0n_karin/"
-          class="sns__icon"
+          class="sns__icon shareBtn shareBtn--lg"
           target="_blank"
         >
           <Instagram />
         </a>
-        <a href="https://github.com/konkarin" class="sns__icon" target="_blank">
+        <a
+          href="https://github.com/konkarin"
+          class="sns__icon shareBtn shareBtn--lg"
+          target="_blank"
+        >
           <Github />
         </a>
       </div>
@@ -47,15 +51,24 @@ interface Data {
 }
 
 export default Vue.extend({
+  async asyncData(): Promise<Data> {
+    const data = await apis.db.getDocById('users', process.env.authorId)
+
+    return {
+      profile: await convertTextToMarkdown(data.profile),
+    }
+  },
   data(): Data {
     return {
       profile: '',
     }
   },
   async mounted() {
-    const data = await apis.db.getDocById('users', process.env.authorId)
+    if (this.profile === '') {
+      const data = await apis.db.getDocById('users', process.env.authorId)
 
-    this.profile = await convertTextToMarkdown(data.profile)
+      this.profile = await convertTextToMarkdown(data.profile)
+    }
   },
   head() {
     return {
