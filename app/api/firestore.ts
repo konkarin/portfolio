@@ -84,7 +84,6 @@ export default class Firestore {
       .collection(collectionPath)
       .where(queries.fieldPath, queries.filterStr, queries.value)
       .get()
-    console.log(snap.docs)
 
     return snap.docs.map((doc) => doc.data())
   }

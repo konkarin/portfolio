@@ -22,19 +22,17 @@ export default Vue.extend({
       }
     } else {
       const collectionPath = `users/${process.env.authorId}/articles`
-
       const article = (await apis.db.getDocById(
         collectionPath,
         params.article
       )) as Article
-
       return {
         article,
         markdownText: await convertTextToMarkdown(article.text),
       }
     }
   },
-  data() {
+  data(): Data {
     return {
       article: {
         id: '',
@@ -43,6 +41,7 @@ export default Vue.extend({
         isPublished: false,
         updatedDate: null,
         createdDate: null,
+        tags: [],
       },
       markdownText: '',
     }

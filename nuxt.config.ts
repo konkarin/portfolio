@@ -1,35 +1,9 @@
 import Fiber from 'fibers'
-import firebase from 'firebase/app'
-import 'firebase/firestore'
 import Sass from 'sass'
+import { generateRoutes } from './routes'
 
 const env = process.env.NODE_ENV
 const envSettings = require(`./env/${env}.ts`)
-
-const generateRoutes = async () => {
-  const articles = await getArticles()
-
-  return articles.map((article) => {
-    return {
-      route: `/articles/${article.id}`,
-      payload: article,
-    }
-  })
-}
-
-const getArticles = async () => {
-  firebase.initializeApp(envSettings.firebaseConfig)
-
-  const collectionPath = `users/${envSettings.authorId}/articles`
-
-  return await firebase
-    .firestore()
-    .collection(collectionPath)
-    .get()
-    .then((snap) => {
-      return snap.docs.map((doc) => doc.data())
-    })
-}
 
 export default {
   env: envSettings,
@@ -131,11 +105,11 @@ export default {
   },
   generate: {
     async routes() {
-      return await generateRoutes()
+      return await generateRoutes(envSettings)
     },
   },
   server: {
-    port: 3001, // デフォルト: 3000
+    port: 3002, // デフォルト: 3000
   },
   // プログレスバーの非表示
   loading: false,

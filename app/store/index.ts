@@ -1,4 +1,4 @@
-import apis, { loadImgList } from '@/api/apis'
+import { loadImgList } from '@/api/apis'
 import firebase from '@/plugins/firebase'
 import { DocumentData, FirebaseUser } from '@/types/firebase'
 import { Article } from '@/types/index'
@@ -62,22 +62,6 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ commit }) {
-    const articlesPath = `users/${process.env.authorId}/articles`
-
-    const articles = (await apis.db.getOrderDocs(
-      articlesPath,
-      'updatedDate',
-      'desc'
-    )) as Article[]
-
-    const tagsPath = `users/${process.env.authorId}/articleTags`
-    const tags = (await apis.db.getDocIds(tagsPath)) as string[]
-
-    commit('updateArticles', articles)
-    commit('updateArticleTags', tags)
-  },
-
   async preloadImgList({ commit }): Promise<void> {
     const loadedImgList = await loadImgList()
 
