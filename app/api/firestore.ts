@@ -21,6 +21,17 @@ export default class Firestore {
   }
 
   /**
+   * コレクション内のすべてのドキュメントIDを取得する
+   * @param collectionPath
+   * @returns
+   */
+  async getDocIds(collectionPath) {
+    const snap = await this.db.collection(collectionPath).get()
+
+    return snap.docs.map((doc) => doc.id)
+  }
+
+  /**
    * コレクション内のすべてのドキュメントを取得
    * @param collectionPath
    */
@@ -68,11 +79,12 @@ export default class Firestore {
    * @param collectionPath
    * @param queries
    */
-  async getDocByQueries(collectionPath: string, queries: Queries) {
+  async getDocsByQueries(collectionPath: string, queries: Queries) {
     const snap = await this.db
       .collection(collectionPath)
       .where(queries.fieldPath, queries.filterStr, queries.value)
       .get()
+    console.log(snap.docs)
 
     return snap.docs.map((doc) => doc.data())
   }

@@ -3,7 +3,7 @@
     <PageTitle>Articles</PageTitle>
     <div class="article">
       <NuxtChild :articles="articles" />
-      <ArticlesSideMenu :recent-articles="recentArticles" />
+      <ArticlesSideMenu :recent-articles="recentArticles" :tags="tags" />
     </div>
   </main>
 </template>
@@ -16,6 +16,10 @@ export default Vue.extend({
   props: {
     articles: {
       type: Array as PropType<Article[]>,
+      required: true,
+    },
+    tags: {
+      type: Array as PropType<string[]>,
       required: true,
     },
   },

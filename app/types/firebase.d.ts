@@ -9,3 +9,9 @@ export type OrderByDirection = firebase.firestore.OrderByDirection
 export type Timestamp = firebase.firestore.Timestamp
 
 export type FieldValue = firebase.firestore.FieldValue
+
+export interface Queries {
+  fieldPath: string
+  filterStr: firebase.firestore.WhereFilterOp
+  value: any
+}

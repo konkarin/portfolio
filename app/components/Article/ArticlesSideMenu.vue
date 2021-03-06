@@ -8,14 +8,15 @@
         :article="article"
       />
     </aside>
-    <!-- <div class="sideMenu__content">
+    <div class="sideMenu__content">
       <div class="sideMenu__title">タグ</div>
-      <div v-for="tag in tags" :key="tag" class="sideMenu__item">
-        <NuxtLink to="">
+      <div v-for="tag in tags" :key="tag" class="sideMenuItem">
+        <!-- TODO:ルーティング考える -->
+        <NuxtLink to="/articles" class="sideMenuItem__title">
           {{ tag }}
         </NuxtLink>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -23,21 +24,16 @@
 import Vue, { PropType } from 'vue'
 import { Article } from '@/types/index'
 
-interface Data {
-  tags: string[]
-}
-
 export default Vue.extend({
   props: {
     recentArticles: {
       type: Array as PropType<Article[]>,
       required: true,
     },
-  },
-  data(): Data {
-    return {
-      tags: [],
-    }
+    tags: {
+      type: Array as PropType<string[]>,
+      required: true,
+    },
   },
 })
 </script>

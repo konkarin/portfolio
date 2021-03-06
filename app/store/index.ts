@@ -1,6 +1,7 @@
-import { loadImgList } from '@/api/apis'
+import apis, { loadImgList } from '@/api/apis'
 import firebase from '@/plugins/firebase'
 import { DocumentData, FirebaseUser } from '@/types/firebase'
+import { Article } from '@/types/index'
 
 interface State {
   isAuth: boolean
@@ -12,6 +13,8 @@ interface State {
     show: boolean
     exif: object
   }
+  articles: Article[]
+  articleTags: string[]
 }
 
 export const state = (): State => ({
@@ -24,6 +27,8 @@ export const state = (): State => ({
     show: false,
     exif: {},
   },
+  articles: [],
+  articleTags: [],
 })
 
 export const mutations = {
@@ -46,9 +51,33 @@ export const mutations = {
   switchPhotoModal(state: State, payload: State['photoModal']) {
     state.photoModal = payload
   },
+
+  updateArticles(state: State, payload: Article[]) {
+    state.articles = payload
+  },
+
+  updateArticleTags(state: State, payload: string[]) {
+    state.articleTags = payload
+  },
 }
 
 export const actions = {
+  async nuxtServerInit({ commit }) {
+    const articlesPath = `users/${process.env.authorId}/articles`
+
+    const articles = (await apis.db.getOrderDocs(
+      articlesPath,
+      'updatedDate',
+      'desc'
+    )) as Article[]
+
+    const tagsPath = `users/${process.env.authorId}/articleTags`
+    const tags = (await apis.db.getDocIds(tagsPath)) as string[]
+
+    commit('updateArticles', articles)
+    commit('updateArticleTags', tags)
+  },
+
   async preloadImgList({ commit }): Promise<void> {
     const loadedImgList = await loadImgList()
 

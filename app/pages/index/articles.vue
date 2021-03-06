@@ -1,5 +1,5 @@
 <template>
-  <ArticleContainer :articles="articles" />
+  <ArticleContainer :articles="articles" :tags="tags" />
 </template>
 
 <script lang="ts">
@@ -9,25 +9,31 @@ import apis from '@/api/apis'
 
 interface Data {
   articles: Article[]
+  tags: string[]
 }
 
 export default Vue.extend({
   async asyncData(): Promise<Data> {
-    const collectionPath = `users/${process.env.authorId}/articles`
+    const articlesPath = `users/${process.env.authorId}/articles`
 
     const articles = (await apis.db.getOrderDocs(
-      collectionPath,
+      articlesPath,
       'updatedDate',
       'desc'
     )) as Article[]
 
+    const tagsPath = `users/${process.env.authorId}/articleTags`
+    const tags = (await apis.db.getDocIds(tagsPath)) as string[]
+
     return {
       articles,
+      tags,
     }
   },
   data(): Data {
     return {
       articles: [],
+      tags: [],
     }
   },
   async mounted() {
@@ -40,6 +46,11 @@ export default Vue.extend({
         'updatedDate',
         'desc'
       )) as Article[]
+    }
+
+    if (this.tags.length === 0) {
+      const tagsPath = `users/${process.env.authorId}/articleTags`
+      this.tags = (await apis.db.getDocIds(tagsPath)) as string[]
     }
   },
   head() {
