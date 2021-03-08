@@ -1,6 +1,6 @@
 <template>
   <main class="wrapper">
-    <PageTitle>Tags: {{ $route.params.tags }}</PageTitle>
+    <PageTitle>Tags: {{ $route.params.tag }}</PageTitle>
     <div class="article">
       <ArticleList :articles="articles" />
       <ArticlesSideMenu :tags="tags" />
@@ -16,36 +16,45 @@ import { Article } from '@/types/index'
 
 interface Data {
   articles: Article[]
-  tags: string[]
+  tag: string
 }
 
 export default Vue.extend({
-  async asyncData({ params }): Promise<Data> {
-    const artilcesPath = `users/${process.env.authorId}/articles`
+  async asyncData({ params, payload }): Promise<Data> {
+    if (payload) {
+      return {
+        articles: payload,
+        tag: params.tag,
+      }
+    } else {
+      const artilcesPath = `users/${process.env.authorId}/articles`
 
-    const queries: Queries = {
-      fieldPath: 'tags',
-      filterStr: 'array-contains',
-      value: params.tags,
-    }
+      const queries: Queries = {
+        fieldPath: 'tags',
+        filterStr: 'array-contains',
+        value: params.tag,
+      }
 
-    const articles = (await apis.db.getDocsByQueries(
-      artilcesPath,
-      queries
-    )) as Article[]
+      const articles = (await apis.db.getDocsByQueries(
+        artilcesPath,
+        queries
+      )) as Article[]
 
-    const tagsPath = `users/${process.env.authorId}/articleTags`
-    const tags = (await apis.db.getDocIds(tagsPath)) as string[]
-
-    return {
-      articles,
-      tags,
+      return {
+        articles,
+        tag: params.tag,
+      }
     }
   },
   data(): Data {
     return {
       articles: [],
-      tags: [],
+      tag: this.$route.params.tag,
+    }
+  },
+  head(): { title: string } {
+    return {
+      title: `${this.$route.params.tag}の記事`,
     }
   },
 })
