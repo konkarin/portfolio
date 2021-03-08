@@ -1,10 +1,16 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
-export const generateRoutes = async (env) => {
+let env
+
+export const generateRoutes = async (envSettings) => {
+  env = envSettings
   if (firebase.apps.length === 0) firebase.initializeApp(env.firebaseConfig)
 
-  const articles = await getArticles(env)
+  const articles = await getArticles()
+
+  const filterdArticlesList = await getArticlesByTag()
+  console.log(filterdArticlesList)
 
   const result = []
 
@@ -17,17 +23,49 @@ export const generateRoutes = async (env) => {
     })
   )
 
+  for (const [tag, articles] of Object.entries(filterdArticlesList)) {
+    result.push({
+      route: `/tags/${tag}`,
+      payload: articles,
+    })
+  }
+
   return result.flat()
 }
 
-const getArticles = async (env) => {
+const getArticles = async () => {
   const collectionPath = `users/${env.authorId}/articles`
+  const snap = await firebase.firestore().collection(collectionPath).get()
 
-  return await firebase
-    .firestore()
-    .collection(collectionPath)
-    .get()
-    .then((snap) => {
-      return snap.docs.map((doc) => doc.data())
-    })
+  return snap.docs.map((doc) => doc.data())
+}
+
+const getArticlesByTag = async () => {
+  const articleTags = await getArticleTags()
+
+  const articlesPath = `users/${env.authorId}/articles`
+
+  const articlesList = {}
+
+  for (let i = 0; i < articleTags.length; i++) {
+    const tag = articleTags[i]
+
+    const snap = await firebase
+      .firestore()
+      .collection(articlesPath)
+      .where('tags', 'array-contains', tag)
+      .get()
+
+    articlesList[tag] = snap.docs.map((doc) => doc.data())
+  }
+
+  return articlesList
+}
+
+const getArticleTags = async () => {
+  const articleTagsPath = `users/${env.authorId}/articleTags`
+
+  const snap = await firebase.firestore().collection(articleTagsPath).get()
+
+  return snap.docs.map((doc) => doc.id)
 }
