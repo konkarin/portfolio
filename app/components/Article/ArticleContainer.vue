@@ -14,13 +14,6 @@ import { Article } from '@/types/index'
 import apis from '@/api/apis'
 
 export default Vue.extend({
-  async fetch(): Promise<void> {
-    const articles = await this.getArticles()
-    const tags = await this.getAritcleTags()
-
-    this.$store.commit('updateArticles', articles)
-    this.$store.commit('updateArticleTags', tags)
-  },
   computed: {
     articles() {
       return this.$store.state.articles

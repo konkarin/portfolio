@@ -1,4 +1,4 @@
-import { loadImgList } from '@/api/apis'
+import apis, { loadImgList } from '@/api/apis'
 import firebase from '@/plugins/firebase'
 import { DocumentData, FirebaseUser } from '@/types/firebase'
 import { Article } from '@/types/index'
@@ -14,6 +14,7 @@ interface State {
     exif: object
   }
   articles: Article[]
+  recentArticles: Article[]
   articleTags: string[]
 }
 
@@ -28,6 +29,7 @@ export const state = (): State => ({
     exif: {},
   },
   articles: [],
+  recentArticles: [],
   articleTags: [],
 })
 
@@ -56,12 +58,39 @@ export const mutations = {
     state.articles = payload
   },
 
+  updateRecentArticles(state: State, payload: Article[]) {
+    state.recentArticles = payload
+  },
+
   updateArticleTags(state: State, payload: string[]) {
     state.articleTags = payload
   },
 }
 
 export const actions = {
+  async nuxtServerInit({ commit }) {
+    // TODO:フォールバックどうなる？
+    const articlesPath = `users/${process.env.authorId}/articles`
+
+    // 一覧用の記事一覧
+    const articles = (await apis.db.getOrderDocs(
+      articlesPath,
+      'updatedDate',
+      'desc'
+    )) as Article[]
+
+    // サイドメニュー用の最新記事一覧
+    const recentArticles = articles.slice(0, 2)
+
+    const tagsPath = `users/${process.env.authorId}/articleTags`
+    // サイドメニュー用のタグ一覧
+    const articleTags = (await apis.db.getDocIds(tagsPath)) as string[]
+
+    commit('updateArticles', articles)
+    commit('updateRecentArticles', recentArticles)
+    commit('updateArticleTags', articleTags)
+  },
+
   async preloadImgList({ commit }): Promise<void> {
     const loadedImgList = await loadImgList()
 

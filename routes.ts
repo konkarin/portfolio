@@ -7,12 +7,10 @@ export const generateRoutes = async (envSettings) => {
   env = envSettings
   if (firebase.apps.length === 0) firebase.initializeApp(env.firebaseConfig)
 
-  const articles = await getArticles()
-
-  const filterdArticlesList = await getArticlesByTag()
-  console.log(filterdArticlesList)
-
   const result = []
+
+  // /articles/_article.vue用の記事
+  const articles = await getArticles()
 
   result.push(
     articles.map((article) => {
@@ -23,7 +21,10 @@ export const generateRoutes = async (envSettings) => {
     })
   )
 
-  for (const [tag, articles] of Object.entries(filterdArticlesList)) {
+  // /tags/_tag.vue用の記事一覧
+  const articlesList = await getArticlesByTag()
+
+  for (const [tag, articles] of Object.entries(articlesList)) {
     result.push({
       route: `/tags/${tag}`,
       payload: articles,

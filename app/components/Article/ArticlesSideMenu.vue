@@ -11,8 +11,7 @@
     <div class="sideMenu__content">
       <div class="sideMenu__title">タグ</div>
       <div v-for="tag in tags" :key="tag" class="sideMenuItem">
-        <!-- TODO:ルーティング考える -->
-        <NuxtLink to="/articles" class="sideMenuItem__title">
+        <NuxtLink :to="`/tags/${tag}`" class="sideMenuItem__title">
           {{ tag }}
         </NuxtLink>
       </div>

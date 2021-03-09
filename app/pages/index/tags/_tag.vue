@@ -3,7 +3,7 @@
     <PageTitle>Tags: {{ $route.params.tag }}</PageTitle>
     <div class="article">
       <ArticleList :articles="articles" />
-      <ArticlesSideMenu :tags="tags" />
+      <ArticlesSideMenu :recent-articles="recentArticles" :tags="tags" />
     </div>
   </main>
 </template>
@@ -16,15 +16,19 @@ import { Article } from '@/types/index'
 
 interface Data {
   articles: Article[]
+  recentArticles: Article[]
   tag: string
+  tags: string[]
 }
 
 export default Vue.extend({
-  async asyncData({ params, payload }): Promise<Data> {
+  async asyncData({ params, payload, store }): Promise<Data> {
     if (payload) {
       return {
         articles: payload,
+        recentArticles: store.state.recentArticles,
         tag: params.tag,
+        tags: store.state.articleTags,
       }
     } else {
       const artilcesPath = `users/${process.env.authorId}/articles`
@@ -42,14 +46,18 @@ export default Vue.extend({
 
       return {
         articles,
+        recentArticles: store.state.recentArticles,
         tag: params.tag,
+        tags: store.state.articleTags,
       }
     }
   },
   data(): Data {
     return {
       articles: [],
+      recentArticles: [],
       tag: this.$route.params.tag,
+      tags: [],
     }
   },
   head(): { title: string } {

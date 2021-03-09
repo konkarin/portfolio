@@ -11,7 +11,7 @@
         <NuxtLink
           v-for="tag in article.tags"
           :key="tag"
-          :to="`/articles?tag=${tag}`"
+          :to="`/tags/${tag}`"
           class="articleFooter__content articleTag articleTag--link"
         >
           {{ tag }}
