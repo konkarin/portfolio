@@ -1,11 +1,11 @@
 <template>
-  <div class="imgContainer">
+  <section class="imgContainer">
     <ImgColumn
       v-for="(column, index) in imgColumns"
       :key="index"
       :column="column"
     />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -44,6 +44,8 @@ export default Vue.extend({
     },
 
     handleResize: debounce(function () {
+      // FIXME: 動いてるけどなんでtsでエラーになるかわからん
+      // @ts-ignore
       this.updateColumnsLength()
     }, 300),
 
@@ -65,10 +67,8 @@ export default Vue.extend({
 
         // カラムの高さが最も小さいindexの配列に画像を追加
         columns[minHeightIndex].push(img)
-
-        const heightRate = img.exif.ImageHeight / img.exif.ImageWidth
         // カラムの高さを更新
-        columnsHeightList[minHeightIndex] += heightRate
+        columnsHeightList[minHeightIndex] += img.height
       })
 
       return columns

@@ -1,21 +1,20 @@
-import firebase from '@/plugins/firebase'
-import Firestore from '@/api/firestore'
+import firebase from '../plugins/firebase'
+import Firestore from './firestore'
 
-type ProfileData = {
+interface ProfileData {
   profile: string
 }
+
+const db = new Firestore()
 
 /**
  * firestoreから取得した画像をロードする
  */
 export const loadImgList = async () => {
-  const collectionRef = firebase
-    .firestore()
-    .collection(`/users/${process.env.authorId}/images`)
+  const collectionPath = `/users/${process.env.authorId}/images`
 
-  const snapshot = await collectionRef.get()
+  const imgList = await db.getDocs(collectionPath)
 
-  const imgList = snapshot.docs.map((doc) => doc.data())
   const urls: string[] = imgList.map((img) => img.thumbUrl)
 
   for (const url of urls) {
@@ -37,5 +36,5 @@ export const saveProfile = async (data: ProfileData) => {
 }
 
 export default {
-  Db: new Firestore(),
+  db,
 }

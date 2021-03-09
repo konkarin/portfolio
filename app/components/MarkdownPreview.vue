@@ -7,54 +7,56 @@
   margin-top: 0;
 }
 
+.markdown ::v-deep a {
+  color: var(--yellow);
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .markdown ::v-deep h1 {
-  font-size: 2em;
-  font-weight: bold;
-  margin-top: 1.5em;
+  margin-top: 2em;
+  border-bottom: 1px solid #ddd;
 }
 
 .markdown ::v-deep h2 {
-  font-size: 1.7em;
-  font-weight: bold;
-  margin-top: 1.5em;
+  margin-top: 2em;
   border-bottom: 1px solid #ddd;
 }
 
 .markdown ::v-deep h3 {
-  font-size: 1.5em;
-  font-weight: bold;
   margin-top: 1.5em;
 }
 
 .markdown ::v-deep h4 {
-  font-size: 1.3em;
-  font-weight: bold;
   margin-top: 1.5em;
 }
+
 .markdown ::v-deep h5 {
-  font-size: 1.1em;
-  font-weight: bold;
   margin-top: 1.5em;
 }
+
 .markdown ::v-deep h6 {
-  font-size: 1em;
-  font-weight: bold;
-  margin-top: 1.5em;
+  font-size: 0.9rem;
 }
 
 .markdown ::v-deep h1 + h2 {
-  margin-top: 1em;
+  margin-top: 1.5em;
 }
 
 .markdown ::v-deep h2 + h3 {
-  margin-top: 1em;
+  margin-top: 1.5em;
 }
+
 .markdown ::v-deep h3 + h4 {
   margin-top: 1em;
 }
+
 .markdown ::v-deep h4 + h5 {
   margin-top: 1em;
 }
+
 .markdown ::v-deep h5 + h6 {
   margin-top: 1em;
 }

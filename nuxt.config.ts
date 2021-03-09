@@ -1,5 +1,6 @@
-import Sass from 'sass'
 import Fiber from 'fibers'
+import Sass from 'sass'
+import { generateRoutes } from './routes'
 
 const env = process.env.NODE_ENV
 const envSettings = require(`./env/${env}.ts`)
@@ -44,7 +45,7 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
-  css: ['@/assets/style/style.scss'],
+  css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
 
   plugins: [],
 
@@ -66,9 +67,9 @@ export default {
     terser: {
       terserOptions: {
         // console.x を production時に削除
-        compress: {
-          drop_console: process.env.NODE_ENV === 'production',
-        },
+        // compress: {
+        //   drop_console: process.env.NODE_ENV === 'production',
+        // },
       },
     },
     loaders: {
@@ -102,6 +103,20 @@ export default {
       })
     },
   },
+  generate: {
+    async routes() {
+      return await generateRoutes(envSettings)
+    },
+  },
+  server: {
+    port: 3002, // デフォルト: 3000
+  },
   // プログレスバーの非表示
   loading: false,
+  // stagingはdevtoolを有効化
+  vue: {
+    config: {
+      devtools: process.env.authorId !== 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2',
+    },
+  },
 }

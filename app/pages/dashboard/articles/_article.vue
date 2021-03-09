@@ -1,3 +1,3 @@
 <template>
-  <ProfileEditor />
+  <ArticleEdit />
 </template>

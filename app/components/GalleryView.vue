@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <main class="wrapper">
     <PageTitle>Gallery</PageTitle>
     <div v-if="isLoadingImg" class="overlay">
       <div class="loader" />
@@ -12,7 +12,7 @@
         @close="closeModal"
       />
     </transition>
-  </div>
+  </main>
 </template>
 
 <script lang="ts">
@@ -20,7 +20,6 @@ import Vue from 'vue'
 import { DocumentData } from '@/types/firebase'
 
 export default Vue.extend({
-  transition: 'page',
   computed: {
     photoModal() {
       return this.$store.state.photoModal

@@ -5,7 +5,5 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({
-  // transition: 'page'
-})
+export default Vue.extend({})
 </script>

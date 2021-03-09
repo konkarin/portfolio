@@ -1,13 +1,14 @@
 <template>
-  <main class="home-image" />
+  <ArticleContainer />
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
   head() {
     return {
-      title: 'Home',
+      title: 'Articles',
     }
   },
 })

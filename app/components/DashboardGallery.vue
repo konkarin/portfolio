@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <h3>Gallery Editor</h3>
-    <button class="flat-button edit-button" @click="deleteImgList()">
-      Delete
-    </button>
+  <section class="dashboard__content">
+    <h3>Gallery Edit</h3>
+    <ImgUploader />
+    <button class="btn edit-button" @click="deleteImgList()">Delete</button>
     <div class="gallery">
       <div v-if="imgList.length === 0">No Photos</div>
       <div
@@ -25,18 +24,19 @@
         </label>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import firebase from '@/plugins/firebase'
 
-type Data = {
+interface Data {
   imgList: firebase.firestore.DocumentData[]
   selectedImgPathList: string[]
   deletingImgListId: string[]
 }
+
 type User = firebase.User
 
 export default Vue.extend({
