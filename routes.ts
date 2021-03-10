@@ -24,6 +24,7 @@ export const generateRoutes = async (envSettings) => {
   // /tags/_tag.vue用の記事一覧
   const articlesList = await getArticlesByTag()
 
+  // TODO:記事が一つもないタグはルートを生成しないようにする
   for (const [tag, articles] of Object.entries(articlesList)) {
     result.push({
       route: `/tags/${tag}`,
@@ -31,7 +32,7 @@ export const generateRoutes = async (envSettings) => {
     })
   }
 
-  return result.flat()
+  return [].concat(...result)
 }
 
 const getArticles = async () => {
