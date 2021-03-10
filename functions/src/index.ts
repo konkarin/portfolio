@@ -4,7 +4,6 @@ import { createUser } from './createUser'
 import { deleteFileFromStorage } from './deleteFileFromStorage'
 import { deleteUser } from './deleteUser'
 import { saveFileToDb } from './saveFileToDb'
-import { updateTags } from './updateTags'
 
 admin.initializeApp()
 
@@ -21,7 +20,3 @@ exports.deleteFileFromStorage = functions.firestore
 exports.createUser = functions.auth.user().onCreate((user) => createUser(user))
 
 exports.deleteUser = functions.auth.user().onDelete((user) => deleteUser(user))
-
-exports.updateTags = functions.firestore
-  .document('user/')
-  .onUpdate((snap, ctx) => updateTags(snap, ctx))
