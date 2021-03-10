@@ -20,6 +20,7 @@ export const loadImgList = async () => {
   for (const url of urls) {
     const img = new Image()
     // TODO: onerrorのハンドリング
+    // https://qiita.com/sin_tanaka/items/b17a099d2a6a5e9a94b7
     img.src = url
   }
 

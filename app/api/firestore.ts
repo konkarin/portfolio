@@ -95,6 +95,7 @@ export default class Firestore {
    * @param data
    */
   async updateDoc(path: string, docId: string, data: any) {
+    // update()は新規作成できないためset
     await this.db.collection(path).doc(docId).set(data)
   }
 }
