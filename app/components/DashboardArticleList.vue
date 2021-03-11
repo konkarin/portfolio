@@ -7,6 +7,7 @@
         v-for="article in articles"
         :key="article.id"
         :article="article"
+        @remove="removeArticle(article.id)"
       />
     </div>
   </section>
@@ -15,7 +16,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import apis from '@/api/apis'
+import Apis from '@/api/apis'
 import { Article } from '@/components/DashboardArticle.vue'
 
 interface Data {
@@ -35,7 +36,7 @@ export default Vue.extend({
     async getArticles() {
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
-      const article = await apis.db.getOrderDocs(
+      const article = await Apis.db.getOrderDocs(
         collectionPath,
         'updatedDate',
         'desc'
@@ -51,6 +52,17 @@ export default Vue.extend({
 
     addArticle() {
       this.$router.push({ path: `/dashboard/articles/${uuidv4()}` })
+    },
+
+    async removeArticle(docId) {
+      const collectionPath = `users/${this.$store.state.user.uid}/articles`
+
+      await Apis.db.deleteDoc(collectionPath, docId).catch((e) => {
+        console.error(e)
+        alert('削除に失敗しました')
+      })
+      // TODO: onSnapshotでリアルタイムに反映させたい
+      alert('削除しました')
     },
   },
 })
