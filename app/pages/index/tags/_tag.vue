@@ -1,6 +1,6 @@
 <template>
   <main class="wrapper">
-    <PageTitle>Tags: {{ $route.params.tag }}</PageTitle>
+    <PageTitle>タグ: {{ $route.params.tag }}</PageTitle>
     <div class="article">
       <ArticleList :articles="articles" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="tags" />
