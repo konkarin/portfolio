@@ -15,3 +15,9 @@ export interface Queries {
   filterStr: firebase.firestore.WhereFilterOp
   value: any
 }
+
+export interface Order {
+  fieldPath: string
+  direction?: OrderByDirection
+  limit?: number
+}

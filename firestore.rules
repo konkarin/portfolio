@@ -6,11 +6,16 @@ service cloud.firestore {
       allow write: if request.auth.uid == userID;
 
       match /articles/{articleID} {
-      	allow read: if resource.isPublished;
-        allow write: if resource.auth.uid == userID;
+      	allow read: if resource.data.isPublished || request.auth.uid == userID;
+        allow write: if request.auth.uid == userID;
       }
 
-      match /{allChildren=**} {
+      match /articleTags/{articleTagID} {
+        allow read;
+        allow write: if request.auth.uid == userID;
+      }
+
+      match /images/{imageID} {
         allow read;
         allow write: if request.auth.uid == userID;
       }

@@ -37,7 +37,11 @@ export const generateRoutes = async (envSettings) => {
 
 const getArticles = async () => {
   const collectionPath = `users/${env.authorId}/articles`
-  const snap = await firebase.firestore().collection(collectionPath).get()
+  const snap = await firebase
+    .firestore()
+    .collection(collectionPath)
+    .where('isPublished', '==', true)
+    .get()
 
   return snap.docs.map((doc) => doc.data())
 }
@@ -56,6 +60,7 @@ const getArticlesByTag = async () => {
       .firestore()
       .collection(articlesPath)
       .where('tags', 'array-contains', tag)
+      .where('isPublished', '==', true)
       .get()
 
     articlesList[tag] = snap.docs.map((doc) => doc.data())

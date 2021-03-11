@@ -11,7 +11,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
-import { Queries } from '@/types/firebase'
+import { Order, Queries } from '@/types/firebase'
 import { Article } from '@/types/index'
 
 interface Data {
@@ -33,15 +33,26 @@ export default Vue.extend({
     } else {
       const artilcesPath = `users/${process.env.authorId}/articles`
 
-      const queries: Queries = {
+      const order: Order = {
+        fieldPath: 'updatedDate',
+        direction: 'desc',
+      }
+      const queries1: Queries = {
         fieldPath: 'tags',
         filterStr: 'array-contains',
         value: params.tag,
       }
+      const queries2: Queries = {
+        fieldPath: 'isPublished',
+        filterStr: '==',
+        value: true,
+      }
 
-      const articles = (await apis.db.getDocsByQueries(
+      const articles = (await apis.db.getDocsByCompoundQueries(
         artilcesPath,
-        queries
+        queries1,
+        queries2,
+        order
       )) as Article[]
 
       return {

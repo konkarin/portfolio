@@ -11,7 +11,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Article } from '@/types/index'
-import apis from '@/api/apis'
 
 export default Vue.extend({
   computed: {
@@ -25,22 +24,6 @@ export default Vue.extend({
 
     articleTags(): string[] {
       return this.$store.state.articleTags
-    },
-  },
-  methods: {
-    async getArticles() {
-      const articlesPath = `users/${process.env.authorId}/articles`
-
-      return (await apis.db.getOrderDocs(
-        articlesPath,
-        'updatedDate',
-        'desc'
-      )) as Article[]
-    },
-
-    async getAritcleTags() {
-      const tagsPath = `users/${process.env.authorId}/articleTags`
-      return (await apis.db.getDocIds(tagsPath)) as string[]
     },
   },
 })
