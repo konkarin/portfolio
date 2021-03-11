@@ -1,10 +1,13 @@
 <template>
   <div class="article__list">
-    <ArticleItem
-      v-for="article in articles"
-      :key="article.id"
-      :article="article"
-    />
+    <template v-if="articles.length > 0">
+      <ArticleItem
+        v-for="article in articles"
+        :key="article.id"
+        :article="article"
+      />
+    </template>
+    <div v-else>記事がありません</div>
   </div>
 </template>
 
