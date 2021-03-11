@@ -1,4 +1,5 @@
 import firebase from '../plugins/firebase'
+import { Order } from '../types/firebase'
 
 export interface Queries {
   fieldPath: string
@@ -86,6 +87,57 @@ export default class Firestore {
       .get()
 
     return snap.docs.map((doc) => doc.data())
+  }
+
+  /**
+   * 指定したクエリでドキュメントを取得
+   * @param collectionPath
+   * @param queries
+   * @param order
+   */
+  async getOrderDocsByQueries(
+    collectionPath: string,
+    queries: Queries,
+    order: Order
+  ) {
+    const snap = await this.db
+      .collection(collectionPath)
+      .where(queries.fieldPath, queries.filterStr, queries.value)
+      .orderBy(order.fieldPath, order.direction)
+      .limit(order.limit)
+      .get()
+
+    return snap.docs.map((doc) => doc.data())
+  }
+
+  /**
+   * 指定したクエリでドキュメントを取得
+   * @param collectionPath
+   * @param queries1
+   * @param queries2
+   * @param order
+   */
+  async getDocsByCompoundQueries(
+    collectionPath: string,
+    queries1: Queries,
+    queries2: Queries,
+    order?: Order
+  ) {
+    const collectionRef = this.db
+      .collection(collectionPath)
+      .where(queries1.fieldPath, queries1.filterStr, queries1.value)
+      .where(queries2.fieldPath, queries2.filterStr, queries2.value)
+
+    if (order != null) {
+      const snap = await collectionRef
+        .orderBy(order.fieldPath, order.direction)
+        .limit(order.limit)
+        .get()
+      return snap.docs.map((doc) => doc.data())
+    } else {
+      const snap = await collectionRef.get()
+      return snap.docs.map((doc) => doc.data())
+    }
   }
 
   /**

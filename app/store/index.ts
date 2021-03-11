@@ -1,6 +1,6 @@
 import apis, { loadImgList } from '@/api/apis'
 import firebase from '@/plugins/firebase'
-import { DocumentData, FirebaseUser } from '@/types/firebase'
+import { DocumentData, FirebaseUser, Order, Queries } from '@/types/firebase'
 import { Article } from '@/types/index'
 
 interface State {
@@ -69,14 +69,22 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ commit }) {
-    // TODO:フォールバックどうなる？
     const articlesPath = `users/${process.env.authorId}/articles`
+    const queries: Queries = {
+      fieldPath: 'isPublished',
+      filterStr: '==',
+      value: true,
+    }
+    const order: Order = {
+      fieldPath: 'updatedDate',
+      direction: 'desc',
+    }
 
     // 一覧用の記事一覧
-    const articles = (await apis.db.getOrderDocs(
+    const articles = (await apis.db.getOrderDocsByQueries(
       articlesPath,
-      'updatedDate',
-      'desc'
+      queries,
+      order
     )) as Article[]
 
     // サイドメニュー用の最新記事一覧
