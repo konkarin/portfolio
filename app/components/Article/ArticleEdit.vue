@@ -106,7 +106,7 @@ export default Vue.extend({
         return
       }
 
-      const collectionPath = `users/${this.$store.state.user.uid}/articles`
+      const articlesPath = `users/${this.$store.state.user.uid}/articles`
 
       const article: Article = {
         id: this.article.id,
@@ -118,7 +118,21 @@ export default Vue.extend({
         tags: this.tag.split(','),
       }
 
-      await apis.db.updateDoc(collectionPath, article.id, article)
+      await apis.db.updateDoc(articlesPath, article.id, article)
+
+      // 書き込み時にDBに存在しないタグがあればDBに追加する
+      const notExistsTags = article.tags.filter(
+        (tag) => !this.$store.state.articleTags.includes(tag)
+      )
+
+      if (notExistsTags) {
+        const articleTagsPath = `users/${this.$store.state.user.uid}/articleTags`
+
+        for (const tag of notExistsTags) {
+          await apis.db.updateDoc(articleTagsPath, tag, {})
+        }
+      }
+
       alert('Completed')
     },
   },

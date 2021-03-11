@@ -1,6 +1,5 @@
 <template>
   <main class="wrapper">
-    <!-- TODO: markedで編集できるようにする -->
     <PageTitle>
       About
       <a

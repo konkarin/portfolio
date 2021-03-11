@@ -95,6 +95,23 @@ export default class Firestore {
    * @param data
    */
   async updateDoc(path: string, docId: string, data: any) {
-    await this.db.collection(path).doc(docId).set(data)
+    // update()は新規作成できないためset
+    await this.db
+      .collection(path)
+      .doc(docId)
+      .set(data)
+      .catch((e) => {
+        throw new Error(e)
+      })
+  }
+
+  async deleteDoc(path: string, docId: string) {
+    await this.db
+      .collection(path)
+      .doc(docId)
+      .delete()
+      .catch((e) => {
+        throw new Error(e)
+      })
   }
 }

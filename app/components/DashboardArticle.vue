@@ -15,6 +15,10 @@
           <Pencil />
           <span class="edit__tooltip">編集</span>
         </NuxtLink>
+        <div class="articleItem__edit edit" @click="removeArticle">
+          <Trash />
+          <span class="edit__tooltip">削除</span>
+        </div>
       </div>
     </div>
     <div class="articleItem__footer">{{ relativeTime }}に作成</div>
@@ -44,6 +48,11 @@ export default Vue.extend({
   computed: {
     relativeTime() {
       return Day.relativeTime(Day.getDate(this.article.createdDate))
+    },
+  },
+  methods: {
+    removeArticle() {
+      this.$emit('remove')
     },
   },
 })
