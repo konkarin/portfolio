@@ -5,12 +5,13 @@ export const buildArticles = async () => {
 }
 
 const requestCI = async () => {
-  console.log('env', process.env.FIREBASE_CONFIG)
   const config = JSON.parse(process.env.FIREBASE_CONFIG)
   const branch =
     config.projectId === 'konkarin-photo' ? 'production' : 'develop'
   const job =
-    config.projectId === 'konkarin-photo' ? 'deploy_prod' : 'deploy_sta'
+    config.projectId === 'konkarin-photo'
+      ? 'deploy_prod_hosting'
+      : 'deploy_sta_hosting'
 
   const url = `https://circleci.com/api/v1.1/project/github/konkarin/portfolio/tree/${branch}`
   const data = {
