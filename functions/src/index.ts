@@ -24,4 +24,4 @@ exports.deleteUser = functions.auth.user().onDelete((user) => deleteUser(user))
 
 exports.buildArticles = functions.firestore
   .document('/users/{uid}/articles/{articleId}')
-  .onWrite(() => buildArticles())
+  .onWrite((snap) => buildArticles(snap))
