@@ -34,5 +34,3 @@ const requestCI = async () => {
 
   console.log('triggered success')
 }
-
-requestCI()
