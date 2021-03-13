@@ -17,6 +17,7 @@ jobs:
           command: ./node_modules/.bin/firebase deploy --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
 
   deploy_sta_hosting:
+    docker:
       - image: circleci/node:10
     steps:
       - checkout
@@ -48,6 +49,7 @@ jobs:
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --project=$FIREBASE_PJ
 
   deploy_prod_hosting:
+    docker:
       - image: circleci/node:10
     steps:
       - checkout
