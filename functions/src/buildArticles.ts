@@ -4,10 +4,13 @@ import * as functions from 'firebase-functions'
 export type ChangeDocumentSnapshot = functions.Change<functions.firestore.DocumentSnapshot>
 
 export const buildArticles = async (snap: ChangeDocumentSnapshot) => {
-  console.log('change doc:', snap.after.get('isPublised'))
+  console.log('change doc:', snap.after.get('isPublished'))
 
-  if (snap.after.get('isPublised')) await requestCI()
-  else console.log('No articles to update')
+  if (!snap.before.get('isPublished') && !snap.after.get('isPublished')) {
+    console.log('No articles to update')
+  } else {
+    await requestCI()
+  }
 }
 
 const requestCI = async () => {
