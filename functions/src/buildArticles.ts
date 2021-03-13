@@ -1,7 +1,13 @@
 import axios from 'axios'
+import * as functions from 'firebase-functions'
 
-export const buildArticles = async () => {
-  await requestCI()
+export type ChangeDocumentSnapshot = functions.Change<functions.firestore.DocumentSnapshot>
+
+export const buildArticles = async (snap: ChangeDocumentSnapshot) => {
+  console.log('change doc:', snap.after.get('isPublised'))
+
+  if (snap.after.get('isPublised')) await requestCI()
+  else console.log('No articles to update')
 }
 
 const requestCI = async () => {
