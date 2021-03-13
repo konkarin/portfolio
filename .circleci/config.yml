@@ -72,21 +72,9 @@ workflows:
           filters:
             branches:
               only: develop
-  deploy_sta_hosting:
-    jobs:
-      - deploy_sta_hosting:
-          filters:
-            branches:
-              only: develop
   deploy_prod:
     jobs:
       - deploy_prod:
-          filters:
-            branches:
-              only: master
-  deploy_prod_hosting:
-    jobs:
-      - deploy_prod_hosting:
           filters:
             branches:
               only: master
