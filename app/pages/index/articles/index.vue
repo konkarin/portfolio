@@ -31,6 +31,11 @@ export default Vue.extend({
           property: 'og:description',
           content: 'kon_karinの記事一覧です。',
         },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `/HomeImg.jpg`,
+        },
       ],
     }
   },

@@ -89,6 +89,11 @@ export default Vue.extend({
           property: 'og:description',
           content: 'kon_karinの自己紹介です。',
         },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `/HomeImg.jpg`,
+        },
       ],
     }
   },

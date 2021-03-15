@@ -27,6 +27,11 @@ export default Vue.extend({
           property: 'og:url',
           content: `${process.env.APP_URL}`,
         },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `/HomeImg.jpg`,
+        },
       ],
     }
   },
