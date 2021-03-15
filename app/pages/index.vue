@@ -17,5 +17,18 @@ export default Vue.extend({
   mounted() {
     this.$store.dispatch('preloadImgList')
   },
+  head(): any {
+    return {
+      title: `kon_karin's photo & blog`,
+      meta: [
+        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          hid: 'og:url',
+          property: 'og:url',
+          content: `${process.env.APP_URL}`,
+        },
+      ],
+    }
+  },
 })
 </script>

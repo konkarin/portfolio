@@ -52,7 +52,7 @@ export default Vue.extend({
       meta: [
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
-          vmid: 'og:title',
+          hid: 'og:title',
           property: 'og:title',
           content: `${this.article.title} - kon_karin's photo & blog`,
         },
@@ -61,6 +61,12 @@ export default Vue.extend({
           property: 'og:url',
           content: `${process.env.APP_URL}articles/${this.article.id}`,
         },
+        // TODO:
+        // {
+        //   hid: 'og:description',
+        //   property: 'og:description',
+        //   content: ``,
+        // },
       ],
     }
   },

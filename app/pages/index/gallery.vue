@@ -11,7 +11,7 @@ export default Vue.extend({
       meta: [
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
-          vmid: 'og:title',
+          hid: 'og:title',
           property: 'og:title',
           content: "Gallery - kon_karin's photo & blog",
         },

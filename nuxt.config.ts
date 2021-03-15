@@ -14,32 +14,6 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'og:type', property: 'og:type', content: 'website' },
-      {
-        hid: 'og:image',
-        property: 'og:image',
-        content: 'https://konkarin-photo.web.app/_nuxt/img/HomeImg.9710970.jpg',
-      },
-      {
-        hid: 'og:site_name',
-        property: 'og:site_name',
-        content: "kon_karin's photo & blog",
-      },
-      {
-        hid: 'og:url',
-        property: 'og:url',
-        content: 'https://konkarin-photo.web.app/',
-      },
-      {
-        vmid: 'og:title',
-        property: 'og:title',
-        content: "kon_karin's photo & blog",
-      },
-      {
-        hid: 'og:description',
-        property: 'og:description',
-        content: 'kon_karinの写真とブログです。',
-      },
       {
         hid: 'og:locale',
         property: 'og:locale',
