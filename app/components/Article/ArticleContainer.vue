@@ -2,7 +2,7 @@
   <main class="wrapper">
     <PageTitle>Articles</PageTitle>
     <div class="article">
-      <NuxtChild :articles="articles" />
+      <NuxtChild />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="articleTags" />
     </div>
   </main>
