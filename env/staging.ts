@@ -9,3 +9,5 @@ export const firebaseConfig = {
 }
 
 export const authorId = 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2'
+
+export const APP_URL = 'https://staging-konkarin-photo.web.app/'

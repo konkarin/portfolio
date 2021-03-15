@@ -71,9 +71,27 @@ export default Vue.extend({
       tags: [],
     }
   },
-  head(): { title: string } {
+  head(): any {
     return {
       title: `${this.$route.params.tag}の記事`,
+      meta: [
+        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: `${this.$route.params.tag}の記事 - kon_karin's photo & blog`,
+        },
+        {
+          hid: 'og:url',
+          property: 'og:url',
+          content: `${process.env.APP_URL}tags/${this.$route.params.tag}`,
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: `${this.$route.params.tag}の記事`,
+        },
+      ],
     }
   },
 })
