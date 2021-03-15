@@ -91,6 +91,11 @@ export default Vue.extend({
           property: 'og:description',
           content: `${this.$route.params.tag}の記事`,
         },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `/HomeImg.jpg`,
+        },
       ],
     }
   },

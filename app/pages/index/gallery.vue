@@ -25,6 +25,11 @@ export default Vue.extend({
           property: 'og:description',
           content: 'kon_karinが撮影した写真の一覧です。',
         },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `/HomeImg.jpg`,
+        },
       ],
     }
   },

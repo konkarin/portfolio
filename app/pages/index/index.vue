@@ -25,6 +25,11 @@ export default Vue.extend({
           property: 'og:description',
           content: 'kon_karinの写真とブログです。',
         },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `/HomeImg.jpg`,
+        },
       ],
     }
   },

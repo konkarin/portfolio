@@ -61,6 +61,11 @@ export default Vue.extend({
           property: 'og:url',
           content: `${process.env.APP_URL}articles/${this.article.id}`,
         },
+        {
+          hid: 'og:image',
+          property: 'og:image',
+          content: `/HomeImg.jpg`,
+        },
         // TODO:
         // {
         //   hid: 'og:description',
