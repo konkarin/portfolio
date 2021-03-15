@@ -36,25 +36,24 @@ export default Vue.extend({
     async getArticles() {
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
-      const article = await Apis.db.getOrderDocs(
+      const article = (await Apis.db.getOrderDocs(
         collectionPath,
         'updatedDate',
         'desc'
-      )
+      )) as Article[]
 
       return article
     },
 
     async setArticles() {
-      const articles = await this.getArticles()
-      this.articles = articles as Article[]
+      this.articles = await this.getArticles()
     },
 
     addArticle() {
       this.$router.push({ path: `/dashboard/articles/${uuidv4()}` })
     },
 
-    async removeArticle(docId) {
+    async removeArticle(docId: string) {
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
       await Apis.db.deleteDoc(collectionPath, docId).catch((e) => {
