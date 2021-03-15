@@ -10,36 +10,40 @@ export default {
   target: 'static',
   srcDir: 'app',
   head: {
-    titleTemplate: "%s - kon_karin's portfolio",
+    titleTemplate: "%s - kon_karin's photo & blog",
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'og:type', property: 'og:type', content: 'website' },
       {
-        hid: 'og:title',
-        property: 'og:title',
-        content: "kon_karin's portfolio",
+        hid: 'og:image',
+        property: 'og:image',
+        content: 'https://konkarin-photo.web.app/_nuxt/img/HomeImg.9710970.jpg',
       },
       {
         hid: 'og:site_name',
         property: 'og:site_name',
-        content: "kon_karin's portfolio",
+        content: "kon_karin's photo & blog",
       },
-      { hid: 'og:type', property: 'og:type', content: 'website' },
       {
         hid: 'og:url',
         property: 'og:url',
-        content: 'https://konkarin-portfolio.firebaseapp.com/',
+        content: 'https://konkarin-photo.web.app/',
+      },
+      {
+        vmid: 'og:title',
+        property: 'og:title',
+        content: "kon_karin's photo & blog",
       },
       {
         hid: 'og:description',
         property: 'og:description',
-        content: 'kon_karinのポートフォリオサイト',
+        content: 'kon_karinの写真とブログです。',
       },
       {
-        hid: 'og:image',
-        property: 'og:image',
-        content:
-          'https://konkarin-portfolio.firebaseapp.com/img/HomeImg.97109707.jpg',
+        hid: 'og:locale',
+        property: 'og:locale',
+        content: 'ja',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],

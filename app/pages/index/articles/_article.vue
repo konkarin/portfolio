@@ -46,9 +46,22 @@ export default Vue.extend({
       markdownText: '',
     }
   },
-  head(): { title: string } {
+  head(): any {
     return {
       title: this.article.title,
+      meta: [
+        { hid: 'og:type', property: 'og:type', content: 'article' },
+        {
+          vmid: 'og:title',
+          property: 'og:title',
+          content: `${this.article.title} - kon_karin's photo & blog`,
+        },
+        {
+          hid: 'og:url',
+          property: 'og:url',
+          content: `${process.env.APP_URL}articles/${this.article.id}`,
+        },
+      ],
     }
   },
 })

@@ -3,14 +3,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { Article } from '@/types/index'
+import Vue from 'vue'
 
 export default Vue.extend({
-  props: {
-    articles: {
-      type: Array as PropType<Article[]>,
-      required: true,
+  computed: {
+    articles() {
+      return this.$store.state.articles
     },
   },
 })
