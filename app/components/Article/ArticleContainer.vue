@@ -1,6 +1,5 @@
 <template>
   <main class="wrapper">
-    <PageTitle>Articles</PageTitle>
     <div class="article">
       <NuxtChild />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="articleTags" />

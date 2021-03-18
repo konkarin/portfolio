@@ -18,9 +18,14 @@
         </NuxtLink>
       </div>
       <div class="articleFooter__container">
-        <div class="articleFooter__content shareBtn shareBtn--md">
+        <a
+          :href="twitterShareUrl"
+          class="articleFooter__content shareBtn shareBtn--md"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+        >
           <Twitter />
-        </div>
+        </a>
       </div>
     </div>
   </div>
@@ -43,8 +48,12 @@ export default Vue.extend({
     },
   },
   computed: {
-    updatedDate() {
+    updatedDate(): string {
       return Day.getDate(this.article.updatedDate, 'YYYY-MM-DD')
+    },
+    twitterShareUrl(): string {
+      const text = encodeURIComponent(this.article.title)
+      return `https://twitter.com/share?url=${process.env.APP_URL}articles/${this.$route.params.article}&text=${text}`
     },
   },
 })

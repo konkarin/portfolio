@@ -19,6 +19,16 @@ export default {
         property: 'og:locale',
         content: 'ja',
       },
+      {
+        hid: 'twitter:card',
+        property: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        hid: 'twitter:creator',
+        property: 'twitter:creator',
+        content: '@k0n_karin',
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
