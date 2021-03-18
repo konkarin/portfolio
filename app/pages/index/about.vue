@@ -51,7 +51,14 @@ interface Data {
 
 export default Vue.extend({
   async asyncData(): Promise<Data> {
-    const data = await apis.db.getDocById('users', process.env.authorId)
+    const data = await apis.db
+      .getDocById('users', process.env.authorId)
+      .catch((e) => {
+        console.error(e)
+        return {
+          profile: '',
+        }
+      })
 
     return {
       profile: await convertTextToMarkdown(data.profile),
@@ -64,7 +71,14 @@ export default Vue.extend({
   },
   async mounted() {
     if (this.profile === '') {
-      const data = await apis.db.getDocById('users', process.env.authorId)
+      const data = await apis.db
+        .getDocById('users', process.env.authorId)
+        .catch((e) => {
+          console.error(e)
+          return {
+            profile: '',
+          }
+        })
 
       this.profile = await convertTextToMarkdown(data.profile)
     }

@@ -27,7 +27,12 @@ export default class Firestore {
    * @returns
    */
   async getDocIds(collectionPath) {
-    const snap = await this.db.collection(collectionPath).get()
+    const snap = await this.db
+      .collection(collectionPath)
+      .get()
+      .catch((e) => {
+        throw e
+      })
 
     return snap.docs.map((doc) => doc.id)
   }
@@ -37,7 +42,12 @@ export default class Firestore {
    * @param collectionPath
    */
   async getDocs(collectionPath: string) {
-    const snap = await this.db.collection(collectionPath).get()
+    const snap = await this.db
+      .collection(collectionPath)
+      .get()
+      .catch((e) => {
+        throw e
+      })
 
     return snap.docs.map((doc) => doc.data())
   }
@@ -60,6 +70,9 @@ export default class Firestore {
       .orderBy(fieldPath, direction)
       .limit(limit)
       .get()
+      .catch((e) => {
+        throw e
+      })
 
     return snap.docs.map((doc) => doc.data())
   }
@@ -70,7 +83,13 @@ export default class Firestore {
    * @param docId
    */
   async getDocById(collectionPath: string, docId: string) {
-    const snap = await this.db.collection(collectionPath).doc(docId).get()
+    const snap = await this.db
+      .collection(collectionPath)
+      .doc(docId)
+      .get()
+      .catch((e) => {
+        throw e
+      })
 
     return snap.data()
   }
@@ -85,6 +104,9 @@ export default class Firestore {
       .collection(collectionPath)
       .where(queries.fieldPath, queries.filterStr, queries.value)
       .get()
+      .catch((e) => {
+        throw e
+      })
 
     return snap.docs.map((doc) => doc.data())
   }
@@ -106,6 +128,9 @@ export default class Firestore {
       .orderBy(order.fieldPath, order.direction)
       .limit(order.limit)
       .get()
+      .catch((e) => {
+        throw e
+      })
 
     return snap.docs.map((doc) => doc.data())
   }
@@ -133,9 +158,16 @@ export default class Firestore {
         .orderBy(order.fieldPath, order.direction)
         .limit(order.limit)
         .get()
+        .catch((e) => {
+          throw e
+        })
+
       return snap.docs.map((doc) => doc.data())
     } else {
-      const snap = await collectionRef.get()
+      const snap = await collectionRef.get().catch((e) => {
+        throw e
+      })
+
       return snap.docs.map((doc) => doc.data())
     }
   }
@@ -153,7 +185,7 @@ export default class Firestore {
       .doc(docId)
       .set(data)
       .catch((e) => {
-        throw new Error(e)
+        throw e
       })
   }
 
@@ -163,7 +195,7 @@ export default class Firestore {
       .doc(docId)
       .delete()
       .catch((e) => {
-        throw new Error(e)
+        throw e
       })
   }
 }
