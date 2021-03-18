@@ -48,12 +48,13 @@ export default Vue.extend({
         value: true,
       }
 
-      const articles = (await apis.db.getDocsByCompoundQueries(
-        artilcesPath,
-        queries1,
-        queries2,
-        order
-      )) as Article[]
+      const articles = (await apis.db
+        .getDocsByCompoundQueries(artilcesPath, queries1, queries2, order)
+        .catch((e) => {
+          console.error(e)
+          alert('Faled to get articles')
+          return []
+        })) as Article[]
 
       return {
         articles,

@@ -63,7 +63,14 @@ export default Vue.extend({
       return
     }
 
-    await this.setArticle()
+    try {
+      await this.setArticle()
+    } catch (e) {
+      console.error(e)
+      alert('Failed to get articles.\nPlease retry.')
+      return
+    }
+
     this.tag = this.article.tags.join()
   },
   methods: {
@@ -88,7 +95,7 @@ export default Vue.extend({
       return article
     },
 
-    async setArticle() {
+    async setArticle(): Promise<void> {
       const article = await this.getArticle()
 
       if (article == null) return

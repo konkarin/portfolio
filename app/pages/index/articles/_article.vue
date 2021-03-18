@@ -13,6 +13,16 @@ interface Data {
   markdownText: string
 }
 
+const emptyAritcle = {
+  id: '',
+  title: '',
+  text: '',
+  isPublished: false,
+  updatedDate: null,
+  createdDate: null,
+  tags: [],
+}
+
 export default Vue.extend({
   async asyncData({ params, payload }): Promise<Data> {
     if (payload) {
@@ -22,10 +32,15 @@ export default Vue.extend({
       }
     } else {
       const collectionPath = `users/${process.env.authorId}/articles`
-      const article = (await apis.db.getDocById(
-        collectionPath,
-        params.article
-      )) as Article
+      const article = (await apis.db
+        .getDocById(collectionPath, params.article)
+        .catch((e) => {
+          console.error(e)
+          alert('Failed to get articles.\nPlease retry.')
+
+          return emptyAritcle
+        })) as Article
+
       return {
         article,
         markdownText: await convertTextToMarkdown(article.text),
@@ -34,21 +49,13 @@ export default Vue.extend({
   },
   data(): Data {
     return {
-      article: {
-        id: '',
-        title: '',
-        text: '',
-        isPublished: false,
-        updatedDate: null,
-        createdDate: null,
-        tags: [],
-      },
+      article: emptyAritcle,
       markdownText: '',
     }
   },
   head(): any {
     return {
-      title: this.article.title,
+      title: this.article.title || '記事がありません。',
       meta: [
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {

@@ -31,12 +31,17 @@ export default Vue.extend({
     },
   },
   async mounted() {
-    this.plainText = await this.getProfile()
+    this.plainText = await this.getProfile().catch((e) => {
+      console.error(e)
+      alert('Failed to get profiles.\nPlease retry.')
+      return ''
+    })
   },
   methods: {
     setPlainText(val: string) {
       this.plainText = val
     },
+
     async getProfile() {
       const data = await apis.db.getDocById('users', this.user.uid)
 
@@ -48,15 +53,16 @@ export default Vue.extend({
         profile: this.plainText as string,
       }
 
-      try {
-        await apis.db.updateDoc('users', this.user.uid, data)
-
-        // TODO: ポップアップにする
-        alert('Saved')
-      } catch (e) {
-        alert(e)
-        console.error(e)
-      }
+      await apis.db
+        .updateDoc('users', this.user.uid, data)
+        .then(() => {
+          // TODO: ポップアップにする
+          alert('Saved')
+        })
+        .catch((e) => {
+          alert('Failed to update profiles.\nPlease retry.')
+          console.error(e)
+        })
     },
   },
 })

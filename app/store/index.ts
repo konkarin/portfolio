@@ -81,18 +81,22 @@ export const actions = {
     }
 
     // 一覧用の記事一覧
-    const articles = (await apis.db.getOrderDocsByQueries(
-      articlesPath,
-      queries,
-      order
-    )) as Article[]
+    const articles = (await apis.db
+      .getOrderDocsByQueries(articlesPath, queries, order)
+      .catch((e) => {
+        console.error(e)
+        return []
+      })) as Article[]
 
     // サイドメニュー用の最新記事一覧
     const recentArticles = articles.slice(0, 2)
 
     const tagsPath = `users/${process.env.authorId}/articleTags`
     // サイドメニュー用のタグ一覧
-    const articleTags = (await apis.db.getDocIds(tagsPath)) as string[]
+    const articleTags = (await apis.db.getDocIds(tagsPath).catch((e) => {
+      console.error(e)
+      return []
+    })) as string[]
 
     commit('updateArticles', articles)
     commit('updateRecentArticles', recentArticles)

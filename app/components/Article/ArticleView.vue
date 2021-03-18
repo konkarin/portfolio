@@ -1,33 +1,36 @@
 <template>
   <div class="article__container">
-    <h1>{{ article.title }}</h1>
-    <div class="article__subTitle">{{ updatedDate }} 更新</div>
-    <article class="article__content">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview v-html="markdownText" />
-    </article>
-    <div class="article__content articleFooter">
-      <div class="articleFooter__container">
-        <NuxtLink
-          v-for="tag in article.tags"
-          :key="tag"
-          :to="`/tags/${tag}`"
-          class="articleFooter__content articleTag articleTag--link"
-        >
-          {{ tag }}
-        </NuxtLink>
+    <template v-if="article">記事がありません</template>
+    <template v-else>
+      <h1>{{ article.title }}</h1>
+      <div class="article__subTitle">{{ updatedDate }} 更新</div>
+      <article class="article__content">
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <MarkdownPreview v-html="markdownText" />
+      </article>
+      <div class="article__content articleFooter">
+        <div class="articleFooter__container">
+          <NuxtLink
+            v-for="tag in article.tags"
+            :key="tag"
+            :to="`/tags/${tag}`"
+            class="articleFooter__content articleTag articleTag--link"
+          >
+            {{ tag }}
+          </NuxtLink>
+        </div>
+        <div class="articleFooter__container">
+          <a
+            :href="twitterShareUrl"
+            class="articleFooter__content shareBtn shareBtn--md"
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+          >
+            <Twitter />
+          </a>
+        </div>
       </div>
-      <div class="articleFooter__container">
-        <a
-          :href="twitterShareUrl"
-          class="articleFooter__content shareBtn shareBtn--md"
-          target="_blank"
-          rel="nofollow noopener noreferrer"
-        >
-          <Twitter />
-        </a>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
