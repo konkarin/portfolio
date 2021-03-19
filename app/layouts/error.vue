@@ -2,7 +2,7 @@
   <div>
     <HeaderNav />
     <main class="wrapper">
-      <PageTitle>ページが見つかりません</PageTitle>
+      <PageTitle>エラーが発生しました</PageTitle>
     </main>
   </div>
 </template>
@@ -11,7 +11,7 @@
 export default {
   head() {
     return {
-      title: 'Not Found',
+      title: 'Error',
     }
   },
 }
