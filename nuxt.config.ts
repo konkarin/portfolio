@@ -95,6 +95,7 @@ export default {
     async routes() {
       return await generateRoutes(envSettings)
     },
+    fallback: true,
   },
   server: {
     port: 3002, // デフォルト: 3000
