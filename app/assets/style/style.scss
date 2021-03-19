@@ -64,8 +64,10 @@ a {
   text-align: center;
   &__link {
     color: var(--yellow);
-    &:hover {
-      text-decoration: underline;
+    @media screen and (min-width: $md) {
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }
@@ -189,13 +191,18 @@ a {
 .shareBtn {
   cursor: pointer;
   color: var(--gray);
-  transition: 0.3s;
   font-size: 2rem;
-  &:hover {
-    color: var(--black);
-  }
   &--lg {
     font-size: 4rem;
+  }
+}
+
+@media screen and (min-width: $md) {
+  .shareBtn {
+    transition: 0.3s;
+    &:hover {
+      color: var(--black);
+    }
   }
 }
 
