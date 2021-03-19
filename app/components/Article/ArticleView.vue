@@ -1,6 +1,6 @@
 <template>
   <div class="article__container">
-    <template v-if="article">記事がありません</template>
+    <template v-if="!article.id">記事がありません</template>
     <template v-else>
       <h1>{{ article.title }}</h1>
       <div class="article__subTitle">{{ updatedDate }} 更新</div>
