@@ -5,6 +5,9 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
+  mounted() {
+    this.$store.dispatch('preloadImgList')
+  },
   head() {
     return {
       title: 'Home',
