@@ -72,6 +72,11 @@ a {
   }
 }
 
+.error {
+  margin-top: 1rem;
+  text-align: center;
+}
+
 .textMessage {
   margin: 1rem 4rem;
 }
@@ -343,6 +348,7 @@ a {
 }
 
 .btn {
+  display: inline-block;
   font-size: 1em;
   font-weight: bold;
   height: 38px;
