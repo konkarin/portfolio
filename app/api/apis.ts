@@ -7,24 +7,24 @@ interface ProfileData {
 
 const db = new Firestore()
 
-/**
- * firestoreから取得した画像をロードする
- */
-export const loadImgList = async () => {
-  const collectionPath = `/users/${process.env.authorId}/images`
-
-  const imgList = await db.getDocs(collectionPath)
-
+export const loadImgList = async (imgList) => {
   const urls: string[] = imgList.map((img) => img.thumbUrl)
 
+  const promiseList = []
   for (const url of urls) {
-    const img = new Image()
-    // TODO: onerrorのハンドリング
-    // https://qiita.com/sin_tanaka/items/b17a099d2a6a5e9a94b7
-    img.src = url
+    promiseList.push(loadImg(url))
   }
 
-  return imgList
+  return await Promise.allSettled(promiseList)
+}
+
+export const loadImg = (url: string) => {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve(url)
+    img.onerror = () => reject(url)
+    img.src = url
+  })
 }
 
 export const saveProfile = async (data: ProfileData) => {
