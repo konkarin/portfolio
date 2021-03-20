@@ -14,9 +14,6 @@ export default Vue.extend({
   components: {
     HeaderNav,
   },
-  mounted() {
-    this.$store.dispatch('preloadImgList')
-  },
   head(): any {
     return {
       title: `kon_karin's photo & blog`,

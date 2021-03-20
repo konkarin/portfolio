@@ -17,6 +17,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Apis from '@/api/apis'
 import { DocumentData } from '@/types/firebase'
 
 export default Vue.extend({
@@ -30,6 +31,14 @@ export default Vue.extend({
     isLoadingImg() {
       return this.$store.state.isLoadingImg as boolean
     },
+  },
+  async mounted() {
+    if (this.imgList.length !== 0) return
+
+    const collectionPath = `/users/${process.env.authorId}/images`
+
+    const imgList = await Apis.db.getDocs(collectionPath)
+    this.$store.commit('updateImgList', imgList)
   },
   methods: {
     closeModal(): void {
