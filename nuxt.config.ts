@@ -87,7 +87,12 @@ export default {
     extendRoutes(routes) {
       routes.push({
         path: '*',
-        component: '@/pages/404',
+        component: './app/layouts/error.vue',
+        props: {
+          error: {
+            message: 'ページが見つかりません',
+          },
+        },
       })
     },
   },
@@ -95,7 +100,6 @@ export default {
     async routes() {
       return await generateRoutes(envSettings)
     },
-    fallback: true,
   },
   server: {
     port: 3002, // デフォルト: 3000

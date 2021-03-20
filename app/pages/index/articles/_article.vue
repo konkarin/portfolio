@@ -61,9 +61,8 @@ export default Vue.extend({
     const existsArtcile = this.articles.some(
       (article) => this.$route.params.article === article.id
     )
-    console.log(existsArtcile)
 
-    if (!existsArtcile) this.$nuxt.error({})
+    if (!existsArtcile) this.$nuxt.error({ message: 'ページが見つかりません' })
   },
   head(): any {
     return {
