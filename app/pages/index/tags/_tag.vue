@@ -52,7 +52,6 @@ export default Vue.extend({
         .getDocsByCompoundQueries(artilcesPath, queries1, queries2, order)
         .catch((e) => {
           console.error(e)
-          alert('Faled to get articles')
           return []
         })) as Article[]
 
@@ -71,6 +70,20 @@ export default Vue.extend({
       tag: this.$route.params.tag,
       tags: [],
     }
+  },
+  computed: {
+    articleTags(): string[] {
+      return this.$store.state.articleTags
+    },
+  },
+  mounted() {
+    // 存在しないタグにアクセスしたらエラー
+    const existsArtcileTag = this.articleTags.some(
+      (tag) => this.$route.params.tag === tag
+    )
+
+    if (!existsArtcileTag)
+      this.$nuxt.error({ message: 'ページが見つかりません' })
   },
   head(): any {
     return {
