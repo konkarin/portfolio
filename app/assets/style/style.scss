@@ -73,8 +73,11 @@ a {
 }
 
 .error {
-  margin-top: 1rem;
+  margin-top: 5rem;
   text-align: center;
+  &__btn {
+    margin-top: 1rem;
+  }
 }
 
 .textMessage {

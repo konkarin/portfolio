@@ -1,21 +1,24 @@
 <template>
-  <div>
-    <HeaderNav />
-    <main class="wrapper">
-      <PageTitle>エラーが発生しました</PageTitle>
-      <div class="error">
-        <NuxtLink to="/" class="btn">トップへ戻る</NuxtLink>
-      </div>
-    </main>
+  <div class="error">
+    <PageTitle v-if="error">{{ error.message }}</PageTitle>
+    <PageTitle v-else>エラーが発生しました</PageTitle>
+    <NuxtLink to="/" class="btn error__btn">トップへ戻る</NuxtLink>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
+  props: {
+    error: {
+      type: Object,
+      default: null,
+    },
+  },
   head() {
     return {
-      title: 'Error',
+      title: 'エラー',
     }
   },
-}
+})
 </script>
