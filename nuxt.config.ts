@@ -87,7 +87,7 @@ export default {
     extendRoutes(routes) {
       routes.push({
         path: '*',
-        redirect: '/',
+        component: '@/pages/404',
       })
     },
   },

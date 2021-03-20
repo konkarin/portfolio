@@ -2,7 +2,10 @@
   <div>
     <HeaderNav />
     <main class="wrapper">
-      <PageTitle>ページが見つかりません</PageTitle>
+      <PageTitle>エラーが発生しました</PageTitle>
+      <div class="error">
+        <NuxtLink to="/" class="btn">トップへ戻る</NuxtLink>
+      </div>
     </main>
   </div>
 </template>
@@ -11,7 +14,7 @@
 export default {
   head() {
     return {
-      title: 'Not Found',
+      title: 'Error',
     }
   },
 }

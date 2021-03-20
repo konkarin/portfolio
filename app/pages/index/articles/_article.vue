@@ -36,14 +36,12 @@ export default Vue.extend({
         .getDocById(collectionPath, params.article)
         .catch((e) => {
           console.error(e)
-          alert('Failed to get articles.\nPlease retry.')
-
           return emptyAritcle
         })) as Article
 
       return {
         article,
-        markdownText: await convertTextToMarkdown(article.text),
+        markdownText: '',
       }
     }
   },
@@ -52,6 +50,20 @@ export default Vue.extend({
       article: emptyAritcle,
       markdownText: '',
     }
+  },
+  computed: {
+    articles() {
+      return this.$store.state.articles
+    },
+  },
+  mounted() {
+    // 存在しない記事にアクセスしたらエラー
+    const existsArtcile = this.articles.some(
+      (article) => this.$route.params.article === article.id
+    )
+    console.log(existsArtcile)
+
+    if (!existsArtcile) this.$nuxt.error({})
   },
   head(): any {
     return {
