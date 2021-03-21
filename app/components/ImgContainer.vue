@@ -31,6 +31,7 @@ export default Vue.extend({
     },
   },
   mounted() {
+    this.updateColumnsLength()
     window.addEventListener('resize', this.handleResize)
   },
   beforeDestroy() {
@@ -38,9 +39,12 @@ export default Vue.extend({
   },
   methods: {
     updateColumnsLength() {
-      // スマホは2カラム固定
-      this.columnsLength =
-        window.innerWidth <= 520 ? 2 : Math.floor(window.innerWidth / 250)
+      // スマホサイズは2カラム固定
+      const columnsLength =
+        window.innerWidth <= 520 ? 2 : Math.floor(window.innerWidth / 260)
+
+      // 最大4カラムまで
+      this.columnsLength = columnsLength > 4 ? 4 : columnsLength
     },
 
     handleResize: debounce(function () {
@@ -68,7 +72,7 @@ export default Vue.extend({
         // カラムの高さが最も小さいindexの配列に画像を追加
         columns[minHeightIndex].push(img)
         // カラムの高さを更新
-        columnsHeightList[minHeightIndex] += img.height
+        columnsHeightList[minHeightIndex] += img.height / img.width
       })
 
       return columns
