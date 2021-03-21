@@ -78,9 +78,14 @@ export const actions = {
     // サイドメニュー用のタグ一覧
     const articleTags = await getArticleTags()
 
+    // 記事が存在しないタグをフィルター
+    const existTags = articleTags.filter((tag) => {
+      return articles.some((article) => article.tags.includes(tag))
+    })
+
     commit('updateArticles', articles)
     commit('updateRecentArticles', recentArticles)
-    commit('updateArticleTags', articleTags)
+    commit('updateArticleTags', existTags)
 
     // 画像一覧の取得
     const imgList = await getImgList()
