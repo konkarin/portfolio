@@ -1,10 +1,10 @@
 <template>
-  <div class="modal-mask" @click="$emit('close')">
-    <div class="modal-container">
+  <div class="modal__mask" @click="$emit('close')">
+    <div class="modal__container">
       <div v-show="isLoading" class="loader" />
       <transition name="fade-modal">
         <div v-show="!isLoading">
-          <img :src="imgSrc" class="modal-img" @load="loaded" />
+          <img :src="imgSrc" class="modal__img" @load="loaded" />
         </div>
       </transition>
     </div>
