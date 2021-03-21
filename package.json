@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
+    "dev": "cross-env NODE_ENV=\"staging\" nuxt-ts",
     "build": "nuxt-ts build",
     "start": "nuxt-ts start",
     "generate:sta": "cross-env NODE_ENV=\"staging\" nuxt-ts generate",
@@ -11,7 +11,9 @@
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "lint": "npm run lint:js && npm run lint:style",
-    "test": "jest"
+    "test": "jest",
+    "deploy:sta": "npm run generate:sta && firebase deploy --only hosting --project=sta",
+    "deploy:prod": "npm run generate:prod && firebase deploy --only hosting --project=prod"
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",
@@ -20,6 +22,7 @@
     "cross-env": "^7.0.3",
     "dayjs": "^1.10.2",
     "firebase": "^8.2.1",
+    "lodash.debounce": "^4.0.8",
     "nuxt": "^2.14.6",
     "remark": "^13.0.0",
     "remark-html": "^13.0.1",
@@ -40,7 +43,7 @@
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-nuxt": "^1.0.0",
-    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-prettier": "^3.3.1",
     "fibers": "^5.0.0",
     "firebase-tools": "^9.2.0",
     "jest": "^26.5.0",

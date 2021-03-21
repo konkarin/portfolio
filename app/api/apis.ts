@@ -1,32 +1,30 @@
-import firebase from '@/plugins/firebase'
-import Firestore from '@/api/firestore'
+import firebase from '../plugins/firebase'
+import Firestore from './firestore'
 
-export type DocumentData = firebase.firestore.DocumentData[]
-
-type ProfileData = {
+interface ProfileData {
   profile: string
 }
 
-/**
- * firestoreから取得した画像をロードする
- */
-export const loadImgList = async () => {
-  const collectionRef = firebase
-    .firestore()
-    .collection(`/users/y6VxBfC6TPPWTRvV5siYr1wzfBx2/images`)
+const db = new Firestore()
 
-  const snapshot = await collectionRef.get()
-
-  const imgList = snapshot.docs.map((doc) => doc.data())
+export const loadImgList = async (imgList) => {
   const urls: string[] = imgList.map((img) => img.thumbUrl)
 
+  const promiseList = []
   for (const url of urls) {
-    const img = new Image()
-    // TODO: onerrorのハンドリング
-    img.src = url
+    promiseList.push(loadImg(url))
   }
 
-  return imgList
+  return await Promise.allSettled(promiseList)
+}
+
+export const loadImg = (url: string) => {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve(url)
+    img.onerror = () => reject(url)
+    img.src = url
+  })
 }
 
 export const saveProfile = async (data: ProfileData) => {
@@ -39,5 +37,5 @@ export const saveProfile = async (data: ProfileData) => {
 }
 
 export default {
-  Db: new Firestore(),
+  db,
 }

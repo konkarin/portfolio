@@ -1,5 +1,5 @@
 <template>
-  <div class="pageTitle">
+  <h1 class="pageTitle">
     <slot />
-  </div>
+  </h1>
 </template>

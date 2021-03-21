@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <section class="dashboard__content">
+    <h1>Profile</h1>
     <MarkdownEditor :plain-text="plainText" @input="setPlainText" />
-    <button class="flat-button" @click="saveProfile">保存</button>
-  </div>
+    <button class="dashboard__btn btn btn--center" @click="saveProfile">
+      保存
+    </button>
+  </section>
 </template>
 
 <script lang="ts">
@@ -27,15 +30,20 @@ export default Vue.extend({
       return this.$store.state.user
     },
   },
-  async created() {
-    this.plainText = await this.getProfile()
+  async mounted() {
+    this.plainText = await this.getProfile().catch((e) => {
+      console.error(e)
+      alert('Failed to get profiles.\nPlease retry.')
+      return ''
+    })
   },
   methods: {
     setPlainText(val: string) {
       this.plainText = val
     },
+
     async getProfile() {
-      const data = await apis.Db.getDocById('users', this.user.uid)
+      const data = await apis.db.getDocById('users', this.user.uid)
 
       return data.profile as string
     },
@@ -45,15 +53,16 @@ export default Vue.extend({
         profile: this.plainText as string,
       }
 
-      try {
-        await apis.Db.updateDoc('users', this.user.uid, data)
-
-        // TODO: ポップアップにする
-        alert('Saved')
-      } catch (e) {
-        alert(e)
-        console.error(e)
-      }
+      await apis.db
+        .updateDoc('users', this.user.uid, data)
+        .then(() => {
+          // TODO: ポップアップにする
+          alert('Saved')
+        })
+        .catch((e) => {
+          alert('Failed to update profiles.\nPlease retry.')
+          console.error(e)
+        })
     },
   },
 })

@@ -1,20 +1,32 @@
 <template>
-  <div class="header-outer">
-    <nav class="header-nav">
-      <ul>
-        <li>
-          <router-link to="/"> Home </router-link>
-        </li>
-        <li>
-          <router-link to="/about"> About </router-link>
-        </li>
-        <li>
-          <router-link to="/gallery"> Gallery </router-link>
-        </li>
-        <li>
-          <router-link to="/contact"> Contact </router-link>
-        </li>
-      </ul>
-    </nav>
-  </div>
+  <nav class="headerNav">
+    <NuxtLink
+      to="/"
+      class="headerNav__item"
+      :class="{ 'headerNav__item--active': $route.path === '/' }"
+    >
+      Home
+    </NuxtLink>
+    <NuxtLink
+      to="/about"
+      class="headerNav__item"
+      :class="{ 'headerNav__item--active': $route.path === '/about' }"
+    >
+      About
+    </NuxtLink>
+    <NuxtLink
+      to="/gallery"
+      class="headerNav__item"
+      :class="{ 'headerNav__item--active': $route.path === '/gallery' }"
+    >
+      Gallery
+    </NuxtLink>
+    <NuxtLink
+      to="/articles"
+      class="headerNav__item"
+      :class="{ 'headerNav__item--active': $route.path.includes('/articles') }"
+    >
+      Articles
+    </NuxtLink>
+  </nav>
 </template>

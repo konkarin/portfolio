@@ -1,6 +1,38 @@
 version: 2
 jobs:
-  deploy_dev:
+  deploy_sta:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: npm ci
+          command: npm ci && cd functions && npm ci
+      - run:
+          name: build
+          command: npm run generate:sta && cd functions && npm run build
+      - run:
+          name: deploy to Firebase Hosting
+          # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
+          command: ./node_modules/.bin/firebase deploy --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
+
+  deploy_sta_hosting:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: npm ci
+          command: npm ci
+      - run:
+          name: build
+          command: npm run generate:sta
+      - run:
+          name: deploy to Firebase Hosting
+          # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
+          command: ./node_modules/.bin/firebase deploy --only hosting --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
+
+  deploy_prod:
     docker:
       - image: circleci/node:10
     steps:
@@ -16,11 +48,33 @@ jobs:
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
           command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN --project=$FIREBASE_PJ
 
+  deploy_prod_hosting:
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+      - run:
+          name: npm ci
+          command: npm ci
+      - run:
+          name: build
+          command: npm run generate:prod
+      - run:
+          name: deploy to Firebase Hosting
+          # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
+          command: ./node_modules/.bin/firebase deploy --only hosting --token=$FIREBASE_TOKEN --project=$FIREBASE_PJ
+
 workflows:
   version: 2
-  deploy_dev:
+  deploy_sta:
     jobs:
-      - deploy_dev:
+      - deploy_sta:
+          filters:
+            branches:
+              only: develop
+  deploy_prod:
+    jobs:
+      - deploy_prod:
           filters:
             branches:
               only: master

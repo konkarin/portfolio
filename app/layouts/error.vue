@@ -1,20 +1,24 @@
 <template>
-  <div>
-    <HeaderNav />
-    <div class="wrapper">
-      <main>
-        <PageTitle>ページが見つかりません</PageTitle>
-      </main>
-    </div>
+  <div class="error">
+    <PageTitle v-if="error">{{ error.message }}</PageTitle>
+    <PageTitle v-else>エラーが発生しました</PageTitle>
+    <NuxtLink to="/" class="btn error__btn">トップへ戻る</NuxtLink>
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
+  props: {
+    error: {
+      type: Object,
+      default: null,
+    },
+  },
   head() {
     return {
-      title: 'Not Found',
+      title: 'エラー',
     }
   },
-}
+})
 </script>

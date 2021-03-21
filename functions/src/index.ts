@@ -1,10 +1,10 @@
-import * as fn from 'firebase-functions'
 import * as admin from 'firebase-admin'
-
-import { saveFileToDb } from './saveFileToDb'
-import { deleteFileFromStorage } from './deleteFileFromStorage'
+import * as fn from 'firebase-functions'
+import { buildArticles } from './buildArticles'
 import { createUser } from './createUser'
+import { deleteFileFromStorage } from './deleteFileFromStorage'
 import { deleteUser } from './deleteUser'
+import { saveFileToDb } from './saveFileToDb'
 
 admin.initializeApp()
 
@@ -21,3 +21,7 @@ exports.deleteFileFromStorage = functions.firestore
 exports.createUser = functions.auth.user().onCreate((user) => createUser(user))
 
 exports.deleteUser = functions.auth.user().onDelete((user) => deleteUser(user))
+
+exports.buildArticles = functions.firestore
+  .document('/users/{uid}/articles/{articleId}')
+  .onWrite((snap) => buildArticles(snap))
