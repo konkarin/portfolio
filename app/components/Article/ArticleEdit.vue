@@ -17,7 +17,12 @@
       <MarkdownEditor :plain-text="article.text" @input="setText" />
       <div class="articleEdit__tagContainer">
         <b>Tags:</b>
-        <input v-model="tag" class="articleEdit__tag" type="text" />
+        <input
+          v-model="tag"
+          class="articleEdit__tag"
+          type="text"
+          placeholder="コンマ区切りで入力"
+        />
       </div>
       <button class="articleEdit__btn btn btn--center" @click="updateArticle">
         保存
@@ -28,9 +33,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apis from '@/api/apis'
+import Apis from '@/api/apis'
 import { Article } from '@/types/index'
-import day from '~/utils/day'
+import Day from '~/utils/day'
 
 interface Data {
   article: Article
@@ -87,7 +92,7 @@ export default Vue.extend({
 
       const collectionPath = `users/${uid}/articles`
 
-      const article = (await apis.db.getDocById(
+      const article = (await Apis.db.getDocById(
         collectionPath,
         this.article.id
       )) as Article
@@ -120,12 +125,17 @@ export default Vue.extend({
         title: this.article.title,
         text: this.article.text,
         isPublished: this.article.isPublished,
-        updatedDate: day.getUnixMS(),
-        createdDate: this.article.createdDate || day.getUnixMS(),
+        updatedDate: Day.getUnixMS(),
+        createdDate: this.article.createdDate || Day.getUnixMS(),
         tags: this.tag.split(','),
       }
 
-      await apis.db.updateDoc(articlesPath, article.id, article)
+      try {
+        await Apis.db.updateDoc(articlesPath, article.id, article)
+      } catch (e) {
+        alert('Failed to update artilces')
+        return
+      }
 
       // 書き込み時にDBに存在しないタグがあればDBに追加する
       const notExistsTags = article.tags.filter(
@@ -135,8 +145,13 @@ export default Vue.extend({
       if (notExistsTags) {
         const articleTagsPath = `users/${this.$store.state.user.uid}/articleTags`
 
-        for (const tag of notExistsTags) {
-          await apis.db.updateDoc(articleTagsPath, tag, {})
+        try {
+          for (const tag of notExistsTags) {
+            await Apis.db.updateDoc(articleTagsPath, tag, {})
+          }
+        } catch (e) {
+          alert('Failed to update tags')
+          return
         }
       }
 
