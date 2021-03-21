@@ -13,8 +13,7 @@ export const buildArticles = async (snap: ChangeDocumentSnapshot) => {
 
 const requestCI = async () => {
   const config = JSON.parse(process.env.FIREBASE_CONFIG)
-  const branch =
-    config.projectId === 'konkarin-photo' ? 'production' : 'develop'
+  const branch = config.projectId === 'konkarin-photo' ? 'master' : 'develop'
   const job =
     config.projectId === 'konkarin-photo'
       ? 'deploy_prod_hosting'
