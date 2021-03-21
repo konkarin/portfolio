@@ -39,9 +39,12 @@ export default Vue.extend({
   },
   methods: {
     updateColumnsLength() {
-      // スマホは2カラム固定
-      this.columnsLength =
+      // スマホサイズは2カラム固定
+      const columnsLength =
         window.innerWidth <= 520 ? 2 : Math.floor(window.innerWidth / 260)
+
+      // 最大4カラムまで
+      this.columnsLength = columnsLength > 4 ? 4 : columnsLength
     },
 
     handleResize: debounce(function () {
