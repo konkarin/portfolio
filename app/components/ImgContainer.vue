@@ -31,6 +31,7 @@ export default Vue.extend({
     },
   },
   mounted() {
+    this.updateColumnsLength()
     window.addEventListener('resize', this.handleResize)
   },
   beforeDestroy() {
