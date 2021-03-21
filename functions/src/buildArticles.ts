@@ -36,7 +36,7 @@ const requestCI = async () => {
       headers,
     })
     .catch((e) => {
-      console.error('catch1')
+      console.error(e)
       throw e
     })
 
