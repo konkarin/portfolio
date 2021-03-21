@@ -109,7 +109,7 @@ export default {
   // stagingはdevtoolを有効化
   vue: {
     config: {
-      devtools: process.env.authorId !== 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2',
+      devtools: envSettings.authorId === 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2',
     },
   },
 }
