@@ -24,7 +24,11 @@
           placeholder="コンマ区切りで入力"
         />
       </div>
-      <button class="articleEdit__btn btn btn--center" @click="updateArticle">
+      <button
+        class="articleEdit__btn btn btn--center"
+        :disabled="article.title === '' || tag === ''"
+        @click="updateArticle"
+      >
         保存
       </button>
     </div>
