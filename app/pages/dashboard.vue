@@ -73,6 +73,7 @@ export default Vue.extend({
       this.$store.commit('updateAuth', !!user)
       if (user) {
         this.$store.commit('updateUser', { uid: user.uid })
+        this.$router.replace({ path: '/dashboard/profile' })
       }
 
       this.isLoading = false

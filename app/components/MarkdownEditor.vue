@@ -1,7 +1,12 @@
 <template>
   <div class="markdownEdit">
     <div class="markdownEdit__textEditContainer">
-      <textarea class="textEdit" :value="plainText" @input="inputText" />
+      <textarea
+        class="textEdit"
+        :value="plainText"
+        placeholder="markdown記法で入力"
+        @input="inputText"
+      />
     </div>
     <div class="markdownEdit__container">
       <!-- eslint-disable-next-line vue/no-v-html -->
