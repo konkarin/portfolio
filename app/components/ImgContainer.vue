@@ -41,7 +41,7 @@ export default Vue.extend({
     updateColumnsLength() {
       // スマホは2カラム固定
       this.columnsLength =
-        window.innerWidth <= 520 ? 2 : Math.floor(window.innerWidth / 250)
+        window.innerWidth <= 520 ? 2 : Math.floor(window.innerWidth / 260)
     },
 
     handleResize: debounce(function () {
