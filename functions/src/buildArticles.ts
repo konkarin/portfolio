@@ -26,7 +26,7 @@ const requestCI = async () => {
     },
   }
 
-  const circleToken = functions.config().portfolio.cricle_token
+  const circleToken = functions.config().portfolio.circle_token
 
   const headers = {
     'Content-Type': 'application/json',
