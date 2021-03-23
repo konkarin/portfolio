@@ -25,9 +25,12 @@ const requestCI = async () => {
       CIRCLE_JOB: job,
     },
   }
+
+  const circleToken = functions.config().cricle_token
+
   const headers = {
     'Content-Type': 'application/json',
-    'Circle-Token': 'c30944ed6c07f6ec3691177b92b1a2c61363bf94',
+    'Circle-Token': circleToken,
   }
 
   await axios
