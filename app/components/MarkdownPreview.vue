@@ -79,4 +79,8 @@
 .markdown ::v-deep h3 + p {
   margin-top: 0.3rem;
 }
+.markdown ::v-deep code {
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
 </style>
