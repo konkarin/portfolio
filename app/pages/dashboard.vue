@@ -73,7 +73,6 @@ export default Vue.extend({
       this.$store.commit('updateAuth', !!user)
       if (user) {
         this.$store.commit('updateUser', { uid: user.uid })
-        this.$router.replace({ path: '/dashboard/profile' })
       }
 
       this.isLoading = false
@@ -109,7 +108,7 @@ export default Vue.extend({
         {
           hid: 'og:image',
           property: 'og:image',
-          content: `/HomeImg.jpg`,
+          content: 'https://konkarin-photo.web.app/HomeImg.jpg',
         },
       ],
     }
