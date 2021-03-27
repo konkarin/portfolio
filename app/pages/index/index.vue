@@ -47,7 +47,7 @@ export default Vue.extend({
         {
           hid: 'og:image',
           property: 'og:image',
-          content: `/HomeImg.jpg`,
+          content: 'https://konkarin-photo.web.app/HomeImg.jpg',
         },
       ],
     }
