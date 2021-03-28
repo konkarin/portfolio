@@ -82,5 +82,10 @@
 .markdown ::v-deep code {
   border-radius: 3px;
   font-size: 0.9rem;
+  display: block;
+  overflow-x: auto;
+  background: #1d1f21;
+  color: #c5c8c6;
+  padding: 0.5em;
 }
 </style>

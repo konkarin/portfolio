@@ -1,3 +1,3 @@
-# kon_karin
+# konkarin's portfolio
 
-https://konkarin-portfolio.firebaseapp.com/
+https://konkarin-photo.web.app/
