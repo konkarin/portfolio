@@ -15,6 +15,9 @@
     "deploy:sta": "npm run generate:sta && firebase deploy --only hosting --project=sta",
     "deploy:prod": "npm run generate:prod && firebase deploy --only hosting --project=prod"
   },
+  "jest": {
+    "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
+  },
   "dependencies": {
     "@nuxt/typescript-runtime": "^2.0.0",
     "blueimp-load-image": "^5.14.0",
