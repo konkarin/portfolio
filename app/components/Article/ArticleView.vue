@@ -13,6 +13,7 @@
           :key="tag"
           :to="`/tags/${tag}`"
           class="articleFooter__content articleTag articleTag--link"
+          data-test="articleTag"
         >
           {{ tag }}
         </NuxtLink>
@@ -23,6 +24,7 @@
           class="articleFooter__content shareBtn shareBtn--md"
           target="_blank"
           rel="nofollow noopener noreferrer"
+          data-test="twitterShare"
         >
           <Twitter />
         </a>
@@ -35,8 +37,14 @@
 import Vue, { PropType } from 'vue'
 import { Article } from '@/types/index'
 import Day from '@/utils/day'
+import MarkdownPreview from '@/components/MarkdownPreview.vue'
+import Twitter from '@/components/svg/Twitter.vue'
 
 export default Vue.extend({
+  components: {
+    MarkdownPreview,
+    Twitter,
+  },
   props: {
     article: {
       type: Object as PropType<Article>,

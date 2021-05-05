@@ -1,6 +1,5 @@
 import ArticleView from '@/components/Article/ArticleView.vue'
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import VueRouter from 'vue-router'
+import { RouterLinkStub, shallowMount } from '@vue/test-utils'
 
 const article = {
   createdDate: 1615393188099,
@@ -14,11 +13,8 @@ const article = {
 
 const markdownText = 'markdown test'
 
-const localVue = createLocalVue()
-localVue.use(VueRouter)
-const router = new VueRouter()
-
 const $route = {
+  path: '/articles',
   params: {
     article: article.id,
   },
@@ -32,12 +28,46 @@ const wrapper = shallowMount(ArticleView, {
   mocks: {
     $route,
   },
-  localVue,
-  router,
+  stubs: {
+    NuxtLink: RouterLinkStub,
+  },
 })
 
 describe('ArticleView', () => {
   test('render article title', () => {
     expect(wrapper.find(`h1`).text()).toBe(article.title)
+  })
+
+  test('computed correct date format', () => {
+    // 日付のチェック
+    const ISO8061Regex = /^\d{4}-\d{2}-\d{2}/
+    expect(ISO8061Regex.test((wrapper.vm as any).updatedDate)).toBe(true)
+  })
+
+  test('render article tags links', () => {
+    const wrappers = wrapper.findAll(`[data-test="articleTag"]`).wrappers
+
+    wrappers.forEach((tag, index) => {
+      expect(tag.findComponent(RouterLinkStub).props().to).toBe(
+        `/tags/${article.tags[index]}`
+      )
+    })
+  })
+
+  test('computed correct twitter share url', () => {
+    const text = encodeURIComponent(article.title)
+
+    expect((wrapper.vm as any).twitterShareUrl).toContain(text)
+    expect((wrapper.vm as any).twitterShareUrl).toContain(
+      'konkarin-photo.web.app/'
+    )
+  })
+
+  test('exists twitter share url', () => {
+    const text = encodeURIComponent(article.title)
+
+    expect(
+      wrapper.find('[data-test="twitterShare"]').attributes().href
+    ).toContain(text)
   })
 })
