@@ -11,7 +11,8 @@
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "lint": "npm run lint:js && npm run lint:style",
-    "test": "jest",
+    "test:sta": "cross-env NODE_ENV=\"staging\" jest",
+    "test:prod": "cross-env NODE_ENV=\"production\" jest",
     "deploy:sta": "npm run generate:sta && firebase deploy --only hosting --project=sta",
     "deploy:prod": "npm run generate:prod && firebase deploy --only hosting --project=prod"
   },
