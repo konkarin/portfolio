@@ -22,7 +22,7 @@ export default Vue.extend({
     },
 
     recentArticles(): Article[] {
-      return this.articles.slice(0, 2)
+      return this.articles.slice(0, 3)
     },
 
     articleTags(): string[] {
