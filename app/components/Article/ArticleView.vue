@@ -4,7 +4,7 @@
     <div class="article__subTitle">{{ updatedDate }} 更新</div>
     <article class="article__content">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview v-html="markdownText" />
+      <MarkdownPreview v-html="htmlText" />
     </article>
     <div class="article__content articleFooter">
       <div class="articleFooter__container">
@@ -50,7 +50,7 @@ export default Vue.extend({
       type: Object as PropType<Article>,
       required: true,
     },
-    markdownText: {
+    htmlText: {
       type: String,
       required: true,
     },

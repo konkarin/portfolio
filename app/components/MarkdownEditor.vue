@@ -10,17 +10,17 @@
     </div>
     <div class="markdownEdit__container">
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview class="markdownEdit__content" v-html="markdownText" />
+      <MarkdownPreview class="markdownEdit__content" v-html="htmlText" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { convertTextToMarkdown } from '@/utils/markdown'
+import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 type Data = {
-  markdownText: string
+  htmlText: string
 }
 
 interface HTMLInputEvent extends Event {
@@ -36,7 +36,7 @@ export default Vue.extend({
   },
   data(): Data {
     return {
-      markdownText: '',
+      htmlText: '',
     }
   },
   watch: {
@@ -50,7 +50,7 @@ export default Vue.extend({
   },
   methods: {
     async setMarkdown() {
-      this.markdownText = await convertTextToMarkdown(this.plainText)
+      this.htmlText = await convertMarkdownTextToHTML(this.plainText)
     },
     inputText(e: HTMLInputEvent) {
       this.$emit('input', e.target.value)

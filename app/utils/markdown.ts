@@ -1,20 +1,18 @@
-// @ts-ignore
 import merge from 'deepmerge'
-import sanitize from 'hast-util-sanitize'
-import 'highlight.js/styles/tomorrow-night.css'
 import remark from 'remark'
 import highlight from 'remark-highlight.js'
 import html from 'remark-html'
 import recommended from 'remark-preset-lint-recommended'
 
-const schema = merge(sanitize, { attributes: { '*': ['className'] } })
+const json = require('hast-util-sanitize/lib/github.json')
+const schema = merge(json, { attributes: { '*': ['className'] } })
 
-export const convertTextToMarkdown = async (text) => {
-  const markdown = await remark()
-    .use(highlight)
+export const convertMarkdownTextToHTML = async (text) => {
+  const hast = await remark()
     .use(recommended)
     .use(html, { sanitize: schema })
+    .use(highlight)
     .process(text)
 
-  return markdown.toString()
+  return hast.toString()
 }
