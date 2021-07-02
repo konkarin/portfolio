@@ -1,36 +1,35 @@
 <template>
   <div class="article__container">
-    <template v-if="!article.id">記事がありません</template>
-    <template v-else>
-      <h1>{{ article.title }}</h1>
-      <div class="article__subTitle">{{ updatedDate }} 更新</div>
-      <article class="article__content">
-        <!-- eslint-disable-next-line vue/no-v-html -->
-        <MarkdownPreview v-html="markdownText" />
-      </article>
-      <div class="article__content articleFooter">
-        <div class="articleFooter__container">
-          <NuxtLink
-            v-for="tag in article.tags"
-            :key="tag"
-            :to="`/tags/${tag}`"
-            class="articleFooter__content articleTag articleTag--link"
-          >
-            {{ tag }}
-          </NuxtLink>
-        </div>
-        <div class="articleFooter__container">
-          <a
-            :href="twitterShareUrl"
-            class="articleFooter__content shareBtn shareBtn--md"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-          >
-            <Twitter />
-          </a>
-        </div>
+    <h1>{{ article.title }}</h1>
+    <div class="article__subTitle">{{ updatedDate }} 更新</div>
+    <article class="article__content">
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <MarkdownPreview v-html="htmlText" />
+    </article>
+    <div class="article__content articleFooter">
+      <div class="articleFooter__container">
+        <NuxtLink
+          v-for="tag in article.tags"
+          :key="tag"
+          :to="`/tags/${tag}`"
+          class="articleFooter__content articleTag articleTag--link"
+          data-test="articleTag"
+        >
+          {{ tag }}
+        </NuxtLink>
       </div>
-    </template>
+      <div class="articleFooter__container">
+        <a
+          :href="twitterShareUrl"
+          class="articleFooter__content shareBtn shareBtn--md"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          data-test="twitterShare"
+        >
+          <Twitter />
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,14 +37,20 @@
 import Vue, { PropType } from 'vue'
 import { Article } from '@/types/index'
 import Day from '@/utils/day'
+import MarkdownPreview from '@/components/MarkdownPreview.vue'
+import Twitter from '@/components/svg/Twitter.vue'
 
 export default Vue.extend({
+  components: {
+    MarkdownPreview,
+    Twitter,
+  },
   props: {
     article: {
       type: Object as PropType<Article>,
       required: true,
     },
-    markdownText: {
+    htmlText: {
       type: String,
       required: true,
     },

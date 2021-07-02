@@ -1,7 +1,9 @@
 <template>
   <NuxtLink :to="`/articles/${article.id}`" class="articleItem">
-    <div class="articleItem__subTitle">{{ articleDate }}</div>
-    <div class="articleItem__title">
+    <div data-test="articleDate" class="articleItem__subTitle">
+      {{ articleDate }}
+    </div>
+    <div data-test="articleTitle" class="articleItem__title">
       {{ article.title }}
     </div>
     <div class="articleItem__footer">
@@ -9,6 +11,7 @@
         v-for="tag in article.tags"
         :key="tag"
         class="articleItem__tag articleTag"
+        data-test="articleTag"
       >
         {{ tag }}
       </div>

@@ -43,7 +43,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
-import { convertTextToMarkdown } from '@/utils/markdown'
+import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 interface Data {
   profile: string
@@ -61,7 +61,7 @@ export default Vue.extend({
       })
 
     return {
-      profile: await convertTextToMarkdown(data.profile),
+      profile: await convertMarkdownTextToHTML(data.profile),
     }
   },
   data(): Data {
@@ -80,7 +80,7 @@ export default Vue.extend({
           }
         })
 
-      this.profile = await convertTextToMarkdown(data.profile)
+      this.profile = await convertMarkdownTextToHTML(data.profile)
     }
   },
   head() {
