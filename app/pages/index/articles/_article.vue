@@ -1,16 +1,16 @@
 <template>
-  <ArticleView :article="article" :markdown-text="markdownText" />
+  <ArticleView :article="article" :html-text="htmlText" />
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import apis from '@/api/apis'
-import { convertTextToMarkdown } from '@/utils/markdown'
+import { convertMarkdownTextToHTML } from '@/utils/markdown'
 import { Article } from '@/types/index'
 
 interface Data {
   article: Article
-  markdownText: string
+  htmlText: string
 }
 
 const emptyAritcle = {
@@ -28,7 +28,7 @@ export default Vue.extend({
     if (payload) {
       return {
         article: payload,
-        markdownText: await convertTextToMarkdown(payload.text),
+        htmlText: await convertMarkdownTextToHTML(payload.text),
       }
     } else {
       const collectionPath = `users/${process.env.authorId}/articles`
@@ -39,16 +39,18 @@ export default Vue.extend({
           return emptyAritcle
         })) as Article
 
+      const htmlText = await convertMarkdownTextToHTML(article.text)
+
       return {
         article,
-        markdownText: '',
+        htmlText,
       }
     }
   },
   data(): Data {
     return {
       article: emptyAritcle,
-      markdownText: '',
+      htmlText: '',
     }
   },
   computed: {

@@ -13,7 +13,7 @@ class Day {
     return dayjs(date).format(formatStr)
   }
 
-  relativeTime(date: string | Date): string {
+  relativeTime(date: dayjs.ConfigType): string {
     return dayjs(date).fromNow()
   }
 

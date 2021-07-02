@@ -2,6 +2,13 @@
   <div class="markdown" />
 </template>
 
+<script lang="ts">
+import 'highlight.js/styles/tomorrow-night.css'
+
+import Vue from 'vue'
+export default Vue.extend({})
+</script>
+
 <style lang="scss" scoped>
 .markdown > :first-child {
   margin-top: 0;
