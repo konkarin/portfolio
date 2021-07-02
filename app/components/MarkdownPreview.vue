@@ -95,4 +95,9 @@ export default Vue.extend({})
   color: #c5c8c6;
   padding: 0.5em;
 }
+
+.markdown ::v-deep img {
+  max-width: 80%;
+  margin: 1.5rem auto;
+}
 </style>
