@@ -1,7 +1,12 @@
 <template>
   <div class="article__container">
     <h1>{{ article.title }}</h1>
-    <div class="article__subTitle">{{ updatedDate }} 更新</div>
+    <div class="article__subTitle subTitle">
+      <div class="subTitle__item">{{ releaseDate }} 公開</div>
+      <div v-if="updatedDate" class="subTitle__item">
+        {{ updatedDate }} 更新
+      </div>
+    </div>
     <article class="article__content">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <MarkdownPreview v-html="htmlText" />
@@ -56,7 +61,11 @@ export default Vue.extend({
     },
   },
   computed: {
+    releaseDate(): string {
+      return Day.getDate(this.article.releaseDate, 'YYYY-MM-DD')
+    },
     updatedDate(): string {
+      if (this.article.updatedDate == null) return ''
       return Day.getDate(this.article.updatedDate, 'YYYY-MM-DD')
     },
     twitterShareUrl(): string {

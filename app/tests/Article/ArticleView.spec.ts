@@ -9,9 +9,10 @@ const article = {
   text: 'test text',
   title: 'test title',
   updatedDate: 1616861647099,
+  releaseDate: 1616861647099,
 }
 
-const markdownText = 'markdown test'
+const htmlText = 'markdown test'
 
 const $route = {
   path: '/articles',
@@ -23,7 +24,7 @@ const $route = {
 const wrapper = shallowMount(ArticleView, {
   propsData: {
     article,
-    markdownText,
+    htmlText,
   },
   mocks: {
     $route,
@@ -41,7 +42,7 @@ describe('ArticleView', () => {
   test('computed correct date format', () => {
     // 日付のチェック
     const ISO8061Regex = /^\d{4}-\d{2}-\d{2}/
-    expect(ISO8061Regex.test((wrapper.vm as any).updatedDate)).toBe(true)
+    expect(ISO8061Regex.test((wrapper.vm as any).releaseDate)).toBe(true)
   })
 
   test('render article tags links', () => {
