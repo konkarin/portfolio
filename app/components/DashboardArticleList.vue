@@ -17,7 +17,7 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import Apis from '@/api/apis'
-import { Article } from '@/components/DashboardArticle.vue'
+import { Article } from '@/types/index'
 
 interface Data {
   articles: Array<Article>
@@ -36,6 +36,7 @@ export default Vue.extend({
     async getArticles() {
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
+      // TODO: 型引数を渡す方がいい？
       const article = (await Apis.db.getOrderDocs(
         collectionPath,
         'updatedDate',

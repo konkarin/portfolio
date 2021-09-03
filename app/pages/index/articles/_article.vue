@@ -13,13 +13,14 @@ interface Data {
   htmlText: string
 }
 
-const emptyAritcle = {
+const emptyAritcle: Article = {
   id: '',
   title: '',
   text: '',
   isPublished: false,
-  updatedDate: null,
-  createdDate: null,
+  updatedDate: 0,
+  releaseDate: 0,
+  createdDate: 0,
   tags: [],
 }
 
