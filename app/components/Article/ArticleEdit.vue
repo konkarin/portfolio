@@ -55,7 +55,8 @@ export default Vue.extend({
         text: '',
         isPublished: false,
         updatedDate: null,
-        createdDate: null,
+        createdDate: Day.getUnixMS(),
+        releaseDate: null,
         tags: [],
       },
       tag: '',
@@ -73,7 +74,7 @@ export default Vue.extend({
     }
 
     try {
-      await this.setArticle()
+      await this.showArticle()
     } catch (e) {
       console.error(e)
       alert('Failed to get articles.\nPlease retry.')
@@ -104,16 +105,11 @@ export default Vue.extend({
       return article
     },
 
-    async setArticle(): Promise<void> {
+    async showArticle(): Promise<void> {
       const article = await this.getArticle()
 
       if (article == null) return
-
-      this.article.title = article.title
-      this.article.text = article.text
-      this.article.isPublished = article.isPublished
-      this.article.createdDate = article.createdDate
-      this.article.tags = article.tags
+      this.article = article
     },
 
     async updateArticle() {
@@ -124,25 +120,26 @@ export default Vue.extend({
 
       const articlesPath = `users/${this.$store.state.user.uid}/articles`
 
-      const article: Article = {
-        id: this.article.id,
-        title: this.article.title,
-        text: this.article.text,
-        isPublished: this.article.isPublished,
-        updatedDate: Day.getUnixMS(),
-        createdDate: this.article.createdDate || Day.getUnixMS(),
-        tags: this.tag.split(','),
+      this.article.tags = this.tag.replace(/\s+/g, '').split(',')
+
+      // 公開日の設定
+      if (this.article.isPublished) {
+        if (this.article.releaseDate == null) {
+          this.article.releaseDate = Day.getUnixMS()
+        } else {
+          this.article.updatedDate = Day.getUnixMS()
+        }
       }
 
       try {
-        await Apis.db.updateDoc(articlesPath, article.id, article)
+        await Apis.db.updateDoc(articlesPath, this.article.id, this.article)
       } catch (e) {
         alert('Failed to update artilces')
         return
       }
 
       // 書き込み時にDBに存在しないタグがあればDBに追加する
-      const notExistsTags = article.tags.filter(
+      const notExistsTags = this.article.tags.filter(
         (tag) => !this.$store.state.articleTags.includes(tag)
       )
 
