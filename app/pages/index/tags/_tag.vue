@@ -34,7 +34,7 @@ export default Vue.extend({
       const artilcesPath = `users/${process.env.authorId}/articles`
 
       const order: Order = {
-        fieldPath: 'updatedDate',
+        fieldPath: 'releaseDate',
         direction: 'desc',
       }
       const queries1: Queries = {
