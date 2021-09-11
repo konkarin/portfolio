@@ -9,7 +9,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "updatedDate",
+          "fieldPath": "releaseDate",
           "order": "DESCENDING"
         }
       ]
@@ -27,7 +27,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "updatedDate",
+          "fieldPath": "releaseDate",
           "order": "DESCENDING"
         }
       ]
