@@ -28,15 +28,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import Day from '@/utils/day'
-
-export interface Article {
-  id: string
-  title: string
-  text: string
-  isPublished: boolean
-  updatedDate: number
-  createdDate: number
-}
+import { Article } from '@/types/index'
 
 export default Vue.extend({
   props: {

@@ -102,7 +102,7 @@ const getArticles = async () => {
     value: true,
   }
   const order: Order = {
-    fieldPath: 'updatedDate',
+    fieldPath: 'releaseDate',
     direction: 'desc',
   }
 

@@ -14,7 +14,7 @@ jobs:
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
-          command: ./node_modules/.bin/firebase deploy --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
+          command: ./node_modules/.bin/firebase deploy -f --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
 
   deploy_sta_hosting:
     docker:
@@ -30,7 +30,7 @@ jobs:
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
-          command: ./node_modules/.bin/firebase deploy --only hosting --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
+          command: ./node_modules/.bin/firebase deploy -f --only hosting --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
 
   deploy_prod:
     docker:

@@ -1,4 +1,4 @@
-import ArticleItem from '@/components/Article/ArticleItem.vue'
+import ArticlesSideMenuItem from '@/components/Article/ArticlesSideMenuItem.vue'
 import { mount, RouterLinkStub } from '@vue/test-utils'
 
 const article = {
@@ -12,7 +12,7 @@ const article = {
   releaseDate: 1616861647099,
 }
 
-const wrapper = mount(ArticleItem, {
+const wrapper = mount(ArticlesSideMenuItem, {
   propsData: {
     article,
   },
@@ -36,13 +36,5 @@ describe('ArticleItem', () => {
     expect(wrapper.find(`[data-test="articleTitle"]`).text()).toBe(
       article.title
     )
-  })
-
-  test('render article tags', () => {
-    wrapper
-      .findAll(`[data-test="articleTag"]`)
-      .wrappers.forEach((tag, index) => {
-        expect(tag.text()).toBe(article.tags[index])
-      })
   })
 })

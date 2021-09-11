@@ -10,6 +10,8 @@ class Day {
   }
 
   getDate(date: dayjs.ConfigType, formatStr?: string) {
+    if (date == null) return dayjs(0).format(formatStr)
+
     return dayjs(date).format(formatStr)
   }
 

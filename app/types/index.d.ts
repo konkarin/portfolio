@@ -3,7 +3,8 @@ export interface Article {
   title: string
   text: string
   isPublished: boolean
-  updatedDate: number | null
-  createdDate: number | null
+  updatedDate?: number
+  createdDate: number
+  releaseDate?: number
   tags: string[]
 }

@@ -4,10 +4,12 @@
     class="sideMenuItem"
     @click.native="scrollTop"
   >
-    <div class="sideMenuItem__subTitle">
-      {{ articleDate }}
+    <div class="sideMenuItem__subTitle" data-test="releaseDate">
+      {{ releaseDate }}
     </div>
-    <div class="sideMenuItem__title">{{ article.title }}</div>
+    <div class="sideMenuItem__title" data-test="articleTitle">
+      {{ article.title }}
+    </div>
   </NuxtLink>
 </template>
 
@@ -24,10 +26,10 @@ export default Vue.extend({
     },
   },
   computed: {
-    articleDate(): string {
+    releaseDate(): string {
       const format = 'YYYY-MM-DD'
 
-      return Day.getDate(this.article.updatedDate, format)
+      return Day.getDate(this.article.releaseDate, format)
     },
   },
   methods: {
