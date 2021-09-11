@@ -1,7 +1,7 @@
 <template>
   <NuxtLink :to="`/articles/${article.id}`" class="articleItem">
-    <div data-test="articleDate" class="articleItem__subTitle">
-      {{ articleDate }}
+    <div data-test="releaseDate" class="articleItem__subTitle">
+      {{ releaseDate }}
     </div>
     <div data-test="articleTitle" class="articleItem__title">
       {{ article.title }}
@@ -32,10 +32,10 @@ export default Vue.extend({
     },
   },
   computed: {
-    articleDate(): string {
+    releaseDate(): string {
       const format = 'YYYY-MM-DD'
 
-      return Day.getDate(this.article.updatedDate, format)
+      return Day.getDate(this.article.releaseDate, format)
     },
   },
 })
