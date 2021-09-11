@@ -14,6 +14,10 @@ describe('utils/day', () => {
     expect(ISO8061Regex.test(Day.getDate(unixMS, ISO8061Format))).toBe(true)
   })
 
+  test('get error date', () => {
+    expect(Day.getDate(null, ISO8061Format)).toBe('1970-01-01')
+  })
+
   test('get correct relative time', () => {
     expect(Day.relativeTime(unixMS)).toContain('前')
   })
