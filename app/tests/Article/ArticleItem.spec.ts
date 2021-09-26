@@ -8,8 +8,8 @@ const article = {
   tags: ['test'],
   text: 'test text',
   title: 'test title',
-  updatedDate: 1629972647099,
-  releaseDate: 1616861647099,
+  updatedDate: 1616986800000,
+  releaseDate: 1616900400000,
 }
 
 const wrapper = mount(ArticleItem, {

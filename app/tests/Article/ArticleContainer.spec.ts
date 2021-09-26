@@ -11,7 +11,7 @@ const articles: Article[] = [...Array(4).keys()].map((_, index) => {
     tags: ['test'],
     text: 'test text',
     title: 'test title',
-    updatedDate: 1616861647099,
+    updatedDate: 1616900400000,
   }
 })
 
