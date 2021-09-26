@@ -81,7 +81,6 @@ export default Vue.extend({
   }
   &__content {
     padding: 0 0.5rem;
-    overflow: scroll;
   }
 }
 .textEdit {
