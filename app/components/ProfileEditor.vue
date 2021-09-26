@@ -1,10 +1,13 @@
 <template>
-  <section class="dashboard__content">
+  <section class="dashboard__content dashboardEdit">
     <h1>Profile</h1>
+    <div class="dashboardEdit__head">
+      <div />
+      <div class="dashboardEdit__btn">
+        <button class="btn" @click="saveProfile">保存</button>
+      </div>
+    </div>
     <MarkdownEditor :plain-text="plainText" @input="setPlainText" />
-    <button class="dashboard__btn btn btn--center" @click="saveProfile">
-      保存
-    </button>
   </section>
 </template>
 

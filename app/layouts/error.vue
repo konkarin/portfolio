@@ -2,7 +2,9 @@
   <div class="error">
     <PageTitle v-if="error">{{ error.message }}</PageTitle>
     <PageTitle v-else>エラーが発生しました</PageTitle>
-    <NuxtLink to="/" class="btn error__btn">トップへ戻る</NuxtLink>
+    <div>
+      <NuxtLink to="/" class="btn error__btn">トップへ戻る</NuxtLink>
+    </div>
   </div>
 </template>
 

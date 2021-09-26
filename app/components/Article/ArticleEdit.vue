@@ -1,20 +1,13 @@
 <template>
-  <section class="wrapper">
-    <div class="articleEdit">
-      <textarea
-        v-model="article.title"
-        placeholder="Title"
-        class="articleEdit__title"
-        maxlength="64"
-      />
-      <ToggleBtn
-        :toggle-btn="article.isPublished"
-        class="articleEdit__toggleBtn"
-        @toggle="updatePublishing"
-      >
-        公開する
-      </ToggleBtn>
-      <MarkdownEditor :plain-text="article.text" @input="setText" />
+  <section class="articleEdit">
+    <!-- TODO: 戻るボタンほしい -->
+    <textarea
+      v-model="article.title"
+      placeholder="Title"
+      class="articleEdit__title dashboardEdit__title"
+      maxlength="64"
+    />
+    <div class="dashboardEdit__head">
       <div class="articleEdit__tagContainer">
         <b>Tags:</b>
         <input
@@ -24,14 +17,24 @@
           placeholder="コンマ区切りで入力"
         />
       </div>
-      <button
-        class="articleEdit__btn btn btn--center"
-        :disabled="article.title === '' || tag === ''"
-        @click="updateArticle"
-      >
-        保存
-      </button>
+      <div class="dashboardEdit__btnWrapper">
+        <ToggleBtn
+          class="dashboardEdit__btn"
+          :toggle-btn="article.isPublished"
+          @toggle="updatePublishing"
+        >
+          公開する
+        </ToggleBtn>
+        <button
+          class="dashboardEdit__btn btn"
+          :disabled="article.title === '' || tag === ''"
+          @click="updateArticle"
+        >
+          保存
+        </button>
+      </div>
     </div>
+    <MarkdownEditor :plain-text="article.text" @input="setText" />
   </section>
 </template>
 
