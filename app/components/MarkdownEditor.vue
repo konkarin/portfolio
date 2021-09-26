@@ -81,7 +81,6 @@ export default Vue.extend({
   }
   &__content {
     padding: 0 0.5rem;
-    height: 50vh;
     overflow: scroll;
   }
 }
@@ -91,13 +90,13 @@ export default Vue.extend({
 
 textarea {
   width: 100%;
-  height: 50vh;
+  height: 100%;
   border: 0;
   padding: 0;
   outline: 0;
   resize: none;
   font-size: 16px;
-  line-height: inherit;
+  line-height: 1.9;
   background-color: #fbfcff;
 }
 </style>
