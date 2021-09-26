@@ -43,7 +43,6 @@ export default Vue.extend({
     },
   },
   methods: {
-    // TODO: 後で調べる
     setFile(e: HTMLInputEvent) {
       this.file = e.target.files[0]
 

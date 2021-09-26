@@ -38,7 +38,7 @@ export default Vue.extend({
     },
   },
   computed: {
-    relativeTime() {
+    relativeTime(): string {
       return Day.relativeTime(Day.getDate(this.article.createdDate))
     },
   },
