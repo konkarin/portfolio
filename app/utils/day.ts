@@ -11,6 +11,7 @@ class Day {
 
   getDate(date: dayjs.ConfigType, formatStr?: string) {
     if (date == null) return dayjs(0).format(formatStr)
+    console.log(dayjs(date).format(formatStr), dayjs(date))
 
     return dayjs(date).format(formatStr)
   }
