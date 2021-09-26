@@ -11,7 +11,7 @@
         <button class="btn sign-in" @click="signIn()">Sign in</button>
       </template>
     </header>
-    <main v-if="isAuth" class="wrapper dashboard">
+    <main v-if="isAuth" class="dashboard">
       <nav v-if="!$route.params.article" class="dashboard__nav">
         <NuxtLink
           to="/dashboard/profile"

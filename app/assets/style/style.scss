@@ -75,9 +75,10 @@ a {
 .error {
   margin-top: 5rem;
   text-align: center;
-  &__btn {
-    margin-top: 1rem;
-  }
+}
+
+.error__btn {
+  margin-top: 1rem;
 }
 
 .textMessage {
@@ -351,12 +352,15 @@ a {
 }
 
 .auth-area {
-  margin-top: 1rem;
-  margin-right: 1rem;
+  display: flex;
+  // margin-top: 1rem;
+  // margin-right: 1rem;
+  max-width: 1200px;
+  margin: 1rem auto 0;
 }
 
 .btn {
-  display: inline-block;
+  display: inline-flex;
   font-size: 1em;
   font-weight: bold;
   height: 38px;
@@ -368,9 +372,6 @@ a {
   border: 0;
   border-radius: 0.5em;
   transition: 0.4s;
-  &--center {
-    margin: 1rem auto 0;
-  }
   &--large {
     font-size: 3em;
   }
@@ -410,13 +411,8 @@ a {
   }
 }
 
+.sign-in,
 .sign-out {
-  display: block;
-  margin: 0 0 0 auto;
-}
-
-.edit-button {
-  display: block;
   margin: 0 0 0 auto;
 }
 
@@ -499,7 +495,15 @@ a {
 /* dashboard */
 .dashboard {
   display: flex;
-  flex-direction: row;
+  max-width: 1200px;
+  margin: 3rem auto 0;
+
+  @media screen and (max-width: $sm) {
+    .dashboard {
+      margin: 0;
+      padding: 2rem 1rem;
+    }
+  }
 
   &__nav {
     position: fixed;
@@ -524,15 +528,8 @@ a {
 
   &__content {
     padding-left: 200px;
+    padding-bottom: 5rem;
     width: 100%;
-  }
-
-  &__btn {
-    display: flex;
-    margin-top: 1rem;
-    &--center {
-      margin: 1rem auto 0;
-    }
   }
 
   &__title {
@@ -544,6 +541,20 @@ a {
   }
 }
 
+.dashboardArticleList__header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dashboardArticleList__body {
+  margin-top: 1rem;
+}
+
+// .dashboardEdit {
+
+// }
+
+// article
 .article {
   display: flex;
   justify-content: space-between;
@@ -722,6 +733,8 @@ a {
 }
 
 .articleEdit {
+  padding-bottom: 5rem;
+
   &__title {
     width: 100%;
     height: 2.5rem;
@@ -735,20 +748,6 @@ a {
     background-color: #fbfcff;
   }
 
-  &__toggleBtn {
-    justify-content: flex-end;
-    margin-top: 0.5rem;
-  }
-
-  &__btn {
-    display: flex;
-    margin-top: 1rem;
-  }
-
-  &__tagContainer {
-    margin-top: 1rem;
-  }
-
   &__tag {
     outline: 0;
     border-radius: 4px;
@@ -756,4 +755,23 @@ a {
     background-color: #fbfcff;
     margin-left: 0.3rem;
   }
+}
+
+.dashboardEdit__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+
+  :only-child {
+    text-align: right;
+  }
+}
+
+.dashboardEdit__btnWrapper {
+  display: flex;
+}
+
+.dashboardEdit__btn {
+  margin-left: 1rem;
 }

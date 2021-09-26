@@ -1,8 +1,10 @@
 <template>
-  <section class="dashboard__content">
+  <section class="dashboard__content dashboardArticleList">
     <h1 class="dashboard__title">Articles</h1>
-    <button class="dashboard__btn btn" @click="addArticle">Add new</button>
-    <div class="dashboard__item">
+    <div class="dashboardArticleList__header">
+      <button class="btn" @click="addArticle">Add new</button>
+    </div>
+    <div class="dashboardArticleList__body">
       <DashboardArticle
         v-for="article in articles"
         :key="article.id"
