@@ -39,7 +39,7 @@ export default Vue.extend({
       // TODO: 型引数を渡す方がいい？
       const article = (await Apis.db.getOrderDocs(
         collectionPath,
-        'updatedDate',
+        'createdDate',
         'desc'
       )) as Article[]
 
