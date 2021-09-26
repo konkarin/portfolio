@@ -1,8 +1,10 @@
 <template>
   <section class="dashboard__content">
     <h3>Gallery Edit</h3>
-    <ImgUploader />
-    <button class="btn edit-button" @click="deleteImgList()">Delete</button>
+    <div class="dashboardEdit__head">
+      <ImgUploader />
+      <button class="btn" @click="deleteImgList()">Delete</button>
+    </div>
     <div class="gallery">
       <div v-if="imgList.length === 0">No Photos</div>
       <div
