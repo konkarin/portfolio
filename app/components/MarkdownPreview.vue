@@ -121,7 +121,7 @@ export default Vue.extend({})
   }
 
   img {
-    max-width: 80%;
+    max-height: 60vh;
     margin: 1.5rem auto;
   }
 }
