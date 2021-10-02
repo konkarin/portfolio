@@ -64,6 +64,7 @@ export default Vue.extend({
   display: flex;
   text-align: center;
   width: 100%;
+  min-height: 300px;
   background-color: #fbfcff;
   border: 1px solid #cbcbcb;
   border-radius: 8px;
