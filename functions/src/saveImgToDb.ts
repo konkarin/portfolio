@@ -1,17 +1,17 @@
-import * as path from 'path'
-import * as os from 'os'
 import * as fs from 'fs'
-import * as admin from 'firebase-admin'
-import * as functions from 'firebase-functions'
+import * as os from 'os'
+import * as path from 'path'
 import dayjs from 'dayjs'
 import exifr from 'exifr'
+import * as admin from 'firebase-admin'
+import * as functions from 'firebase-functions'
 
 const imageSize = require('image-size')
 const spawn = require('child-process-promise').spawn
 
 export type ObjectMetadata = functions.storage.ObjectMetadata
 
-export const saveFileToDb = async (object: ObjectMetadata) => {
+export const saveImgToDb = async (object: ObjectMetadata) => {
   const fileBucket: string = object.bucket
   // images/{uid}/{imageId: uuid}/original/hogehoge.jpg
   const originalFilePath: string = object.name
