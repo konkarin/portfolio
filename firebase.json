@@ -16,7 +16,7 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "headers": [
       {
-        "source": "**/*.@(html)",
+        "source": "**/index.html",
         "headers": [
           {
             "key": "Cache-Control",
