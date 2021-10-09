@@ -16,11 +16,11 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "headers": [
       {
-        "source": "**/*.html",
+        "source": "**/*.@(html)",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "private, no-store, no-cache"
+            "value": "private, no-store, no-cache, must-revalidate"
           }
         ]
       },
