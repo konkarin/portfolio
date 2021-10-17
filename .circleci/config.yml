@@ -1,29 +1,50 @@
-version: 2
+version: 2.1
+commands:
+  install-modules:
+    description: 'install node_modules'
+    steps:
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run: npm ci
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+  build-functions:
+    description: 'init cloud functions'
+    steps:
+      - run:
+          name: install cloud functions dependencies
+          command: cd functions && npm ci
+      - run:
+          name: build
+          command: cd functions && npm run build
+
 jobs:
   deploy_sta:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
-      - run:
-          name: npm ci
-          command: npm ci && cd functions && npm ci
+      - install-modules
       - run:
           name: build
-          command: npm run generate:sta && cd functions && npm run build
+          command: npm run generate:sta
       - run:
-          name: deploy to Firebase Hosting
+          name: test
+          command: npm run test:sta
+      - build-functions
+      - run:
+          name: deploy to Firebase
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
           command: ./node_modules/.bin/firebase deploy -f --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
 
   deploy_sta_hosting:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
-      - run:
-          name: npm ci
-          command: npm ci
+      - install-modules
       - run:
           name: build
           command: npm run generate:sta
@@ -34,7 +55,7 @@ jobs:
 
   deploy_prod:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - run:
@@ -50,7 +71,7 @@ jobs:
 
   deploy_prod_hosting:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     steps:
       - checkout
       - run:

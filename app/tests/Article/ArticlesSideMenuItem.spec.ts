@@ -9,7 +9,7 @@ const article = {
   text: 'test text',
   title: 'test title',
   updatedDate: 1629972647099,
-  releaseDate: 1616861647099,
+  releaseDate: 1616900400000,
 }
 
 const wrapper = mount(ArticlesSideMenuItem, {
