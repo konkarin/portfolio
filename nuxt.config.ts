@@ -36,8 +36,12 @@ export default {
   css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
 
   plugins: [],
-
-  components: true,
+  components: [
+    {
+      path: '@/components/',
+      pathPrefix: false,
+    },
+  ],
 
   buildModules: [
     // https://go.nuxtjs.dev/typescript
