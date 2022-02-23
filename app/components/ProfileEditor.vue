@@ -47,7 +47,7 @@ export default Vue.extend({
 
     async getProfile() {
       const data = await apis.db.getDocById('users', this.user.uid)
-
+      if (data === undefined) return ''
       return data.profile as string
     },
 

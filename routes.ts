@@ -1,25 +1,35 @@
 import firebase from 'firebase/app'
+
 import 'firebase/firestore'
 
-let env
+interface FirebaseConfig {
+  [key: string]: string
+}
 
-export const generateRoutes = async (envSettings) => {
+interface Env {
+  firebaseConfig: FirebaseConfig
+  authorId: string
+}
+
+interface Articles {
+  [key: string]: firebase.firestore.DocumentData[]
+}
+
+let env: Env
+
+export const generateRoutes = async (envSettings: Env) => {
   env = envSettings
   if (firebase.apps.length === 0) firebase.initializeApp(env.firebaseConfig)
-
-  const result = []
 
   // /articles/_article.vue用の記事
   const articles = await getArticles()
 
-  result.push(
-    articles.map((article) => {
-      return {
-        route: `/articles/${article.id}`,
-        payload: article,
-      }
-    })
-  )
+  const result = articles.map((article) => {
+    return {
+      route: `/articles/${article.id}`,
+      payload: article,
+    }
+  })
 
   // /tags/_tag.vue用の記事一覧
   const articlesList = await getArticlesByTag()
@@ -32,7 +42,7 @@ export const generateRoutes = async (envSettings) => {
     })
   }
 
-  return [].concat(...result)
+  return result
 }
 
 const getArticles = async () => {
@@ -51,7 +61,7 @@ const getArticlesByTag = async () => {
 
   const articlesPath = `users/${env.authorId}/articles`
 
-  const articlesList = {}
+  const articlesList: Articles = {}
 
   for (let i = 0; i < articleTags.length; i++) {
     const tag = articleTags[i]

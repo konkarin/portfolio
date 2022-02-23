@@ -56,7 +56,7 @@ interface Data {
 }
 
 export default Vue.extend({
-  name: 'Settings',
+  name: 'PagesDashboard',
   data(): Data {
     return {
       isLoading: true,

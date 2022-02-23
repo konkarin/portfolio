@@ -6,6 +6,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  name: 'PagesArticlesIndex',
   computed: {
     articles() {
       return this.$store.state.articles

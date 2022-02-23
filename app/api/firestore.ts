@@ -26,7 +26,7 @@ export default class Firestore {
    * @param collectionPath
    * @returns
    */
-  async getDocIds(collectionPath) {
+  async getDocIds(collectionPath: string) {
     const snap = await this.db
       .collection(collectionPath)
       .get()
@@ -68,7 +68,7 @@ export default class Firestore {
     const snap = await this.db
       .collection(collectionPath)
       .orderBy(fieldPath, direction)
-      .limit(limit)
+      .limit(limit || 30)
       .get()
       .catch((e) => {
         throw e
@@ -126,7 +126,7 @@ export default class Firestore {
       .collection(collectionPath)
       .where(queries.fieldPath, queries.filterStr, queries.value)
       .orderBy(order.fieldPath, order.direction)
-      .limit(order.limit)
+      .limit(order.limit || 30)
       .get()
       .catch((e) => {
         throw e
@@ -153,7 +153,7 @@ export default class Firestore {
       .where(queries1.fieldPath, queries1.filterStr, queries1.value)
       .where(queries2.fieldPath, queries2.filterStr, queries2.value)
 
-    if (order != null) {
+    if (order !== undefined && order.limit !== undefined) {
       const snap = await collectionRef
         .orderBy(order.fieldPath, order.direction)
         .limit(order.limit)

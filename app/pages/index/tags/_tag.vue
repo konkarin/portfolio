@@ -22,6 +22,7 @@ interface Data {
 }
 
 export default Vue.extend({
+  name: 'PagesTag',
   async asyncData({ params, payload, store }): Promise<Data> {
     if (payload) {
       return {
@@ -78,9 +79,7 @@ export default Vue.extend({
   },
   mounted() {
     // 存在しないタグにアクセスしたらエラー
-    const existsArtcileTag = this.articleTags.some(
-      (tag) => this.$route.params.tag === tag
-    )
+    const existsArtcileTag = this.articleTags.includes(this.$route.params.tag)
 
     if (!existsArtcileTag)
       this.$nuxt.error({ message: 'ページが見つかりません' })

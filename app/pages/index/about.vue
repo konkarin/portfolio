@@ -50,6 +50,7 @@ interface Data {
 }
 
 export default Vue.extend({
+  name: 'PagesAbout',
   async asyncData(): Promise<Data> {
     const data = await apis.db
       .getDocById('users', process.env.authorId)
@@ -61,7 +62,7 @@ export default Vue.extend({
       })
 
     return {
-      profile: await convertMarkdownTextToHTML(data.profile),
+      profile: await convertMarkdownTextToHTML(data?.profile),
     }
   },
   data(): Data {
@@ -80,7 +81,7 @@ export default Vue.extend({
           }
         })
 
-      this.profile = await convertMarkdownTextToHTML(data.profile)
+      this.profile = await convertMarkdownTextToHTML(data?.profile)
     }
   },
   head() {

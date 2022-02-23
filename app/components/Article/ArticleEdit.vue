@@ -57,12 +57,17 @@ export default Vue.extend({
         title: '',
         text: '',
         isPublished: false,
-        updatedDate: null,
+        updatedDate: 0,
         createdDate: Day.getUnixMS(),
-        releaseDate: null,
+        releaseDate: 0,
         tags: [],
       },
       tag: '',
+    }
+  },
+  head(): { title: string } {
+    return {
+      title: `Editing ${this.articleTitle}`,
     }
   },
   computed: {
@@ -161,11 +166,6 @@ export default Vue.extend({
 
       alert('Completed')
     },
-  },
-  head(): { title: string } {
-    return {
-      title: `Editing ${this.articleTitle}`,
-    }
   },
 })
 </script>

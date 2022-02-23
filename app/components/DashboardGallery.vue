@@ -74,6 +74,7 @@ export default Vue.extend({
         return snapshot.docs.map((doc) => doc.data())
       } catch (e) {
         console.error(e)
+        return []
       }
     },
 

@@ -1,11 +1,13 @@
-import Fiber from 'fibers'
+import { NuxtConfig } from '@nuxt/types'
+
+// import Fiber from 'fibers'
 import Sass from 'sass'
 import { generateRoutes } from './routes'
 
 const env = process.env.NODE_ENV
 const envSettings = require(`./env/${env}.ts`)
 
-export default {
+const nuxtConfig: NuxtConfig = {
   env: envSettings,
   target: 'static',
   srcDir: 'app',
@@ -44,48 +46,37 @@ export default {
   ],
 
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
-    // "@nuxtjs/eslint-module",
-    // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
+    'nuxt-typed-vuex',
   ],
-
   build: {
     // npm run build -aでAnalyze結果を出力
     // analyze: {
     //   analyzerMode: 'static',
     // },
-    terser: {
-      terserOptions: {
-        // console.x を production時に削除
-        // compress: {
-        //   drop_console: process.env.NODE_ENV === 'production',
-        // },
-      },
-    },
     loaders: {
       scss: {
         implementation: Sass,
-        sassOptions: {
-          fiber: Fiber,
-        },
+        // sassOptions: {
+        //   fiber: Fiber,
+        // },
       },
     },
-    extend(config, ctx) {
-      // npm run dev時に自動fix
-      if (ctx.isDev && ctx.isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue|ts)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/,
-          options: {
-            fix: true,
-          },
-        })
-      }
-    },
+    // extend(config, ctx) {
+    // npm run dev時に自動fix
+    // if (ctx.isDev && ctx.isClient) {
+    //   config.module.rules.push({
+    //     enforce: 'pre',
+    //     test: /\.(js|vue|ts)$/,
+    //     loader: 'eslint-loader',
+    //     exclude: /(node_modules)/,
+    //     options: {
+    //       fix: true,
+    //     },
+    //   })
+    // }
+    // },
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
     },
@@ -120,3 +111,5 @@ export default {
     },
   },
 }
+
+export default nuxtConfig

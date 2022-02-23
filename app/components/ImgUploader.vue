@@ -16,8 +16,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import firebase from '@/plugins/firebase'
 import { v4 as uuidv4 } from 'uuid'
+import firebase from '@/plugins/firebase'
 
 type User = firebase.User
 
@@ -44,7 +44,7 @@ export default Vue.extend({
   },
   methods: {
     setFile(e: HTMLInputEvent) {
-      this.file = e.target.files[0]
+      this.file = e.target.files?.[0]
 
       if (this.file === null) {
         alert('Please select a file')
