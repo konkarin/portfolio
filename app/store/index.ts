@@ -47,7 +47,7 @@ export const mutations = mutationTree(state, {
     state.isAuth = payload
   },
 
-  updateUser(state: State, payload: firebase.User): void {
+  updateUser(state: State, payload: FirebaseUser): void {
     state.user = payload
   },
 

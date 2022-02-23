@@ -13,14 +13,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import firebase from '@/utils/firebase'
 import apis from '@/api/apis'
+import { FirebaseUser } from '~/types/firebase'
 
 type Data = {
   plainText: string
 }
-
-type User = firebase.User
 
 export default Vue.extend({
   data(): Data {
@@ -29,7 +27,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    user(): User {
+    user(): FirebaseUser {
       return this.$store.state.user
     },
   },

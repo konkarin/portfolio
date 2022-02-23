@@ -18,8 +18,7 @@
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import firebase from '@/utils/firebase'
-
-type User = firebase.User
+import { FirebaseUser } from '~/types/firebase'
 
 type Data = {
   isUploading: boolean
@@ -38,7 +37,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    user(): User {
+    user(): FirebaseUser {
       return this.$store.state.user
     },
   },
