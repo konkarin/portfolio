@@ -35,7 +35,7 @@ export default Vue.extend({
         htmlText: await convertMarkdownTextToHTML(payload.text),
       }
     } else {
-      const collectionPath = `users/${process.env.authorId}/articles`
+      const collectionPath = `users/${process.env.AUTHOR_ID}/articles`
       const article = (await apis.db
         .getDocById(collectionPath, params.article)
         .catch((e) => {

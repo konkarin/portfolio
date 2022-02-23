@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import firebase from '@/plugins/firebase'
+import firebase from '@/utils/firebase'
 import apis from '@/api/apis'
 
 type Data = {

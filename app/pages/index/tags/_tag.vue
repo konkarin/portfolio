@@ -32,7 +32,7 @@ export default Vue.extend({
         tags: store.state.articleTags,
       }
     } else {
-      const artilcesPath = `users/${process.env.authorId}/articles`
+      const artilcesPath = `users/${process.env.AUTHOR_ID}/articles`
 
       const order: Order = {
         fieldPath: 'releaseDate',

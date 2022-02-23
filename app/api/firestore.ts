@@ -1,4 +1,4 @@
-import firebase from '../plugins/firebase'
+import firebase from '../utils/firebase'
 import { Order } from '../types/firebase'
 
 export interface Queries {

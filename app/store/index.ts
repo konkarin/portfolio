@@ -5,7 +5,6 @@ import {
   getterTree,
 } from 'typed-vuex'
 import apis from '@/api/apis'
-import firebase from '@/plugins/firebase'
 import { DocumentData, FirebaseUser, Order, Queries } from '@/types/firebase'
 import { Article } from '@/types/index'
 
@@ -108,7 +107,7 @@ export const actions = actionTree(
 )
 
 const getArticles = async () => {
-  const articlesPath = `users/${process.env.authorId}/articles`
+  const articlesPath = `users/${process.env.AUTHOR_ID}/articles`
   const queries: Queries = {
     fieldPath: 'isPublished',
     filterStr: '==',
@@ -129,7 +128,7 @@ const getArticles = async () => {
 }
 
 const getArticleTags = async () => {
-  const tagsPath = `users/${process.env.authorId}/articleTags`
+  const tagsPath = `users/${process.env.AUTHOR_ID}/articleTags`
   // サイドメニュー用のタグ一覧
   return (await apis.db.getDocIds(tagsPath).catch((e) => {
     console.error(e)
@@ -138,7 +137,7 @@ const getArticleTags = async () => {
 }
 
 const getImgList = async () => {
-  const collectionPath = `/users/${process.env.authorId}/images`
+  const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
 
   return await apis.db.getDocs(collectionPath)
 }

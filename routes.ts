@@ -1,25 +1,14 @@
 import firebase from 'firebase/app'
-
 import 'firebase/firestore'
 
-interface FirebaseConfig {
-  [key: string]: string
-}
-
-interface Env {
-  firebaseConfig: FirebaseConfig
-  authorId: string
-}
+import { FIREBASE_OPTIONS } from './app/utils/firebase'
 
 interface Articles {
   [key: string]: firebase.firestore.DocumentData[]
 }
 
-let env: Env
-
-export const generateRoutes = async (envSettings: Env) => {
-  env = envSettings
-  if (firebase.apps.length === 0) firebase.initializeApp(env.firebaseConfig)
+export const generateRoutes = async () => {
+  if (firebase.apps.length === 0) firebase.initializeApp(FIREBASE_OPTIONS)
 
   // /articles/_article.vue用の記事
   const articles = await getArticles()
@@ -46,7 +35,7 @@ export const generateRoutes = async (envSettings: Env) => {
 }
 
 const getArticles = async () => {
-  const collectionPath = `users/${env.authorId}/articles`
+  const collectionPath = `users/${process.env.AUTHOR_ID}/articles`
   const snap = await firebase
     .firestore()
     .collection(collectionPath)
@@ -59,7 +48,7 @@ const getArticles = async () => {
 const getArticlesByTag = async () => {
   const articleTags = await getArticleTags()
 
-  const articlesPath = `users/${env.authorId}/articles`
+  const articlesPath = `users/${process.env.AUTHOR_ID}/articles`
 
   const articlesList: Articles = {}
 
@@ -80,7 +69,7 @@ const getArticlesByTag = async () => {
 }
 
 const getArticleTags = async () => {
-  const articleTagsPath = `users/${env.authorId}/articleTags`
+  const articleTagsPath = `users/${process.env.AUTHOR_ID}/articleTags`
 
   const snap = await firebase.firestore().collection(articleTagsPath).get()
 

@@ -53,7 +53,7 @@ export default Vue.extend({
   name: 'PagesAbout',
   async asyncData(): Promise<Data> {
     const data = await apis.db
-      .getDocById('users', process.env.authorId)
+      .getDocById('users', process.env.AUTHOR_ID)
       .catch((e) => {
         console.error(e)
         return {
@@ -73,7 +73,7 @@ export default Vue.extend({
   async mounted() {
     if (this.profile === '') {
       const data = await apis.db
-        .getDocById('users', process.env.authorId)
+        .getDocById('users', process.env.AUTHOR_ID)
         .catch((e) => {
           console.error(e)
           return {

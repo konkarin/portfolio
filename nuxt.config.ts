@@ -1,14 +1,12 @@
 import { NuxtConfig } from '@nuxt/types'
 
-// import Fiber from 'fibers'
 import Sass from 'sass'
 import { generateRoutes } from './routes'
 
-const env = process.env.NODE_ENV
-const envSettings = require(`./env/${env}.ts`)
+const envPath = `app/.env.${process.env.NODE_ENV}`
+require('dotenv').config({ path: envPath })
 
 const nuxtConfig: NuxtConfig = {
-  env: envSettings,
   target: 'static',
   srcDir: 'app',
   head: {
@@ -34,9 +32,7 @@ const nuxtConfig: NuxtConfig = {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-
   css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
-
   plugins: [],
   components: [
     {
@@ -44,11 +40,11 @@ const nuxtConfig: NuxtConfig = {
       pathPrefix: false,
     },
   ],
-
   buildModules: [
     '@nuxt/typescript-build',
-    '@nuxtjs/stylelint-module',
     'nuxt-typed-vuex',
+    ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
+    '@nuxtjs/dotenv',
   ],
   build: {
     // npm run build -aでAnalyze結果を出力
@@ -62,6 +58,11 @@ const nuxtConfig: NuxtConfig = {
         //   fiber: Fiber,
         // },
       },
+    },
+    extend(config) {
+      config.node = {
+        fs: 'empty',
+      }
     },
     // extend(config, ctx) {
     // npm run dev時に自動fix
@@ -96,7 +97,7 @@ const nuxtConfig: NuxtConfig = {
   },
   generate: {
     async routes() {
-      return await generateRoutes(envSettings)
+      return await generateRoutes()
     },
   },
   server: {
@@ -107,7 +108,7 @@ const nuxtConfig: NuxtConfig = {
   // stagingはdevtoolを有効化
   vue: {
     config: {
-      devtools: envSettings.authorId === 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2',
+      devtools: process.env.NODE_ENV === 'staging',
     },
   },
 }

@@ -1,4 +1,4 @@
-import firebase from '../plugins/firebase'
+import firebase from '../utils/firebase'
 import Firestore from './firestore'
 
 interface ProfileData {
@@ -20,8 +20,6 @@ interface Img {
 const db = new Firestore()
 
 export const loadImgList = async (imgList: Img[]) => {
-  console.log(imgList)
-
   const urls: string[] = imgList.map((img) => img.thumbUrl)
 
   const promiseList = []

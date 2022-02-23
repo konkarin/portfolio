@@ -17,7 +17,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import firebase from '@/plugins/firebase'
+import firebase from '@/utils/firebase'
 
 type User = firebase.User
 
