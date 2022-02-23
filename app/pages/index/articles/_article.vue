@@ -7,6 +7,8 @@ import Vue from 'vue'
 import apis from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 import { Article } from '@/types/index'
+import { Context } from '@nuxt/types'
+import { MetaInfo } from 'vue-meta'
 
 interface Data {
   article: Article
@@ -25,14 +27,15 @@ const emptyAritcle: Article = {
 }
 
 export default Vue.extend({
-  async asyncData({ params, payload }): Promise<Data> {
+  name: 'PagesArticle',
+  async asyncData({ params, payload }: Context): Promise<Data> {
     if (payload) {
       return {
         article: payload,
         htmlText: await convertMarkdownTextToHTML(payload.text),
       }
     } else {
-      const collectionPath = `users/${process.env.authorId}/articles`
+      const collectionPath = `users/${process.env.AUTHOR_ID}/articles`
       const article = (await apis.db
         .getDocById(collectionPath, params.article)
         .catch((e) => {
@@ -56,7 +59,7 @@ export default Vue.extend({
   },
   computed: {
     articles() {
-      return this.$store.state.articles
+      return this.$accessor.articles
     },
   },
   mounted() {
@@ -67,7 +70,7 @@ export default Vue.extend({
 
     if (!existsArtcile) this.$nuxt.error({ message: 'ページが見つかりません' })
   },
-  head(): any {
+  head(): MetaInfo {
     return {
       title: this.article.title || '記事がありません。',
       meta: [

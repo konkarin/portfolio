@@ -1,12 +1,12 @@
-import Fiber from 'fibers'
+import { NuxtConfig } from '@nuxt/types'
+
 import Sass from 'sass'
 import { generateRoutes } from './routes'
 
-const env = process.env.NODE_ENV
-const envSettings = require(`./env/${env}.ts`)
+const envPath = `app/.env.${process.env.NODE_ENV}`
+require('dotenv').config({ path: envPath })
 
-export default {
-  env: envSettings,
+const nuxtConfig: NuxtConfig = {
   target: 'static',
   srcDir: 'app',
   head: {
@@ -32,56 +32,52 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-
   css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
-
   plugins: [],
-
-  components: true,
-
-  buildModules: [
-    // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
-    // "@nuxtjs/eslint-module",
-    // https://go.nuxtjs.dev/stylelint
-    '@nuxtjs/stylelint-module',
+  components: [
+    {
+      path: '@/components/',
+      pathPrefix: false,
+    },
   ],
-
+  buildModules: [
+    '@nuxt/typescript-build',
+    'nuxt-typed-vuex',
+    ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
+    '@nuxtjs/dotenv',
+  ],
   build: {
     // npm run build -aでAnalyze結果を出力
     // analyze: {
     //   analyzerMode: 'static',
     // },
-    terser: {
-      terserOptions: {
-        // console.x を production時に削除
-        // compress: {
-        //   drop_console: process.env.NODE_ENV === 'production',
-        // },
-      },
-    },
     loaders: {
       scss: {
         implementation: Sass,
-        sassOptions: {
-          fiber: Fiber,
-        },
+        // sassOptions: {
+        //   fiber: Fiber,
+        // },
       },
     },
-    extend(config, ctx) {
-      // npm run dev時に自動fix
-      if (ctx.isDev && ctx.isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue|ts)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/,
-          options: {
-            fix: true,
-          },
-        })
+    extend(config) {
+      config.node = {
+        fs: 'empty',
       }
     },
+    // extend(config, ctx) {
+    // npm run dev時に自動fix
+    // if (ctx.isDev && ctx.isClient) {
+    //   config.module.rules.push({
+    //     enforce: 'pre',
+    //     test: /\.(js|vue|ts)$/,
+    //     loader: 'eslint-loader',
+    //     exclude: /(node_modules)/,
+    //     options: {
+    //       fix: true,
+    //     },
+    //   })
+    // }
+    // },
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
     },
@@ -101,7 +97,7 @@ export default {
   },
   generate: {
     async routes() {
-      return await generateRoutes(envSettings)
+      return await generateRoutes()
     },
   },
   server: {
@@ -112,7 +108,9 @@ export default {
   // stagingはdevtoolを有効化
   vue: {
     config: {
-      devtools: envSettings.authorId === 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2',
+      devtools: process.env.NODE_ENV === 'staging',
     },
   },
 }
+
+export default nuxtConfig

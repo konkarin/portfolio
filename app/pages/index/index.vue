@@ -7,6 +7,7 @@ import Vue from 'vue'
 import { loadImgList } from '@/api/apis'
 
 export default Vue.extend({
+  name: 'PagesIndex',
   computed: {
     imgList() {
       return this.$store.state.imgList
