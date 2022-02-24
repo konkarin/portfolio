@@ -21,6 +21,11 @@ import Apis from '@/api/apis'
 import { DocumentData } from '@/types/firebase'
 
 export default Vue.extend({
+  head() {
+    return {
+      title: 'Gallery',
+    }
+  },
   computed: {
     photoModal() {
       return this.$store.state.photoModal
@@ -35,7 +40,7 @@ export default Vue.extend({
   async mounted() {
     if (this.imgList.length !== 0) return
 
-    const collectionPath = `/users/${process.env.authorId}/images`
+    const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
 
     const imgList = await Apis.db.getDocs(collectionPath)
     this.$store.commit('updateImgList', imgList)
@@ -54,11 +59,6 @@ export default Vue.extend({
     // substituteSrc (index) {
     //   this.imgList[index].thumburl = 'https://pbs.twimg.com/profile_images/1211962587442642944/iOxDr-Ba_400x400.jpg'
     // }
-  },
-  head() {
-    return {
-      title: 'Gallery',
-    }
   },
 })
 </script>

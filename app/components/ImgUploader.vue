@@ -16,10 +16,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import firebase from '@/plugins/firebase'
 import { v4 as uuidv4 } from 'uuid'
-
-type User = firebase.User
+import firebase from '@/utils/firebase'
+import { FirebaseUser } from '~/types/firebase'
 
 type Data = {
   isUploading: boolean
@@ -38,13 +37,13 @@ export default Vue.extend({
     }
   },
   computed: {
-    user(): User {
+    user(): FirebaseUser {
       return this.$store.state.user
     },
   },
   methods: {
     setFile(e: HTMLInputEvent) {
-      this.file = e.target.files[0]
+      this.file = e.target.files?.[0]
 
       if (this.file === null) {
         alert('Please select a file')

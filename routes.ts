@@ -1,25 +1,24 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
-let env
+import { FIREBASE_OPTIONS } from './app/utils/firebase'
 
-export const generateRoutes = async (envSettings) => {
-  env = envSettings
-  if (firebase.apps.length === 0) firebase.initializeApp(env.firebaseConfig)
+interface Articles {
+  [key: string]: firebase.firestore.DocumentData[]
+}
 
-  const result = []
+export const generateRoutes = async () => {
+  if (firebase.apps.length === 0) firebase.initializeApp(FIREBASE_OPTIONS)
 
   // /articles/_article.vue用の記事
   const articles = await getArticles()
 
-  result.push(
-    articles.map((article) => {
-      return {
-        route: `/articles/${article.id}`,
-        payload: article,
-      }
-    })
-  )
+  const result = articles.map((article) => {
+    return {
+      route: `/articles/${article.id}`,
+      payload: article,
+    }
+  })
 
   // /tags/_tag.vue用の記事一覧
   const articlesList = await getArticlesByTag()
@@ -32,11 +31,11 @@ export const generateRoutes = async (envSettings) => {
     })
   }
 
-  return [].concat(...result)
+  return result
 }
 
 const getArticles = async () => {
-  const collectionPath = `users/${env.authorId}/articles`
+  const collectionPath = `users/${process.env.AUTHOR_ID}/articles`
   const snap = await firebase
     .firestore()
     .collection(collectionPath)
@@ -49,9 +48,9 @@ const getArticles = async () => {
 const getArticlesByTag = async () => {
   const articleTags = await getArticleTags()
 
-  const articlesPath = `users/${env.authorId}/articles`
+  const articlesPath = `users/${process.env.AUTHOR_ID}/articles`
 
-  const articlesList = {}
+  const articlesList: Articles = {}
 
   for (let i = 0; i < articleTags.length; i++) {
     const tag = articleTags[i]
@@ -70,7 +69,7 @@ const getArticlesByTag = async () => {
 }
 
 const getArticleTags = async () => {
-  const articleTagsPath = `users/${env.authorId}/articleTags`
+  const articleTagsPath = `users/${process.env.AUTHOR_ID}/articleTags`
 
   const snap = await firebase.firestore().collection(articleTagsPath).get()
 

@@ -31,15 +31,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import firebase from '@/plugins/firebase'
+import firebase from '@/utils/firebase'
+import { FirebaseUser } from '~/types/firebase'
 
 interface Data {
   imgList: firebase.firestore.DocumentData[]
   selectedImgPathList: string[]
   deletingImgListId: string[]
 }
-
-type User = firebase.User
 
 export default Vue.extend({
   data(): Data {
@@ -50,12 +49,12 @@ export default Vue.extend({
     }
   },
   computed: {
-    user(): User {
+    user(): FirebaseUser {
       return this.$store.state.user
     },
   },
   watch: {
-    async user(user: User) {
+    async user(user: FirebaseUser) {
       if (user != null) this.imgList = await this.getImgList()
     },
   },
@@ -74,6 +73,7 @@ export default Vue.extend({
         return snapshot.docs.map((doc) => doc.data())
       } catch (e) {
         console.error(e)
+        return []
       }
     },
 

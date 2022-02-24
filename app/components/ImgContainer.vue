@@ -10,8 +10,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import { DocumentData } from '@/types/firebase'
 import debounce from 'lodash.debounce'
+import { DocumentData } from '@/types/firebase'
 
 export default Vue.extend({
   props: {
@@ -65,9 +65,8 @@ export default Vue.extend({
       // 全体ループ
       imgList.forEach((img) => {
         // カラムの高さが最も小さいindexを取得
-        const minHeightIndex: number = this.findMinHeightIndex(
-          columnsHeightList
-        )
+        const minHeightIndex: number =
+          this.findMinHeightIndex(columnsHeightList)
 
         // カラムの高さが最も小さいindexの配列に画像を追加
         columns[minHeightIndex].push(img)

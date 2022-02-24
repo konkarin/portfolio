@@ -50,9 +50,10 @@ interface Data {
 }
 
 export default Vue.extend({
+  name: 'PagesAbout',
   async asyncData(): Promise<Data> {
     const data = await apis.db
-      .getDocById('users', process.env.authorId)
+      .getDocById('users', process.env.AUTHOR_ID)
       .catch((e) => {
         console.error(e)
         return {
@@ -61,7 +62,7 @@ export default Vue.extend({
       })
 
     return {
-      profile: await convertMarkdownTextToHTML(data.profile),
+      profile: await convertMarkdownTextToHTML(data?.profile),
     }
   },
   data(): Data {
@@ -72,7 +73,7 @@ export default Vue.extend({
   async mounted() {
     if (this.profile === '') {
       const data = await apis.db
-        .getDocById('users', process.env.authorId)
+        .getDocById('users', process.env.AUTHOR_ID)
         .catch((e) => {
           console.error(e)
           return {
@@ -80,7 +81,7 @@ export default Vue.extend({
           }
         })
 
-      this.profile = await convertMarkdownTextToHTML(data.profile)
+      this.profile = await convertMarkdownTextToHTML(data?.profile)
     }
   },
   head() {
