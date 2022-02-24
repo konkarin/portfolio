@@ -20,12 +20,12 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=0"
+            "value": "private, no-store, no-cache, must-revalidate"
           }
         ]
       },
       {
-        "source": "**/*.@(js|css|jpg|jpeg|gif|png)",
+        "source": "**/*.@(js|css|jpg|jpeg|gif|png|webp|svg|ico)",
         "headers": [
           {
             "key": "Cache-Control",

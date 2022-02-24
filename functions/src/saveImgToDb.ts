@@ -46,7 +46,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   const exif = await getExif(tempFilePath)
 
   // Generate a thumbnail using ImageMagick.
-  await spawn('convert', [tempFilePath, '-thumbnail', '300x300>', tempFilePath])
+  await spawn('convert', [tempFilePath, '-thumbnail', '800x800>', tempFilePath])
   console.log('Thumbnail created at', tempFilePath)
 
   // We add a 'thumb_' prefix to thumbnails file name. That's where we'll upload the thumbnail.
