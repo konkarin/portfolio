@@ -5,13 +5,13 @@ import Vuex from 'vuex'
 
 const articles: Article[] = [...Array(4).keys()].map((_, index) => {
   return {
-    createdDate: 1615393188099,
+    createdDate: 1616932800000,
     id: String(index),
     isPublished: true,
     tags: ['test'],
     text: 'test text',
     title: 'test title',
-    updatedDate: 1616900400000,
+    updatedDate: 1617019200000,
   }
 })
 

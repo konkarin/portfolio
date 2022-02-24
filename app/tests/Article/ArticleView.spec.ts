@@ -8,8 +8,8 @@ const article = {
   tags: ['test'],
   text: 'test text',
   title: 'test title',
-  updatedDate: 1616986800000,
-  releaseDate: 1616900400000,
+  updatedDate: 1617019200000,
+  releaseDate: 1616932800000,
 }
 
 const htmlText = 'markdown test'
