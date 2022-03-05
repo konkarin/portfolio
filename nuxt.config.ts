@@ -44,7 +44,6 @@ const nuxtConfig: NuxtConfig = {
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
     ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
-    '@nuxtjs/dotenv',
   ],
   build: {
     // npm run build -aでAnalyze結果を出力
