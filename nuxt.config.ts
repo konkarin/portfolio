@@ -10,7 +10,7 @@ const nuxtConfig: NuxtConfig = {
   target: 'static',
   srcDir: 'app',
   head: {
-    titleTemplate: "%s | kon_karin's photo & blog",
+    titleTemplate: "%s - kon_karin's photo & blog",
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -44,7 +44,6 @@ const nuxtConfig: NuxtConfig = {
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
     ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
-    '@nuxtjs/dotenv',
   ],
   build: {
     // npm run build -aでAnalyze結果を出力
