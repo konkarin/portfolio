@@ -1,10 +1,8 @@
-import admin from 'firebase-admin'
-
-export type UserRecord = admin.auth.UserRecord
+import { UserRecord } from 'firebase-admin/auth'
+import { getFirestore } from 'firebase-admin/firestore'
 
 export const deleteUser = async (user: UserRecord) => {
-  const db = admin.firestore()
-  const usersCollectionRef = db.collection('users')
+  const usersCollectionRef = getFirestore().collection('users')
 
   await usersCollectionRef
     .doc(user.uid)

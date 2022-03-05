@@ -1,12 +1,12 @@
 import * as path from 'path'
-import admin from 'firebase-admin'
-import functions from 'firebase-functions'
+import { firestore } from 'firebase-functions'
+import { getStorage } from 'firebase-admin/storage'
 
-export type QueryDocumentSnapshot = functions.firestore.QueryDocumentSnapshot
+export type QueryDocumentSnapshot = firestore.QueryDocumentSnapshot
 
 export const deleteFileFromStorage = async (snap: QueryDocumentSnapshot) => {
   const bucketName = 'konkarin-photo.appspot.com'
-  const bucket = admin.storage().bucket(bucketName)
+  const bucket = getStorage().bucket(bucketName)
   // /users/{uid}/images/{imageId}/original/hoge.jpg
   const deletedPath = snap.data().originalFilePath
 
