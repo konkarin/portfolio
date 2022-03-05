@@ -1,5 +1,5 @@
-import admin from 'firebase-admin'
-export type UserRecord = admin.auth.UserRecord
+import { UserRecord } from 'firebase-admin/auth'
+import { getFirestore } from 'firebase-admin/firestore'
 
 export const createUser = async (user: UserRecord) => {
   const data = {
@@ -10,8 +10,7 @@ export const createUser = async (user: UserRecord) => {
     phoneNumber: user.phoneNumber,
   }
 
-  const db = admin.firestore()
-  const usersCollectionRef = db.collection('users')
+  const usersCollectionRef = getFirestore().collection('users')
 
   await usersCollectionRef
     .doc(user.uid)

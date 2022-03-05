@@ -3,13 +3,14 @@ import * as os from 'os'
 import * as path from 'path'
 import dayjs from 'dayjs'
 import { parse } from 'exifr'
-import admin from 'firebase-admin'
-import functions from 'firebase-functions'
+import { storage } from 'firebase-functions'
+import { getStorage } from 'firebase-admin/storage'
+import { getFirestore } from 'firebase-admin/firestore'
 
 const imageSize = require('image-size')
 const spawn = require('child-process-promise').spawn
 
-export type ObjectMetadata = functions.storage.ObjectMetadata
+export type ObjectMetadata = storage.ObjectMetadata
 
 export const saveImgToDb = async (object: ObjectMetadata) => {
   const fileBucket: string = object.bucket
@@ -35,7 +36,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   const originalFileName = path.basename(originalFilePath)
 
   // Download file from bucket.
-  const bucket = admin.storage().bucket(fileBucket)
+  const bucket = getStorage().bucket(fileBucket)
   const tempFilePath = path.join(os.tmpdir(), originalFileName)
 
   await bucket.file(originalFilePath).download({ destination: tempFilePath })
@@ -95,7 +96,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
 
   // NOTE: StorageのonFinalizeはcontextのauthにuidを持たないため、ファイルパスから取得
   const uid = originalFilePath.split('/')[1]
-  const collectionRef = admin.firestore().collection(`users/${uid}/images`)
+  const collectionRef = getFirestore().collection(`users/${uid}/images`)
 
   try {
     await collectionRef.add(data)
