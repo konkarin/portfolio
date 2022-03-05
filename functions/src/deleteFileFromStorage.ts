@@ -1,6 +1,6 @@
 import * as path from 'path'
-import * as admin from 'firebase-admin'
-import * as functions from 'firebase-functions'
+import admin from 'firebase-admin'
+import functions from 'firebase-functions'
 
 export type QueryDocumentSnapshot = functions.firestore.QueryDocumentSnapshot
 

@@ -2,9 +2,9 @@ import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
 import dayjs from 'dayjs'
-import exifr from 'exifr'
-import * as admin from 'firebase-admin'
-import * as functions from 'firebase-functions'
+import { parse } from 'exifr'
+import admin from 'firebase-admin'
+import functions from 'firebase-functions'
 
 const imageSize = require('image-size')
 const spawn = require('child-process-promise').spawn
@@ -126,7 +126,7 @@ const getExif = async (tempFilePath: string) => {
     silentErrors: true,
   }
 
-  const data = await exifr.parse(tempFilePath, options).catch((e: Error) => {
+  const data = await parse(tempFilePath, options).catch((e: Error) => {
     console.error(e)
     return {}
   })
