@@ -13,6 +13,8 @@ export type ObjectMetadata = functions.storage.ObjectMetadata
 
 export const saveImgToDb = async (object: ObjectMetadata) => {
   const fileBucket: string = object.bucket
+
+  if (!object.name || !object.contentType) return
   // images/{uid}/{imageId: uuid}/original/hogehoge.jpg
   const originalFilePath: string = object.name
   const contentType: string = object.contentType
@@ -124,7 +126,7 @@ const getExif = async (tempFilePath: string) => {
     silentErrors: true,
   }
 
-  const data = await exifr.parse(tempFilePath, options).catch((e) => {
+  const data = await exifr.parse(tempFilePath, options).catch((e: Error) => {
     console.error(e)
     return {}
   })
