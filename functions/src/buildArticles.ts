@@ -12,6 +12,7 @@ export const buildArticles = async (snap: ChangeDocumentSnapshot) => {
 }
 
 const requestCI = async () => {
+  // NOTE: https://firebase.google.com/docs/functions/config-env?hl=ja#automatically_populated_environment_variables
   const config = JSON.parse(process.env.FIREBASE_CONFIG)
   const branch = config.projectId === 'konkarin-photo' ? 'master' : 'develop'
   const job =
