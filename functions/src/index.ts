@@ -1,5 +1,5 @@
-import * as admin from 'firebase-admin'
-import * as fn from 'firebase-functions'
+import admin from 'firebase-admin'
+import fn from 'firebase-functions'
 import { buildArticles } from './buildArticles'
 import { createUser } from './createUser'
 import { deleteFileFromStorage } from './deleteFileFromStorage'
