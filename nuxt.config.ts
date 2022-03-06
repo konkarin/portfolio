@@ -1,4 +1,4 @@
-import { NuxtConfig } from '@nuxt/types'
+import { defineNuxtConfig } from '@nuxt/bridge'
 
 import Sass from 'sass'
 import { generateRoutes } from './routes'
@@ -6,7 +6,7 @@ import { generateRoutes } from './routes'
 const envPath = `app/.env.${process.env.NODE_ENV}`
 require('dotenv').config({ path: envPath })
 
-const nuxtConfig: NuxtConfig = {
+export default defineNuxtConfig({
   target: 'static',
   srcDir: 'app',
   head: {
@@ -41,7 +41,6 @@ const nuxtConfig: NuxtConfig = {
     },
   ],
   buildModules: [
-    '@nuxt/typescript-build',
     'nuxt-typed-vuex',
     ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
   ],
@@ -58,6 +57,7 @@ const nuxtConfig: NuxtConfig = {
         // },
       },
     },
+    // @ts-expect-error
     extend(config) {
       config.node = {
         fs: 'empty',
@@ -81,8 +81,13 @@ const nuxtConfig: NuxtConfig = {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
     },
   },
+  // https://github.com/nuxt/framework/issues/1151
+  alias: {
+    tslib: 'tslib/tslib.es6.js',
+  },
   router: {
-    extendRoutes(routes) {
+    // TODO: nuxt3で型がどうなるかチェック
+    extendRoutes(routes: any[]) {
       routes.push({
         path: '*',
         component: './app/layouts/error.vue',
@@ -95,21 +100,26 @@ const nuxtConfig: NuxtConfig = {
     },
   },
   generate: {
+    // @ts-expect-error TODO: nuxt3でどうなるかチェック
     async routes() {
       return await generateRoutes()
     },
+    // example
+    // routes(callback: any) {
+    //   generateRoutes()
+    //     .then((res) => {
+    //       callback(null, res)
+    //     })
+    //     .catch(callback)
+    // },
   },
   server: {
     port: 3002, // デフォルト: 3000
   },
-  // プログレスバーの非表示
-  loading: false,
   // stagingはdevtoolを有効化
   vue: {
     config: {
       devtools: process.env.NODE_ENV === 'staging',
     },
   },
-}
-
-export default nuxtConfig
+})

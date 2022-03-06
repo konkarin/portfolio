@@ -28,6 +28,7 @@ yarn-error.log*
 /firebase
 
 .nuxt
+.output
 
 # jest
 coverage
