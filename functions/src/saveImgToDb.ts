@@ -132,6 +132,11 @@ const getExif = async (tempFilePath: string) => {
     return {}
   })
 
+  if (data === undefined) {
+    console.log('Exif does not exist')
+    return {}
+  }
+
   console.log('Get Exif')
   return data
 }
