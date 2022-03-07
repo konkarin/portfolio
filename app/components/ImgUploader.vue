@@ -17,8 +17,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import firebase from '@/utils/firebase'
-import { FirebaseUser } from '~/types/firebase'
+import { getStorage, ref, uploadBytes } from 'firebase/storage'
+import { User } from '@firebase/auth'
 
 type Data = {
   isUploading: boolean
@@ -37,7 +37,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    user(): FirebaseUser {
+    user(): User {
       return this.$store.state.user
     },
   },
@@ -60,11 +60,11 @@ export default Vue.extend({
       }`
 
       // 保存するファイル名に現在時刻を指定
-      const storageRef = firebase.storage().ref().child(target)
+      const storageRef = ref(getStorage(), target)
 
       // ストレージに保存
       try {
-        await storageRef.put(this.file)
+        await uploadBytes(storageRef, this.file)
 
         alert('Uploaded successfully')
         // TODO: 写真一覧を更新

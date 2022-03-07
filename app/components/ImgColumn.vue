@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts">
+import { DocumentData } from '@firebase/firestore'
 import Vue, { PropType } from 'vue'
-import { DocumentData } from '@/types/firebase'
 
 export default Vue.extend({
   props: {

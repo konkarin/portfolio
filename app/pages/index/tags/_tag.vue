@@ -10,9 +10,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apis from '@/api/apis'
-import { Order, Queries } from '@/types/firebase'
+import { db } from '@/api/apis'
 import { Article } from '@/types/index'
+import { Order, Query } from '~/api/firestore'
 
 interface Data {
   articles: Article[]
@@ -38,19 +38,19 @@ export default Vue.extend({
         fieldPath: 'releaseDate',
         direction: 'desc',
       }
-      const queries1: Queries = {
+      const queries1: Query = {
         fieldPath: 'tags',
         filterStr: 'array-contains',
         value: params.tag,
       }
-      const queries2: Queries = {
+      const queries2: Query = {
         fieldPath: 'isPublished',
         filterStr: '==',
         value: true,
       }
 
-      const articles = (await apis.db
-        .getDocsByCompoundQueries(artilcesPath, queries1, queries2, order)
+      const articles = (await db
+        .getDocsByCompoundQueries(artilcesPath, [queries1, queries2], order)
         .catch((e) => {
           console.error(e)
           return []

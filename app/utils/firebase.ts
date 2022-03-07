@@ -1,13 +1,10 @@
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-import 'firebase/functions'
-import 'firebase/storage'
+import { getApp, getApps, initializeApp } from 'firebase/app'
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
 
 const envPath = `app/.env.${process.env.NODE_ENV}`
 require('dotenv').config({ path: envPath })
 
-export const FIREBASE_OPTIONS = {
+const firebaseConfig = {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
   projectId: process.env.PROJECT_ID,
@@ -17,15 +14,10 @@ export const FIREBASE_OPTIONS = {
   measurementId: process.env.MEASUREMENT_ID,
 }
 
-// Initialize Firebase
-// NOTE: SSGだとこれいれないと複数回初期化される
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(FIREBASE_OPTIONS)
-}
+export const firebaseApp =
+  getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
 
 // DEBUG:
 if (process.env.NODE_ENV === 'development') {
-  firebase.functions().useEmulator('localhost', 5001)
+  connectFunctionsEmulator(getFunctions(firebaseApp), 'localhost', 5001)
 }
-
-export default firebase

@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Apis from '@/api/apis'
+import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import Day from '~/utils/day'
 
@@ -105,7 +105,7 @@ export default Vue.extend({
 
       const collectionPath = `users/${uid}/articles`
 
-      const article = (await Apis.db.getDocById(
+      const article = (await db.getDocById(
         collectionPath,
         this.article.id
       )) as Article
@@ -140,7 +140,7 @@ export default Vue.extend({
       }
 
       try {
-        await Apis.db.updateDoc(articlesPath, this.article.id, this.article)
+        await db.updateDoc(articlesPath, this.article.id, this.article)
       } catch (e) {
         alert('Failed to update artilces')
         return
@@ -156,7 +156,7 @@ export default Vue.extend({
 
         try {
           for (const tag of notExistsTags) {
-            await Apis.db.updateDoc(articleTagsPath, tag, {})
+            await db.updateDoc(articleTagsPath, tag, {})
           }
         } catch (e) {
           alert('Failed to update tags')

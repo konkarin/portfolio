@@ -13,8 +13,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apis from '@/api/apis'
-import { FirebaseUser } from '~/types/firebase'
+import { db } from '@/api/apis'
+import { User } from '@firebase/auth'
 
 type Data = {
   plainText: string
@@ -27,7 +27,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    user(): FirebaseUser {
+    user(): User {
       return this.$store.state.user
     },
   },
@@ -44,7 +44,7 @@ export default Vue.extend({
     },
 
     async getProfile() {
-      const data = await apis.db.getDocById('users', this.user.uid)
+      const data = await db.getDocById('users', this.user.uid)
       if (data === undefined) return ''
       return data.profile as string
     },
@@ -54,7 +54,7 @@ export default Vue.extend({
         profile: this.plainText as string,
       }
 
-      await apis.db
+      await db
         .updateDoc('users', this.user.uid, data)
         .then(() => {
           // TODO: ポップアップにする

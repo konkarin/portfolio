@@ -47,8 +47,13 @@
 </template>
 
 <script lang="ts">
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from '@firebase/auth'
 import Vue from 'vue'
-import firebase from '@/utils/firebase'
 
 interface Data {
   isLoading: boolean
@@ -69,7 +74,7 @@ export default Vue.extend({
     },
   },
   mounted(): void {
-    firebase.auth().onAuthStateChanged((user) => {
+    getAuth().onAuthStateChanged((user) => {
       this.$store.commit('updateAuth', !!user)
       if (user) {
         this.$store.commit('updateUser', { uid: user.uid })
@@ -80,13 +85,13 @@ export default Vue.extend({
   },
   methods: {
     signIn(): void {
-      const provider = new firebase.auth.GoogleAuthProvider()
-      firebase.auth().signInWithPopup(provider)
+      const provider = new GoogleAuthProvider()
+      signInWithPopup(getAuth(), provider)
     },
 
     async signOut(): Promise<void> {
       this.isLoading = true
-      await firebase.auth().signOut()
+      await signOut(getAuth())
       this.isLoading = false
     },
   },

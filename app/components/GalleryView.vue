@@ -17,8 +17,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Apis from '@/api/apis'
-import { DocumentData } from '@/types/firebase'
+import { db } from '@/api/apis'
+import { DocumentData } from '@firebase/firestore'
 
 export default Vue.extend({
   head() {
@@ -42,7 +42,7 @@ export default Vue.extend({
 
     const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
 
-    const imgList = await Apis.db.getDocs(collectionPath)
+    const imgList = await db.getDocsData(collectionPath)
     this.$store.commit('updateImgList', imgList)
   },
   methods: {

@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apis from '@/api/apis'
+import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 interface Data {
@@ -52,7 +52,7 @@ interface Data {
 export default Vue.extend({
   name: 'PagesAbout',
   async asyncData(): Promise<Data> {
-    const data = await apis.db
+    const data = await db
       .getDocById('users', process.env.AUTHOR_ID)
       .catch((e) => {
         console.error(e)
@@ -72,7 +72,7 @@ export default Vue.extend({
   },
   async mounted() {
     if (this.profile === '') {
-      const data = await apis.db
+      const data = await db
         .getDocById('users', process.env.AUTHOR_ID)
         .catch((e) => {
           console.error(e)

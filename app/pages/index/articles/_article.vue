@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apis from '@/api/apis'
+import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 import { Article } from '@/types/index'
 import { Context } from '@nuxt/types'
@@ -36,7 +36,7 @@ export default Vue.extend({
       }
     } else {
       const collectionPath = `users/${process.env.AUTHOR_ID}/articles`
-      const article = (await apis.db
+      const article = (await db
         .getDocById(collectionPath, params.article)
         .catch((e) => {
           console.error(e)

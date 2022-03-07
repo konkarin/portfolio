@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { loadImgList } from '@/api/apis'
+import { loadImgList } from '@/utils/image'
 
 export default Vue.extend({
   name: 'PagesIndex',

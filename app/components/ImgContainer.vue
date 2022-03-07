@@ -11,7 +11,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import debounce from 'lodash.debounce'
-import { DocumentData } from '@/types/firebase'
+import { DocumentData } from '@firebase/firestore'
 
 export default Vue.extend({
   props: {
