@@ -22,5 +22,8 @@ export default Vue.extend({
       required: true,
     },
   },
+  beforeDestroy() {
+    scrollTo({ top: 0, behavior: 'smooth' })
+  },
 })
 </script>
