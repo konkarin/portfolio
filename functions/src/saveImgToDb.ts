@@ -12,7 +12,6 @@ const spawn = require('child-process-promise').spawn
 
 export type ObjectMetadata = storage.ObjectMetadata
 
-
 export const saveImgToDb = async (object: ObjectMetadata) => {
   const fileBucket: string = object.bucket
 

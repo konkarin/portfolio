@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase-admin/app'
 import { region } from 'firebase-functions'
+import { getFirestore } from 'firebase-admin/firestore'
 import { buildArticles } from './buildArticles'
 import { createUser } from './createUser'
 import { deleteFileFromStorage } from './deleteFileFromStorage'
 import { saveImgToDb } from './saveImgToDb'
-import { getFirestore } from 'firebase-admin/firestore'
 
 initializeApp()
 getFirestore().settings({ ignoreUndefinedProperties: true })
