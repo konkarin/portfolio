@@ -62,8 +62,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
 
   const metadata = {
     contentType,
-    // キャッシュ max-age: 24時間, s-maxage: ３日
-    cacheControl: 'public,max-age=86400,s-maxage=2592000',
+    cacheControl: 'public, max-age=31536000, s-maxage=31536000',
   }
 
   // Uploading the thumbnail.
