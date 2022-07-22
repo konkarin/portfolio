@@ -4,6 +4,7 @@
       v-for="(column, index) in imgColumns"
       :key="index"
       :column="column"
+      :style="`width: calc(100vw/${columnsLength})`"
     />
   </section>
 </template>
