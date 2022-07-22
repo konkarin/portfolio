@@ -4,6 +4,7 @@
       v-for="(column, index) in imgColumns"
       :key="index"
       :column="column"
+      :style="`width: calc(100vw/${columnsLength})`"
     />
   </section>
 </template>
@@ -29,6 +30,11 @@ export default Vue.extend({
     imgColumns(): DocumentData[][] {
       return this.createImgColumns(this.imgList, this.columnsLength)
     },
+    handleResize() {
+      return debounce(() => {
+        this.updateColumnsLength()
+      }, 300)
+    },
   },
   mounted() {
     this.updateColumnsLength()
@@ -46,13 +52,11 @@ export default Vue.extend({
       // 最大4カラムまで
       this.columnsLength = columnsLength > 4 ? 4 : columnsLength
     },
-
-    handleResize: debounce(function () {
-      // FIXME: 動いてるけどなんでtsでエラーになるかわからん
-      // @ts-ignore
-      this.updateColumnsLength()
-    }, 300),
-
+    // handleResize() {
+    //   return debounce(() => {
+    //     this.updateColumnsLength()
+    //   }, 300)
+    // },
     createImgColumns(imgList: DocumentData[], columnsLength: number) {
       // [column[], column[], ...]の配列
       // NOTE: .mapがないと、push時にfillの引数の[]が参照され、同じ配列が生成される

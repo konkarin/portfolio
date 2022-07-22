@@ -64,7 +64,7 @@ export default Vue.extend({
 
       // ストレージに保存
       try {
-        await storageRef.put(this.file)
+        await storageRef.put(this.file, { cacheControl: 'public, max-age=31536000, s-maxage=31536000' })
 
         alert('Uploaded successfully')
         // TODO: 写真一覧を更新
