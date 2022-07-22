@@ -1,7 +1,11 @@
 import axios from 'axios'
-import * as functions from 'firebase-functions'
+import {
+  Change,
+  config as functionsConfig,
+  firestore,
+} from 'firebase-functions'
 
-export type ChangeDocumentSnapshot = functions.Change<functions.firestore.DocumentSnapshot>
+export type ChangeDocumentSnapshot = Change<firestore.DocumentSnapshot>
 
 export const buildArticles = async (snap: ChangeDocumentSnapshot) => {
   if (!snap.before.get('isPublished') && !snap.after.get('isPublished')) {
@@ -12,6 +16,7 @@ export const buildArticles = async (snap: ChangeDocumentSnapshot) => {
 }
 
 const requestCI = async () => {
+  // NOTE: https://firebase.google.com/docs/functions/config-env?hl=ja#automatically_populated_environment_variables
   const config = JSON.parse(process.env.FIREBASE_CONFIG)
   const branch = config.projectId === 'konkarin-photo' ? 'master' : 'develop'
   const job =
@@ -26,7 +31,7 @@ const requestCI = async () => {
     },
   }
 
-  const circleToken = functions.config().portfolio.circle_token
+  const circleToken = functionsConfig().portfolio.circle_token
 
   const headers = {
     'Content-Type': 'application/json',

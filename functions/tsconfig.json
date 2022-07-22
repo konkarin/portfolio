@@ -7,21 +7,12 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-
-    // 頑張らないTSの設定
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "strictFunctionTypes": false,
-    "strictBindCallApply": false,
-    "strictPropertyInitialization": false,
-    "noImplicitThis": false,
-
+    "baseUrl": ".",
     // NOTE: 下記エラーに対応
     // This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "compileOnSave": true,
-  "include": [
-    "src"
-  ]
+  "exclude": ["node_modules", "lib"]
 }

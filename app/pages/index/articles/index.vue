@@ -6,6 +6,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  name: 'PagesArticlesIndex',
   computed: {
     articles() {
       return this.$store.state.articles
@@ -34,7 +35,7 @@ export default Vue.extend({
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://konkarin-photo.web.app/HomeImg.jpg',
+          content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
     }

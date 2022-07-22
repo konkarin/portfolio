@@ -6,6 +6,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  name: 'PagesDashboardProfile',
   head() {
     return {
       title: 'Profile',

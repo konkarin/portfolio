@@ -1,4 +1,4 @@
-import firebase from '@/plugins/firebase'
+import firebase from 'firebase/app'
 
 export type DocumentData = firebase.firestore.DocumentData
 

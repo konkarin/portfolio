@@ -2,17 +2,20 @@ import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
 import dayjs from 'dayjs'
-import exifr from 'exifr'
-import * as admin from 'firebase-admin'
-import * as functions from 'firebase-functions'
+import { parse } from 'exifr'
+import { storage } from 'firebase-functions'
+import { getStorage } from 'firebase-admin/storage'
+import { getFirestore } from 'firebase-admin/firestore'
 
 const imageSize = require('image-size')
 const spawn = require('child-process-promise').spawn
 
-export type ObjectMetadata = functions.storage.ObjectMetadata
+export type ObjectMetadata = storage.ObjectMetadata
 
 export const saveImgToDb = async (object: ObjectMetadata) => {
   const fileBucket: string = object.bucket
+
+  if (!object.name || !object.contentType) return
   // images/{uid}/{imageId: uuid}/original/hogehoge.jpg
   const originalFilePath: string = object.name
   const contentType: string = object.contentType
@@ -33,7 +36,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   const originalFileName = path.basename(originalFilePath)
 
   // Download file from bucket.
-  const bucket = admin.storage().bucket(fileBucket)
+  const bucket = getStorage().bucket(fileBucket)
   const tempFilePath = path.join(os.tmpdir(), originalFileName)
 
   await bucket.file(originalFilePath).download({ destination: tempFilePath })
@@ -46,7 +49,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   const exif = await getExif(tempFilePath)
 
   // Generate a thumbnail using ImageMagick.
-  await spawn('convert', [tempFilePath, '-thumbnail', '300x300>', tempFilePath])
+  await spawn('convert', [tempFilePath, '-thumbnail', '800x800>', tempFilePath])
   console.log('Thumbnail created at', tempFilePath)
 
   // We add a 'thumb_' prefix to thumbnails file name. That's where we'll upload the thumbnail.
@@ -93,7 +96,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
 
   // NOTE: StorageのonFinalizeはcontextのauthにuidを持たないため、ファイルパスから取得
   const uid = originalFilePath.split('/')[1]
-  const collectionRef = admin.firestore().collection(`users/${uid}/images`)
+  const collectionRef = getFirestore().collection(`users/${uid}/images`)
 
   try {
     await collectionRef.add(data)
@@ -124,10 +127,15 @@ const getExif = async (tempFilePath: string) => {
     silentErrors: true,
   }
 
-  const data = await exifr.parse(tempFilePath, options).catch((e) => {
+  const data = await parse(tempFilePath, options).catch((e: Error) => {
     console.error(e)
     return {}
   })
+
+  if (data === undefined) {
+    console.log('Exif does not exist')
+    return {}
+  }
 
   console.log('Get Exif')
   return data

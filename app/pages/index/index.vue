@@ -7,6 +7,7 @@ import Vue from 'vue'
 import { loadImgList } from '@/api/apis'
 
 export default Vue.extend({
+  name: 'PagesIndex',
   computed: {
     imgList() {
       return this.$store.state.imgList
@@ -47,7 +48,7 @@ export default Vue.extend({
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://konkarin-photo.web.app/HomeImg.jpg',
+          content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
     }

@@ -5,6 +5,7 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
+  name: 'PagesGallery',
   head() {
     return {
       title: 'Gallery',
@@ -28,7 +29,7 @@ export default Vue.extend({
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://konkarin-photo.web.app/HomeImg.jpg',
+          content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
     }

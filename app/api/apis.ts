@@ -1,13 +1,25 @@
-import firebase from '../plugins/firebase'
+import firebase from '../utils/firebase'
 import Firestore from './firestore'
 
 interface ProfileData {
   profile: string
 }
 
+interface Img {
+  date: string
+  exif: any
+  height: number
+  originalFileName: string
+  originalFilePath: string
+  originalUrl: string
+  thumbFilePath: string
+  thumbUrl: string
+  width: number
+}
+
 const db = new Firestore()
 
-export const loadImgList = async (imgList) => {
+export const loadImgList = async (imgList: Img[]) => {
   const urls: string[] = imgList.map((img) => img.thumbUrl)
 
   const promiseList = []

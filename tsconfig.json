@@ -11,18 +11,17 @@
     "noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
-
-    // 頑張らないTSの設定
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "strictFunctionTypes": false,
-    "strictBindCallApply": false,
-
     "paths": {
       "~/*": ["./app/*"],
       "@/*": ["./app/*"]
     },
-    "types": ["@types/node", "@nuxt/types", "@types/jest"]
+    "types": [
+      "@types/node",
+      "@nuxt/types",
+      "@types/jest",
+      "@types/uuid",
+      "@types/lodash.debounce"
+    ]
   },
-  "exclude": ["node_modules", ".nuxt", "dist"]
+  "exclude": ["node_modules", "functions"]
 }
