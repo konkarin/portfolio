@@ -22,7 +22,7 @@ import { FirebaseUser } from '~/types/firebase'
 
 type Data = {
   isUploading: boolean
-  file: any
+  file: File | null
 }
 
 interface HTMLInputEvent extends Event {
@@ -43,15 +43,17 @@ export default Vue.extend({
   },
   methods: {
     setFile(e: HTMLInputEvent) {
-      this.file = e.target.files?.[0]
-
-      if (this.file === null) {
+      if (e.target.files && e.target.files[0]) {
+        this.file = e.target.files[0]
+      } else {
         alert('Please select a file')
       }
     },
 
     // 画像をアップロード
     async uploadFile(): Promise<void> {
+      if (this.file === null) return
+
       // ローディングを表示
       this.isUploading = true
 
@@ -64,9 +66,13 @@ export default Vue.extend({
 
       // ストレージに保存
       try {
-        await storageRef.put(this.file, { cacheControl: 'public, max-age=31536000, s-maxage=31536000' })
+        await storageRef.put(this.file, {
+          cacheControl: 'public, max-age=31536000, s-maxage=31536000',
+        })
 
         alert('Uploaded successfully')
+        this.file = null
+
         // TODO: 写真一覧を更新
         // this.getImages()
       } catch (e) {
