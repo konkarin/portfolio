@@ -5,23 +5,27 @@
       <ImgUploader />
       <button class="btn" @click="deleteImgList()">Delete</button>
     </div>
-    <div class="gallery">
+    <div class="dashboardEdit__gallery">
       <div v-if="imgList.length === 0">No Photos</div>
       <div
         v-for="(img, index) in imgList"
         :key="img.originalUrl"
-        class="photo-box"
+        class="photoBox"
+        :style="{
+          width: `${(img.width * 200) / img.height}px`,
+          'flex-grow': `${(img.width * 200) / img.height}`,
+        }"
       >
-        <label>
+        <label class="photoBox__select">
           <input
             :id="index"
             v-model="selectedImgPathList"
             type="checkbox"
-            class="img-checkbox"
+            class="photoBox__checkbox"
             :value="img.originalFilePath"
           />
-          <div class="thumb-box">
-            <img class="select-img" :src="img.thumbUrl" />
+          <div class="photoBox__thumbnail">
+            <img class="photoBox__photo" :src="img.thumbUrl" />
           </div>
         </label>
       </div>
@@ -116,3 +120,49 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.dashboardEdit__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  :only-child {
+    text-align: right;
+  }
+}
+
+.dashboardEdit__gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  &::after {
+    content: '';
+    flex-grow: 9999;
+  }
+}
+
+.photoBox {
+  box-sizing: border-box;
+  width: 25%;
+  height: 100%;
+}
+
+.photoBox__thumbnail {
+  overflow: hidden;
+}
+
+.photoBox__checkbox {
+  display: none;
+  &:checked + div {
+    outline: 5px solid var(--yellow);
+    outline-offset: -5px;
+  }
+}
+
+.photoBox__photo {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+</style>
