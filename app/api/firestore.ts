@@ -224,7 +224,6 @@ export default class Firestore {
 
   static async deleteDoc(path: string, docId: string) {
     const docRef = this.docRef(path, docId)
-    console.log(docRef)
 
     await deleteDoc(docRef).catch((e) => {
       throw e
