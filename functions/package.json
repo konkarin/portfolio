@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "lint": "eslint \"src/**/*\"",
+    "lint": "eslint --fix 'src/**/*' && prettier --write 'src/**/*.ts'",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
@@ -14,7 +14,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "child-process-promise": "^2.2.1",
     "dayjs": "^1.10.4",
     "exifr": "^6.0.0",

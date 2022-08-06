@@ -1,3 +1,3 @@
 # konkarin's portfolio
 
-https://konkarin-photo.web.app/
+https://konkarin.photo

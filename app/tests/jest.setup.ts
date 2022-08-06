@@ -1,3 +1,6 @@
-const env = require(`../../env/${process.env.NODE_ENV}`)
+const envPath = `app/.env.${process.env.NODE_ENV}`
+require('dotenv').config({ path: envPath })
 
-process.env = { ...env }
+module.exports = {
+  setupFiles: ['dotenv/config'],
+}

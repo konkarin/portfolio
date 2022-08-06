@@ -38,12 +38,25 @@ export default Vue.extend({
     },
   },
   async mounted() {
-    if (this.imgList.length !== 0) return
+    if (this.imgList.length === 0) {
+      const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
 
-    const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
+      const imgList = await db.getDocsData(collectionPath)
+      this.$store.commit('updateImgList', imgList)
+    }
 
-    const imgList = await db.getDocsData(collectionPath)
-    this.$store.commit('updateImgList', imgList)
+    if (typeof this.$route.query.path === 'string') {
+      const imageDoc = this.imgList.find((img) => {
+        return img.originalFilePath.includes(this.$route.query.path)
+      })
+
+      if (imageDoc === undefined) return
+
+      this.$store.commit('switchPhotoModal', {
+        url: imageDoc.originalUrl,
+        show: true,
+      })
+    }
   },
   methods: {
     closeModal(): void {

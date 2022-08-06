@@ -1,16 +1,23 @@
 <template>
   <section class="imgContainer">
-    <ImgColumn
-      v-for="(column, index) in imgColumns"
-      :key="index"
-      :column="column"
-    />
+    <div
+      v-for="img in imgList"
+      :key="img.originalUrl"
+      class="photoBox"
+      :style="{
+        width: `${(img.width * 200) / img.height}px`,
+        'flex-grow': `${(img.width * 200) / img.height}`,
+      }"
+    >
+      <div class="photoBox__thumbnail" @click="openModal(img.originalUrl)">
+        <img class="photoBox__photo" :src="img.thumbUrl" />
+      </div>
+    </div>
   </section>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
-import debounce from 'lodash.debounce'
 import { DocumentData } from '@firebase/firestore'
 
 export default Vue.extend({
@@ -20,74 +27,13 @@ export default Vue.extend({
       required: true,
     },
   },
-  data() {
-    return {
-      columnsLength: 4,
-    }
-  },
-  computed: {
-    imgColumns(): DocumentData[][] {
-      return this.createImgColumns(this.imgList, this.columnsLength)
-    },
-  },
-  mounted() {
-    this.updateColumnsLength()
-    window.addEventListener('resize', this.handleResize)
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.handleResize)
-  },
   methods: {
-    updateColumnsLength() {
-      // スマホサイズは2カラム固定
-      const columnsLength =
-        window.innerWidth <= 520 ? 2 : Math.floor(window.innerWidth / 260)
-
-      // 最大4カラムまで
-      this.columnsLength = columnsLength > 4 ? 4 : columnsLength
-    },
-
-    handleResize: debounce(function () {
-      // FIXME: 動いてるけどなんでtsでエラーになるかわからん
-      // @ts-ignore
-      this.updateColumnsLength()
-    }, 300),
-
-    createImgColumns(imgList: DocumentData[], columnsLength: number) {
-      // [column[], column[], ...]の配列
-      // NOTE: .mapがないと、push時にfillの引数の[]が参照され、同じ配列が生成される
-      const columns: DocumentData[][] = new Array(columnsLength)
-        .fill([])
-        .map((_i) => [])
-
-      const columnsHeightList: number[] = Array(columnsLength).fill(0)
-
-      // 全体ループ
-      imgList.forEach((img) => {
-        // カラムの高さが最も小さいindexを取得
-        const minHeightIndex: number =
-          this.findMinHeightIndex(columnsHeightList)
-
-        // カラムの高さが最も小さいindexの配列に画像を追加
-        columns[minHeightIndex].push(img)
-        // カラムの高さを更新
-        columnsHeightList[minHeightIndex] += img.height / img.width
-      })
-
-      return columns
-    },
-
-    findMinHeightIndex(columnsHeightList: number[]): number {
-      let minHeight = 100000
-      let minIndex = 0
-
-      columnsHeightList.forEach((height, index) => {
-        if (minHeight > height) {
-          minHeight = height
-          minIndex = index
-        }
-      })
-      return minIndex
+    openModal(url: string) {
+      const payload = {
+        url,
+        show: true,
+      }
+      this.$store.commit('switchPhotoModal', payload)
     },
   },
 })
@@ -97,6 +43,43 @@ export default Vue.extend({
 .imgContainer {
   margin-top: 2rem;
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  &::after {
+    content: '';
+    flex-grow: 9999;
+  }
+}
+
+.photoBox {
+  box-sizing: border-box;
+  width: 25%;
+  height: 100%;
+}
+
+.photoBox__thumbnail {
+  overflow: hidden;
+}
+
+.photoBox__checkbox {
+  display: none;
+  &:checked + div {
+    outline: 5px solid var(--yellow);
+    outline-offset: -5px;
+  }
+}
+
+.photoBox__photo {
+  cursor: pointer;
+  height: 100%;
+  display: block;
+  // NOTE: max-width: 100%だと画像自体の大きさ以上に拡大されない
+  width: 100%;
+  transition-duration: 0.3s;
+  &:hover {
+    transform: scale(1.1);
+    transition-duration: 0.3s;
+    opacity: 0.6;
+  }
 }
 </style>
