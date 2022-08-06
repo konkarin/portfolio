@@ -65,7 +65,7 @@ export default Vue.extend({
       return Day.getDate(this.article.releaseDate, 'YYYY-MM-DD')
     },
     updatedDate(): string {
-      if (this.article.updatedDate == null) return ''
+      if (!Boolean(this.article.updatedDate)) return ''
       return Day.getDate(this.article.updatedDate, 'YYYY-MM-DD')
     },
     twitterShareUrl(): string {

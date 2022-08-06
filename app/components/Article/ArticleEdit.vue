@@ -132,7 +132,7 @@ export default Vue.extend({
 
       // 公開日の設定
       if (this.article.isPublished) {
-        if (this.article.releaseDate == null) {
+        if (!Boolean(this.article.releaseDate)) {
           this.article.releaseDate = Day.getUnixMS()
         } else {
           this.article.updatedDate = Day.getUnixMS()
