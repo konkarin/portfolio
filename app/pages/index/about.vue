@@ -44,6 +44,7 @@
 import Vue from 'vue'
 import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
+import { getApps } from '@firebase/app'
 
 interface Data {
   profile: string
@@ -51,9 +52,11 @@ interface Data {
 
 export default Vue.extend({
   name: 'PagesAbout',
-  async asyncData(): Promise<Data> {
+  async asyncData({ $config }): Promise<Data> {
+    console.log('a', $config.public.AUTHOR_ID)
+
     const data = await db
-      .getDocById('users', process.env.AUTHOR_ID)
+      .getDocById('users', $config.public.AUTHOR_ID)
       .catch((e) => {
         console.error(e)
         return {
@@ -71,9 +74,12 @@ export default Vue.extend({
     }
   },
   async mounted() {
+    console.log(getApps().length)
     if (this.profile === '') {
+      console.log('m', this.$config.public.AUTHOR_ID)
+
       const data = await db
-        .getDocById('users', process.env.AUTHOR_ID)
+        .getDocById('users', this.$config.public.AUTHOR_ID)
         .catch((e) => {
           console.error(e)
           return {
