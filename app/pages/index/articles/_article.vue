@@ -28,7 +28,6 @@ const emptyAritcle: Article = {
 
 export default Vue.extend({
   name: 'PagesArticle',
-  scrollToTop: true,
   async asyncData({ params, payload }: Context): Promise<Data> {
     if (payload) {
       return {
