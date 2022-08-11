@@ -23,6 +23,7 @@ interface Data {
 
 export default Vue.extend({
   name: 'PagesTag',
+  scrollToTop: true,
   async asyncData({ params, payload, store }): Promise<Data> {
     if (payload) {
       return {

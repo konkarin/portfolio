@@ -1,9 +1,5 @@
 <template>
-  <NuxtLink
-    :to="`/articles/${article.id}`"
-    class="sideMenuItem"
-    @click.native="scrollTop"
-  >
+  <NuxtLink :to="`/articles/${article.id}`" class="sideMenuItem">
     <div class="sideMenuItem__subTitle" data-test="releaseDate">
       {{ releaseDate }}
     </div>
@@ -30,11 +26,6 @@ export default Vue.extend({
       const format = 'YYYY-MM-DD'
 
       return Day.getDate(this.article.releaseDate, format)
-    },
-  },
-  methods: {
-    scrollTop() {
-      window.scrollTo(0, 0)
     },
   },
 })
