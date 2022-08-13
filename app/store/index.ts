@@ -10,7 +10,7 @@ import { DocumentData } from 'firebase/firestore'
 import { User } from 'firebase/auth'
 import { Query, Order } from '~/api/firestore'
 
-interface State {
+export interface State {
   isAuth: boolean
   user: User | null
   imgList: DocumentData[]

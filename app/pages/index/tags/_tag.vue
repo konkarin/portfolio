@@ -1,6 +1,6 @@
 <template>
   <main class="wrapper">
-    <PageTitle>タグ: {{ $route.params.tag }}</PageTitle>
+    <PageTitle>タグ: {{ tag }}</PageTitle>
     <div class="article">
       <ArticleList :articles="articles" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="tags" />
@@ -9,31 +9,49 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import {
+  defineComponent,
+  ref,
+  computed,
+  onMounted,
+  useMeta,
+  useStore,
+  useContext,
+  useFetch,
+  useAsync,
+  useStatic,
+  watch,
+} from '@nuxtjs/composition-api'
+
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import { Order, Query } from '~/api/firestore'
+import { State } from '~/store'
 
-interface Data {
-  articles: Article[]
-  recentArticles: Article[]
-  tag: string
-  tags: string[]
-}
-
-export default Vue.extend({
+export default defineComponent({
   name: 'PagesTag',
-  async asyncData({ params, payload, store }): Promise<Data> {
-    if (payload) {
-      return {
-        articles: payload,
-        recentArticles: store.state.recentArticles,
-        tag: params.tag,
-        tags: store.state.articleTags,
-      }
-    } else {
-      const artilcesPath = `users/${process.env.AUTHOR_ID}/articles`
+  head: {},
+  setup() {
+    const store = useStore<State>()
+    const { params, error } = useContext()
 
+    const articles = ref<Article[]>([])
+    const recentArticles = ref<Article[]>([])
+    const tags = ref<string[]>([])
+    const tag = computed(() => params.value.tag)
+    const articleTags = computed((): string[] => {
+      return store.state.articleTags
+    })
+
+    onMounted(() => {
+      const existsArtcileTag = articleTags.value.includes(tag.value)
+      if (!existsArtcileTag) {
+        error({ message: 'ページが見つかりません' })
+      }
+    })
+
+    const getArticles = async (param: string) => {
+      const artilcesPath = `users/${process.env.AUTHOR_ID}/articles`
       const order: Order = {
         fieldPath: 'releaseDate',
         direction: 'desc',
@@ -41,68 +59,58 @@ export default Vue.extend({
       const queries1: Query = {
         fieldPath: 'tags',
         filterStr: 'array-contains',
-        value: params.tag,
+        value: param,
       }
       const queries2: Query = {
         fieldPath: 'isPublished',
         filterStr: '==',
         value: true,
       }
-
-      const articles = (await db
+      return (await db
         .getDocsByCompoundQueries(artilcesPath, [queries1, queries2], order)
         .catch((e) => {
           console.error(e)
           return []
         })) as Article[]
-
-      return {
-        articles,
-        recentArticles: store.state.recentArticles,
-        tag: params.tag,
-        tags: store.state.articleTags,
-      }
     }
-  },
-  data(): Data {
-    return {
-      articles: [],
-      recentArticles: [],
-      tag: this.$route.params.tag,
-      tags: [],
-    }
-  },
-  computed: {
-    articleTags(): string[] {
-      return this.$store.state.articleTags
-    },
-  },
-  mounted() {
-    // 存在しないタグにアクセスしたらエラー
-    const existsArtcileTag = this.articleTags.includes(this.$route.params.tag)
 
-    if (!existsArtcileTag)
-      this.$nuxt.error({ message: 'ページが見つかりません' })
-  },
-  head(): any {
-    return {
-      title: `${this.$route.params.tag}の記事`,
+    // generate時のみ実行
+    useFetch(async () => {
+      const data = await getArticles(tag.value)
+      articles.value = data
+    })
+
+    recentArticles.value = store.state.recentArticles
+    tags.value = store.state.articleTags
+
+    // クライアント側の動的ルーティングで実行
+    const staticData = useStatic(
+      async (param) => await getArticles(param),
+      tag,
+      'tag'
+    )
+    watch(staticData, () => {
+      if (staticData.value !== null) articles.value = staticData.value
+    })
+
+    useMeta({
+      title: `${tag.value}の記事`,
       meta: [
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `${this.$route.params.tag}の記事 - kon_karin's photo & blog`,
+          content: `${tag.value}の記事 - kon_karin's photo & blog`,
         },
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}tags/${this.$route.params.tag}`,
+          content: `${process.env.APP_URL}tags/${tag.value}`,
         },
         {
           hid: 'og:description',
           property: 'og:description',
-          content: `${this.$route.params.tag}の記事`,
+          content: `${tag.value}の記事`,
         },
         {
           hid: 'og:image',
@@ -110,7 +118,9 @@ export default Vue.extend({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
+    })
+
+    return { articles, recentArticles, tags, tag, articleTags }
   },
 })
 </script>

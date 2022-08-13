@@ -41,51 +41,38 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import {
+  defineComponent,
+  ref,
+  useMeta,
+  useFetch,
+} from '@nuxtjs/composition-api'
+
 import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
-interface Data {
+type Data = {
   profile: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PagesAbout',
-  async asyncData(): Promise<Data> {
-    const data = await db
-      .getDocById('users', process.env.AUTHOR_ID)
-      .catch((e) => {
-        console.error(e)
-        return {
-          profile: '',
-        }
-      })
+  head: {},
+  setup() {
+    const profile = ref('')
 
-    return {
-      profile: await convertMarkdownTextToHTML(data?.profile),
-    }
-  },
-  data(): Data {
-    return {
-      profile: '',
-    }
-  },
-  async mounted() {
-    if (this.profile === '') {
-      const data = await db
+    useFetch(async () => {
+      const data = (await db
         .getDocById('users', process.env.AUTHOR_ID)
         .catch((e) => {
           console.error(e)
-          return {
-            profile: '',
-          }
-        })
+          return { profile: '' }
+        })) as Data
 
-      this.profile = await convertMarkdownTextToHTML(data?.profile)
-    }
-  },
-  head() {
-    return {
+      profile.value = await convertMarkdownTextToHTML(data.profile)
+    })
+
+    useMeta({
       title: 'About',
       meta: [
         { hid: 'og:type', property: 'og:type', content: 'article' },
@@ -110,7 +97,9 @@ export default Vue.extend({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
+    })
+
+    return { profile }
   },
 })
 </script>
