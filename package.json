@@ -20,6 +20,7 @@
     "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$"
   },
   "dependencies": {
+    "@nuxtjs/composition-api": "^0.33.1",
     "blueimp-load-image": "^5.14.0",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.3",
@@ -34,7 +35,9 @@
     "remark-highlight.js": "^6.0.0",
     "remark-html": "^13.0.1",
     "remark-preset-lint-recommended": "^5.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "vue-server-renderer": "^2.7.8",
+    "vue-template-compiler": "^2.7.8"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.8",

@@ -41,6 +41,7 @@ const nuxtConfig: NuxtConfig = {
     },
   ],
   buildModules: [
+    '@nuxtjs/composition-api/module',
     '@nuxt/typescript-build',
     'nuxt-typed-vuex',
     ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
