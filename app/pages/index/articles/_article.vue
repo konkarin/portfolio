@@ -24,6 +24,7 @@ const emptyAritcle: Article = {
   releaseDate: 0,
   createdDate: 0,
   tags: [],
+  ogpImageUrl: '',
 }
 
 export default Vue.extend({
@@ -75,7 +76,7 @@ export default Vue.extend({
         {
           hid: 'og:image',
           property: 'og:image',
-          content: 'https://konkarin.photo/HomeImg.jpg',
+          content: this.ogImage,
         },
         {
           hid: 'og:description',
@@ -90,11 +91,19 @@ export default Vue.extend({
       return this.$accessor.articles
     },
     ogDescription(): string {
-      if (this.article.text === '') {
+      const text = this.article.text
+      if (text === '') {
         return ''
+      } else if (text.length > 50) {
+        return text.slice(0, 50) + '...'
       } else {
-        return this.article.text.slice(0, 50) + '...'
+        return text
       }
+    },
+    ogImage(): string {
+      const img = this.article.ogpImageUrl
+
+      return img || 'https://konkarin.photo/HomeImg.jpg'
     },
   },
   mounted() {

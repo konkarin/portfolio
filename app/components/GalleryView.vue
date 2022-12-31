@@ -17,8 +17,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { db } from '@/api/apis'
 import { DocumentData } from '@firebase/firestore'
+import { db } from '@/api/apis'
 
 export default Vue.extend({
   head() {

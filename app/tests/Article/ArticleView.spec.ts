@@ -1,5 +1,5 @@
-import ArticleView from '@/components/Article/ArticleView.vue'
 import { RouterLinkStub, shallowMount } from '@vue/test-utils'
+import ArticleView from '@/components/Article/ArticleView.vue'
 
 const article = {
   createdDate: 1615393188099,

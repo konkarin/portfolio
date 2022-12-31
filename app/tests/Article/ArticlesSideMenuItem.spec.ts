@@ -1,5 +1,5 @@
-import ArticlesSideMenuItem from '@/components/Article/ArticlesSideMenuItem.vue'
 import { mount, RouterLinkStub } from '@vue/test-utils'
+import ArticlesSideMenuItem from '@/components/Article/ArticlesSideMenuItem.vue'
 
 const article = {
   createdDate: 1615393188099,
