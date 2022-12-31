@@ -1,15 +1,12 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore'
-
-import { FIREBASE_OPTIONS } from './app/utils/firebase'
+import { DocumentData } from 'firebase/firestore'
+import { db } from './app/api/apis'
+import { Query } from './app/api/firestore'
 
 interface Articles {
-  [key: string]: firebase.firestore.DocumentData[]
+  [key: string]: DocumentData[]
 }
 
 export const generateRoutes = async () => {
-  if (firebase.apps.length === 0) firebase.initializeApp(FIREBASE_OPTIONS)
-
   // /articles/_article.vue用の記事
   const articles = await getArticles()
 
@@ -36,33 +33,36 @@ export const generateRoutes = async () => {
 
 const getArticles = async () => {
   const collectionPath = `users/${process.env.AUTHOR_ID}/articles`
-  const snap = await firebase
-    .firestore()
-    .collection(collectionPath)
-    .where('isPublished', '==', true)
-    .get()
+  const query: Query = {
+    fieldPath: 'isPublished',
+    filterStr: '==',
+    value: true,
+  }
 
-  return snap.docs.map((doc) => doc.data())
+  return await db.getDocsData(collectionPath, [query])
 }
 
 const getArticlesByTag = async () => {
   const articleTags = await getArticleTags()
-
-  const articlesPath = `users/${process.env.AUTHOR_ID}/articles`
-
   const articlesList: Articles = {}
+  const articlesPath = `users/${process.env.AUTHOR_ID}/articles`
 
   for (let i = 0; i < articleTags.length; i++) {
     const tag = articleTags[i]
+    const queries: Query[] = [
+      {
+        fieldPath: 'tags',
+        filterStr: 'array-contains',
+        value: tag,
+      },
+      {
+        fieldPath: 'isPublished',
+        filterStr: '==',
+        value: true,
+      },
+    ]
 
-    const snap = await firebase
-      .firestore()
-      .collection(articlesPath)
-      .where('tags', 'array-contains', tag)
-      .where('isPublished', '==', true)
-      .get()
-
-    articlesList[tag] = snap.docs.map((doc) => doc.data())
+    articlesList[tag] = await db.getDocsData(articlesPath, queries)
   }
 
   return articlesList
@@ -70,8 +70,5 @@ const getArticlesByTag = async () => {
 
 const getArticleTags = async () => {
   const articleTagsPath = `users/${process.env.AUTHOR_ID}/articleTags`
-
-  const snap = await firebase.firestore().collection(articleTagsPath).get()
-
-  return snap.docs.map((doc) => doc.id)
+  return await db.getDocIds(articleTagsPath)
 }

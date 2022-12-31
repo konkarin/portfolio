@@ -18,7 +18,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import Apis from '@/api/apis'
+import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 
 interface Data {
@@ -39,7 +39,7 @@ export default Vue.extend({
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
       // TODO: 型引数を渡す方がいい？
-      const article = (await Apis.db.getOrderDocs(
+      const article = (await db.getOrderDocs(
         collectionPath,
         'createdDate',
         'desc'
@@ -59,7 +59,7 @@ export default Vue.extend({
     async removeArticle(docId: string) {
       const collectionPath = `users/${this.$store.state.user.uid}/articles`
 
-      await Apis.db.deleteDoc(collectionPath, docId).catch((e) => {
+      await db.deleteDoc(collectionPath, docId).catch((e) => {
         console.error(e)
         alert('削除に失敗しました')
       })

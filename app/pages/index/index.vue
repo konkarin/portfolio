@@ -4,31 +4,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { loadImgList } from '@/api/apis'
+import { loadImgList } from '@/utils/image'
 
 export default Vue.extend({
   name: 'PagesIndex',
-  computed: {
-    imgList() {
-      return this.$store.state.imgList
-    },
-  },
-  async mounted() {
-    if (this.imgList.length === 0) return
-
-    // 画像のプリロード
-    await loadImgList(this.imgList)
-    // const loadedImgList = await loadImgList(this.imgList)
-
-    // TODO:ロードに失敗した画像を一覧から削除
-    // const failedList = loadedImgList.some(
-    //   (result) => result.status === 'rejected'
-    // )
-  },
   head() {
     return {
       title: 'Home',
       meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'kon_karinの写真とブログです。',
+        },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',
@@ -52,6 +40,23 @@ export default Vue.extend({
         },
       ],
     }
+  },
+  computed: {
+    imgList() {
+      return this.$store.state.imgList
+    },
+  },
+  async mounted() {
+    if (this.imgList.length === 0) return
+
+    // 画像のプリロード
+    await loadImgList(this.imgList)
+    // const loadedImgList = await loadImgList(this.imgList)
+
+    // TODO:ロードに失敗した画像を一覧から削除
+    // const failedList = loadedImgList.some(
+    //   (result) => result.status === 'rejected'
+    // )
   },
 })
 </script>

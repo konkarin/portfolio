@@ -10,9 +10,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apis from '@/api/apis'
-import { Order, Queries } from '@/types/firebase'
+import { db } from '@/api/apis'
 import { Article } from '@/types/index'
+import { Order, Query } from '~/api/firestore'
 
 interface Data {
   articles: Article[]
@@ -23,6 +23,7 @@ interface Data {
 
 export default Vue.extend({
   name: 'PagesTag',
+  scrollToTop: true,
   async asyncData({ params, payload, store }): Promise<Data> {
     if (payload) {
       return {
@@ -38,19 +39,19 @@ export default Vue.extend({
         fieldPath: 'releaseDate',
         direction: 'desc',
       }
-      const queries1: Queries = {
+      const queries1: Query = {
         fieldPath: 'tags',
         filterStr: 'array-contains',
         value: params.tag,
       }
-      const queries2: Queries = {
+      const queries2: Query = {
         fieldPath: 'isPublished',
         filterStr: '==',
         value: true,
       }
 
-      const articles = (await apis.db
-        .getDocsByCompoundQueries(artilcesPath, queries1, queries2, order)
+      const articles = (await db
+        .getDocsByCompoundQueries(artilcesPath, [queries1, queries2], order)
         .catch((e) => {
           console.error(e)
           return []
@@ -72,22 +73,15 @@ export default Vue.extend({
       tags: [],
     }
   },
-  computed: {
-    articleTags(): string[] {
-      return this.$store.state.articleTags
-    },
-  },
-  mounted() {
-    // 存在しないタグにアクセスしたらエラー
-    const existsArtcileTag = this.articleTags.includes(this.$route.params.tag)
-
-    if (!existsArtcileTag)
-      this.$nuxt.error({ message: 'ページが見つかりません' })
-  },
   head(): any {
     return {
       title: `${this.$route.params.tag}の記事`,
       meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: `${this.$route.params.tag}の記事`,
+        },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',
@@ -111,6 +105,18 @@ export default Vue.extend({
         },
       ],
     }
+  },
+  computed: {
+    articleTags(): string[] {
+      return this.$store.state.articleTags
+    },
+  },
+  mounted() {
+    // 存在しないタグにアクセスしたらエラー
+    const existsArtcileTag = this.articleTags.includes(this.$route.params.tag)
+
+    if (!existsArtcileTag)
+      this.$nuxt.error({ message: 'ページが見つかりません' })
   },
 })
 </script>

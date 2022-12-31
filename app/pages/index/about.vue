@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import apis from '@/api/apis'
+import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 interface Data {
@@ -52,7 +52,7 @@ interface Data {
 export default Vue.extend({
   name: 'PagesAbout',
   async asyncData(): Promise<Data> {
-    const data = await apis.db
+    const data = await db
       .getDocById('users', process.env.AUTHOR_ID)
       .catch((e) => {
         console.error(e)
@@ -70,24 +70,15 @@ export default Vue.extend({
       profile: '',
     }
   },
-  async mounted() {
-    if (this.profile === '') {
-      const data = await apis.db
-        .getDocById('users', process.env.AUTHOR_ID)
-        .catch((e) => {
-          console.error(e)
-          return {
-            profile: '',
-          }
-        })
-
-      this.profile = await convertMarkdownTextToHTML(data?.profile)
-    }
-  },
   head() {
     return {
       title: 'About',
       meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'kon_karinの自己紹介です。',
+        },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',
@@ -110,6 +101,20 @@ export default Vue.extend({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
+    }
+  },
+  async mounted() {
+    if (this.profile === '') {
+      const data = await db
+        .getDocById('users', process.env.AUTHOR_ID)
+        .catch((e) => {
+          console.error(e)
+          return {
+            profile: '',
+          }
+        })
+
+      this.profile = await convertMarkdownTextToHTML(data?.profile)
     }
   },
 })

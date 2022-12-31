@@ -11,6 +11,7 @@ import Vue from 'vue'
 import HeaderNav from '@/components/HeaderNav.vue'
 
 export default Vue.extend({
+  name: 'PagesIndex',
   components: {
     HeaderNav,
   },

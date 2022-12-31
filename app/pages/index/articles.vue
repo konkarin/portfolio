@@ -5,6 +5,7 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
-  name: 'pagesArticles',
+  name: 'PagesArticles',
+  scrollToTop: true,
 })
 </script>

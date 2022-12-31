@@ -35,13 +35,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import firebase from '@/utils/firebase'
-import { FirebaseUser } from '~/types/firebase'
+import { DocumentData } from '@firebase/firestore'
+import { db } from '~/api/apis'
+import { Query } from '~/api/firestore'
+import { User } from '@firebase/auth'
 
 interface Data {
-  imgList: firebase.firestore.DocumentData[]
+  imgList: DocumentData[]
   selectedImgPathList: string[]
-  deletingImgListId: string[]
 }
 
 export default Vue.extend({
@@ -49,16 +50,15 @@ export default Vue.extend({
     return {
       imgList: [],
       selectedImgPathList: [],
-      deletingImgListId: [],
     }
   },
   computed: {
-    user(): FirebaseUser {
+    user(): User {
       return this.$store.state.user
     },
   },
   watch: {
-    async user(user: FirebaseUser) {
+    async user(user: User) {
       if (user != null) this.imgList = await this.getImgList()
     },
   },
@@ -66,15 +66,11 @@ export default Vue.extend({
     if (this.user) this.imgList = await this.getImgList()
   },
   methods: {
-    async getImgList(): Promise<firebase.firestore.DocumentData[]> {
-      const collectionRef = firebase
-        .firestore()
-        .collection(`users/${this.user.uid}/images`)
+    async getImgList(): Promise<DocumentData[]> {
+      const path = `users/${this.user.uid}/images`
 
       try {
-        const snapshot = await collectionRef.get()
-
-        return snapshot.docs.map((doc) => doc.data())
+        return await db.getDocsData(path)
       } catch (e) {
         console.error(e)
         return []
@@ -89,32 +85,40 @@ export default Vue.extend({
         return
       }
 
-      const collectionRef = firebase
-        .firestore()
-        .collection(`users/${this.user.uid}/images`)
-
-      const selectedImgPathList: string[] = this.selectedImgPathList
+      const path = `users/${this.user.uid}/images`
 
       // 選択した画像のdocumentを取得
-      const snapshots = await Promise.all(
-        selectedImgPathList.map((imgPath) =>
-          collectionRef.where('originalFilePath', '==', imgPath).get()
-        )
+      const result = await Promise.all(
+        this.selectedImgPathList.map((imgPath) => {
+          const query: Query = {
+            fieldPath: 'originalFilePath',
+            filterStr: '==',
+            value: imgPath,
+          }
+
+          return db.getDocIds(path, [query])
+        })
       )
-      snapshots.forEach((snapshot) =>
-        snapshot.forEach((document) => this.deletingImgListId.push(document.id))
-      )
+
+      const deleteImgIds = result.flatMap((ids) => {
+        return ids
+      })
 
       // まとめて削除
-      await Promise.all(
-        this.deletingImgListId.map((id: string) =>
-          collectionRef.doc(id).delete()
-        )
-      )
+      await Promise.allSettled(
+        deleteImgIds.map((id) => {
+          db.deleteDoc(path, id)
+        })
+      ).catch((e) => {
+        // TODO: トーストとかにしたい
+        alert('Some error occured')
+        console.error(e)
+      })
 
-      // TODO: ポップアップにする
+      // TODO: トーストとかにしたい
       alert('Remove successfully')
 
+      // TODO: firestoreを監視したい
       this.imgList = await this.getImgList()
     },
   },

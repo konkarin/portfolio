@@ -1,55 +1,117 @@
-import firebase from '../utils/firebase'
-import { Order } from '../types/firebase'
+import { firebaseApp } from '../utils/firebase'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  limit,
+  orderBy,
+  OrderByDirection,
+  query,
+  QueryConstraint,
+  serverTimestamp,
+  setDoc,
+  where,
+  WhereFilterOp,
+} from 'firebase/firestore'
 
-export interface Queries {
+export interface Query {
   fieldPath: string
-  filterStr: firebase.firestore.WhereFilterOp
+  filterStr: WhereFilterOp
   value: any
 }
 
-export type OrderByDirection = firebase.firestore.OrderByDirection
-
-export type FieldValue = firebase.firestore.FieldValue
+export interface Order {
+  fieldPath: string
+  direction?: OrderByDirection
+  limit?: number
+}
 
 export default class Firestore {
-  private db = firebase.firestore()
+  private static readonly db = getFirestore(firebaseApp)
 
   /**
    * Firestoreのサーバータイムスタンプを取得
    */
-  getTimestamp() {
-    return firebase.firestore.FieldValue.serverTimestamp()
+  static getTimestamp() {
+    return serverTimestamp()
+  }
+
+  private static query(path: string, ...queryConstraint: QueryConstraint[]) {
+    return queryConstraint === undefined
+      ? query(collection(this.db, path))
+      : query(collection(this.db, path), ...queryConstraint)
+  }
+
+  private static docRef(path: string, ...queryConstraint: string[]) {
+    return queryConstraint === undefined
+      ? doc(collection(this.db, path))
+      : doc(collection(this.db, path), ...queryConstraint)
+  }
+
+  static async getDocs(
+    collectionPath: string,
+    whereQueries?: Query[],
+    order?: Order
+  ) {
+    const conditions: QueryConstraint[] = []
+
+    if (whereQueries !== undefined) {
+      whereQueries
+        .map((q) => {
+          return where(q.fieldPath, q.filterStr, q.value)
+        })
+        .forEach((query) => {
+          conditions.push(query)
+        })
+    }
+
+    if (order !== undefined) {
+      conditions.push(orderBy(order.fieldPath, order.direction))
+
+      if (order.limit !== undefined) {
+        conditions.push(limit(order.limit || 30))
+      }
+    }
+
+    const q = this.query(collectionPath, ...conditions)
+    const snap = await getDocs(q).catch((e) => {
+      throw e
+    })
+
+    return snap.docs
   }
 
   /**
-   * コレクション内のすべてのドキュメントIDを取得する
+   * コレクション内のすべてのドキュメントのIDを取得
    * @param collectionPath
-   * @returns
+   * @param whereQueries
+   * @param order
    */
-  async getDocIds(collectionPath: string) {
-    const snap = await this.db
-      .collection(collectionPath)
-      .get()
-      .catch((e) => {
-        throw e
-      })
-
-    return snap.docs.map((doc) => doc.id)
+  static async getDocIds(
+    collectionPath: string,
+    whereQueries?: Query[],
+    order?: Order
+  ) {
+    const docs = await this.getDocs(collectionPath, whereQueries, order)
+    return docs.map((doc) => doc.id)
   }
 
   /**
    * コレクション内のすべてのドキュメントを取得
    * @param collectionPath
+   * @param whereQueries
+   * @param order
    */
-  async getDocs(collectionPath: string) {
-    const snap = await this.db
-      .collection(collectionPath)
-      .get()
-      .catch((e) => {
-        throw e
-      })
-
-    return snap.docs.map((doc) => doc.data())
+  static async getDocsData(
+    collectionPath: string,
+    whereQueries?: Query[],
+    order?: Order
+  ) {
+    const docs = await this.getDocs(collectionPath, whereQueries, order)
+    return docs.map((doc) => doc.data())
   }
 
   /**
@@ -57,22 +119,22 @@ export default class Firestore {
    * @param collectionPath
    * @param fieldPath
    * @param direction
-   * @param limit
+   * @param limitNumber
    */
-  async getOrderDocs(
+  static async getOrderDocs(
     collectionPath: string,
     fieldPath: string,
     direction?: OrderByDirection,
-    limit?: number
+    limitNumber?: number
   ) {
-    const snap = await this.db
-      .collection(collectionPath)
-      .orderBy(fieldPath, direction)
-      .limit(limit || 30)
-      .get()
-      .catch((e) => {
-        throw e
-      })
+    const q = this.query(
+      collectionPath,
+      orderBy(fieldPath, direction),
+      limit(limitNumber || 30)
+    )
+    const snap = await getDocs(q).catch((e) => {
+      throw e
+    })
 
     return snap.docs.map((doc) => doc.data())
   }
@@ -82,14 +144,11 @@ export default class Firestore {
    * @param collectionPath
    * @param docId
    */
-  async getDocById(collectionPath: string, docId: string) {
-    const snap = await this.db
-      .collection(collectionPath)
-      .doc(docId)
-      .get()
-      .catch((e) => {
-        throw e
-      })
+  static async getDocById(collectionPath: string, docId: string) {
+    const docRef = this.docRef(collectionPath, docId)
+    const snap = await getDoc(docRef).catch((e) => {
+      throw e
+    })
 
     return snap.data()
   }
@@ -98,78 +157,55 @@ export default class Firestore {
    * 指定したクエリでドキュメントを取得
    * @param collectionPath
    * @param queries
-   */
-  async getDocsByQueries(collectionPath: string, queries: Queries) {
-    const snap = await this.db
-      .collection(collectionPath)
-      .where(queries.fieldPath, queries.filterStr, queries.value)
-      .get()
-      .catch((e) => {
-        throw e
-      })
-
-    return snap.docs.map((doc) => doc.data())
-  }
-
-  /**
-   * 指定したクエリでドキュメントを取得
-   * @param collectionPath
-   * @param queries
    * @param order
    */
-  async getOrderDocsByQueries(
+  static async getOrderDocsByQueries(
     collectionPath: string,
-    queries: Queries,
+    queries: Query,
     order: Order
   ) {
-    const snap = await this.db
-      .collection(collectionPath)
-      .where(queries.fieldPath, queries.filterStr, queries.value)
-      .orderBy(order.fieldPath, order.direction)
-      .limit(order.limit || 30)
-      .get()
-      .catch((e) => {
-        throw e
-      })
+    const q = this.query(
+      collectionPath,
+      where(queries.fieldPath, queries.filterStr, queries.value),
+      orderBy(order.fieldPath, order.direction),
+      limit(order.limit || 30)
+    )
+    const snap = await getDocs(q).catch((e) => {
+      throw e
+    })
 
     return snap.docs.map((doc) => doc.data())
   }
 
   /**
-   * 指定したクエリでドキュメントを取得
+   * 指定した複数のクエリでドキュメントを取得
    * @param collectionPath
-   * @param queries1
-   * @param queries2
+   * @param whereQueries
    * @param order
    */
-  async getDocsByCompoundQueries(
+  static async getDocsByCompoundQueries(
     collectionPath: string,
-    queries1: Queries,
-    queries2: Queries,
+    whereQueries: Query[],
     order?: Order
   ) {
-    const collectionRef = this.db
-      .collection(collectionPath)
-      .where(queries1.fieldPath, queries1.filterStr, queries1.value)
-      .where(queries2.fieldPath, queries2.filterStr, queries2.value)
+    const conditions = whereQueries.map((q) => {
+      return where(q.fieldPath, q.filterStr, q.value)
+    })
 
-    if (order !== undefined && order.limit !== undefined) {
-      const snap = await collectionRef
-        .orderBy(order.fieldPath, order.direction)
-        .limit(order.limit)
-        .get()
-        .catch((e) => {
-          throw e
-        })
+    if (order !== undefined) {
+      conditions.push(orderBy(order.fieldPath, order.direction))
 
-      return snap.docs.map((doc) => doc.data())
-    } else {
-      const snap = await collectionRef.get().catch((e) => {
-        throw e
-      })
-
-      return snap.docs.map((doc) => doc.data())
+      if (order.limit) {
+        conditions.push(limit(order.limit || 30))
+      }
     }
+
+    const q = this.query(collectionPath, ...conditions)
+    const snap = await getDocs(q).catch((e) => {
+      throw e
+    })
+
+    return snap.docs.map((doc) => doc.data())
   }
 
   /**
@@ -178,24 +214,19 @@ export default class Firestore {
    * @param docId
    * @param data
    */
-  async updateDoc(path: string, docId: string, data: any) {
+  static async updateDoc(path: string, docId: string, data: any) {
     // update()は新規作成できないためset
-    await this.db
-      .collection(path)
-      .doc(docId)
-      .set(data)
-      .catch((e) => {
-        throw e
-      })
+    const docRef = this.docRef(path, docId)
+    await setDoc(docRef, data).catch((e) => {
+      throw e
+    })
   }
 
-  async deleteDoc(path: string, docId: string) {
-    await this.db
-      .collection(path)
-      .doc(docId)
-      .delete()
-      .catch((e) => {
-        throw e
-      })
+  static async deleteDoc(path: string, docId: string) {
+    const docRef = this.docRef(path, docId)
+
+    await deleteDoc(docRef).catch((e) => {
+      throw e
+    })
   }
 }

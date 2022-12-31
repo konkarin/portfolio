@@ -4,13 +4,15 @@ import {
   actionTree,
   getterTree,
 } from 'typed-vuex'
-import apis from '@/api/apis'
-import { DocumentData, FirebaseUser, Order, Queries } from '@/types/firebase'
+import { db } from '@/api/apis'
 import { Article } from '@/types/index'
+import { DocumentData } from 'firebase/firestore'
+import { User } from 'firebase/auth'
+import { Query, Order } from '~/api/firestore'
 
 interface State {
   isAuth: boolean
-  user: FirebaseUser | null
+  user: User | null
   imgList: DocumentData[]
   isLoadingImg: boolean
   photoModal: {
@@ -47,7 +49,7 @@ export const mutations = mutationTree(state, {
     state.isAuth = payload
   },
 
-  updateUser(state: State, payload: FirebaseUser): void {
+  updateUser(state: State, payload: User): void {
     state.user = payload
   },
 
@@ -108,7 +110,7 @@ export const actions = actionTree(
 
 const getArticles = async () => {
   const articlesPath = `users/${process.env.AUTHOR_ID}/articles`
-  const queries: Queries = {
+  const queries: Query = {
     fieldPath: 'isPublished',
     filterStr: '==',
     value: true,
@@ -119,7 +121,7 @@ const getArticles = async () => {
   }
 
   // 一覧用の記事一覧
-  return (await apis.db
+  return (await db
     .getOrderDocsByQueries(articlesPath, queries, order)
     .catch((e) => {
       console.error(e)
@@ -130,20 +132,17 @@ const getArticles = async () => {
 const getArticleTags = async () => {
   const tagsPath = `users/${process.env.AUTHOR_ID}/articleTags`
   // サイドメニュー用のタグ一覧
-  return (await apis.db.getDocIds(tagsPath).catch((e) => {
+  return await db.getDocIds(tagsPath).catch((e) => {
     console.error(e)
-    return []
-  })) as string[]
+    return [] as string[]
+  })
 }
 
 const getImgList = async () => {
   const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
 
-  return await apis.db.getDocs(collectionPath)
+  return await db.getDocsData(collectionPath)
 }
-
-// If needed, you can define state for use in vanilla Vuex types
-export type RootState = ReturnType<typeof state>
 
 export const accessorType = getAccessorType({
   state,
