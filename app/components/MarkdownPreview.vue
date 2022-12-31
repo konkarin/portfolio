@@ -19,7 +19,8 @@ export default Vue.extend({})
 
   a {
     color: var(--yellow);
-
+    line-break: anywhere;
+    word-break: break-all;
     &:hover {
       text-decoration: underline;
     }
