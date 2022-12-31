@@ -705,14 +705,6 @@ a {
     line-height: 1.6;
     background-color: #fbfcff;
   }
-
-  &__tag {
-    outline: 0;
-    border-radius: 4px;
-    border: 1px solid #cbcbcb;
-    background-color: #fbfcff;
-    margin-left: 0.3rem;
-  }
 }
 
 .dashboardEdit__head {
@@ -722,6 +714,42 @@ a {
   :only-child {
     text-align: right;
   }
+}
+
+.dashboardEdit__headContainer {
+  display: grid;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.dashboardEdit__tagContainer {
+  display: flex;
+  gap: 5px;
+}
+
+.dashboardEdit__ogpContainer {
+}
+
+.dashboardEdit__ogpInput {
+  display: flex;
+  gap: 5px;
+  flex-grow: 1;
+}
+
+.dashboardEdit__ogpPreview {
+  max-height: 100px;
+}
+
+.dashboardEdit__ogpPreviewImg {
+  max-height: 100px;
+}
+
+.dashboardEdit__input {
+  outline: 0;
+  border-radius: 4px;
+  border: 1px solid #cbcbcb;
+  background-color: #fbfcff;
+  flex-grow: 1;
 }
 
 .dashboardEdit__btnWrapper {

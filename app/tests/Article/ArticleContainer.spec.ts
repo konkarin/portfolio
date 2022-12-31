@@ -12,6 +12,7 @@ const articles: Article[] = [...Array(4).keys()].map((_, index) => {
     text: 'test text',
     title: 'test title',
     updatedDate: 1617019200000,
+    ogpImageUrl: '',
   }
 })
 

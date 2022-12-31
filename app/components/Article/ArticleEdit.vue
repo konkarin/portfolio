@@ -8,15 +8,32 @@
       maxlength="64"
     />
     <div class="dashboardEdit__head">
-      <div class="articleEdit__tagContainer">
-        <b>Tags:</b>
-        <input
-          v-model="tag"
-          class="articleEdit__tag"
-          type="text"
-          placeholder="コンマ区切りで入力"
-        />
+      <div class="dashboardEdit__headContainer">
+        <div class="dashboardEdit__tagContainer">
+          <b>Tags:</b>
+          <input
+            v-model="tag"
+            class="dashboardEdit__input"
+            type="text"
+            placeholder="コンマ区切りで入力"
+          />
+        </div>
+        <div class="dashboardEdit__ogpContainer">
+          <div class="dashboardEdit__ogpInput">
+            <b>OGP画像</b>
+            <input
+              v-model="ogpImageUrl"
+              class="dashboardEdit__input"
+              type="text"
+              placeholder="OGP画像のURLを入力"
+            />
+          </div>
+          <div class="dashboardEdit__ogpPreview">
+            <img :src="ogpImageUrl" class="dashboardEdit__ogpPreviewImg" />
+          </div>
+        </div>
       </div>
+
       <div class="dashboardEdit__btnWrapper">
         <ToggleBtn
           class="dashboardEdit__btn"
@@ -47,6 +64,7 @@ import Day from '~/utils/day'
 interface Data {
   article: Article
   tag: string
+  ogpImageUrl: string
 }
 
 export default Vue.extend({
@@ -61,8 +79,10 @@ export default Vue.extend({
         createdDate: Day.getUnixMS(),
         releaseDate: 0,
         tags: [],
+        ogpImageUrl: '',
       },
       tag: '',
+      ogpImageUrl: '',
     }
   },
   head(): { title: string } {
@@ -90,6 +110,9 @@ export default Vue.extend({
     }
 
     this.tag = this.article.tags.join()
+    if (this.article.ogpImageUrl !== undefined) {
+      this.ogpImageUrl = this.article.ogpImageUrl
+    }
   },
   methods: {
     updatePublishing() {
@@ -129,11 +152,12 @@ export default Vue.extend({
       const articlesPath = `users/${this.$store.state.user.uid}/articles`
 
       this.article.tags = this.tag.replace(/\s+/g, '').split(',')
+      this.article.ogpImageUrl = this.ogpImageUrl
 
       // 公開日の設定
       if (this.article.isPublished) {
         // 公開日が既にある場合は更新日を更新
-        if (Boolean(this.article.releaseDate)) {
+        if (this.article.releaseDate) {
           this.article.updatedDate = Day.getUnixMS()
         } else {
           this.article.releaseDate = Day.getUnixMS()
