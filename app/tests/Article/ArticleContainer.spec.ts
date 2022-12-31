@@ -1,5 +1,5 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
+import Vuex, { Store } from 'vuex'
 import ArticleContainer from '@/components/Article/ArticleContainer.vue'
 import { Article } from '@/types/index'
 
@@ -20,7 +20,7 @@ const articleTags = ['test']
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
-const store = new Vuex.Store({
+const store = new Store({
   state: {
     articles,
     articleTags,
