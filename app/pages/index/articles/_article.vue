@@ -4,11 +4,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Context } from '@nuxt/types'
+import { MetaInfo } from 'vue-meta'
 import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 import { Article } from '@/types/index'
-import { Context } from '@nuxt/types'
-import { MetaInfo } from 'vue-meta'
 
 interface Data {
   article: Article
@@ -57,19 +57,6 @@ export default Vue.extend({
       htmlText: '',
     }
   },
-  computed: {
-    articles() {
-      return this.$accessor.articles
-    },
-  },
-  mounted() {
-    // 存在しない記事にアクセスしたらエラー
-    const existsArtcile = this.articles.some(
-      (article) => this.$route.params.article === article.id
-    )
-
-    if (!existsArtcile) this.$nuxt.error({ message: 'ページが見つかりません' })
-  },
   head(): MetaInfo {
     return {
       title: this.article.title || '記事がありません。',
@@ -98,6 +85,19 @@ export default Vue.extend({
         // },
       ],
     }
+  },
+  computed: {
+    articles() {
+      return this.$accessor.articles
+    },
+  },
+  mounted() {
+    // 存在しない記事にアクセスしたらエラー
+    const existsArtcile = this.articles.some(
+      (article) => this.$route.params.article === article.id
+    )
+
+    if (!existsArtcile) this.$nuxt.error({ message: 'ページが見つかりません' })
   },
 })
 </script>
