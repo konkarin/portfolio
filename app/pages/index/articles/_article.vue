@@ -77,18 +77,27 @@ export default Vue.extend({
           property: 'og:image',
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
-        // TODO:
-        // {
-        //   hid: 'og:description',
-        //   property: 'og:description',
-        //   content: ``,
-        // },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: this.ogDescription,
+        },
       ],
     }
   },
   computed: {
-    articles() {
+    articles(): Article[] {
       return this.$accessor.articles
+    },
+    ogDescription(): string {
+      const text = this.article.text
+      if (text === '') {
+        return ''
+      } else if (text.length > 50) {
+        return text.slice(0, 50) + '...'
+      } else {
+        return text
+      }
     },
   },
   mounted() {
