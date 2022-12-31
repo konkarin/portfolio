@@ -13,8 +13,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { db } from '@/api/apis'
 import { User } from '@firebase/auth'
+import { db } from '@/api/apis'
 
 type Data = {
   plainText: string

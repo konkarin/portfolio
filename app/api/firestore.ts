@@ -1,4 +1,3 @@
-import { firebaseApp } from '../utils/firebase'
 import {
   collection,
   deleteDoc,
@@ -16,6 +15,7 @@ import {
   where,
   WhereFilterOp,
 } from 'firebase/firestore'
+import { firebaseApp } from '../utils/firebase'
 
 export interface Query {
   fieldPath: string

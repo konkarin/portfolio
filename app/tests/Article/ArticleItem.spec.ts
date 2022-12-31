@@ -1,5 +1,5 @@
-import ArticleItem from '@/components/Article/ArticleItem.vue'
 import { mount, RouterLinkStub } from '@vue/test-utils'
+import ArticleItem from '@/components/Article/ArticleItem.vue'
 
 const article = {
   createdDate: 1615393188099,
