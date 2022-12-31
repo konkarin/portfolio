@@ -7,4 +7,5 @@ export interface Article {
   createdDate: number
   releaseDate?: number
   tags: string[]
+  ogpImageUrl?: string
 }

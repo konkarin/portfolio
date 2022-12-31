@@ -36,9 +36,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DocumentData } from '@firebase/firestore'
+import { User } from '@firebase/auth'
 import { db } from '~/api/apis'
 import { Query } from '~/api/firestore'
-import { User } from '@firebase/auth'
 
 interface Data {
   imgList: DocumentData[]

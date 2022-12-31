@@ -1,7 +1,7 @@
+import { createLocalVue, shallowMount } from '@vue/test-utils'
+import Vuex, { Store } from 'vuex'
 import ArticleContainer from '@/components/Article/ArticleContainer.vue'
 import { Article } from '@/types/index'
-import { createLocalVue, shallowMount } from '@vue/test-utils'
-import Vuex from 'vuex'
 
 const articles: Article[] = [...Array(4).keys()].map((_, index) => {
   return {
@@ -12,6 +12,7 @@ const articles: Article[] = [...Array(4).keys()].map((_, index) => {
     text: 'test text',
     title: 'test title',
     updatedDate: 1617019200000,
+    ogpImageUrl: '',
   }
 })
 
@@ -20,7 +21,7 @@ const articleTags = ['test']
 const localVue = createLocalVue()
 localVue.use(Vuex)
 
-const store = new Vuex.Store({
+const store = new Store({
   state: {
     articles,
     articleTags,

@@ -4,10 +4,10 @@ import {
   actionTree,
   getterTree,
 } from 'typed-vuex'
-import { db } from '@/api/apis'
-import { Article } from '@/types/index'
 import { DocumentData } from 'firebase/firestore'
 import { User } from 'firebase/auth'
+import { db } from '@/api/apis'
+import { Article } from '@/types/index'
 import { Query, Order } from '~/api/firestore'
 
 interface State {
