@@ -89,6 +89,11 @@ export default Vue.extend({
     return {
       title: `${this.$route.params.tag}の記事`,
       meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: `${this.$route.params.tag}の記事`,
+        },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',

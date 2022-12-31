@@ -88,6 +88,11 @@ export default Vue.extend({
     return {
       title: 'About',
       meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'kon_karinの自己紹介です。',
+        },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',

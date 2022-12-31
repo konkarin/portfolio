@@ -10,6 +10,11 @@ export default Vue.extend({
     return {
       title: 'Gallery',
       meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'kon_karinが撮影した写真の一覧です。',
+        },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',

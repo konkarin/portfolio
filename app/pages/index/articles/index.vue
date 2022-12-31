@@ -16,6 +16,11 @@ export default Vue.extend({
     return {
       title: 'Articles',
       meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'kon_karinの記事一覧です。',
+        },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',
