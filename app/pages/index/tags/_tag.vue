@@ -73,18 +73,6 @@ export default Vue.extend({
       tags: [],
     }
   },
-  computed: {
-    articleTags(): string[] {
-      return this.$store.state.articleTags
-    },
-  },
-  mounted() {
-    // 存在しないタグにアクセスしたらエラー
-    const existsArtcileTag = this.articleTags.includes(this.$route.params.tag)
-
-    if (!existsArtcileTag)
-      this.$nuxt.error({ message: 'ページが見つかりません' })
-  },
   head(): any {
     return {
       title: `${this.$route.params.tag}の記事`,
@@ -117,6 +105,18 @@ export default Vue.extend({
         },
       ],
     }
+  },
+  computed: {
+    articleTags(): string[] {
+      return this.$store.state.articleTags
+    },
+  },
+  mounted() {
+    // 存在しないタグにアクセスしたらエラー
+    const existsArtcileTag = this.articleTags.includes(this.$route.params.tag)
+
+    if (!existsArtcileTag)
+      this.$nuxt.error({ message: 'ページが見つかりません' })
   },
 })
 </script>

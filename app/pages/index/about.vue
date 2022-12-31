@@ -70,20 +70,6 @@ export default Vue.extend({
       profile: '',
     }
   },
-  async mounted() {
-    if (this.profile === '') {
-      const data = await db
-        .getDocById('users', process.env.AUTHOR_ID)
-        .catch((e) => {
-          console.error(e)
-          return {
-            profile: '',
-          }
-        })
-
-      this.profile = await convertMarkdownTextToHTML(data?.profile)
-    }
-  },
   head() {
     return {
       title: 'About',
@@ -115,6 +101,20 @@ export default Vue.extend({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
+    }
+  },
+  async mounted() {
+    if (this.profile === '') {
+      const data = await db
+        .getDocById('users', process.env.AUTHOR_ID)
+        .catch((e) => {
+          console.error(e)
+          return {
+            profile: '',
+          }
+        })
+
+      this.profile = await convertMarkdownTextToHTML(data?.profile)
     }
   },
 })
