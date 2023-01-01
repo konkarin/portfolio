@@ -107,7 +107,7 @@ export default Vue.extend({
       // まとめて削除
       await Promise.allSettled(
         deleteImgIds.map((id) => {
-          db.deleteDoc(path, id)
+          return db.deleteDoc(path, id)
         })
       ).catch((e) => {
         // TODO: トーストとかにしたい
