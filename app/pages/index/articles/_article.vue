@@ -94,8 +94,8 @@ export default Vue.extend({
       const text = this.article.text
       if (text === '') {
         return ''
-      } else if (text.length > 50) {
-        return text.slice(0, 50) + '...'
+      } else if (text.length > 100) {
+        return text.slice(0, 100)
       } else {
         return text
       }
