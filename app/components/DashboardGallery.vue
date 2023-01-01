@@ -104,22 +104,23 @@ export default Vue.extend({
         return ids
       })
 
-      // まとめて削除
-      await Promise.allSettled(
-        deleteImgIds.map((id) => {
-          return db.deleteDoc(path, id)
-        })
-      ).catch((e) => {
+      try {
+        // まとめて削除
+        await Promise.allSettled(
+          deleteImgIds.map((id) => {
+            return db.deleteDoc(path, id)
+          })
+        )
+
+        // TODO: トーストとかにしたい
+        alert('Remove successfully')
+        // TODO: firestoreを監視したい
+        this.imgList = await this.getImgList()
+      } catch (e) {
         // TODO: トーストとかにしたい
         alert('Some error occured')
         console.error(e)
-      })
-
-      // TODO: トーストとかにしたい
-      alert('Remove successfully')
-
-      // TODO: firestoreを監視したい
-      this.imgList = await this.getImgList()
+      }
     },
   },
 })
