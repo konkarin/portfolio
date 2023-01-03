@@ -52,9 +52,9 @@
       </div>
     </div>
     <MarkdownEditor
-      :plain-text="article.text"
+      :plain-text="plainText"
       @input="setText"
-      @keydown-tab="handleKeydownTab"
+      @save="updateArticle"
     />
   </section>
 </template>
@@ -98,6 +98,9 @@ export default Vue.extend({
     articleTitle(): string {
       return this.article.title
     },
+    plainText(): string {
+      return this.article.text
+    },
   },
   async mounted() {
     if (!this.$store.state.isAuth) {
@@ -117,22 +120,8 @@ export default Vue.extend({
     if (this.article.ogpImageUrl !== undefined) {
       this.ogpImageUrl = this.article.ogpImageUrl
     }
-
-    document.addEventListener('keydown', this.updateArticleFromShortCut)
-  },
-  beforeDestroy() {
-    document.removeEventListener('keydown', this.updateArticleFromShortCut)
   },
   methods: {
-    updateArticleFromShortCut(e: KeyboardEvent) {
-      if (
-        ((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) &&
-        e.key === 's'
-      ) {
-        e.preventDefault()
-        this.updateArticle()
-      }
-    },
     updatePublishing() {
       this.article.isPublished = !this.article.isPublished
     },
@@ -208,10 +197,6 @@ export default Vue.extend({
       }
 
       alert('Completed')
-    },
-    handleKeydownTab({ value, index }: { value: '  '; index: number }) {
-      const text = this.article.text
-      this.article.text = text.slice(0, index) + value + text.slice(index)
     },
   },
 })

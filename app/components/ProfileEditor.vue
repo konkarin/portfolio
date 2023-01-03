@@ -7,7 +7,11 @@
         <button class="btn" @click="saveProfile">保存</button>
       </div>
     </div>
-    <MarkdownEditor :plain-text="plainText" @input="setPlainText" />
+    <MarkdownEditor
+      :plain-text="plainText"
+      @input="setPlainText"
+      @save="saveProfile"
+    />
   </section>
 </template>
 
