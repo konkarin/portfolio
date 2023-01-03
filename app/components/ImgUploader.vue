@@ -25,10 +25,6 @@ type Data = {
   file: File | null
 }
 
-interface HTMLInputEvent extends Event {
-  target: HTMLInputElement & EventTarget
-}
-
 export default Vue.extend({
   data(): Data {
     return {
@@ -42,7 +38,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    setFile(e: HTMLInputEvent) {
+    setFile(e: HTMLInputEvent<HTMLInputElement>) {
       if (e.target.files && e.target.files[0]) {
         this.file = e.target.files[0]
       } else {

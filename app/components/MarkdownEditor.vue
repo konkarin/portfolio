@@ -26,14 +26,6 @@ type Data = {
   localValue: string
 }
 
-interface HTMLInputEvent<T> extends Event {
-  target: T & EventTarget
-}
-
-interface HTMLKeyboardEvent<T> extends KeyboardEvent {
-  target: T & EventTarget
-}
-
 export default Vue.extend({
   props: {
     plainText: {
