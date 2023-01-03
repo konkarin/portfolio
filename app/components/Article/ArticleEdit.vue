@@ -51,7 +51,11 @@
         </button>
       </div>
     </div>
-    <MarkdownEditor :plain-text="article.text" @input="setText" />
+    <MarkdownEditor
+      :plain-text="article.text"
+      @input="setText"
+      @keydown-tab="handleKeydownTab"
+    />
   </section>
 </template>
 
@@ -113,8 +117,22 @@ export default Vue.extend({
     if (this.article.ogpImageUrl !== undefined) {
       this.ogpImageUrl = this.article.ogpImageUrl
     }
+
+    document.addEventListener('keydown', this.updateArticleFromShortCut)
+  },
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.updateArticleFromShortCut)
   },
   methods: {
+    updateArticleFromShortCut(e: KeyboardEvent) {
+      if (
+        ((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) &&
+        e.key === 's'
+      ) {
+        e.preventDefault()
+        this.updateArticle()
+      }
+    },
     updatePublishing() {
       this.article.isPublished = !this.article.isPublished
     },
@@ -190,6 +208,10 @@ export default Vue.extend({
       }
 
       alert('Completed')
+    },
+    handleKeydownTab({ value, index }: { value: '  '; index: number }) {
+      const text = this.article.text
+      this.article.text = text.slice(0, index) + value + text.slice(index)
     },
   },
 })

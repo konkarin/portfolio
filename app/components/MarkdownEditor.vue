@@ -6,6 +6,8 @@
         :value="plainText"
         placeholder="markdown記法で入力"
         @input="inputText"
+        @keydown.tab.prevent="handlePressTab"
+        @keydown.esc.prevent="handlePressEsc"
       />
     </div>
     <div class="markdownEdit__container">
@@ -16,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 type Data = {
@@ -30,7 +32,7 @@ interface HTMLInputEvent extends Event {
 export default Vue.extend({
   props: {
     plainText: {
-      type: String as PropType<string>,
+      type: String,
       required: true,
     },
   },
@@ -54,6 +56,23 @@ export default Vue.extend({
     },
     inputText(e: HTMLInputEvent) {
       this.$emit('input', e.target.value)
+    },
+    handlePressTab(e: HTMLInputEvent) {
+      const index = e.target.selectionEnd
+      if (index === null) return
+
+      const payload = {
+        value: '  ', // white space x2
+        index,
+      }
+      this.$emit('keydown-tab', payload)
+
+      setTimeout(() => {
+        e.target.setSelectionRange(index + 2, index + 2)
+      }, 0)
+    },
+    handlePressEsc(e: HTMLInputEvent) {
+      e.target.blur()
     },
   },
 })
