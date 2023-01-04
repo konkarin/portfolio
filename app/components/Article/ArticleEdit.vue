@@ -51,7 +51,11 @@
         </button>
       </div>
     </div>
-    <MarkdownEditor :plain-text="article.text" @input="setText" />
+    <MarkdownEditor
+      :plain-text="plainText"
+      @input="setText"
+      @save="updateArticle"
+    />
   </section>
 </template>
 
@@ -93,6 +97,9 @@ export default Vue.extend({
   computed: {
     articleTitle(): string {
       return this.article.title
+    },
+    plainText(): string {
+      return this.article.text
     },
   },
   async mounted() {

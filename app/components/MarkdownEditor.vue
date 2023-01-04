@@ -3,9 +3,11 @@
     <div class="markdownEdit__textEditContainer">
       <textarea
         class="textEdit"
-        :value="plainText"
+        :value="localValue"
         placeholder="markdown記法で入力"
         @input="inputText"
+        @keydown.tab.prevent="handlePressTab"
+        @keydown.esc.prevent="handlePressEsc"
       />
     </div>
     <div class="markdownEdit__container">
@@ -16,44 +18,95 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import Vue from 'vue'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 type Data = {
   htmlText: string
-}
-
-interface HTMLInputEvent extends Event {
-  target: HTMLInputElement & EventTarget
+  localValue: string
 }
 
 export default Vue.extend({
   props: {
     plainText: {
-      type: String as PropType<string>,
+      type: String,
       required: true,
     },
   },
   data(): Data {
     return {
       htmlText: '',
+      localValue: '',
     }
   },
   watch: {
     // NOTE: inputText内でplainTextの変更が完了しないためwatchで対応
-    plainText() {
-      this.setMarkdown()
+    localValue: {
+      handler() {
+        this.setMarkdown()
+      },
+      immediate: true,
+    },
+    plainText: {
+      handler() {
+        this.localValue = this.plainText
+      },
+      immediate: true,
     },
   },
-  created() {
-    this.setMarkdown()
+  mounted() {
+    document.addEventListener('keydown', this.handleKeydownCmdS)
+  },
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.handleKeydownCmdS)
   },
   methods: {
     async setMarkdown() {
       this.htmlText = await convertMarkdownTextToHTML(this.plainText)
     },
-    inputText(e: HTMLInputEvent) {
-      this.$emit('input', e.target.value)
+    inputText(e: HTMLInputEvent<HTMLTextAreaElement>) {
+      this.localValue = e.target.value
+      this.$emit('input', this.localValue)
+    },
+    handlePressTab(e: HTMLKeyboardEvent<HTMLTextAreaElement>) {
+      const index = e.target.selectionEnd
+      if (index === null) return
+
+      if (e.shiftKey) {
+        const firstHalf = this.localValue.slice(0, index)
+        const arraySplittedByEnter = firstHalf.split('\n')
+        const target = arraySplittedByEnter.pop()
+        if (target === undefined || target.search('  ') === -1) return
+
+        arraySplittedByEnter.push(target.replace('  ', ''))
+
+        this.localValue =
+          arraySplittedByEnter.join('\n') + this.localValue.slice(index)
+
+        setTimeout(() => {
+          e.target.setSelectionRange(index - 2, index - 2)
+        }, 0)
+      } else {
+        this.localValue =
+          this.localValue.slice(0, index) + '  ' + this.localValue.slice(index)
+        this.$emit('input', this.localValue)
+
+        setTimeout(() => {
+          e.target.setSelectionRange(index + 2, index + 2)
+        }, 0)
+      }
+    },
+    handlePressEsc(e: HTMLInputEvent<HTMLTextAreaElement>) {
+      e.target.blur()
+    },
+    handleKeydownCmdS(e: KeyboardEvent) {
+      if (
+        ((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) &&
+        e.key === 's'
+      ) {
+        e.preventDefault()
+        this.$emit('save')
+      }
     },
   },
 })
