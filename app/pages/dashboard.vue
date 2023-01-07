@@ -76,7 +76,7 @@ export default Vue.extend({
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `Dashboard - kon_karin's photo & blog`,
+          content: `Dashboard - konkarin's photos & blog`,
         },
         {
           hid: 'og:url',

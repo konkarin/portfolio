@@ -75,18 +75,18 @@ export default Vue.extend({
   },
   head(): any {
     return {
-      title: `${this.$route.params.tag}の記事`,
+      title: `Articles of '${this.$route.params.tag}'`,
       meta: [
         {
           hid: 'description',
           name: 'description',
-          content: `${this.$route.params.tag}の記事`,
+          content: `Articles of '${this.$route.params.tag}'`,
         },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `${this.$route.params.tag}の記事 - kon_karin's photo & blog`,
+          content: `Articles of '${this.$route.params.tag}' - konkarin's photos & blog`,
         },
         {
           hid: 'og:url',
@@ -96,7 +96,7 @@ export default Vue.extend({
         {
           hid: 'og:description',
           property: 'og:description',
-          content: `${this.$route.params.tag}の記事`,
+          content: `Articles of '${this.$route.params.tag}'`,
         },
         {
           hid: 'og:image',

@@ -66,7 +66,7 @@ export default Vue.extend({
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `${this.article.title} - kon_karin's photo & blog`,
+          content: `${this.article.title} - konkarin's photos & blog`,
         },
         {
           hid: 'og:url',

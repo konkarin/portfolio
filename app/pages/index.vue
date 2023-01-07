@@ -17,7 +17,7 @@ export default Vue.extend({
   },
   head(): any {
     return {
-      title: `kon_karin's photo & blog`,
+      title: `konkarin's photos & blog`,
       meta: [
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
