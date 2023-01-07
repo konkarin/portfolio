@@ -14,13 +14,13 @@ export default Vue.extend({
         {
           hid: 'description',
           name: 'description',
-          content: 'kon_karinの記事一覧です。',
+          content: "konkarin's article list.",
         },
         { hid: 'og:type', property: 'og:type', content: 'article' },
         {
           hid: 'og:title',
           property: 'og:title',
-          content: "Articles - kon_karin's photo & blog",
+          content: "Articles - konkarin's photos & blog",
         },
         {
           hid: 'og:url',
@@ -30,7 +30,7 @@ export default Vue.extend({
         {
           hid: 'og:description',
           property: 'og:description',
-          content: 'kon_karinの記事一覧です。',
+          content: "konkarin's article list.",
         },
         {
           hid: 'og:image',
