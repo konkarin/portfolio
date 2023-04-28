@@ -51,9 +51,9 @@ interface Data {
 
 export default Vue.extend({
   name: 'PagesAbout',
-  async asyncData(): Promise<Data> {
+  async asyncData({ $config }): Promise<Data> {
     const data = await db
-      .getDocById('users', process.env.AUTHOR_ID)
+      .getDocById('users', $config.public.AUTHOR_ID)
       .catch((e) => {
         console.error(e)
         return {
@@ -88,7 +88,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}about`,
+          content: `${this.$config.public.APP_URL}about`,
         },
         {
           hid: 'og:description',
@@ -106,7 +106,7 @@ export default Vue.extend({
   async mounted() {
     if (this.profile === '') {
       const data = await db
-        .getDocById('users', process.env.AUTHOR_ID)
+        .getDocById('users', this.$config.public.AUTHOR_ID)
         .catch((e) => {
           console.error(e)
           return {

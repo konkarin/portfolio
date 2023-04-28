@@ -23,7 +23,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}`,
+          content: `${this.$config.public.APP_URL}`,
         },
         {
           hid: 'og:image',

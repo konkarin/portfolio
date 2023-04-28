@@ -2,9 +2,7 @@ import { defineNuxtConfig } from '@nuxt/bridge'
 
 import Sass from 'sass'
 import { generateRoutes } from './routes'
-
-const envPath = `app/.env.${process.env.NODE_ENV}`
-require('dotenv').config({ path: envPath })
+import { runtimePublicConfig } from './config'
 
 export default defineNuxtConfig({
   target: 'static',
@@ -40,10 +38,7 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
-  buildModules: [
-    'nuxt-typed-vuex',
-    ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
-  ],
+  buildModules: ['nuxt-typed-vuex'],
   build: {
     // npm run build -aでAnalyze結果を出力
     // analyze: {
@@ -104,10 +99,7 @@ export default defineNuxtConfig({
   },
   // プログレスバーの非表示
   loading: false,
-  // stagingはdevtoolを有効化
-  vue: {
-    config: {
-      devtools: process.env.NODE_ENV === 'staging',
-    },
+  runtimeConfig: {
+    public: runtimePublicConfig,
   },
 })

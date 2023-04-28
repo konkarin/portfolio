@@ -25,7 +25,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}articles`,
+          content: `${this.$config.public.APP_URL}articles`,
         },
         {
           hid: 'og:description',

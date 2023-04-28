@@ -82,14 +82,16 @@ export const actions = actionTree(
   { state, mutations },
   {
     async nuxtServerInit({ commit }): Promise<void> {
+      const authorId = this.$config.public.AUTHOR_ID
+
       // 一覧用の記事一覧
-      const articles = await getArticles()
+      const articles = await getArticles(authorId)
 
       // サイドメニュー用の最新記事一覧
       const recentArticles = articles.slice(0, 2)
 
       // サイドメニュー用のタグ一覧
-      const articleTags = await getArticleTags()
+      const articleTags = await getArticleTags(authorId)
 
       // 記事が存在しないタグをフィルター
       const existTags = articleTags.filter((tag) => {
@@ -101,15 +103,15 @@ export const actions = actionTree(
       commit('updateArticleTags', existTags)
 
       // 画像一覧の取得
-      const imgList = await getImgList()
+      const imgList = await getImgList(authorId)
 
       commit('updateImgList', imgList)
     },
   }
 )
 
-const getArticles = async () => {
-  const articlesPath = `users/${process.env.AUTHOR_ID}/articles`
+const getArticles = async (authorId: string) => {
+  const articlesPath = `users/${authorId}/articles`
   const queries: Query = {
     fieldPath: 'isPublished',
     filterStr: '==',
@@ -129,8 +131,8 @@ const getArticles = async () => {
     })) as Article[]
 }
 
-const getArticleTags = async () => {
-  const tagsPath = `users/${process.env.AUTHOR_ID}/articleTags`
+const getArticleTags = async (authorId: string) => {
+  const tagsPath = `users/${authorId}/articleTags`
   // サイドメニュー用のタグ一覧
   return await db.getDocIds(tagsPath).catch((e) => {
     console.error(e)
@@ -138,8 +140,8 @@ const getArticleTags = async () => {
   })
 }
 
-const getImgList = async () => {
-  const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
+const getImgList = async (authorId: string) => {
+  const collectionPath = `/users/${authorId}/images`
 
   return await db.getDocsData(collectionPath)
 }

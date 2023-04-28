@@ -3,18 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxi dev --dotenv .env.development",
+    "dev": "nuxi dev",
     "build": "nuxi build",
     "start": "nuxi start",
-    "generate:sta": "nuxi generate  --dotenv .env.development",
-    "generate:prod": "nuxi generate  --dotenv .env.production",
+    "generate": "nuxi generate",
     "lint": "eslint --ext .ts,.js,.vue .",
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "lintfix": "eslint --fix --ext .ts,.js,.vue . && prettier --write './**/*.{js,vue,ts}'",
-    "test:sta": "cross-env NODE_ENV=\"development\" jest",
-    "test:prod": "cross-env NODE_ENV=\"production\" jest",
-    "deploy:sta": "npm run generate:sta && firebase deploy --only hosting --project=sta",
-    "deploy:prod": "npm run generate:prod && firebase deploy --only hosting --project=prod",
+    "test": "jest",
+    "deploy:sta": "npm run generate && firebase deploy --only hosting --project=sta",
+    "deploy:prod": "npm run generate && firebase deploy --only hosting --project=prod",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

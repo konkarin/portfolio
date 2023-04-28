@@ -81,7 +81,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}Dashboard`,
+          content: `${this.$config.public.APP_URL}Dashboard`,
         },
         {
           hid: 'og:image',

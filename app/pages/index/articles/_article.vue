@@ -29,14 +29,14 @@ const emptyAritcle: Article = {
 
 export default Vue.extend({
   name: 'PagesArticle',
-  async asyncData({ params, payload }: Context): Promise<Data> {
+  async asyncData({ params, payload, $config }: Context): Promise<Data> {
     if (payload) {
       return {
         article: payload,
         htmlText: await convertMarkdownTextToHTML(payload.text),
       }
     } else {
-      const collectionPath = `users/${process.env.AUTHOR_ID}/articles`
+      const collectionPath = `users/${$config.public.AUTHOR_ID}/articles`
       const article = (await db
         .getDocById(collectionPath, params.article)
         .catch((e) => {
@@ -71,7 +71,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}articles/${this.article.id}`,
+          content: `${this.$config.public.APP_URL}articles/${this.article.id}`,
         },
         {
           hid: 'og:image',

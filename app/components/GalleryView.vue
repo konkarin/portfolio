@@ -39,7 +39,7 @@ export default Vue.extend({
   },
   async mounted() {
     if (this.imgList.length === 0) {
-      const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
+      const collectionPath = `/users/${this.$config.public.AUTHOR_ID}/images`
 
       const imgList = await db.getDocsData(collectionPath)
       this.$store.commit('updateImgList', imgList)
