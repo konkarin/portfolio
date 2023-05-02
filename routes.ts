@@ -1,6 +1,7 @@
 import { DocumentData } from 'firebase/firestore'
 import { db } from './app/api/apis'
 import { Query } from './app/api/firestore'
+import { runtimePublicConfig } from './config'
 
 interface Articles {
   [key: string]: DocumentData[]
@@ -32,7 +33,7 @@ export const generateRoutes = async () => {
 }
 
 const getArticles = async () => {
-  const collectionPath = `users/${process.env.AUTHOR_ID}/articles`
+  const collectionPath = `users/${runtimePublicConfig.AUTHOR_ID}/articles`
   const query: Query = {
     fieldPath: 'isPublished',
     filterStr: '==',
@@ -45,7 +46,7 @@ const getArticles = async () => {
 const getArticlesByTag = async () => {
   const articleTags = await getArticleTags()
   const articlesList: Articles = {}
-  const articlesPath = `users/${process.env.AUTHOR_ID}/articles`
+  const articlesPath = `users/${runtimePublicConfig.AUTHOR_ID}/articles`
 
   for (let i = 0; i < articleTags.length; i++) {
     const tag = articleTags[i]
@@ -69,6 +70,6 @@ const getArticlesByTag = async () => {
 }
 
 const getArticleTags = async () => {
-  const articleTagsPath = `users/${process.env.AUTHOR_ID}/articleTags`
+  const articleTagsPath = `users/${runtimePublicConfig.AUTHOR_ID}/articleTags`
   return await db.getDocIds(articleTagsPath)
 }

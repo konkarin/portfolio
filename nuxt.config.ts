@@ -1,12 +1,10 @@
-import { NuxtConfig } from '@nuxt/types'
+import { defineNuxtConfig } from '@nuxt/bridge'
 
 import Sass from 'sass'
 import { generateRoutes } from './routes'
+import { runtimePublicConfig } from './config'
 
-const envPath = `app/.env.${process.env.NODE_ENV}`
-require('dotenv').config({ path: envPath })
-
-const nuxtConfig: NuxtConfig = {
+export default defineNuxtConfig({
   target: 'static',
   srcDir: 'app',
   head: {
@@ -40,11 +38,7 @@ const nuxtConfig: NuxtConfig = {
       pathPrefix: false,
     },
   ],
-  buildModules: [
-    '@nuxt/typescript-build',
-    'nuxt-typed-vuex',
-    ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
-  ],
+  buildModules: ['nuxt-typed-vuex'],
   build: {
     // npm run build -aでAnalyze結果を出力
     // analyze: {
@@ -94,6 +88,7 @@ const nuxtConfig: NuxtConfig = {
       })
     },
   },
+  // TODO: nitro.config に移行
   generate: {
     async routes() {
       return await generateRoutes()
@@ -104,12 +99,7 @@ const nuxtConfig: NuxtConfig = {
   },
   // プログレスバーの非表示
   loading: false,
-  // stagingはdevtoolを有効化
-  vue: {
-    config: {
-      devtools: process.env.NODE_ENV === 'staging',
-    },
+  runtimeConfig: {
+    public: runtimePublicConfig,
   },
-}
-
-export default nuxtConfig
+})

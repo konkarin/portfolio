@@ -1,4 +1,6 @@
 import { RouterLinkStub, shallowMount } from '@vue/test-utils'
+
+import { runtimePublicConfig } from '../../../config'
 import ArticleView from '@/components/Article/ArticleView.vue'
 
 const article = {
@@ -21,6 +23,10 @@ const $route = {
   },
 }
 
+const $config = {
+  public: runtimePublicConfig,
+}
+
 const wrapper = shallowMount(ArticleView, {
   propsData: {
     article,
@@ -28,6 +34,7 @@ const wrapper = shallowMount(ArticleView, {
   },
   mocks: {
     $route,
+    $config,
   },
   stubs: {
     NuxtLink: RouterLinkStub,

@@ -24,7 +24,7 @@ interface Data {
 export default Vue.extend({
   name: 'PagesTag',
   scrollToTop: true,
-  async asyncData({ params, payload, store }): Promise<Data> {
+  async asyncData({ params, payload, store, $config }): Promise<Data> {
     if (payload) {
       return {
         articles: payload,
@@ -33,7 +33,7 @@ export default Vue.extend({
         tags: store.state.articleTags,
       }
     } else {
-      const artilcesPath = `users/${process.env.AUTHOR_ID}/articles`
+      const artilcesPath = `users/${$config.public.AUTHOR_ID}/articles`
 
       const order: Order = {
         fieldPath: 'releaseDate',
@@ -91,7 +91,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}tags/${this.$route.params.tag}`,
+          content: `${this.$config.public.APP_URL}tags/${this.$route.params.tag}`,
         },
         {
           hid: 'og:description',

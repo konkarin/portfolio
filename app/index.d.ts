@@ -15,3 +15,13 @@ declare module '@nuxt/types' {
     $accessor: typeof accessorType
   }
 }
+
+declare module 'vuex/types/index' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface Store<S> {
+    $config: {
+      [key: string]: string
+      public: Record<string, string>
+    }
+  }
+}
