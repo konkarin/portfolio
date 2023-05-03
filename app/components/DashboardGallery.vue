@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { DocumentData } from '@firebase/firestore'
 import { User } from '@firebase/auth'
 import { db } from '~/api/apis'
@@ -45,7 +45,7 @@ interface Data {
   selectedImgPathList: string[]
 }
 
-export default Vue.extend({
+export default defineComponent({
   data(): Data {
     return {
       imgList: [],

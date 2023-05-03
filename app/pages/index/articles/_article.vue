@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { Context } from '@nuxt/types'
 import { MetaInfo } from 'vue-meta'
 import { db } from '@/api/apis'
@@ -27,7 +27,7 @@ const emptyAritcle: Article = {
   ogpImageUrl: '',
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PagesArticle',
   async asyncData({ params, payload, $config }: Context): Promise<Data> {
     if (payload) {
@@ -37,12 +37,10 @@ export default Vue.extend({
       }
     } else {
       const collectionPath = `users/${$config.public.AUTHOR_ID}/articles`
-      const article = (await db
-        .getDocById(collectionPath, params.article)
-        .catch((e) => {
-          console.error(e)
-          return emptyAritcle
-        })) as Article
+      const article = (await db.getDocById(collectionPath, params.article).catch((e) => {
+        console.error(e)
+        return emptyAritcle
+      })) as Article
 
       const htmlText = await convertMarkdownTextToHTML(article.text)
 
@@ -108,9 +106,7 @@ export default Vue.extend({
   },
   mounted() {
     // 存在しない記事にアクセスしたらエラー
-    const existsArtcile = this.articles.some(
-      (article) => this.$route.params.article === article.id
-    )
+    const existsArtcile = this.articles.some((article) => this.$route.params.article === article.id)
 
     if (!existsArtcile) this.$nuxt.error({ message: 'ページが見つかりません' })
   },

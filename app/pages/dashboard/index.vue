@@ -3,12 +3,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'PagesDashboardIndex',
   mounted() {
-    if (this.$store.state.user)
-      this.$router.replace({ path: '/dashboard/profile' })
+    if (this.$store.state.user) this.$router.replace({ path: '/dashboard/profile' })
   },
 })
 </script>

@@ -51,16 +51,12 @@
         </button>
       </div>
     </div>
-    <MarkdownEditor
-      :plain-text="plainText"
-      @input="setText"
-      @save="updateArticle"
-    />
+    <MarkdownEditor :plain-text="plainText" @input="setText" @save="updateArticle" />
   </section>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import Day from '~/utils/day'
@@ -71,7 +67,7 @@ interface Data {
   ogpImageUrl: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   data(): Data {
     return {
       article: {
@@ -135,10 +131,7 @@ export default Vue.extend({
 
       const collectionPath = `users/${uid}/articles`
 
-      const article = (await db.getDocById(
-        collectionPath,
-        this.article.id
-      )) as Article
+      const article = (await db.getDocById(collectionPath, this.article.id)) as Article
 
       return article
     },
