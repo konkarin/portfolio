@@ -9,7 +9,6 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import { Order, Query } from '~/api/firestore'
@@ -21,7 +20,7 @@ interface Data {
   tags: string[]
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PagesTag',
   scrollToTop: true,
   async asyncData({ params, payload, store, $config }): Promise<Data> {
@@ -115,8 +114,7 @@ export default Vue.extend({
     // 存在しないタグにアクセスしたらエラー
     const existsArtcileTag = this.articleTags.includes(this.$route.params.tag)
 
-    if (!existsArtcileTag)
-      this.$nuxt.error({ message: 'ページが見つかりません' })
+    if (!existsArtcileTag) this.$nuxt.error({ message: 'ページが見つかりません' })
   },
 })
 </script>
