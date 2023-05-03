@@ -52,11 +52,6 @@ export default defineNuxtConfig({
         // },
       },
     },
-    extend(config) {
-      config.node = {
-        fs: 'empty',
-      }
-    },
     // extend(config, ctx) {
     // npm run dev時に自動fix
     // if (ctx.isDev && ctx.isClient) {
@@ -76,7 +71,7 @@ export default defineNuxtConfig({
     },
   },
   router: {
-    extendRoutes(routes) {
+    extendRoutes(routes: any[]) {
       routes.push({
         path: '*',
         component: './app/layouts/error.vue',
@@ -97,8 +92,6 @@ export default defineNuxtConfig({
   server: {
     port: 3002, // デフォルト: 3000
   },
-  // プログレスバーの非表示
-  loading: false,
   runtimeConfig: {
     public: runtimePublicConfig,
   },
