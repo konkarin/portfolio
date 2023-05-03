@@ -56,7 +56,7 @@ export default defineComponent({
   mounted() {
     document.addEventListener('keydown', this.handleKeydownCmdS)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keydown', this.handleKeydownCmdS)
   },
   methods: {
