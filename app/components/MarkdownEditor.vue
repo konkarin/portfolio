@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 type Data = {
@@ -25,7 +26,7 @@ type Data = {
   localValue: string
 }
 
-export default defineComponent({
+export default Vue.extend({
   props: {
     plainText: {
       type: String,
@@ -79,13 +80,15 @@ export default defineComponent({
 
         arraySplittedByEnter.push(target.replace('  ', ''))
 
-        this.localValue = arraySplittedByEnter.join('\n') + this.localValue.slice(index)
+        this.localValue =
+          arraySplittedByEnter.join('\n') + this.localValue.slice(index)
 
         setTimeout(() => {
           e.target.setSelectionRange(index - 2, index - 2)
         }, 0)
       } else {
-        this.localValue = this.localValue.slice(0, index) + '  ' + this.localValue.slice(index)
+        this.localValue =
+          this.localValue.slice(0, index) + '  ' + this.localValue.slice(index)
         this.$emit('input', this.localValue)
 
         setTimeout(() => {
@@ -97,7 +100,10 @@ export default defineComponent({
       e.target.blur()
     },
     handleKeydownCmdS(e: KeyboardEvent) {
-      if (((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) && e.key === 's') {
+      if (
+        ((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) &&
+        e.key === 's'
+      ) {
         e.preventDefault()
         this.$emit('save')
       }

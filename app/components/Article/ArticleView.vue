@@ -3,7 +3,9 @@
     <h1>{{ article.title }}</h1>
     <div class="article__subTitle subTitle">
       <div class="subTitle__item">{{ releaseDate }} 公開</div>
-      <div v-if="updatedDate" class="subTitle__item">{{ updatedDate }} 更新</div>
+      <div v-if="updatedDate" class="subTitle__item">
+        {{ updatedDate }} 更新
+      </div>
     </div>
     <article class="article__content">
       <!-- eslint-disable-next-line vue/no-v-html -->
@@ -37,13 +39,13 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
+import Vue, { PropType } from 'vue'
 import { Article } from '@/types/index'
 import Day from '@/utils/day'
 import MarkdownPreview from '@/components/MarkdownPreview.vue'
 import Twitter from '@/components/svg/Twitter.vue'
 
-export default defineComponent({
+export default Vue.extend({
   components: {
     MarkdownPreview,
     Twitter,
@@ -63,7 +65,11 @@ export default defineComponent({
       return Day.getDate(this.article.releaseDate, 'YYYY-MM-DD')
     },
     updatedDate(): string {
-      if (this.article.updatedDate === undefined || this.article.updatedDate === 0) return ''
+      if (
+        this.article.updatedDate === undefined ||
+        this.article.updatedDate === 0
+      )
+        return ''
       return Day.getDate(this.article.updatedDate, 'YYYY-MM-DD')
     },
     twitterShareUrl(): string {

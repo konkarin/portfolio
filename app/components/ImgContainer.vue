@@ -17,10 +17,10 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
+import Vue, { PropType } from 'vue'
 import { DocumentData } from '@firebase/firestore'
 
-export default defineComponent({
+export default Vue.extend({
   props: {
     imgList: {
       type: Array as PropType<DocumentData[]>,

@@ -8,10 +8,11 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { Article } from '@/types/index'
 import ArticlesSideMenu from '@/components/Article/ArticlesSideMenu.vue'
 
-export default defineComponent({
+export default Vue.extend({
   components: {
     ArticlesSideMenu,
   },

@@ -6,9 +6,11 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
+
 import HeaderNav from '@/components/HeaderNav.vue'
 
-export default defineComponent({
+export default Vue.extend({
   name: 'PagesIndex',
   components: {
     HeaderNav,

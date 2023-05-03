@@ -2,7 +2,11 @@
   <main class="wrapper">
     <PageTitle>
       About
-      <a href="https://twitter.com/k0n_karin" class="pageTitle__link" target="_blank">
+      <a
+        href="https://twitter.com/k0n_karin"
+        class="pageTitle__link"
+        target="_blank"
+      >
         こんかりん
       </a>
     </PageTitle>
@@ -37,6 +41,7 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
@@ -44,15 +49,17 @@ interface Data {
   profile: string
 }
 
-export default defineComponent({
+export default Vue.extend({
   name: 'PagesAbout',
   async asyncData({ $config }): Promise<Data> {
-    const data = await db.getDocById('users', $config.public.AUTHOR_ID).catch((e) => {
-      console.error(e)
-      return {
-        profile: '',
-      }
-    })
+    const data = await db
+      .getDocById('users', $config.public.AUTHOR_ID)
+      .catch((e) => {
+        console.error(e)
+        return {
+          profile: '',
+        }
+      })
 
     return {
       profile: await convertMarkdownTextToHTML(data?.profile),
@@ -98,12 +105,14 @@ export default defineComponent({
   },
   async mounted() {
     if (this.profile === '') {
-      const data = await db.getDocById('users', this.$config.public.AUTHOR_ID).catch((e) => {
-        console.error(e)
-        return {
-          profile: '',
-        }
-      })
+      const data = await db
+        .getDocById('users', this.$config.public.AUTHOR_ID)
+        .catch((e) => {
+          console.error(e)
+          return {
+            profile: '',
+          }
+        })
 
       this.profile = await convertMarkdownTextToHTML(data?.profile)
     }

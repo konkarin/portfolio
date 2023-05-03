@@ -3,9 +3,10 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { loadImgList } from '@/utils/image'
 
-export default defineComponent({
+export default Vue.extend({
   name: 'PagesIndex',
   head() {
     return {

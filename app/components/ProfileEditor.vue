@@ -7,11 +7,16 @@
         <button class="btn" @click="saveProfile">保存</button>
       </div>
     </div>
-    <MarkdownEditor :plain-text="plainText" @input="setPlainText" @save="saveProfile" />
+    <MarkdownEditor
+      :plain-text="plainText"
+      @input="setPlainText"
+      @save="saveProfile"
+    />
   </section>
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { User } from '@firebase/auth'
 import { db } from '@/api/apis'
 
@@ -19,7 +24,7 @@ type Data = {
   plainText: string
 }
 
-export default defineComponent({
+export default Vue.extend({
   data(): Data {
     return {
       plainText: '',

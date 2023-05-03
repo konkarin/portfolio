@@ -20,10 +20,10 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
+import Vue, { PropType } from 'vue'
 import { Article } from '@/types/index'
 
-export default defineComponent({
+export default Vue.extend({
   props: {
     recentArticles: {
       type: Array as PropType<Article[]>,

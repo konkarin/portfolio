@@ -47,14 +47,20 @@
 </template>
 
 <script lang="ts">
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from '@firebase/auth'
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from '@firebase/auth'
+import Vue from 'vue'
 
 interface Data {
   isLoading: boolean
   isUploading: boolean
 }
 
-export default defineComponent({
+export default Vue.extend({
   name: 'PagesDashboard',
   data(): Data {
     return {

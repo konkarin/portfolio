@@ -6,16 +6,21 @@
     </div>
     <ImgContainer :img-list="imgList" />
     <transition name="fade-modal">
-      <PhotoModal v-if="photoModal.show" :img-src="photoModal.url" @close="closeModal" />
+      <PhotoModal
+        v-if="photoModal.show"
+        :img-src="photoModal.url"
+        @close="closeModal"
+      />
     </transition>
   </main>
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import { DocumentData } from '@firebase/firestore'
 import { db } from '@/api/apis'
 
-export default defineComponent({
+export default Vue.extend({
   head() {
     return {
       title: 'Gallery',

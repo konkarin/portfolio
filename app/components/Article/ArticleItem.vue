@@ -20,11 +20,11 @@
 </template>
 
 <script lang="ts">
-import type { PropType } from 'vue'
+import Vue, { PropType } from 'vue'
 import Day from '@/utils/day'
 import { Article } from '@/types/index'
 
-export default defineComponent({
+export default Vue.extend({
   props: {
     article: {
       type: Object as PropType<Article>,

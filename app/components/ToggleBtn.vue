@@ -1,7 +1,12 @@
 <template>
   <div class="toggleBtn">
     <label class="toggleBtn__label">
-      <input type="checkbox" :checked="toggleBtn" class="toggleBtn__input" @change="toggle" />
+      <input
+        type="checkbox"
+        :checked="toggleBtn"
+        class="toggleBtn__input"
+        @change="toggle"
+      />
       <span class="toggleBtn__slider" />
     </label>
     <slot />
@@ -9,10 +14,12 @@
 </template>
 
 <script lang="ts">
-export default defineComponent({
+import Vue, { PropType } from 'vue'
+
+export default Vue.extend({
   props: {
     toggleBtn: {
-      type: Boolean,
+      type: Boolean as PropType<boolean>,
       required: true,
     },
   },

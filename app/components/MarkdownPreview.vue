@@ -4,7 +4,9 @@
 
 <script lang="ts">
 import 'highlight.js/styles/tomorrow-night.css'
-export default defineComponent({})
+
+import Vue from 'vue'
+export default Vue.extend({})
 </script>
 
 <style lang="scss" scoped>

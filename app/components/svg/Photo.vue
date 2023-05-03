@@ -18,7 +18,8 @@
 </template>
 
 <script lang="ts">
-export default defineComponent({
+import Vue from 'vue'
+export default Vue.extend({
   name: 'SvgPencil',
 })
 </script>
