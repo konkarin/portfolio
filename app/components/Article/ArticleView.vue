@@ -6,8 +6,7 @@
       <div v-if="updatedDate" class="subTitle__item">{{ updatedDate }} 更新</div>
     </div>
     <article class="article__content">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview v-html="htmlText" />
+      <MarkdownPreview :html-text="htmlText" />
     </article>
     <div class="article__content articleFooter">
       <div class="articleFooter__container">

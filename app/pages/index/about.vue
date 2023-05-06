@@ -7,8 +7,7 @@
       </a>
     </PageTitle>
     <div class="profile">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview v-html="profile" />
+      <MarkdownPreview :html-text="profile" />
       <div class="profile__sns sns">
         <a
           href="https://twitter.com/k0n_karin"

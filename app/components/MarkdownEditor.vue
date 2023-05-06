@@ -11,8 +11,7 @@
       />
     </div>
     <div class="markdownEdit__container">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview class="markdownEdit__content" v-html="htmlText" />
+      <MarkdownPreview class="markdownEdit__content" :html-text="htmlText" />
     </div>
   </div>
 </template>
