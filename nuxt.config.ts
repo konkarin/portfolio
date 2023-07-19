@@ -50,10 +50,18 @@ export default defineNuxtConfig({
       })
     },
   },
-  // TODO: nitro.config に移行
-  generate: {
-    async routes() {
-      return await generateRoutes()
+  hooks: {
+    async 'nitro:config'(nitroConfig) {
+      if (nitroConfig.dev) {
+        return
+      }
+      const routes = await generateRoutes()
+      if (nitroConfig.prerender?.routes === undefined) {
+        return
+      }
+      nitroConfig.prerender.routes = routes.map((route) => {
+        return route.route
+      })
     },
   },
   server: {
