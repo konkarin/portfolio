@@ -1,11 +1,9 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
 
-import Sass from 'sass'
 import { generateRoutes } from './routes'
 import { runtimePublicConfig } from './config'
 
 export default defineNuxtConfig({
-  target: 'static',
   srcDir: 'app',
   head: {
     titleTemplate: "%s - konkarin's photos & blog",
@@ -39,37 +37,6 @@ export default defineNuxtConfig({
     },
   ],
   buildModules: ['nuxt-typed-vuex'],
-  build: {
-    // npm run build -aでAnalyze結果を出力
-    // analyze: {
-    //   analyzerMode: 'static',
-    // },
-    loaders: {
-      scss: {
-        implementation: Sass,
-        // sassOptions: {
-        //   fiber: Fiber,
-        // },
-      },
-    },
-    // extend(config, ctx) {
-    // npm run dev時に自動fix
-    // if (ctx.isDev && ctx.isClient) {
-    //   config.module.rules.push({
-    //     enforce: 'pre',
-    //     test: /\.(js|vue|ts)$/,
-    //     loader: 'eslint-loader',
-    //     exclude: /(node_modules)/,
-    //     options: {
-    //       fix: true,
-    //     },
-    //   })
-    // }
-    // },
-    babel: {
-      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
-    },
-  },
   router: {
     extendRoutes(routes: any[]) {
       routes.push({
