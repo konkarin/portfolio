@@ -40,27 +40,24 @@ import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
-interface Data {
-  profile: string
-}
-
 export default defineComponent({
   name: 'PagesAbout',
-  async asyncData({ $config }): Promise<Data> {
-    const data = await db.getDocById('users', $config.public.AUTHOR_ID).catch((e) => {
-      console.error(e)
-      return {
-        profile: '',
-      }
+  setup() {
+    const config = useRuntimeConfig()
+
+    const { data: profile } = useLazyAsyncData('about', async () => {
+      const data = await db.getDocById('users', config.public.AUTHOR_ID).catch((e) => {
+        console.error(e)
+        return {
+          profile: '',
+        }
+      })
+
+      return await convertMarkdownTextToHTML(data?.profile)
     })
 
     return {
-      profile: await convertMarkdownTextToHTML(data?.profile),
-    }
-  },
-  data(): Data {
-    return {
-      profile: '',
+      profile,
     }
   },
   head() {
@@ -94,18 +91,6 @@ export default defineComponent({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
-  },
-  async mounted() {
-    if (this.profile === '') {
-      const data = await db.getDocById('users', this.$config.public.AUTHOR_ID).catch((e) => {
-        console.error(e)
-        return {
-          profile: '',
-        }
-      })
-
-      this.profile = await convertMarkdownTextToHTML(data?.profile)
     }
   },
 })
