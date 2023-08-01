@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { PropType } from 'vue'
 import { Context } from '@nuxt/types'
 import { MetaInfo } from 'vue-meta'
 import { db } from '@/api/apis'
@@ -29,6 +29,12 @@ const emptyAritcle: Article = {
 
 export default defineComponent({
   name: 'PagesArticle',
+  props: {
+    articles: {
+      type: Array as PropType<Article[]>,
+      required: true,
+    },
+  },
   async asyncData({ params, payload, $config }: Context): Promise<Data> {
     if (payload) {
       return {
@@ -85,9 +91,6 @@ export default defineComponent({
     }
   },
   computed: {
-    articles(): Article[] {
-      return this.$accessor.articles
-    },
     ogDescription(): string {
       const text = this.article.text
       if (text === '') {

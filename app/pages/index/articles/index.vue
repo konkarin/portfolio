@@ -3,10 +3,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { PropType } from 'vue'
+import { Article } from '~/types'
 
 export default defineComponent({
   name: 'PagesArticlesIndex',
+  props: {
+    articles: {
+      type: Array as PropType<Article[]>,
+      required: true,
+    },
+  },
   head() {
     return {
       title: 'Articles',
@@ -39,11 +46,6 @@ export default defineComponent({
         },
       ],
     }
-  },
-  computed: {
-    articles() {
-      return this.$store.state.articles
-    },
   },
 })
 </script>
