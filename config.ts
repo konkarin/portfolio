@@ -10,7 +10,7 @@ const production = {
   MEASUREMENT_ID: 'G-YGDY0HJSYV',
   AUTHOR_ID: 'y6VxBfC6TPPWTRvV5siYr1wzfBx2',
   APP_URL: 'https://konkarin.photo',
-}
+} as const
 
 const development = {
   API_KEY: 'AIzaSyAZUlX7Qx63lE5IAp9mfjEPfGvn6v-Hwjs',
@@ -22,7 +22,6 @@ const development = {
   MEASUREMENT_ID: 'G-5QD17SVXWZ',
   AUTHOR_ID: 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2',
   APP_URL: 'https://staging-konkarin-photo.web.app/',
-}
+} as const
 
-export const runtimePublicConfig =
-  targetEnv === 'production' ? production : development
+export const runtimePublicConfig = targetEnv === 'production' ? production : development
