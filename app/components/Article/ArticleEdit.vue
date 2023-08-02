@@ -60,6 +60,7 @@ import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import Day from '~/utils/day'
+import { getArticleTags } from '~/utils/article'
 
 interface Data {
   article: Article
@@ -171,10 +172,10 @@ export default defineComponent({
         return
       }
 
+      const articleTags = await getArticleTags(this.$store.state.user.uid)
+
       // 書き込み時にDBに存在しないタグがあればDBに追加する
-      const notExistsTags = this.article.tags.filter(
-        (tag) => !this.$store.state.articleTags.includes(tag)
-      )
+      const notExistsTags = this.article.tags.filter((tag) => !articleTags.includes(tag))
 
       if (notExistsTags) {
         const articleTagsPath = `users/${this.$store.state.user.uid}/articleTags`
