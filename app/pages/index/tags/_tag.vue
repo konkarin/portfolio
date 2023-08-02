@@ -2,7 +2,7 @@
   <main class="wrapper">
     <PageTitle>タグ: {{ $route.params.tag }}</PageTitle>
     <div class="article">
-      <ArticleList :articles="articles" />
+      <ArticleList :articles="articlesByTag" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="tags" />
     </div>
   </main>
@@ -13,9 +13,10 @@ import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import { Order, Query } from '~/api/firestore'
+import { getArticleTags, getArticles } from '~/utils/article'
 
 interface Data {
-  articles: Article[]
+  articlesByTag: Article[]
   recentArticles: Article[]
   tag: string
   tags: string[]
@@ -24,13 +25,14 @@ interface Data {
 export default defineComponent({
   name: 'PagesTag',
   scrollToTop: true,
-  async asyncData({ params, payload, store, $config }): Promise<Data> {
+  async asyncData({ params, payload, $config }): Promise<Data> {
     if (payload) {
+      const { articlesByTag, recentArticles, allTags } = payload
       return {
-        articles: payload,
-        recentArticles: store.state.recentArticles,
+        articlesByTag,
+        recentArticles,
         tag: params.tag,
-        tags: store.state.articleTags,
+        tags: allTags,
       }
     } else {
       const artilcesPath = `users/${$config.public.AUTHOR_ID}/articles`
@@ -50,24 +52,29 @@ export default defineComponent({
         value: true,
       }
 
-      const articles = (await db
+      const articlesByTag = (await db
         .getDocsByCompoundQueries(artilcesPath, [queries1, queries2], order)
         .catch((e) => {
           console.error(e)
           return []
         })) as Article[]
 
+      const aritcles = await getArticles($config.public.AUTHOR_ID)
+      const recentArticles = aritcles.slice(0, 2)
+
+      const allTags = await getArticleTags($config.public.AUTHOR_ID)
+
       return {
-        articles,
-        recentArticles: store.state.recentArticles,
+        articlesByTag,
+        recentArticles,
         tag: params.tag,
-        tags: store.state.articleTags,
+        tags: allTags,
       }
     }
   },
   data(): Data {
     return {
-      articles: [],
+      articlesByTag: [],
       recentArticles: [],
       tag: this.$route.params.tag,
       tags: [],
@@ -105,17 +112,6 @@ export default defineComponent({
         },
       ],
     }
-  },
-  computed: {
-    articleTags(): string[] {
-      return this.$store.state.articleTags
-    },
-  },
-  mounted() {
-    // 存在しないタグにアクセスしたらエラー
-    const existsArtcileTag = this.articleTags.includes(this.$route.params.tag)
-
-    if (!existsArtcileTag) this.$nuxt.error({ message: 'ページが見つかりません' })
   },
 })
 </script>

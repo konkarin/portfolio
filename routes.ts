@@ -1,6 +1,6 @@
-import { DocumentData } from 'firebase/firestore'
+import type { DocumentData } from 'firebase/firestore'
 import { db } from './app/api/apis'
-import { Query } from './app/api/firestore'
+import type { Query } from './app/api/firestore'
 import { runtimePublicConfig } from './config'
 
 interface Articles {
@@ -9,47 +9,45 @@ interface Articles {
 
 export const generateRoutes = async () => {
   // /articles/_article.vue用の記事
-  const articles = await getArticles()
+  const allArticles = await getArticles()
 
-  const result = articles.map((article) => {
+  const articleRoutes = allArticles.map((article) => {
     return {
       route: `/articles/${article.id}`,
       payload: article,
     }
   })
 
+  const allTags = await getArticleTags()
+
   // /tags/_tag.vue用の記事一覧
-  const articlesList = await getArticlesByTag()
+  const articleRecordByTag = await getArticleRecordByTag()
 
-  // TODO:記事が一つもないタグはルートを生成しないようにする
-  for (const [tag, articles] of Object.entries(articlesList)) {
-    result.push({
-      route: `/tags/${tag}`,
-      payload: articles,
+  const tagRoutes = Object.entries(articleRecordByTag)
+    .map(([tag, articles]) => {
+      return {
+        route: `/tags/${tag}`,
+        payload: {
+          articlesByTag: articles,
+          recentArticles: articles.slice(0, 2),
+          allTags,
+        },
+      }
     })
-  }
+    .filter(({ payload }) => {
+      return payload.articlesByTag.length > 0
+    })
 
-  return result
+  return [...articleRoutes, ...tagRoutes]
 }
 
-const getArticles = async () => {
-  const collectionPath = `users/${runtimePublicConfig.AUTHOR_ID}/articles`
-  const query: Query = {
-    fieldPath: 'isPublished',
-    filterStr: '==',
-    value: true,
-  }
-
-  return await db.getDocsData(collectionPath, [query])
-}
-
-const getArticlesByTag = async () => {
-  const articleTags = await getArticleTags()
-  const articlesList: Articles = {}
+const getArticleRecordByTag = async () => {
+  const allTags = await getArticleTags()
+  const articleRecord: Articles = {}
   const articlesPath = `users/${runtimePublicConfig.AUTHOR_ID}/articles`
 
-  for (let i = 0; i < articleTags.length; i++) {
-    const tag = articleTags[i]
+  for (let i = 0; i < allTags.length; i++) {
+    const tag = allTags[i]
     const queries: Query[] = [
       {
         fieldPath: 'tags',
@@ -63,10 +61,21 @@ const getArticlesByTag = async () => {
       },
     ]
 
-    articlesList[tag] = await db.getDocsData(articlesPath, queries)
+    articleRecord[tag] = await db.getDocsData(articlesPath, queries)
   }
 
-  return articlesList
+  return articleRecord
+}
+
+const getArticles = async () => {
+  const collectionPath = `users/${runtimePublicConfig.AUTHOR_ID}/articles`
+  const query: Query = {
+    fieldPath: 'isPublished',
+    filterStr: '==',
+    value: true,
+  }
+
+  return await db.getDocsData(collectionPath, [query])
 }
 
 const getArticleTags = async () => {
