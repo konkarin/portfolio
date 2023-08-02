@@ -3,10 +3,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { PropType } from 'vue'
+import { Article } from '~/types'
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PagesArticlesIndex',
+  props: {
+    articles: {
+      type: Array as PropType<Article[]>,
+      required: true,
+    },
+  },
   head() {
     return {
       title: 'Articles',
@@ -39,11 +46,6 @@ export default Vue.extend({
         },
       ],
     }
-  },
-  computed: {
-    articles() {
-      return this.$store.state.articles
-    },
   },
 })
 </script>

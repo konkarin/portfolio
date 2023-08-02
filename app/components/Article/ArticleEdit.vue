@@ -51,19 +51,16 @@
         </button>
       </div>
     </div>
-    <MarkdownEditor
-      :plain-text="plainText"
-      @input="setText"
-      @save="updateArticle"
-    />
+    <MarkdownEditor :plain-text="plainText" @input="setText" @save="updateArticle" />
   </section>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import Day from '~/utils/day'
+import { getArticleTags } from '~/utils/article'
 
 interface Data {
   article: Article
@@ -71,7 +68,7 @@ interface Data {
   ogpImageUrl: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   data(): Data {
     return {
       article: {
@@ -135,10 +132,7 @@ export default Vue.extend({
 
       const collectionPath = `users/${uid}/articles`
 
-      const article = (await db.getDocById(
-        collectionPath,
-        this.article.id
-      )) as Article
+      const article = (await db.getDocById(collectionPath, this.article.id)) as Article
 
       return article
     },
@@ -178,10 +172,10 @@ export default Vue.extend({
         return
       }
 
+      const articleTags = await getArticleTags(this.$store.state.user.uid)
+
       // 書き込み時にDBに存在しないタグがあればDBに追加する
-      const notExistsTags = this.article.tags.filter(
-        (tag) => !this.$store.state.articleTags.includes(tag)
-      )
+      const notExistsTags = this.article.tags.filter((tag) => !articleTags.includes(tag))
 
       if (notExistsTags) {
         const articleTagsPath = `users/${this.$store.state.user.uid}/articleTags`

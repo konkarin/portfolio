@@ -1,33 +1,29 @@
 <template>
   <main class="wrapper">
-    <div class="article">
-      <NuxtChild />
+    <div v-if="articles && articleTags" class="article">
+      <NuxtChild :articles="articles" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="articleTags" />
     </div>
   </main>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { Article } from '@/types/index'
+import { useArticles } from '@/composables/useArticles'
 import ArticlesSideMenu from '@/components/Article/ArticlesSideMenu.vue'
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     ArticlesSideMenu,
   },
-  computed: {
-    articles(): Article[] {
-      return this.$store.state.articles
-    },
+  setup() {
+    const { articles, articleTags } = useArticles()
+    const recentArticles = computed(() => articles.value?.slice(0, 2))
 
-    recentArticles(): Article[] {
-      return this.articles.slice(0, 3)
-    },
-
-    articleTags(): string[] {
-      return this.$store.state.articleTags
-    },
+    return {
+      articles,
+      recentArticles,
+      articleTags,
+    }
   },
 })
 </script>

@@ -1,11 +1,9 @@
 import { defineNuxtConfig } from '@nuxt/bridge'
 
-import Sass from 'sass'
 import { generateRoutes } from './routes'
 import { runtimePublicConfig } from './config'
 
 export default defineNuxtConfig({
-  target: 'static',
   srcDir: 'app',
   head: {
     titleTemplate: "%s - konkarin's photos & blog",
@@ -39,44 +37,8 @@ export default defineNuxtConfig({
     },
   ],
   buildModules: ['nuxt-typed-vuex'],
-  build: {
-    // npm run build -aでAnalyze結果を出力
-    // analyze: {
-    //   analyzerMode: 'static',
-    // },
-    loaders: {
-      scss: {
-        implementation: Sass,
-        // sassOptions: {
-        //   fiber: Fiber,
-        // },
-      },
-    },
-    extend(config) {
-      config.node = {
-        fs: 'empty',
-      }
-    },
-    // extend(config, ctx) {
-    // npm run dev時に自動fix
-    // if (ctx.isDev && ctx.isClient) {
-    //   config.module.rules.push({
-    //     enforce: 'pre',
-    //     test: /\.(js|vue|ts)$/,
-    //     loader: 'eslint-loader',
-    //     exclude: /(node_modules)/,
-    //     options: {
-    //       fix: true,
-    //     },
-    //   })
-    // }
-    // },
-    babel: {
-      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
-    },
-  },
   router: {
-    extendRoutes(routes) {
+    extendRoutes(routes: any[]) {
       routes.push({
         path: '*',
         component: './app/layouts/error.vue',
@@ -88,18 +50,28 @@ export default defineNuxtConfig({
       })
     },
   },
-  // TODO: nitro.config に移行
-  generate: {
-    async routes() {
-      return await generateRoutes()
+  hooks: {
+    async 'nitro:config'(nitroConfig) {
+      if (nitroConfig.dev) {
+        return
+      }
+      const routes = await generateRoutes()
+      if (nitroConfig.prerender?.routes === undefined) {
+        return
+      }
+      nitroConfig.prerender.routes = routes.map((route) => {
+        return route.route
+      })
     },
   },
   server: {
     port: 3002, // デフォルト: 3000
   },
-  // プログレスバーの非表示
-  loading: false,
   runtimeConfig: {
     public: runtimePublicConfig,
+  },
+  // https://github.com/nuxt/bridge/issues/25#issuecomment-1097946846
+  alias: {
+    tslib: 'tslib/tslib.es6.js',
   },
 })

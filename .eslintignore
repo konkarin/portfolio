@@ -4,11 +4,9 @@ node_modules
 # logs
 npm-debug.log
 
-# Nuxt build
+# Nuxt
 .nuxt
-
-# Nuxt generate
-dist
+.output
 
 # vscode
 .vscode
@@ -19,5 +17,6 @@ dist
 # static
 static
 
-# functions
+# functions配下は別途lint設定あり
 functions
+
