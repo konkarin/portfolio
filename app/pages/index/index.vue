@@ -3,10 +3,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { loadImgList } from '@/utils/image'
 
-export default defineComponent({
+export default defineNuxtComponent({
   name: 'PagesIndex',
   head() {
     return {

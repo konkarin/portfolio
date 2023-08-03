@@ -36,11 +36,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
-export default defineComponent({
+export default defineNuxtComponent({
   name: 'PagesAbout',
   setup() {
     const config = useRuntimeConfig()

@@ -9,7 +9,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import { Order, Query } from '~/api/firestore'
@@ -22,7 +21,7 @@ interface Data {
   tags: string[]
 }
 
-export default defineComponent({
+export default defineNuxtComponent({
   name: 'PagesTag',
   scrollToTop: true,
   async asyncData({ params, payload, $config }): Promise<Data> {

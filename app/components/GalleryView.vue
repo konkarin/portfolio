@@ -12,11 +12,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { DocumentData } from '@firebase/firestore'
 import { db } from '@/api/apis'
 
-export default defineComponent({
+export default defineNuxtComponent({
   head() {
     return {
       title: 'Gallery',

@@ -27,7 +27,7 @@ const emptyAritcle: Article = {
   ogpImageUrl: '',
 }
 
-export default defineComponent({
+export default defineNuxtComponent({
   name: 'PagesArticle',
   props: {
     articles: {

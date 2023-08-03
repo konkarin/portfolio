@@ -6,11 +6,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
 import HeaderNav from '@/components/HeaderNav.vue'
 
-export default defineComponent({
+export default defineNuxtComponent({
   name: 'PagesIndex',
   components: {
     HeaderNav,

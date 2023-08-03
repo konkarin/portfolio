@@ -56,7 +56,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import Day from '~/utils/day'
@@ -68,7 +67,7 @@ interface Data {
   ogpImageUrl: string
 }
 
-export default defineComponent({
+export default defineNuxtComponent({
   data(): Data {
     return {
       article: {

@@ -6,7 +6,7 @@
 import { PropType } from 'vue'
 import { Article } from '~/types'
 
-export default defineComponent({
+export default defineNuxtComponent({
   name: 'PagesArticlesIndex',
   props: {
     articles: {
