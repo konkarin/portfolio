@@ -1,24 +1,30 @@
 import { getArticleTags, getArticles } from '~/utils/article'
 
 export function useArticles() {
-  const config = useRuntimeConfig()
+  const { AUTHOR_ID } = useRuntimeConfig().public
 
-  const { data: articles } = useLazyAsyncData('articles', () => {
-    return getArticles(config.public.AUTHOR_ID)
+  const { data: articles } = useAsyncData('articles', () => {
+    return getArticles(AUTHOR_ID)
+  })
+  const articleComputed = computed(() => {
+    return articles.value || []
   })
 
-  const { data: tags } = useLazyAsyncData('tags', () => {
-    return getArticleTags(config.public.AUTHOR_ID)
+  const { data: tags } = useAsyncData('tags', () => {
+    return getArticleTags(AUTHOR_ID)
   })
-
   const articleTags = computed(() => {
-    return tags.value?.filter((tag) => {
-      return articles.value.some((article) => article.tags.includes(tag))
+    if (tags.value === null) {
+      return []
+    }
+
+    return tags.value.filter((tag) => {
+      return articleComputed.value.some((article) => article.tags.includes(tag))
     })
   })
 
   return {
-    articles,
+    articles: articleComputed,
     articleTags,
   }
 }
