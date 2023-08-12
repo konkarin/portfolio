@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderNav />
-    <NuxtChild />
+    <NuxtPage />
   </div>
 </template>
 
@@ -21,7 +21,7 @@ export default defineNuxtComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${this.$config.public.APP_URL}`,
+          // content: `${this.$config.public.APP_URL}`,
         },
         {
           hid: 'og:image',

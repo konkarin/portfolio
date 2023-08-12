@@ -41,7 +41,7 @@
           Articles
         </NuxtLink>
       </nav>
-      <NuxtChild />
+      <NuxtPage />
     </main>
   </div>
 </template>

@@ -32,7 +32,7 @@ const wrapper = shallowMount(ArticleContainer, {
   store,
   localVue,
   stubs: {
-    NuxtChild: { template: '<div></div>' },
+    NuxtPage: { template: '<div></div>' },
   },
 })
 

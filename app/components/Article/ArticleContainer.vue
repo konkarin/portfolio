@@ -1,7 +1,7 @@
 <template>
   <main class="wrapper">
     <div v-if="articles && articleTags" class="article">
-      <NuxtChild :articles="articles" />
+      <NuxtPage :articles="articles" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="articleTags" />
     </div>
   </main>
