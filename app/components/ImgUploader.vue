@@ -31,14 +31,15 @@ export default defineComponent({
     }
   },
   computed: {
-    user(): User {
+    user(): User | null {
       return this.$store.state.user
     },
   },
   methods: {
-    setFile(e: HTMLInputEvent<HTMLInputElement>) {
-      if (e.target.files && e.target.files[0]) {
-        this.file = e.target.files[0]
+    setFile(e: Event) {
+      const target = e.target as HTMLInputElement
+      if (target.files && target.files[0]) {
+        this.file = target.files[0]
       } else {
         alert('Please select a file')
       }
@@ -46,7 +47,7 @@ export default defineComponent({
 
     // 画像をアップロード
     async uploadFile(): Promise<void> {
-      if (this.file === null) return
+      if (this.user === null || this.file === null) return
 
       // ローディングを表示
       this.isUploading = true

@@ -18,7 +18,7 @@
       >
         <label class="photoBox__select">
           <input
-            :id="index"
+            :id="`${index}`"
             v-model="selectedImgPathList"
             type="checkbox"
             class="photoBox__checkbox"
@@ -53,7 +53,7 @@ export default defineComponent({
     }
   },
   computed: {
-    user(): User {
+    user(): User | null {
       return this.$store.state.user
     },
   },
@@ -67,7 +67,7 @@ export default defineComponent({
   },
   methods: {
     async getImgList(): Promise<DocumentData[]> {
-      const path = `users/${this.user.uid}/images`
+      const path = `users/${this.user?.uid}/images`
 
       try {
         return await db.getDocsData(path)
@@ -85,7 +85,7 @@ export default defineComponent({
         return
       }
 
-      const path = `users/${this.user.uid}/images`
+      const path = `users/${this.user?.uid}/images`
 
       // 選択した画像のdocumentを取得
       const result = await Promise.all(

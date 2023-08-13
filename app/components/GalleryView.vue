@@ -12,7 +12,6 @@
 </template>
 
 <script lang="ts">
-import { DocumentData } from '@firebase/firestore'
 import { db } from '@/api/apis'
 
 export default defineNuxtComponent({
@@ -26,10 +25,10 @@ export default defineNuxtComponent({
       return this.$store.state.photoModal
     },
     imgList() {
-      return this.$store.state.imgList as DocumentData[]
+      return this.$store.state.imgList
     },
     isLoadingImg() {
-      return this.$store.state.isLoadingImg as boolean
+      return this.$store.state.isLoadingImg
     },
   },
   async mounted() {
