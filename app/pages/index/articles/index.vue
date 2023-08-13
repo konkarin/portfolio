@@ -14,8 +14,9 @@ export default defineNuxtComponent({
       required: true,
     },
   },
-  head() {
-    return {
+  setup() {
+    const { APP_URL } = useRuntimeConfig().public
+    useHead({
       title: 'Articles',
       meta: [
         {
@@ -32,7 +33,7 @@ export default defineNuxtComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${this.$config.public.APP_URL}articles`,
+          content: `${APP_URL}articles`,
         },
         {
           hid: 'og:description',
@@ -45,7 +46,7 @@ export default defineNuxtComponent({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
+    })
   },
 })
 </script>

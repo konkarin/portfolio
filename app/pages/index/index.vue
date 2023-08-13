@@ -6,9 +6,10 @@
 import { loadImgList } from '@/utils/image'
 
 export default defineNuxtComponent({
-  name: 'PagesIndex',
-  head() {
-    return {
+  setup() {
+    const { APP_URL } = useRuntimeConfig().public
+
+    useHead({
       title: 'Home',
       meta: [
         {
@@ -25,7 +26,7 @@ export default defineNuxtComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${this.$config.public.APP_URL}`,
+          content: APP_URL,
         },
         {
           hid: 'og:description',
@@ -38,7 +39,7 @@ export default defineNuxtComponent({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
+    })
   },
   computed: {
     imgList() {
