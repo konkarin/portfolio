@@ -7,7 +7,7 @@
       </a>
     </PageTitle>
     <div class="profile">
-      <MarkdownPreview :html-text="profile" />
+      <MarkdownPreview :html-text="profile || ''" />
       <div class="profile__sns sns">
         <a
           href="https://twitter.com/k0n_karin"
@@ -41,26 +41,21 @@ import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 export default defineNuxtComponent({
   name: 'PagesAbout',
-  setup() {
-    const config = useRuntimeConfig()
+  async setup() {
+    const { AUTHOR_ID, APP_URL } = useRuntimeConfig().public
 
-    const { data: profile } = useLazyAsyncData('about', async () => {
-      const data = await db.getDocById('users', config.public.AUTHOR_ID).catch((e) => {
+    const { data: profile } = await useAsyncData(async () => {
+      const data = await db.getDocById('users', AUTHOR_ID).catch((e) => {
         console.error(e)
         return {
           profile: '',
         }
       })
 
-      return await convertMarkdownTextToHTML(data?.profile)
+      return await convertMarkdownTextToHTML(data?.profile || '')
     })
 
-    return {
-      profile,
-    }
-  },
-  head() {
-    return {
+    useHead({
       title: 'About',
       meta: [
         {
@@ -77,7 +72,7 @@ export default defineNuxtComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${this.$config.public.APP_URL}about`,
+          content: `${APP_URL}about`,
         },
         {
           hid: 'og:description',
@@ -90,6 +85,10 @@ export default defineNuxtComponent({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
+    })
+
+    return {
+      profile,
     }
   },
 })
