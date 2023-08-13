@@ -27,7 +27,7 @@ export default defineComponent({
     }
   },
   computed: {
-    user(): User {
+    user(): User | null {
       return this.$store.state.user
     },
   },
@@ -44,7 +44,7 @@ export default defineComponent({
     },
 
     async getProfile() {
-      const data = await db.getDocById('users', this.user.uid)
+      const data = await db.getDocById('users', this.user?.uid || '')
       if (data === undefined) return ''
       return data.profile as string
     },
@@ -55,7 +55,7 @@ export default defineComponent({
       }
 
       await db
-        .updateDoc('users', this.user.uid, data)
+        .updateDoc('users', this.user?.uid || '', data)
         .then(() => {
           // TODO: ポップアップにする
           alert('Saved')

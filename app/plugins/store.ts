@@ -1,4 +1,4 @@
-import { Store, createStore } from 'vuex'
+import { createStore } from 'vuex'
 import { useAccessor, mutationTree, actionTree, getterTree } from 'typed-vuex'
 import type { DocumentData } from 'firebase/firestore'
 import type { User } from 'firebase/auth'
@@ -17,7 +17,7 @@ interface State {
   }
 }
 
-export const state = () => ({
+export const state = (): State => ({
   isAuth: false,
   user: null,
   imgList: [],
