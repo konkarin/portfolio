@@ -10,7 +10,6 @@
 
 <script lang="ts">
 export default defineNuxtComponent({
-  name: 'LayoutError',
   props: {
     error: {
       type: Object,
