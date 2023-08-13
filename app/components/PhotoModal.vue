@@ -19,6 +19,7 @@ export default {
       default: '',
     },
   },
+  emits: ['close'],
   data() {
     return {
       isLoading: true,

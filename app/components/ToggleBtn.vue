@@ -19,6 +19,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['toggle'],
   methods: {
     toggle() {
       this.$emit('toggle')

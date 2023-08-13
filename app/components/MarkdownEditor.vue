@@ -32,6 +32,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['input', 'save'],
   data(): Data {
     return {
       htmlText: '',
@@ -65,6 +66,8 @@ export default defineComponent({
     },
     inputText(e: HTMLInputEvent<HTMLTextAreaElement>) {
       this.localValue = e.target.value
+      console.log('inputText', this.localValue)
+
       this.$emit('input', this.localValue)
     },
     handlePressTab(e: HTMLKeyboardEvent<HTMLTextAreaElement>) {
