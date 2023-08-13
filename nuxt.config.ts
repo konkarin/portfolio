@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   },
   srcDir: 'app',
   app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       titleTemplate: "%s - konkarin's photos & blog",
       meta: [
