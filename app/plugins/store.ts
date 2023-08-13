@@ -68,7 +68,7 @@ export const actions = actionTree(
         return img
       })
 
-      commit('updateImgList', [imgList[0]])
+      commit('updateImgList', imgList)
     },
   }
 )
