@@ -3,13 +3,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import { loadImgList } from '@/utils/image'
 
-export default Vue.extend({
-  name: 'PagesIndex',
-  head() {
-    return {
+export default defineNuxtComponent({
+  setup() {
+    const { APP_URL } = useRuntimeConfig().public
+
+    useHead({
       title: 'Home',
       meta: [
         {
@@ -26,7 +26,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}`,
+          content: APP_URL,
         },
         {
           hid: 'og:description',
@@ -39,7 +39,7 @@ export default Vue.extend({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
+    })
   },
   computed: {
     imgList() {

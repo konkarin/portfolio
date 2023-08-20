@@ -1,4 +1,6 @@
-module.exports = {
+import type { Config } from 'jest'
+
+const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/app/$1',
     '^~/(.*)$': '<rootDir>/app/$1',
@@ -17,4 +19,7 @@ module.exports = {
     '<rootDir>/pages/**/*.vue',
   ],
   setupFilesAfterEnv: ['./app/tests/jest.setup.ts'],
+  testEnvironment: 'jsdom',
 }
+
+export default config

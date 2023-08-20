@@ -1,33 +1,34 @@
 <template>
   <main class="wrapper">
-    <div class="article">
-      <NuxtChild />
+    <div v-if="articles && articleTags" class="article">
+      <NuxtPage :articles="articles" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="articleTags" />
     </div>
   </main>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Article } from '@/types/index'
-import ArticlesSideMenu from '@/components/Article/ArticlesSideMenu.vue'
+<script setup lang="ts">
+import { getArticleTags, getArticles } from '~/utils/article'
 
-export default Vue.extend({
-  components: {
-    ArticlesSideMenu,
-  },
-  computed: {
-    articles(): Article[] {
-      return this.$store.state.articles
-    },
+const { AUTHOR_ID } = useRuntimeConfig().public
 
-    recentArticles(): Article[] {
-      return this.articles.slice(0, 3)
-    },
-
-    articleTags(): string[] {
-      return this.$store.state.articleTags
-    },
-  },
+const { data: articles } = await useAsyncData('articles', () => {
+  return getArticles(AUTHOR_ID)
 })
+const articleComputed = computed(() => articles.value || [])
+
+const { data: tags } = await useAsyncData('tags', () => {
+  return getArticleTags(AUTHOR_ID)
+})
+const articleTags = computed(() => {
+  if (tags.value === null) {
+    return []
+  }
+
+  return tags.value.filter((tag) => {
+    return articleComputed.value.some((article) => article.tags.includes(tag))
+  })
+})
+
+const recentArticles = computed(() => articles.value?.slice(0, 2) || [])
 </script>

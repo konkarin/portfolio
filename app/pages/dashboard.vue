@@ -41,26 +41,21 @@
           Articles
         </NuxtLink>
       </nav>
-      <NuxtChild />
+      <NuxtPage />
     </main>
   </div>
 </template>
 
 <script lang="ts">
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-} from '@firebase/auth'
-import Vue from 'vue'
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from '@firebase/auth'
+import { defineComponent } from 'vue'
 
 interface Data {
   isLoading: boolean
   isUploading: boolean
 }
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PagesDashboard',
   data(): Data {
     return {
@@ -68,8 +63,10 @@ export default Vue.extend({
       isUploading: false,
     }
   },
-  head(): any {
-    return {
+  setup() {
+    const { APP_URL } = useRuntimeConfig().public
+
+    useHead({
       title: 'Dashboard',
       meta: [
         { hid: 'og:type', property: 'og:type', content: 'article' },
@@ -81,7 +78,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}Dashboard`,
+          content: `${APP_URL}Dashboard`,
         },
         {
           hid: 'og:image',
@@ -89,7 +86,7 @@ export default Vue.extend({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
+    })
   },
   computed: {
     isAuth(): boolean {

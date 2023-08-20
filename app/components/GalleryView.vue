@@ -6,21 +6,15 @@
     </div>
     <ImgContainer :img-list="imgList" />
     <transition name="fade-modal">
-      <PhotoModal
-        v-if="photoModal.show"
-        :img-src="photoModal.url"
-        @close="closeModal"
-      />
+      <PhotoModal v-if="photoModal.show" :img-src="photoModal.url" @close="closeModal" />
     </transition>
   </main>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { DocumentData } from '@firebase/firestore'
 import { db } from '@/api/apis'
 
-export default Vue.extend({
+export default defineNuxtComponent({
   head() {
     return {
       title: 'Gallery',
@@ -31,15 +25,15 @@ export default Vue.extend({
       return this.$store.state.photoModal
     },
     imgList() {
-      return this.$store.state.imgList as DocumentData[]
+      return this.$store.state.imgList
     },
     isLoadingImg() {
-      return this.$store.state.isLoadingImg as boolean
+      return this.$store.state.isLoadingImg
     },
   },
   async mounted() {
     if (this.imgList.length === 0) {
-      const collectionPath = `/users/${process.env.AUTHOR_ID}/images`
+      const collectionPath = `/users/${this.$config.public.AUTHOR_ID}/images`
 
       const imgList = await db.getDocsData(collectionPath)
       this.$store.commit('updateImgList', imgList)

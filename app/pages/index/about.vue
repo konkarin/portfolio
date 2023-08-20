@@ -2,17 +2,12 @@
   <main class="wrapper">
     <PageTitle>
       About
-      <a
-        href="https://twitter.com/k0n_karin"
-        class="pageTitle__link"
-        target="_blank"
-      >
+      <a href="https://twitter.com/k0n_karin" class="pageTitle__link" target="_blank">
         こんかりん
       </a>
     </PageTitle>
     <div class="profile">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview v-html="profile" />
+      <MarkdownPreview :html-text="profile || ''" />
       <div class="profile__sns sns">
         <a
           href="https://twitter.com/k0n_karin"
@@ -41,37 +36,26 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
-interface Data {
-  profile: string
-}
-
-export default Vue.extend({
+export default defineNuxtComponent({
   name: 'PagesAbout',
-  async asyncData(): Promise<Data> {
-    const data = await db
-      .getDocById('users', process.env.AUTHOR_ID)
-      .catch((e) => {
+  async setup() {
+    const { AUTHOR_ID, APP_URL } = useRuntimeConfig().public
+
+    const { data: profile } = await useAsyncData(async () => {
+      const data = await db.getDocById('users', AUTHOR_ID).catch((e) => {
         console.error(e)
         return {
           profile: '',
         }
       })
 
-    return {
-      profile: await convertMarkdownTextToHTML(data?.profile),
-    }
-  },
-  data(): Data {
-    return {
-      profile: '',
-    }
-  },
-  head() {
-    return {
+      return await convertMarkdownTextToHTML(data?.profile || '')
+    })
+
+    useHead({
       title: 'About',
       meta: [
         {
@@ -88,7 +72,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}about`,
+          content: `${APP_URL}about`,
         },
         {
           hid: 'og:description',
@@ -101,20 +85,10 @@ export default Vue.extend({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
-  },
-  async mounted() {
-    if (this.profile === '') {
-      const data = await db
-        .getDocById('users', process.env.AUTHOR_ID)
-        .catch((e) => {
-          console.error(e)
-          return {
-            profile: '',
-          }
-        })
+    })
 
-      this.profile = await convertMarkdownTextToHTML(data?.profile)
+    return {
+      profile,
     }
   },
 })

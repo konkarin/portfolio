@@ -1,16 +1,14 @@
 <template>
   <div>
     <HeaderNav />
-    <NuxtChild />
+    <NuxtPage />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-
 import HeaderNav from '@/components/HeaderNav.vue'
 
-export default Vue.extend({
+export default defineNuxtComponent({
   name: 'PagesIndex',
   components: {
     HeaderNav,
@@ -23,7 +21,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}`,
+          // content: `${this.$config.public.APP_URL}`,
         },
         {
           hid: 'og:image',

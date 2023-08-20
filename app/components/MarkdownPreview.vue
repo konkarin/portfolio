@@ -1,12 +1,20 @@
 <template>
-  <div class="markdown" />
+  <div class="markdown" v-html="htmlText" />
 </template>
 
 <script lang="ts">
 import 'highlight.js/styles/tomorrow-night.css'
 
-import Vue from 'vue'
-export default Vue.extend({})
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  props: {
+    htmlText: {
+      type: String,
+      required: true,
+    },
+  },
+})
 </script>
 
 <style lang="scss" scoped>

@@ -1,3 +1,5 @@
+import { DocumentData } from 'firebase/firestore'
+
 interface Img {
   date: string
   exif: any
@@ -10,7 +12,7 @@ interface Img {
   width: number
 }
 
-export const loadImgList = async (imgList: Img[]) => {
+export const loadImgList = async (imgList: DocumentData[]) => {
   const urls: string[] = imgList.map((img) => img.thumbUrl)
 
   const promiseList = []

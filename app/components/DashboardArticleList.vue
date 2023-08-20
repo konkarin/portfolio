@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
@@ -25,7 +25,7 @@ interface Data {
   articles: Array<Article>
 }
 
-export default Vue.extend({
+export default defineComponent({
   data(): Data {
     return {
       articles: [],
@@ -36,14 +36,10 @@ export default Vue.extend({
   },
   methods: {
     async getArticles() {
-      const collectionPath = `users/${this.$store.state.user.uid}/articles`
+      const collectionPath = `users/${this.$store.state.user?.uid}/articles`
 
       // TODO: 型引数を渡す方がいい？
-      const article = (await db.getOrderDocs(
-        collectionPath,
-        'createdDate',
-        'desc'
-      )) as Article[]
+      const article = (await db.getOrderDocs(collectionPath, 'createdDate', 'desc')) as Article[]
 
       return article
     },
@@ -57,7 +53,7 @@ export default Vue.extend({
     },
 
     async removeArticle(docId: string) {
-      const collectionPath = `users/${this.$store.state.user.uid}/articles`
+      const collectionPath = `users/${this.$store.state.user?.uid}/articles`
 
       await db.deleteDoc(collectionPath, docId).catch((e) => {
         console.error(e)

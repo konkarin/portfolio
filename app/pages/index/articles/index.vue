@@ -3,12 +3,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { PropType } from 'vue'
+import { Article } from '~/types'
 
-export default Vue.extend({
+export default defineNuxtComponent({
   name: 'PagesArticlesIndex',
-  head() {
-    return {
+  props: {
+    articles: {
+      type: Array as PropType<Article[]>,
+      required: true,
+    },
+  },
+  setup() {
+    const { APP_URL } = useRuntimeConfig().public
+    useHead({
       title: 'Articles',
       meta: [
         {
@@ -25,7 +33,7 @@ export default Vue.extend({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${process.env.APP_URL}articles`,
+          content: `${APP_URL}articles`,
         },
         {
           hid: 'og:description',
@@ -38,12 +46,7 @@ export default Vue.extend({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
-  },
-  computed: {
-    articles() {
-      return this.$store.state.articles
-    },
+    })
   },
 })
 </script>

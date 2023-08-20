@@ -1,36 +1,46 @@
-import { NuxtConfig } from '@nuxt/types'
-
-import Sass from 'sass'
 import { generateRoutes } from './routes'
+import { runtimePublicConfig } from './config'
 
-const envPath = `app/.env.${process.env.NODE_ENV}`
-require('dotenv').config({ path: envPath })
+export default defineNuxtConfig({
+  devtools: {
+    enabled: true,
 
-const nuxtConfig: NuxtConfig = {
-  target: 'static',
+    timeline: {
+      enabled: true,
+    },
+  },
+  routeRules: {
+    '/': { prerender: true },
+    '/about': { prerender: true },
+    '/gallery': { prerender: true },
+    '/articles': { prerender: true },
+  },
   srcDir: 'app',
-  head: {
-    titleTemplate: "%s - konkarin's photos & blog",
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'og:locale',
-        property: 'og:locale',
-        content: 'ja',
-      },
-      {
-        hid: 'twitter:card',
-        property: 'twitter:card',
-        content: 'summary_large_image',
-      },
-      {
-        hid: 'twitter:creator',
-        property: 'twitter:creator',
-        content: '@k0n_karin',
-      },
-    ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+  app: {
+    pageTransition: { name: 'page', mode: 'out-in' },
+    head: {
+      titleTemplate: "%s - konkarin's photos & blog",
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          hid: 'og:locale',
+          property: 'og:locale',
+          content: 'ja',
+        },
+        {
+          hid: 'twitter:card',
+          property: 'twitter:card',
+          content: 'summary_large_image',
+        },
+        {
+          hid: 'twitter:creator',
+          property: 'twitter:creator',
+          content: '@k0n_karin',
+        },
+      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    },
   },
   css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
   plugins: [],
@@ -40,76 +50,25 @@ const nuxtConfig: NuxtConfig = {
       pathPrefix: false,
     },
   ],
-  buildModules: [
-    '@nuxt/typescript-build',
-    'nuxt-typed-vuex',
-    ['@nuxtjs/dotenv', { filename: `.env.${process.env.NODE_ENV}` }],
-  ],
-  build: {
-    // npm run build -aでAnalyze結果を出力
-    // analyze: {
-    //   analyzerMode: 'static',
-    // },
-    loaders: {
-      scss: {
-        implementation: Sass,
-        // sassOptions: {
-        //   fiber: Fiber,
-        // },
-      },
-    },
-    extend(config) {
-      config.node = {
-        fs: 'empty',
+  hooks: {
+    async 'nitro:config'(nitroConfig) {
+      if (nitroConfig.dev) {
+        return
       }
-    },
-    // extend(config, ctx) {
-    // npm run dev時に自動fix
-    // if (ctx.isDev && ctx.isClient) {
-    //   config.module.rules.push({
-    //     enforce: 'pre',
-    //     test: /\.(js|vue|ts)$/,
-    //     loader: 'eslint-loader',
-    //     exclude: /(node_modules)/,
-    //     options: {
-    //       fix: true,
-    //     },
-    //   })
-    // }
-    // },
-    babel: {
-      plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
-    },
-  },
-  router: {
-    extendRoutes(routes) {
-      routes.push({
-        path: '*',
-        component: './app/layouts/error.vue',
-        props: {
-          error: {
-            message: 'ページが見つかりません',
-          },
-        },
+      const routes = await generateRoutes()
+      if (nitroConfig.prerender?.routes === undefined) {
+        return
+      }
+      nitroConfig.prerender.routes = routes.map((route) => {
+        return route.route
       })
     },
   },
-  generate: {
-    async routes() {
-      return await generateRoutes()
-    },
+  runtimeConfig: {
+    public: runtimePublicConfig,
   },
-  server: {
-    port: 3002, // デフォルト: 3000
+  // https://github.com/nuxt/bridge/issues/25#issuecomment-1097946846
+  alias: {
+    tslib: 'tslib/tslib.es6.js',
   },
-  // プログレスバーの非表示
-  loading: false,
-  // stagingはdevtoolを有効化
-  vue: {
-    config: {
-      devtools: process.env.NODE_ENV === 'staging',
-    },
-  },
-}
-
-export default nuxtConfig
+})

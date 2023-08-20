@@ -7,16 +7,12 @@
         <button class="btn" @click="saveProfile">保存</button>
       </div>
     </div>
-    <MarkdownEditor
-      :plain-text="plainText"
-      @input="setPlainText"
-      @save="saveProfile"
-    />
+    <MarkdownEditor :plain-text="plainText" @input="setPlainText" @save="saveProfile" />
   </section>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { User } from '@firebase/auth'
 import { db } from '@/api/apis'
 
@@ -24,14 +20,14 @@ type Data = {
   plainText: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   data(): Data {
     return {
       plainText: '',
     }
   },
   computed: {
-    user(): User {
+    user(): User | null {
       return this.$store.state.user
     },
   },
@@ -48,7 +44,7 @@ export default Vue.extend({
     },
 
     async getProfile() {
-      const data = await db.getDocById('users', this.user.uid)
+      const data = await db.getDocById('users', this.user?.uid || '')
       if (data === undefined) return ''
       return data.profile as string
     },
@@ -59,7 +55,7 @@ export default Vue.extend({
       }
 
       await db
-        .updateDoc('users', this.user.uid, data)
+        .updateDoc('users', this.user?.uid || '', data)
         .then(() => {
           // TODO: ポップアップにする
           alert('Saved')

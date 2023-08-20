@@ -18,7 +18,7 @@
       >
         <label class="photoBox__select">
           <input
-            :id="index"
+            :id="`${index}`"
             v-model="selectedImgPathList"
             type="checkbox"
             class="photoBox__checkbox"
@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { DocumentData } from '@firebase/firestore'
 import { User } from '@firebase/auth'
 import { db } from '~/api/apis'
@@ -45,7 +45,7 @@ interface Data {
   selectedImgPathList: string[]
 }
 
-export default Vue.extend({
+export default defineComponent({
   data(): Data {
     return {
       imgList: [],
@@ -53,7 +53,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    user(): User {
+    user(): User | null {
       return this.$store.state.user
     },
   },
@@ -67,7 +67,7 @@ export default Vue.extend({
   },
   methods: {
     async getImgList(): Promise<DocumentData[]> {
-      const path = `users/${this.user.uid}/images`
+      const path = `users/${this.user?.uid}/images`
 
       try {
         return await db.getDocsData(path)
@@ -85,7 +85,7 @@ export default Vue.extend({
         return
       }
 
-      const path = `users/${this.user.uid}/images`
+      const path = `users/${this.user?.uid}/images`
 
       // 選択した画像のdocumentを取得
       const result = await Promise.all(

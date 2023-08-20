@@ -1,17 +1,11 @@
 <template>
   <div class="articleItem">
     <div class="articleItem__titleContainer">
-      <NuxtLink
-        :to="`/dashboard/articles/${article.id}`"
-        class="articleItem__title"
-      >
+      <NuxtLink :to="`/dashboard/articles/${article.id}`" class="articleItem__title">
         {{ article.title }}
       </NuxtLink>
       <div class="articleItem__actionContainer">
-        <NuxtLink
-          :to="`/dashboard/articles/${article.id}`"
-          class="articleItem__edit edit"
-        >
+        <NuxtLink :to="`/dashboard/articles/${article.id}`" class="articleItem__edit edit">
           <Pencil />
           <span class="edit__tooltip">編集</span>
         </NuxtLink>
@@ -26,17 +20,19 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
 import Day from '@/utils/day'
 import { Article } from '@/types/index'
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     article: {
       type: Object as PropType<Article>,
       required: true,
     },
   },
+  emits: ['remove'],
   computed: {
     relativeTime(): string {
       return Day.relativeTime(Day.getDate(this.article.createdDate))

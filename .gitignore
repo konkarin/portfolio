@@ -31,3 +31,6 @@ yarn-error.log*
 
 # jest
 coverage
+
+# nuxt
+.output

@@ -7,15 +7,13 @@
       </label>
     </div>
     <div class="imgUploader__content">
-      <button class="btn" :disabled="file === null" @click="uploadFile()">
-        upload
-      </button>
+      <button class="btn" :disabled="file === null" @click="uploadFile()">upload</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { User } from '@firebase/auth'
@@ -25,7 +23,7 @@ type Data = {
   file: File | null
 }
 
-export default Vue.extend({
+export default defineComponent({
   data(): Data {
     return {
       isUploading: false,
@@ -33,14 +31,15 @@ export default Vue.extend({
     }
   },
   computed: {
-    user(): User {
+    user(): User | null {
       return this.$store.state.user
     },
   },
   methods: {
-    setFile(e: HTMLInputEvent<HTMLInputElement>) {
-      if (e.target.files && e.target.files[0]) {
-        this.file = e.target.files[0]
+    setFile(e: Event) {
+      const target = e.target as HTMLInputElement
+      if (target.files && target.files[0]) {
+        this.file = target.files[0]
       } else {
         alert('Please select a file')
       }
@@ -48,14 +47,12 @@ export default Vue.extend({
 
     // 画像をアップロード
     async uploadFile(): Promise<void> {
-      if (this.file === null) return
+      if (this.user === null || this.file === null) return
 
       // ローディングを表示
       this.isUploading = true
 
-      const target = `users/${this.user.uid}/${uuidv4()}/original/${
-        this.file.name
-      }`
+      const target = `users/${this.user.uid}/${uuidv4()}/original/${this.file.name}`
 
       // 保存するファイル名に現在時刻を指定
       const storageRef = ref(getStorage(), target)

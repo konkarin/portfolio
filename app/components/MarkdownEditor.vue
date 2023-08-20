@@ -11,14 +11,13 @@
       />
     </div>
     <div class="markdownEdit__container">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <MarkdownPreview class="markdownEdit__content" v-html="htmlText" />
+      <MarkdownPreview class="markdownEdit__content" :html-text="htmlText" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { defineComponent } from 'vue'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 type Data = {
@@ -26,13 +25,14 @@ type Data = {
   localValue: string
 }
 
-export default Vue.extend({
+export default defineComponent({
   props: {
     plainText: {
       type: String,
       required: true,
     },
   },
+  emits: ['input', 'save'],
   data(): Data {
     return {
       htmlText: '',
@@ -57,19 +57,21 @@ export default Vue.extend({
   mounted() {
     document.addEventListener('keydown', this.handleKeydownCmdS)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keydown', this.handleKeydownCmdS)
   },
   methods: {
     async setMarkdown() {
       this.htmlText = await convertMarkdownTextToHTML(this.plainText)
     },
-    inputText(e: HTMLInputEvent<HTMLTextAreaElement>) {
-      this.localValue = e.target.value
-      this.$emit('input', this.localValue)
+    inputText(e: Event) {
+      if (e.target instanceof HTMLTextAreaElement) {
+        this.localValue = e.target.value
+        this.$emit('input', this.localValue)
+      }
     },
-    handlePressTab(e: HTMLKeyboardEvent<HTMLTextAreaElement>) {
-      const index = e.target.selectionEnd
+    handlePressTab(e: KeyboardEvent) {
+      const index = (e.target as HTMLTextAreaElement).selectionEnd
       if (index === null) return
 
       if (e.shiftKey) {
@@ -80,30 +82,25 @@ export default Vue.extend({
 
         arraySplittedByEnter.push(target.replace('  ', ''))
 
-        this.localValue =
-          arraySplittedByEnter.join('\n') + this.localValue.slice(index)
+        this.localValue = arraySplittedByEnter.join('\n') + this.localValue.slice(index)
 
         setTimeout(() => {
-          e.target.setSelectionRange(index - 2, index - 2)
+          ;(e.target as HTMLTextAreaElement).setSelectionRange(index - 2, index - 2)
         }, 0)
       } else {
-        this.localValue =
-          this.localValue.slice(0, index) + '  ' + this.localValue.slice(index)
+        this.localValue = this.localValue.slice(0, index) + '  ' + this.localValue.slice(index)
         this.$emit('input', this.localValue)
 
         setTimeout(() => {
-          e.target.setSelectionRange(index + 2, index + 2)
+          ;(e.target as HTMLTextAreaElement).setSelectionRange(index + 2, index + 2)
         }, 0)
       }
     },
-    handlePressEsc(e: HTMLInputEvent<HTMLTextAreaElement>) {
-      e.target.blur()
+    handlePressEsc(e: KeyboardEvent) {
+      ;(e.target as HTMLTextAreaElement).blur()
     },
     handleKeydownCmdS(e: KeyboardEvent) {
-      if (
-        ((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) &&
-        e.key === 's'
-      ) {
+      if (((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) && e.key === 's') {
         e.preventDefault()
         this.$emit('save')
       }
