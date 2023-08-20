@@ -12,11 +12,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { DocumentData } from '@firebase/firestore'
 import { db } from '@/api/apis'
 
-export default defineComponent({
+export default defineNuxtComponent({
   head() {
     return {
       title: 'Gallery',
@@ -27,10 +25,10 @@ export default defineComponent({
       return this.$store.state.photoModal
     },
     imgList() {
-      return this.$store.state.imgList as DocumentData[]
+      return this.$store.state.imgList
     },
     isLoadingImg() {
-      return this.$store.state.isLoadingImg as boolean
+      return this.$store.state.isLoadingImg
     },
   },
   async mounted() {

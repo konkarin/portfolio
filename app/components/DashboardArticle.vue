@@ -32,6 +32,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['remove'],
   computed: {
     relativeTime(): string {
       return Day.relativeTime(Day.getDate(this.article.createdDate))

@@ -36,7 +36,7 @@ export default defineComponent({
   },
   methods: {
     async getArticles() {
-      const collectionPath = `users/${this.$store.state.user.uid}/articles`
+      const collectionPath = `users/${this.$store.state.user?.uid}/articles`
 
       // TODO: 型引数を渡す方がいい？
       const article = (await db.getOrderDocs(collectionPath, 'createdDate', 'desc')) as Article[]
@@ -53,7 +53,7 @@ export default defineComponent({
     },
 
     async removeArticle(docId: string) {
-      const collectionPath = `users/${this.$store.state.user.uid}/articles`
+      const collectionPath = `users/${this.$store.state.user?.uid}/articles`
 
       await db.deleteDoc(collectionPath, docId).catch((e) => {
         console.error(e)

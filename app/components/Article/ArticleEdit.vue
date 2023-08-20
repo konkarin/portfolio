@@ -56,7 +56,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { db } from '@/api/apis'
 import { Article } from '@/types/index'
 import Day from '~/utils/day'
@@ -68,11 +67,11 @@ interface Data {
   ogpImageUrl: string
 }
 
-export default defineComponent({
+export default defineNuxtComponent({
   data(): Data {
     return {
       article: {
-        id: this.$route.params.article,
+        id: this.$route.params.article as string,
         title: '',
         text: '',
         isPublished: false,
@@ -92,6 +91,9 @@ export default defineComponent({
     }
   },
   computed: {
+    user() {
+      return this.$store.state.user
+    },
     articleTitle(): string {
       return this.article.title
     },
@@ -128,7 +130,9 @@ export default defineComponent({
     },
 
     async getArticle() {
-      const uid: string = this.$store.state.user.uid
+      const uid = this.$store.state.user?.uid
+
+      if (uid == null) return
 
       const collectionPath = `users/${uid}/articles`
 
@@ -150,7 +154,7 @@ export default defineComponent({
         return
       }
 
-      const articlesPath = `users/${this.$store.state.user.uid}/articles`
+      const articlesPath = `users/${this.user?.uid}/articles`
 
       this.article.tags = this.tag.replace(/\s+/g, '').split(',')
       this.article.ogpImageUrl = this.ogpImageUrl
@@ -172,13 +176,13 @@ export default defineComponent({
         return
       }
 
-      const articleTags = await getArticleTags(this.$store.state.user.uid)
+      const articleTags = await getArticleTags(this.user?.uid || '')
 
       // 書き込み時にDBに存在しないタグがあればDBに追加する
       const notExistsTags = this.article.tags.filter((tag) => !articleTags.includes(tag))
 
       if (notExistsTags) {
-        const articleTagsPath = `users/${this.$store.state.user.uid}/articleTags`
+        const articleTagsPath = `users/${this.user?.uid}/articleTags`
 
         try {
           for (const tag of notExistsTags) {

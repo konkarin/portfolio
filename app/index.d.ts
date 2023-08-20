@@ -23,6 +23,8 @@ declare module 'vuex/types/index' {
       [key: string]: string
       public: Record<string, string>
     }
+    // Nuxt v2との互換性のための型定義
+    app: NuxtApp
   }
 }
 

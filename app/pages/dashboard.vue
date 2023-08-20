@@ -41,7 +41,7 @@
           Articles
         </NuxtLink>
       </nav>
-      <NuxtChild />
+      <NuxtPage />
     </main>
   </div>
 </template>
@@ -63,8 +63,10 @@ export default defineComponent({
       isUploading: false,
     }
   },
-  head(): any {
-    return {
+  setup() {
+    const { APP_URL } = useRuntimeConfig().public
+
+    useHead({
       title: 'Dashboard',
       meta: [
         { hid: 'og:type', property: 'og:type', content: 'article' },
@@ -76,7 +78,7 @@ export default defineComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${this.$config.public.APP_URL}Dashboard`,
+          content: `${APP_URL}Dashboard`,
         },
         {
           hid: 'og:image',
@@ -84,7 +86,7 @@ export default defineComponent({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
+    })
   },
   computed: {
     isAuth(): boolean {

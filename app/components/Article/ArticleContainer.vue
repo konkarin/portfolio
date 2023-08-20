@@ -1,29 +1,34 @@
 <template>
   <main class="wrapper">
     <div v-if="articles && articleTags" class="article">
-      <NuxtChild :articles="articles" />
+      <NuxtPage :articles="articles" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="articleTags" />
     </div>
   </main>
 </template>
 
-<script lang="ts">
-import { useArticles } from '@/composables/useArticles'
-import ArticlesSideMenu from '@/components/Article/ArticlesSideMenu.vue'
+<script setup lang="ts">
+import { getArticleTags, getArticles } from '~/utils/article'
 
-export default defineComponent({
-  components: {
-    ArticlesSideMenu,
-  },
-  setup() {
-    const { articles, articleTags } = useArticles()
-    const recentArticles = computed(() => articles.value?.slice(0, 2))
+const { AUTHOR_ID } = useRuntimeConfig().public
 
-    return {
-      articles,
-      recentArticles,
-      articleTags,
-    }
-  },
+const { data: articles } = await useAsyncData('articles', () => {
+  return getArticles(AUTHOR_ID)
 })
+const articleComputed = computed(() => articles.value || [])
+
+const { data: tags } = await useAsyncData('tags', () => {
+  return getArticleTags(AUTHOR_ID)
+})
+const articleTags = computed(() => {
+  if (tags.value === null) {
+    return []
+  }
+
+  return tags.value.filter((tag) => {
+    return articleComputed.value.some((article) => article.tags.includes(tag))
+  })
+})
+
+const recentArticles = computed(() => articles.value?.slice(0, 2) || [])
 </script>

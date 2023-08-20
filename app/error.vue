@@ -9,9 +9,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'LayoutError',
+export default defineNuxtComponent({
   props: {
     error: {
       type: Object,

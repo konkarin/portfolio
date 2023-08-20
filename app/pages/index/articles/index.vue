@@ -6,7 +6,7 @@
 import { PropType } from 'vue'
 import { Article } from '~/types'
 
-export default defineComponent({
+export default defineNuxtComponent({
   name: 'PagesArticlesIndex',
   props: {
     articles: {
@@ -14,8 +14,9 @@ export default defineComponent({
       required: true,
     },
   },
-  head() {
-    return {
+  setup() {
+    const { APP_URL } = useRuntimeConfig().public
+    useHead({
       title: 'Articles',
       meta: [
         {
@@ -32,7 +33,7 @@ export default defineComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${this.$config.public.APP_URL}articles`,
+          content: `${APP_URL}articles`,
         },
         {
           hid: 'og:description',
@@ -45,7 +46,7 @@ export default defineComponent({
           content: 'https://konkarin.photo/HomeImg.jpg',
         },
       ],
-    }
+    })
   },
 })
 </script>
