@@ -43,7 +43,6 @@ export default defineNuxtConfig({
     },
   },
   css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
-  plugins: [],
   components: [
     {
       path: '@/components/',
