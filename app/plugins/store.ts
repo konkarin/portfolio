@@ -65,6 +65,7 @@ export const actions = actionTree(
 
       // 画像一覧の取得
       const { data: imgList } = await useAsyncData(
+        'imgList',
         async () => {
           const result = await getImgList(authorId)
 
