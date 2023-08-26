@@ -11,9 +11,7 @@ getFirestore().settings({ ignoreUndefinedProperties: true })
 
 const functions = region('asia-northeast1')
 
-exports.saveImgToDb = functions.storage
-  .object()
-  .onFinalize((object) => saveImgToDb(object))
+exports.saveImgToDb = functions.storage.object().onFinalize((object) => saveImgToDb(object))
 
 exports.deleteFileFromStorage = functions.firestore
   .document('/users/{uid}/images/{imageId}')
@@ -21,6 +19,7 @@ exports.deleteFileFromStorage = functions.firestore
 
 exports.createUser = functions.auth.user().onCreate((user) => createUser(user))
 
-exports.buildArticles = functions.firestore
-  .document('/users/{uid}/articles/{articleId}')
+exports.buildArticles = functions
+  .runWith({ secrets: ['CIRCLE_CI_TOKEN'] })
+  .firestore.document('/users/{uid}/articles/{articleId}')
   .onWrite((snap) => buildArticles(snap))
