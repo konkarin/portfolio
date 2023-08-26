@@ -66,8 +66,4 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: runtimePublicConfig,
   },
-  // https://github.com/nuxt/bridge/issues/25#issuecomment-1097946846
-  alias: {
-    tslib: 'tslib/tslib.es6.js',
-  },
 })
