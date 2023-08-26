@@ -14,16 +14,11 @@ import { Article } from '@/types/index'
 const { params } = useRoute()
 const { APP_URL } = useRuntimeConfig().public
 
-const { data: allTags } = useNuxtData('tags')
-const { data: allArticles } = useNuxtData('articles')
+const { $tags: allTags, $aritcles: allArticles } = useNuxtApp()
 
 const filterdArticlesByTag = computed(() => {
-  if (allArticles.value === null) {
-    return []
-  }
-
   return allArticles.value.filter((article: Article) => {
-    return article.tags.includes(params.tag)
+    return article.tags.includes(params.tag as string)
   })
 })
 
