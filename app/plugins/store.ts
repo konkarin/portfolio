@@ -1,3 +1,5 @@
+import { defineNuxtPlugin } from '#app'
+
 import { createStore } from 'vuex'
 import { useAccessor, mutationTree, actionTree, getterTree } from 'typed-vuex'
 import type { DocumentData } from 'firebase/firestore'
@@ -62,13 +64,25 @@ export const actions = actionTree(
       const authorId = config.public.AUTHOR_ID
 
       // 画像一覧の取得
-      const imgList = (await getImgList(authorId)).map((img) => {
-        // FIXME: firestoreのtimestamp型をdevalueで解釈できないので一旦消す
-        delete img.exif
-        return img
-      })
+      const { data: imgList } = await useAsyncData(
+        'imgList',
+        async () => {
+          const result = await getImgList(authorId)
 
-      commit('updateImgList', imgList)
+          return result.map((img) => {
+            // FIXME: firestoreのtimestamp型をdevalueで解釈できないので一旦消す
+            delete img.exif
+            return img
+          })
+        },
+        {
+          default(): DocumentData[] {
+            return []
+          },
+        }
+      )
+
+      commit('updateImgList', imgList.value)
     },
   }
 )
@@ -88,9 +102,9 @@ const storePattern = {
 
 const store = createStore(storePattern)
 
-export const accessor = useAccessor(store, storePattern)
+const accessor = useAccessor(store, storePattern)
 
-const plugin = defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
 
   nuxtApp.vueApp.use(store)
@@ -98,33 +112,25 @@ const plugin = defineNuxtPlugin((nuxtApp) => {
 
   // Nuxt v2との互換性のためのcontext注入
   // https://github.com/nuxt/nuxt/blob/d4b9e4b0553bcd617ecbc0b8b76871070b347fcb/packages/vue-app/template/index.js#L164-L165
-  store.app = nuxtApp.vueApp.$nuxt
+  store.app = nuxtApp
 
   if (process.server) {
     store.dispatch('nuxtServerInit', config)
   }
 
   if (process.server) {
-    nuxtApp.payload.store = store.state
-  } else if (nuxtApp.payload && nuxtApp.payload.store) {
-    store.replaceState(nuxtApp.payload.store as typeof store.state)
+    nuxtApp.payload.storeState = store.state
+  } else if (nuxtApp.payload.storeState) {
+    store.replaceState(nuxtApp.payload.storeState as typeof store.state)
   }
 
   return {
     provide: {
       store,
+      accessor,
     },
   }
 })
-
-export default plugin
-
-// #appだとエラーでるので↓にしてる
-declare module 'node_modules/nuxt/dist/app' {
-  interface NuxtApp {
-    $accessor: typeof accessor
-  }
-}
 
 declare module 'vue' {
   interface ComponentCustomProperties {

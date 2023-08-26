@@ -1,9 +1,6 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node",
     "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
     "esModuleInterop": true,
     "allowJs": true,
@@ -12,17 +9,30 @@
     "noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
+    "types": ["@types/node", "@nuxt/types", "@types/jest", "@types/uuid", "@types/lodash.debounce"],
+
     "paths": {
+      "~": ["./app"],
       "~/*": ["./app/*"],
-      "@/*": ["./app/*"]
-    },
-    "types": [
-      "@types/node",
-      "@nuxt/types",
-      "@types/jest",
-      "@types/uuid",
-      "@types/lodash.debounce"
-    ]
+      "@": ["./app"],
+      "@/*": ["./app/*"],
+      "~~": ["."],
+      "~~/*": ["*"],
+      "@@": ["."],
+      "@@/*": ["./*"],
+      "assets": ["./app/assets"],
+      "assets/*": ["./app/assets/*"],
+      "public": ["./app/public"],
+      "public/*": ["./app/public/*"],
+      "#app": ["node_modules/nuxt/dist/app"],
+      "#app/*": ["node_modules/nuxt/dist/app/*"],
+      "vue-demi": ["node_modules/nuxt/dist/app/compat/vue-demi"],
+      "#vue-router": [".nuxt/vue-router"],
+      "#imports": [".nuxt/imports"],
+      "#build": [".nuxt"],
+      "#build/*": [".nuxt/*"],
+      "#components": [".nuxt/components"]
+    }
   },
   "exclude": ["node_modules", "functions"]
 }

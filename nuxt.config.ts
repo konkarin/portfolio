@@ -43,7 +43,6 @@ export default defineNuxtConfig({
     },
   },
   css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
-  plugins: [],
   components: [
     {
       path: '@/components/',
@@ -66,9 +65,5 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: runtimePublicConfig,
-  },
-  // https://github.com/nuxt/bridge/issues/25#issuecomment-1097946846
-  alias: {
-    tslib: 'tslib/tslib.es6.js',
   },
 })
