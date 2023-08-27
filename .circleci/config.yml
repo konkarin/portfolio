@@ -10,10 +10,12 @@ commands:
               TARGET_ENV="production"
             fi
             echo "export TARGET_ENV=${TARGET_ENV}" >> $BASH_ENV
+
   switch-env:
     description: 'switch env by branch'
     steps:
       - run: sed -i -e "s/{{TARGET_ENV}}/${TARGET_ENV}/g" config.ts
+
   install-modules:
     description: 'install node_modules'
     steps:
@@ -24,6 +26,7 @@ commands:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
+
   build-functions:
     description: 'init cloud functions'
     steps:
@@ -71,12 +74,13 @@ jobs:
       - image: cimg/node:16.13.0
     steps:
       - checkout
-      - run:
-          name: npm ci
-          command: npm ci && cd functions && npm ci
+      - set-env
+      - switch-env
+      - install-modules
       - run:
           name: build
-          command: npm run generate && cd functions && npm run build
+          command: npm run generate
+      - build-functions
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
@@ -87,9 +91,7 @@ jobs:
       - image: cimg/node:16.13.0
     steps:
       - checkout
-      - run:
-          name: npm ci
-          command: npm ci
+      - install-modules
       - run:
           name: build
           command: npm run generate
@@ -106,6 +108,7 @@ workflows:
           filters:
             branches:
               only: develop
+
   deploy_prod:
     jobs:
       - deploy_prod:

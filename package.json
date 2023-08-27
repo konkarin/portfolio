@@ -10,9 +10,8 @@
     "lint": "eslint . --ext .ts,.js,.vue --fix",
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "test": "jest",
-    "deploy:sta": "npm run generate && firebase deploy --only hosting --project=sta",
-    "deploy:prod": "npm run generate && firebase deploy --only hosting --project=prod",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "deploy:sta": "npm run generate && firebase deploy --only hosting --project=staging-konkarin-photo",
+    "deploy:prod": "npm run generate && firebase deploy --only hosting --project=konkarin-photo"
   },
   "dependencies": {
     "blueimp-load-image": "^5.14.0",
