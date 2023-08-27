@@ -1,5 +1,9 @@
 import axios from 'axios'
-import { Change, firestore } from 'firebase-functions'
+import {
+  Change,
+  config as functionsConfig,
+  firestore,
+} from 'firebase-functions'
 
 export type ChangeDocumentSnapshot = Change<firestore.DocumentSnapshot>
 
@@ -15,7 +19,10 @@ const requestCI = async () => {
   // NOTE: https://firebase.google.com/docs/functions/config-env?hl=ja#automatically_populated_environment_variables
   const config = JSON.parse(process.env.FIREBASE_CONFIG)
   const branch = config.projectId === 'konkarin-photo' ? 'master' : 'develop'
-  const job = config.projectId === 'konkarin-photo' ? 'deploy_prod_hosting' : 'deploy_sta_hosting'
+  const job =
+    config.projectId === 'konkarin-photo'
+      ? 'deploy_prod_hosting'
+      : 'deploy_sta_hosting'
 
   const url = `https://circleci.com/api/v1.1/project/github/konkarin/portfolio/tree/${branch}`
   const data = {
@@ -24,9 +31,11 @@ const requestCI = async () => {
     },
   }
 
+  const circleToken = functionsConfig().portfolio.circle_token
+
   const headers = {
     'Content-Type': 'application/json',
-    'Circle-Token': process.env.CIRCLE_CI_TOKEN,
+    'Circle-Token': circleToken,
   }
 
   await axios

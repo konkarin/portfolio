@@ -36,10 +36,6 @@
     ],
     "rewrites": [
       {
-        "source": "dashboard/articles/**",
-        "destination": "/200.html"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }

@@ -4,6 +4,7 @@ import { runtimePublicConfig } from './config'
 export default defineNuxtConfig({
   devtools: {
     enabled: true,
+
     timeline: {
       enabled: true,
     },
@@ -13,9 +14,7 @@ export default defineNuxtConfig({
     '/about': { prerender: true },
     '/gallery': { prerender: true },
     '/articles': { prerender: true },
-    '/dashboard/**': { ssr: false },
   },
-  spaLoadingTemplate: false,
   srcDir: 'app',
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
