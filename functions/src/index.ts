@@ -11,7 +11,9 @@ getFirestore().settings({ ignoreUndefinedProperties: true })
 
 const functions = region('asia-northeast1')
 
-exports.saveImgToDb = functions.storage.object().onFinalize((object) => saveImgToDb(object))
+exports.saveImgToDb = functions.storage
+  .object()
+  .onFinalize((object) => saveImgToDb(object))
 
 exports.deleteFileFromStorage = functions.firestore
   .document('/users/{uid}/images/{imageId}')
