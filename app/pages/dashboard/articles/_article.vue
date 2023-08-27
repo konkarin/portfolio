@@ -1,3 +1,0 @@
-<template>
-  <ArticleEdit />
-</template>
