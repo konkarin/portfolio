@@ -19,10 +19,6 @@ exports.deleteFileFromStorage = functions.firestore
 
 exports.createUser = functions.auth.user().onCreate((user) => createUser(user))
 
-exports.buildArticles = functions
-  .runWith({ secrets: ['SAMPLE'] })
-  .firestore.document('/users/{uid}/articles/{articleId}')
-  .onWrite((snap) => {
-    console.log(process.env.SAMPLE)
-    buildArticles(snap)
-  })
+exports.buildArticles = functions.firestore
+  .document('/users/{uid}/articles/{articleId}')
+  .onWrite((snap) => buildArticles(snap))

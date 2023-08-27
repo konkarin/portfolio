@@ -23,7 +23,6 @@ const requestCI = async () => {
       CIRCLE_JOB: job,
     },
   }
-  console.log(process.env.SAMPLE)
 
   const headers = {
     'Content-Type': 'application/json',
