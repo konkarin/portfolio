@@ -23,7 +23,7 @@
     "highlight.js": "^10.7.1",
     "lodash.debounce": "^4.0.8",
     "nuxt": "^3.6.5",
-    "postcss": "^8.4.21",
+    "postcss": "^8.4.31",
     "remark": "^13.0.0",
     "remark-highlight.js": "^6.0.0",
     "remark-html": "^13.0.1",
