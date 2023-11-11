@@ -36,7 +36,7 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^0.8.0",
+    "@nuxt/devtools": "^1.0.1",
     "@nuxt/types": "^2.16.3",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/stylelint-module": "^4.1.0",
