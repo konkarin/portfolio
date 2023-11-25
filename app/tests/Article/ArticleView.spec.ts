@@ -36,8 +36,11 @@ const wrapper = shallowMount(ArticleView, {
     $route,
     $config,
   },
-  stubs: {
-    NuxtLink: RouterLinkStub,
+  global: {
+    stubs: {
+      RouterLink: RouterLinkStub,
+      NuxtLink: RouterLinkStub,
+    },
   },
 })
 
@@ -49,33 +52,27 @@ describe('ArticleView', () => {
   test('computed correct date format', () => {
     // 日付のチェック
     const ISO8061Regex = /^\d{4}-\d{2}-\d{2}/
-    expect(ISO8061Regex.test((wrapper.vm as any).releaseDate)).toBe(true)
+    expect(ISO8061Regex.test(wrapper.vm.releaseDate)).toBe(true)
   })
 
   test('render article tags links', () => {
-    const wrappers = wrapper.findAll(`[data-test="articleTag"]`).wrappers
+    const wrappers = wrapper.findAll(`[data-test="articleTag"]`)
 
     wrappers.forEach((tag, index) => {
-      expect(tag.findComponent(RouterLinkStub).props().to).toBe(
-        `/tags/${article.tags[index]}`
-      )
+      expect(tag.findComponent(RouterLinkStub).props().to).toBe(`/tags/${article.tags[index]}`)
     })
   })
 
   test('computed correct twitter share url', () => {
     const text = encodeURIComponent(article.title)
 
-    expect((wrapper.vm as any).twitterShareUrl).toContain(text)
-    expect((wrapper.vm as any).twitterShareUrl).toContain(
-      'konkarin-photo.web.app/'
-    )
+    expect(wrapper.vm.twitterShareUrl).toContain(text)
+    expect(wrapper.vm.twitterShareUrl).toContain('konkarin-photo.web.app/')
   })
 
   test('exists twitter share url', () => {
     const text = encodeURIComponent(article.title)
 
-    expect(
-      wrapper.find('[data-test="twitterShare"]').attributes().href
-    ).toContain(text)
+    expect(wrapper.find('[data-test="twitterShare"]').attributes().href).toContain(text)
   })
 })

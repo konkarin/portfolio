@@ -16,16 +16,17 @@ const wrapper = mount(ArticleItem, {
   propsData: {
     article,
   },
-  stubs: {
-    NuxtLink: RouterLinkStub,
+  global: {
+    stubs: {
+      RouterLink: RouterLinkStub,
+      NuxtLink: RouterLinkStub,
+    },
   },
 })
 
 describe('ArticleItem', () => {
   test('render article links', () => {
-    expect(wrapper.findComponent(RouterLinkStub).props().to).toContain(
-      article.id
-    )
+    expect(wrapper.findComponent(RouterLinkStub).props().to).toContain(article.id)
   })
 
   test('render releaseDate', () => {
@@ -33,16 +34,12 @@ describe('ArticleItem', () => {
   })
 
   test('render article title', () => {
-    expect(wrapper.find(`[data-test="articleTitle"]`).text()).toBe(
-      article.title
-    )
+    expect(wrapper.find(`[data-test="articleTitle"]`).text()).toBe(article.title)
   })
 
   test('render article tags', () => {
-    wrapper
-      .findAll(`[data-test="articleTag"]`)
-      .wrappers.forEach((tag, index) => {
-        expect(tag.text()).toBe(article.tags[index])
-      })
+    wrapper.findAll(`[data-test="articleTag"]`).forEach((tag, index) => {
+      expect(tag.text()).toBe(article.tags[index])
+    })
   })
 })
