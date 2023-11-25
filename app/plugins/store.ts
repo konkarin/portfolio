@@ -112,7 +112,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Nuxt v2との互換性のためのcontext注入
   // https://github.com/nuxt/nuxt/blob/d4b9e4b0553bcd617ecbc0b8b76871070b347fcb/packages/vue-app/template/index.js#L164-L165
-  store.app = nuxtApp
+  // store.app = nuxtApp
 
   if (process.server) {
     store.dispatch('nuxtServerInit', config)
