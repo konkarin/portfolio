@@ -8,6 +8,8 @@
 </template>
 
 <script setup lang="ts">
+import { useNuxtApp } from '#app'
+
 const { $tags: allTags, $aritcles: allArticles } = useNuxtApp()
 
 const articleTags = computed(() => {
@@ -21,4 +23,10 @@ const articleTags = computed(() => {
 })
 
 const recentArticles = computed(() => allArticles.value?.slice(0, 2) || [])
+
+defineExpose({
+  allArticles,
+  articleTags,
+  recentArticles,
+})
 </script>

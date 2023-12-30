@@ -27,21 +27,3 @@ declare module 'vuex/types/index' {
     app: NuxtApp
   }
 }
-
-// vue test utils の shallowMountの型エラーに対応 https://github.com/vuejs/vue-test-utils/pull/2031#issuecomment-1333455266
-// eslint-disable-next-line no-restricted-imports
-import type Vue from 'vue'
-import type { Component } from 'vue'
-import type { ThisTypedShallowMountOptions, ThisTypedMountOptions, Wrapper } from '@vue/test-utils'
-
-declare module '@vue/test-utils' {
-  export function shallowMount<C extends Component>(
-    component: C,
-    options?: ThisTypedShallowMountOptions<Vue>
-  ): Wrapper<Vue>
-
-  export function mount<C extends Component>(
-    component: C,
-    options?: ThisTypedMountOptions<Vue>
-  ): Wrapper<Vue>
-}
