@@ -1,4 +1,10 @@
 version: 2.1
+
+executors:
+  default-executor:
+    docker:
+      - image: cimg/node:18.18.0
+
 commands:
   set-env:
     steps:
@@ -39,8 +45,7 @@ commands:
 
 jobs:
   deploy_sta:
-    docker:
-      - image: cimg/node:16.13.0
+    executor: default-executor
     steps:
       - checkout
       - set-env
@@ -56,8 +61,7 @@ jobs:
           command: ./node_modules/.bin/firebase deploy -f --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
 
   deploy_sta_hosting:
-    docker:
-      - image: cimg/node:16.13.0
+    executor: default-executor
     steps:
       - checkout
       - set-env
@@ -72,8 +76,7 @@ jobs:
           command: ./node_modules/.bin/firebase deploy --only hosting --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
 
   deploy_prod:
-    docker:
-      - image: cimg/node:16.13.0
+    executor: default-executor
     steps:
       - checkout
       - set-env
@@ -89,8 +92,7 @@ jobs:
           command: ./node_modules/.bin/firebase deploy -f --token=$FIREBASE_TOKEN --project=$FIREBASE_PJ
 
   deploy_prod_hosting:
-    docker:
-      - image: cimg/node:16.13.0
+    executor: default-executor
     steps:
       - checkout
       - set-env
