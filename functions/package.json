@@ -32,5 +32,8 @@
     "prettier": "^2.2.1",
     "typescript": "^4.5.5"
   },
+  "overrides": {
+    "stream-shift": "1.0.2"
+  },
   "private": true
 }
