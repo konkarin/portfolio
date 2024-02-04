@@ -19,7 +19,7 @@
     "dayjs": "^1.10.4",
     "exifr": "^6.0.0",
     "firebase-admin": "^10.0.2",
-    "firebase-functions": "^3.18.1",
+    "firebase-functions": "^3.24.1",
     "image-size": "^0.9.3"
   },
   "devDependencies": {
