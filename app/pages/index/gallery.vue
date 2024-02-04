@@ -26,7 +26,7 @@ useHead({
     {
       hid: 'og:url',
       property: 'og:url',
-      content: `${APP_URL}gallery`,
+      content: `${APP_URL}/gallery`,
     },
     {
       hid: 'og:description',

@@ -43,7 +43,7 @@ useHead({
     {
       hid: 'og:url',
       property: 'og:url',
-      content: `${APP_URL}tags/${params.tag}`,
+      content: `${APP_URL}/tags/${params.tag}`,
     },
     {
       hid: 'og:description',

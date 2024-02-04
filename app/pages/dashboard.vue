@@ -78,7 +78,7 @@ export default defineComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${APP_URL}Dashboard`,
+          content: `${APP_URL}/Dashboard`,
         },
         {
           hid: 'og:image',

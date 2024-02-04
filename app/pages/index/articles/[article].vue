@@ -65,7 +65,7 @@ export default defineNuxtComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${APP_URL}articles/${article.value.id}`,
+          content: `${APP_URL}/articles/${article.value.id}`,
         },
         {
           hid: 'og:image',

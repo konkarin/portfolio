@@ -68,7 +68,7 @@ export default defineComponent({
     },
     twitterShareUrl(): string {
       const text = encodeURIComponent(this.article.title)
-      return `https://twitter.com/share?url=${this.$config.public.APP_URL}articles/${this.$route.params.article}&text=${text}`
+      return `https://twitter.com/share?url=${this.$config.public.APP_URL}/articles/${this.$route.params.article}&text=${text}`
     },
   },
 })
