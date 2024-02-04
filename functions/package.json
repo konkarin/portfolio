@@ -10,7 +10,7 @@
     "logs": "firebase functions:log"
   },
   "engines": {
-    "node": "14"
+    "node": "20"
   },
   "main": "lib/index.js",
   "dependencies": {
@@ -18,8 +18,8 @@
     "child-process-promise": "^2.2.1",
     "dayjs": "^1.10.4",
     "exifr": "^6.0.0",
-    "firebase-admin": "^10.0.2",
-    "firebase-functions": "^3.18.1",
+    "firebase-admin": "^11.11.1",
+    "firebase-functions": "^3.24.1",
     "image-size": "^0.9.3"
   },
   "devDependencies": {
@@ -31,6 +31,9 @@
     "firebase-functions-test": "^0.2.0",
     "prettier": "^2.2.1",
     "typescript": "^4.5.5"
+  },
+  "overrides": {
+    "stream-shift": "1.0.2"
   },
   "private": true
 }
