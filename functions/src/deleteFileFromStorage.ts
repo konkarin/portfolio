@@ -5,7 +5,12 @@ import { getStorage } from 'firebase-admin/storage'
 export type QueryDocumentSnapshot = firestore.QueryDocumentSnapshot
 
 export const deleteFileFromStorage = async (snap: QueryDocumentSnapshot) => {
-  const bucketName = 'konkarin-photo.appspot.com'
+  const config = JSON.parse(process.env.FIREBASE_CONFIG)
+
+  const bucketName =
+    config.projectId === 'konkarin-photo'
+      ? 'konkarin-photo.appspot.com'
+      : 'staging-konkarin-photo.appspot.com'
   const bucket = getStorage().bucket(bucketName)
   // /users/{uid}/images/{imageId}/original/hoge.jpg
   const deletedPath = snap.data().originalFilePath
