@@ -82,6 +82,13 @@ export default defineComponent({
   gap: 3rem;
   width: calc(100% - 300px);
 }
+@media screen and (max-width: $md) {
+  .articleView {
+    width: 100%;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--lightBlack);
+  }
+}
 
 .articleView__header {
   display: flex;
@@ -90,20 +97,8 @@ export default defineComponent({
 }
 
 .articleView__eyeCatch {
-  max-height: 350px;
   object-fit: cover;
-}
-
-@media screen and (max-width: $md) {
-  .articleView {
-    width: 100%;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--lightBlack);
-  }
-
-  .articleView__eyeCatch {
-    max-height: 300px;
-  }
+  aspect-ratio: 16 / 9;
 }
 
 .articleView__subTitle {
