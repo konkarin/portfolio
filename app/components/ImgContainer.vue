@@ -77,9 +77,11 @@ export default defineComponent({
   // NOTE: max-width: 100%だと画像自体の大きさ以上に拡大されない
   width: 100%;
   transition-duration: 0.3s;
-  &:hover {
-    transform: scale(1.05);
-    opacity: 0.8;
+  @media (hover: hover) {
+    &:hover {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
   }
 }
 </style>

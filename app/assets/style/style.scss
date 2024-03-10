@@ -476,12 +476,14 @@ a {
   &:first-child {
     padding-top: 0;
   }
-  &:hover {
-    text-decoration: none;
-    color: var(--yellow);
-    & .articleItem__eyeCatchInner {
-      transform: scale(1.05);
-      opacity: 0.8;
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: none;
+      color: var(--yellow);
+      & .articleItem__eyeCatchInner {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
     }
   }
 }
