@@ -78,7 +78,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .articleView {
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
   gap: 3rem;
   width: calc(100% - 300px);
