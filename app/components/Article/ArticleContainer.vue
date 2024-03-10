@@ -1,6 +1,6 @@
 <template>
   <main class="wrapper">
-    <div v-if="allArticles && articleTags" class="article">
+    <div v-if="allArticles && articleTags" class="articleContainer">
       <NuxtPage :articles="allArticles" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="articleTags" />
     </div>
@@ -30,3 +30,16 @@ defineExpose({
   recentArticles,
 })
 </script>
+
+<style lang="scss" scoped>
+.articleContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: $md) {
+  .articleContainer {
+    display: block;
+  }
+}
+</style>

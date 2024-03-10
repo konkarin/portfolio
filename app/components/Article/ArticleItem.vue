@@ -6,14 +6,10 @@
     <div data-test="articleTitle" class="articleItem__title">
       {{ article.title }}
     </div>
-    <div class="articleItem__footer">
-      <div
-        v-for="tag in article.tags"
-        :key="tag"
-        class="articleItem__tag articleTag"
-        data-test="articleTag"
-      >
-        {{ tag }}
+    <div class="articleItem__eyeCatchOuter">
+      <div class="articleItem__eyeCatchInner">
+        <img v-if="article.ogpImageUrl" class="articleItem__eyeCatch" :src="article.ogpImageUrl" />
+        <div v-else class="articleItem__emptyEyeCatch">🦊</div>
       </div>
     </div>
   </NuxtLink>
@@ -41,3 +37,5 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped lang="scss"></style>
