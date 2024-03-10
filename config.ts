@@ -21,7 +21,7 @@ const development = {
   APP_ID: '1:607311000326:web:ffd640d8859113a35a6487',
   MEASUREMENT_ID: 'G-5QD17SVXWZ',
   AUTHOR_ID: 'oOHIOfsyFSh5fVKAJoGSSmL2lfo2',
-  APP_URL: 'https://staging-konkarin-photo.web.app/',
+  APP_URL: 'https://staging-konkarin-photo.web.app',
 } as const
 
 export const runtimePublicConfig = targetEnv === 'production' ? production : development

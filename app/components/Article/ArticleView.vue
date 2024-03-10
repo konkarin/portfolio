@@ -1,38 +1,39 @@
 <template>
-  <div class="article__container">
-    <h1>{{ article.title }}</h1>
-    <div class="article__subTitle subTitle">
-      <div class="subTitle__item">{{ releaseDate }} 公開</div>
-      <div v-if="updatedDate" class="subTitle__item">{{ updatedDate }} 更新</div>
-    </div>
-    <article class="article__content">
-      <MarkdownPreview :html-text="htmlText" />
-    </article>
-    <div class="article__content articleFooter">
-      <div class="articleFooter__container">
+  <article class="articleView">
+    <header class="articleView__header">
+      <img v-if="article.ogpImageUrl" class="articleView__eyeCatch" :src="article.ogpImageUrl" />
+      <h1>{{ article.title }}</h1>
+      <div class="articleView__subTitle">
+        <div>{{ releaseDate }} 公開</div>
+        <div v-if="updatedDate">（{{ updatedDate }} 更新）</div>
+      </div>
+      <div class="articleView__tag">
         <NuxtLink
           v-for="tag in article.tags"
           :key="tag"
           :to="`/tags/${tag}`"
-          class="articleFooter__content articleTag articleTag--link"
+          class="articleTag articleTag--link"
           data-test="articleTag"
         >
           {{ tag }}
         </NuxtLink>
       </div>
-      <div class="articleFooter__container">
-        <a
-          :href="twitterShareUrl"
-          class="articleFooter__content shareBtn shareBtn--md"
-          target="_blank"
-          rel="nofollow noopener noreferrer"
-          data-test="twitterShare"
-        >
-          <Twitter />
-        </a>
-      </div>
+    </header>
+    <div class="articleView__content">
+      <MarkdownPreview :html-text="htmlText" />
     </div>
-  </div>
+    <footer class="articleView__footer">
+      <a
+        :href="twitterShareUrl"
+        class="articleView__footerLink shareBtn shareBtn--md"
+        target="_blank"
+        rel="nofollow noopener noreferrer"
+        data-test="twitterShare"
+      >
+        <Twitter />
+      </a>
+    </footer>
+  </article>
 </template>
 
 <script lang="ts">
@@ -68,8 +69,53 @@ export default defineComponent({
     },
     twitterShareUrl(): string {
       const text = encodeURIComponent(this.article.title)
-      return `https://twitter.com/share?url=${this.$config.public.APP_URL}articles/${this.$route.params.article}&text=${text}`
+      return `https://twitter.com/share?url=${this.$config.public.APP_URL}/articles/${this.$route.params.article}&text=${text}`
     },
   },
 })
 </script>
+
+<style scoped lang="scss">
+.articleView {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: calc(100% - 300px);
+}
+
+.articleView__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.articleView__eyeCatch {
+  max-height: 350px;
+  object-fit: cover;
+}
+
+@media screen and (max-width: $md) {
+  .articleView {
+    width: 100%;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--lightBlack);
+  }
+
+  .articleView__eyeCatch {
+    max-height: 300px;
+  }
+}
+
+.articleView__subTitle {
+  display: flex;
+  flex-direction: row;
+  color: var(--gray);
+}
+
+.articleView__footer {
+  display: flex;
+}
+.articleView__footerLink {
+  display: inline-flex;
+}
+</style>

@@ -50,6 +50,15 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "@/assets/style/variables.scss" as *;',
+        },
+      },
+    },
+  },
   hooks: {
     async 'nitro:config'(nitroConfig) {
       if (nitroConfig.dev) {

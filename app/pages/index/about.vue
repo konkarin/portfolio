@@ -72,7 +72,7 @@ export default defineNuxtComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${APP_URL}about`,
+          content: `${APP_URL}/about`,
         },
         {
           hid: 'og:description',

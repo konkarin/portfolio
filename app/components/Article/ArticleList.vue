@@ -1,5 +1,5 @@
 <template>
-  <div class="article__list">
+  <div class="artcileList">
     <template v-if="articles.length > 0">
       <ArticleItem v-for="article in articles" :key="article.id" :article="article" />
     </template>
@@ -21,3 +21,17 @@ export default defineComponent({
   },
 })
 </script>
+
+<style scoped lang="scss">
+.artcileList {
+  width: calc(100% - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: $md) {
+  .artcileList {
+    width: 100%;
+  }
+}
+</style>
