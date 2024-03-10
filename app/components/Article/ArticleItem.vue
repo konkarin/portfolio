@@ -8,7 +8,12 @@
     </div>
     <div class="articleItem__eyeCatchOuter">
       <div class="articleItem__eyeCatchInner">
-        <img v-if="article.ogpImageUrl" class="articleItem__eyeCatch" :src="article.ogpImageUrl" />
+        <img
+          v-if="article.ogpImageUrl"
+          class="articleItem__eyeCatch"
+          :src="article.ogpImageUrl"
+          loading="lazy"
+        />
         <div v-else class="articleItem__emptyEyeCatch">🦊</div>
       </div>
     </div>
