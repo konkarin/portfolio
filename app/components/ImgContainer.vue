@@ -78,9 +78,8 @@ export default defineComponent({
   width: 100%;
   transition-duration: 0.3s;
   &:hover {
-    transform: scale(1.1);
-    transition-duration: 0.3s;
-    opacity: 0.6;
+    transform: scale(1.05);
+    opacity: 0.8;
   }
 }
 </style>
