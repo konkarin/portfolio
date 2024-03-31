@@ -18,6 +18,19 @@
             placeholder="コンマ区切りで入力"
           />
         </div>
+        <div class="dashboardEdit__tagContainer">
+          <b>CustomID:</b>
+          <input
+            v-model="customId"
+            class="dashboardEdit__input"
+            type="text"
+            placeholder="CustomIDを入力"
+            @input="validateCustomId(($event.target as HTMLInputElement).value)"
+          />
+          <div v-if="!isValidCustomId">
+            <div class="dashboardEdit__error">利用できないCustomIDだよ</div>
+          </div>
+        </div>
         <div class="dashboardEdit__ogpContainer">
           <div class="dashboardEdit__ogpInput">
             <b>OGP画像</b>
@@ -44,7 +57,7 @@
         </ToggleBtn>
         <button
           class="dashboardEdit__btn btn"
-          :disabled="article.title === '' || tag === ''"
+          :disabled="article.title === '' || tag === '' || !isValidCustomId"
           @click="updateArticle"
         >
           保存
@@ -65,6 +78,9 @@ interface Data {
   article: Article
   tag: string
   ogpImageUrl: string
+  customId: string
+  availableCustomIds: string[]
+  isValidCustomId: boolean
 }
 
 export default defineNuxtComponent({
@@ -82,7 +98,10 @@ export default defineNuxtComponent({
         ogpImageUrl: '',
       },
       tag: '',
+      customId: '',
       ogpImageUrl: '',
+      availableCustomIds: [],
+      isValidCustomId: true,
     }
   },
   head(): { title: string } {
@@ -119,6 +138,14 @@ export default defineNuxtComponent({
     if (this.article.ogpImageUrl !== undefined) {
       this.ogpImageUrl = this.article.ogpImageUrl
     }
+
+    this.availableCustomIds = (await getArticles(useRuntimeConfig().public.AUTHOR_ID)).flatMap(
+      (article) => {
+        if (article.customId) return [article.id, article.customId]
+        else return article.id
+      }
+    )
+    this.customId = this.article.customId || ''
   },
   methods: {
     updatePublishing() {
@@ -127,6 +154,12 @@ export default defineNuxtComponent({
 
     setText(val: string) {
       this.article.text = val
+    },
+
+    validateCustomId(id: string) {
+      // 利用可能な文字は半角英数とハイフンアンダーバーのみ
+      const reg = /^[a-zA-Z0-9-_]*$/
+      this.isValidCustomId = !this.availableCustomIds.includes(id) && reg.test(id)
     },
 
     async getArticle() {
@@ -154,10 +187,16 @@ export default defineNuxtComponent({
         return
       }
 
+      if (!this.isValidCustomId) {
+        alert('利用できないCustomIDです')
+        return
+      }
+
       const articlesPath = `users/${this.user?.uid}/articles`
 
       this.article.tags = this.tag.replace(/\s+/g, '').split(',')
       this.article.ogpImageUrl = this.ogpImageUrl
+      this.article.customId = this.customId
 
       // 公開日の設定
       if (this.article.isPublished) {
@@ -199,3 +238,9 @@ export default defineNuxtComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.dashboardEdit__error {
+  color: red;
+}
+</style>

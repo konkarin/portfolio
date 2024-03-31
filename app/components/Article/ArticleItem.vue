@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="`/articles/${article.id}`" class="articleItem">
+  <NuxtLink :to="`/articles/${articleId}`" class="articleItem">
     <div data-test="releaseDate" class="articleItem__subTitle">
       {{ releaseDate }}
     </div>
@@ -38,6 +38,9 @@ export default defineComponent({
       const format = 'YYYY-MM-DD'
 
       return Day.getDate(this.article.releaseDate, format)
+    },
+    articleId() {
+      return this.article.customId || this.article.id
     },
   },
 })
