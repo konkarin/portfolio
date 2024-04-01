@@ -112,11 +112,11 @@ export default defineComponent({
   }
 
   h2 + p {
-    margin-top: 0.3rem;
+    margin-top: 1rem;
   }
 
   h3 + p {
-    margin-top: 0.3rem;
+    margin-top: 0.5rem;
   }
 
   code {
