@@ -8,4 +8,5 @@ export interface Article {
   releaseDate?: number
   tags: string[]
   ogpImageUrl?: string
+  customId?: string
 }

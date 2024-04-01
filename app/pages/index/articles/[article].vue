@@ -29,12 +29,27 @@ export default defineNuxtComponent({
   },
   async setup(props) {
     const { APP_URL } = useRuntimeConfig().public
-    const { params } = useRoute()
+    const { params, path } = useRoute()
+
+    const existsArtcile = props.articles.some(
+      (article) => params.article === article.id || params.article === article.customId
+    )
+    if (!existsArtcile) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: '記事が見つかりませんでした。',
+        fatal: true,
+      })
+    }
 
     const article = computed(() => {
-      const data = props.articles.find((article) => article.id === params.article)
+      const data = props.articles.find(
+        (article) => params.article === article.id || params.article === article.customId
+      )
       return data || emptyAritcle
     })
+
+    const articleId = computed(() => article.value.customId || article.value.id)
 
     const ogDescription = computed(() => {
       const text = article.value.text
@@ -65,7 +80,7 @@ export default defineNuxtComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${APP_URL}/articles/${article.value.id}`,
+          content: `${APP_URL}/articles/${articleId.value}`,
         },
         {
           hid: 'og:image',
@@ -79,17 +94,17 @@ export default defineNuxtComponent({
         },
       ],
     })
+
+    onMounted(() => {
+      if (article.value.customId && !path.includes(article.value.customId)) {
+        history.pushState(null, '', `/articles/${article.value.customId}`)
+      }
+    })
+
     return {
       article,
       htmlText: await convertMarkdownTextToHTML(article.value.text),
     }
-  },
-  mounted() {
-    // 存在しない記事にアクセスしたらエラー
-    const existsArtcile = this.articles.some((article) => this.$route.params.article === article.id)
-
-    // TODO:
-    // if (!existsArtcile) this.$nuxt.error({ message: 'ページが見つかりません' })
   },
 })
 </script>

@@ -12,11 +12,21 @@ export const generateRoutes = async () => {
   // /articles/_article.vue用の記事
   const allArticles = await getArticles()
 
-  const articleRoutes = allArticles.map((article) => {
-    return {
+  const articleRoutes = allArticles.flatMap((article) => {
+    const uuidRoute = {
       route: `/articles/${article.id}`,
       payload: article,
     }
+    if (article.customId) {
+      return [
+        uuidRoute,
+        {
+          route: `/articles/${article.customId}`,
+          payload: article,
+        },
+      ]
+    }
+    return uuidRoute
   })
 
   const allTags = await getArticleTags()
