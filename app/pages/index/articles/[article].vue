@@ -49,6 +49,8 @@ export default defineNuxtComponent({
       return data || emptyAritcle
     })
 
+    const articleId = computed(() => article.value.customId || article.value.id)
+
     const ogDescription = computed(() => {
       const text = article.value.text
       if (text === '') {
@@ -78,7 +80,7 @@ export default defineNuxtComponent({
         {
           hid: 'og:url',
           property: 'og:url',
-          content: `${APP_URL}/articles/${article.value.id}`,
+          content: `${APP_URL}/articles/${articleId.value}`,
         },
         {
           hid: 'og:image',
