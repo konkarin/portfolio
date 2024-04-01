@@ -1,6 +1,5 @@
 <template>
   <main class="wrapper">
-    <PageTitle>Gallery</PageTitle>
     <div v-if="isLoadingImg" class="overlay">
       <div class="loader" />
     </div>

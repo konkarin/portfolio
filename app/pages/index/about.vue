@@ -1,33 +1,15 @@
 <template>
   <main class="wrapper">
-    <PageTitle>
-      About
-      <a href="https://twitter.com/k0n_karin" class="pageTitle__link" target="_blank">
-        こんかりん
-      </a>
-    </PageTitle>
     <div class="profile">
       <MarkdownPreview :html-text="profile || ''" />
-      <div class="profile__sns sns">
-        <a
-          href="https://twitter.com/k0n_karin"
-          class="sns__icon shareBtn shareBtn--lg"
-          target="_blank"
-        >
+      <div class="profile__sns">
+        <a href="https://twitter.com/k0n_karin" class="sns__icon shareBtn" target="_blank">
           <Twitter />
         </a>
-        <a
-          href="https://www.instagram.com/k0n_karin/"
-          class="sns__icon shareBtn shareBtn--lg"
-          target="_blank"
-        >
+        <a href="https://www.instagram.com/k0n_karin/" class="sns__icon shareBtn" target="_blank">
           <Instagram />
         </a>
-        <a
-          href="https://github.com/konkarin"
-          class="sns__icon shareBtn shareBtn--lg"
-          target="_blank"
-        >
+        <a href="https://github.com/konkarin" class="sns__icon shareBtn" target="_blank">
           <Github />
         </a>
       </div>
@@ -93,3 +75,27 @@ export default defineNuxtComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.profile {
+  max-width: 700px;
+  padding: 2rem 2rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile__sns {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sns__icon {
+  display: flex;
+  &:last-child {
+    margin-right: 0;
+  }
+}
+</style>
