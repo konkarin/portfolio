@@ -1,4 +1,4 @@
-import { DocumentData } from 'firebase/firestore'
+import type { DocumentData } from 'firebase/firestore'
 
 interface Img {
   date: string

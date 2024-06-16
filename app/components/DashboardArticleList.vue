@@ -18,7 +18,7 @@
 <script lang="ts">
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '@/api/apis'
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 
 interface Data {
   articles: Array<Article>

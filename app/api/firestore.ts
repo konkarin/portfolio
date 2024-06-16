@@ -7,13 +7,13 @@ import {
   getFirestore,
   limit,
   orderBy,
-  OrderByDirection,
   query,
   QueryConstraint,
   serverTimestamp,
   setDoc,
   where,
-  WhereFilterOp,
+  type OrderByDirection,
+  type WhereFilterOp,
 } from 'firebase/firestore'
 import { firebaseApp } from '../utils/firebase'
 
@@ -51,11 +51,7 @@ export default class Firestore {
       : doc(collection(this.db, path), ...queryConstraint)
   }
 
-  static async getDocs(
-    collectionPath: string,
-    whereQueries?: Query[],
-    order?: Order
-  ) {
+  static async getDocs(collectionPath: string, whereQueries?: Query[], order?: Order) {
     const conditions: QueryConstraint[] = []
 
     if (whereQueries !== undefined) {
@@ -90,11 +86,7 @@ export default class Firestore {
    * @param whereQueries
    * @param order
    */
-  static async getDocIds(
-    collectionPath: string,
-    whereQueries?: Query[],
-    order?: Order
-  ) {
+  static async getDocIds(collectionPath: string, whereQueries?: Query[], order?: Order) {
     const docs = await this.getDocs(collectionPath, whereQueries, order)
     return docs.map((doc) => doc.id)
   }
@@ -105,11 +97,7 @@ export default class Firestore {
    * @param whereQueries
    * @param order
    */
-  static async getDocsData(
-    collectionPath: string,
-    whereQueries?: Query[],
-    order?: Order
-  ) {
+  static async getDocsData(collectionPath: string, whereQueries?: Query[], order?: Order) {
     const docs = await this.getDocs(collectionPath, whereQueries, order)
     return docs.map((doc) => doc.data())
   }
@@ -127,11 +115,7 @@ export default class Firestore {
     direction?: OrderByDirection,
     limitNumber?: number
   ) {
-    const q = this.query(
-      collectionPath,
-      orderBy(fieldPath, direction),
-      limit(limitNumber || 30)
-    )
+    const q = this.query(collectionPath, orderBy(fieldPath, direction), limit(limitNumber || 30))
     const snap = await getDocs(q).catch((e) => {
       throw e
     })
@@ -159,11 +143,7 @@ export default class Firestore {
    * @param queries
    * @param order
    */
-  static async getOrderDocsByQueries(
-    collectionPath: string,
-    queries: Query,
-    order: Order
-  ) {
+  static async getOrderDocsByQueries(collectionPath: string, queries: Query, order: Order) {
     const q = this.query(
       collectionPath,
       where(queries.fieldPath, queries.filterStr, queries.value),

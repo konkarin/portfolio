@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { User } from '@firebase/auth'
+import type { User } from '@firebase/auth'
 import { db } from '@/api/apis'
 
 type Data = {

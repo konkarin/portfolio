@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import { db } from '@/api/apis'
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 import Day from '~/utils/day'
 import { getArticleTags } from '~/utils/article'
 

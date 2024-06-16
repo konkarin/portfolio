@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 
 const { params } = useRoute()
 const { APP_URL } = useRuntimeConfig().public

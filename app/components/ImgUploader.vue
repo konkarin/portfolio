@@ -15,7 +15,7 @@
 <script lang="ts">
 import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
-import { User } from '@firebase/auth'
+import type { User } from '@firebase/auth'
 
 type Data = {
   isUploading: boolean

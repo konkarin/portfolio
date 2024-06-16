@@ -34,10 +34,11 @@
 </template>
 
 <script lang="ts">
-import { DocumentData } from '@firebase/firestore'
-import { User } from '@firebase/auth'
+import type { DocumentData } from '@firebase/firestore'
+import type { User } from '@firebase/auth'
+
 import { db } from '~/api/apis'
-import { Query } from '~/api/firestore'
+import type { Query } from '~/api/firestore'
 
 interface Data {
   imgList: DocumentData[]

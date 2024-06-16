@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { DocumentData } from '@firebase/firestore'
+import type { DocumentData } from '@firebase/firestore'
 
 export default defineComponent({
   props: {

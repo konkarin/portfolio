@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex'
 import ArticleContainer from '@/components/Article/ArticleContainer.vue'
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 
 const articles: Article[] = [...Array(4).keys()].map((_, index) => {
   return {

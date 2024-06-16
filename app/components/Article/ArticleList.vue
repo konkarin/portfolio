@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 
 export default defineComponent({
   props: {

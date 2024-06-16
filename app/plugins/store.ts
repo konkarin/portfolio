@@ -5,7 +5,7 @@ import { useAccessor, mutationTree, actionTree, getterTree } from 'typed-vuex'
 import type { DocumentData } from 'firebase/firestore'
 import type { User } from 'firebase/auth'
 import { db } from '@/api/apis'
-import { NuxtApp } from 'nuxt/app'
+import type { NuxtApp } from 'nuxt/app'
 
 interface State {
   isAuth: boolean
@@ -137,13 +137,5 @@ declare module 'vue' {
     $accessor: typeof accessor
     // Nuxt v2との互換性のための型定義
     $store: typeof store
-  }
-}
-
-// Nuxt v2との互換性のための型定義
-declare module 'vuex/types/index' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface Store<S> {
-    app: NuxtApp
   }
 }

@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 
 const emptyAritcle: Article = {
   id: '',

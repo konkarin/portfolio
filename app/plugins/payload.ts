@@ -1,4 +1,4 @@
-import { Article } from '~/types'
+import type { Article } from '@/types'
 
 export default defineNuxtPlugin(async () => {
   const { AUTHOR_ID } = useRuntimeConfig().public
