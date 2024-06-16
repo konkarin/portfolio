@@ -22,10 +22,10 @@ export default defineComponent({
   margin-top: 0;
 }
 
-.markdown::v-deep {
+.markdown {
   line-height: 1.9;
 
-  a {
+  :deep(a) {
     color: var(--yellow);
     line-break: anywhere;
     word-break: break-all;
@@ -34,74 +34,74 @@ export default defineComponent({
     }
   }
 
-  h1 {
+  :deep(h1) {
     margin-top: 2em;
     border-bottom: 1px solid #ddd;
   }
 
-  h2 {
+  :deep(h2) {
     margin-top: 2em;
     border-bottom: 1px solid #ddd;
   }
 
-  h3 {
+  :deep(h3) {
     margin-top: 1.5em;
   }
 
-  h4 {
+  :deep(h4) {
     margin-top: 1.5em;
   }
 
-  h5 {
+  :deep(h5) {
     margin-top: 1.5em;
   }
 
-  h6 {
+  :deep(h6) {
     font-size: 0.9rem;
   }
 
-  h1 + h2 {
+  :deep(h1 + h2) {
     margin-top: 1.5em;
   }
 
-  h2 + h3 {
+  :deep(h2 + h3) {
     margin-top: 1.5em;
   }
 
-  h3 + h4 {
+  :deep(h3 + h4) {
     margin-top: 1em;
   }
 
-  h4 + h5 {
+  :deep(h4 + h5) {
     margin-top: 1em;
   }
 
-  h5 + h6 {
+  :deep(h5 + h6) {
     margin-top: 1em;
   }
 
-  p {
+  :deep(p) {
     margin-top: 1.5rem;
   }
 
-  ul {
+  :deep(ul) {
     padding-left: 1.2em;
     list-style-type: disc;
   }
 
-  ol {
+  :deep(ol) {
     padding-left: 1.2em;
     list-style-type: decimal;
   }
 
-  li {
+  :deep(li) {
     margin: 0.4rem 0;
     > p {
       margin: 0;
     }
   }
 
-  blockquote {
+  :deep(blockquote) {
     margin: 1.4rem 0;
     border-left: 3px solid #b3bfc7;
     padding: 2px 0 2px 0.7em;
@@ -111,15 +111,15 @@ export default defineComponent({
     }
   }
 
-  h2 + p {
+  :deep(h2 + p) {
     margin-top: 1rem;
   }
 
-  h3 + p {
+  :deep(h3 + p) {
     margin-top: 0.5rem;
   }
 
-  code {
+  :deep(code) {
     border-radius: 3px;
     font-size: 0.9rem;
     display: block;
@@ -129,7 +129,7 @@ export default defineComponent({
     padding: 0.5em;
   }
 
-  img {
+  :deep(img) {
     max-height: 60vh;
     margin: 1.5rem auto;
   }
