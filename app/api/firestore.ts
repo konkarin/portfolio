@@ -11,6 +11,7 @@ import {
   QueryConstraint,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
   type OrderByDirection,
   type WhereFilterOp,
@@ -82,9 +83,6 @@ export default class Firestore {
 
   /**
    * コレクション内のすべてのドキュメントのIDを取得
-   * @param collectionPath
-   * @param whereQueries
-   * @param order
    */
   static async getDocIds(collectionPath: string, whereQueries?: Query[], order?: Order) {
     const docs = await this.getDocs(collectionPath, whereQueries, order)
@@ -93,21 +91,14 @@ export default class Firestore {
 
   /**
    * コレクション内のすべてのドキュメントを取得
-   * @param collectionPath
-   * @param whereQueries
-   * @param order
    */
   static async getDocsData(collectionPath: string, whereQueries?: Query[], order?: Order) {
     const docs = await this.getDocs(collectionPath, whereQueries, order)
-    return docs.map((doc) => doc.data())
+    return docs.map((doc) => ({ ...doc.data(), id: doc.id }))
   }
 
   /**
    * 指定した数の並べ替えたドキュメントを取得
-   * @param collectionPath
-   * @param fieldPath
-   * @param direction
-   * @param limitNumber
    */
   static async getOrderDocs(
     collectionPath: string,
@@ -120,13 +111,11 @@ export default class Firestore {
       throw e
     })
 
-    return snap.docs.map((doc) => doc.data())
+    return snap.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
   }
 
   /**
    * 指定したドキュメントIDを取得
-   * @param collectionPath
-   * @param docId
    */
   static async getDocById(collectionPath: string, docId: string) {
     const docRef = this.docRef(collectionPath, docId)
@@ -139,9 +128,6 @@ export default class Firestore {
 
   /**
    * 指定したクエリでドキュメントを取得
-   * @param collectionPath
-   * @param queries
-   * @param order
    */
   static async getOrderDocsByQueries(collectionPath: string, queries: Query, order: Order) {
     const q = this.query(
@@ -159,9 +145,6 @@ export default class Firestore {
 
   /**
    * 指定した複数のクエリでドキュメントを取得
-   * @param collectionPath
-   * @param whereQueries
-   * @param order
    */
   static async getDocsByCompoundQueries(
     collectionPath: string,
@@ -189,15 +172,23 @@ export default class Firestore {
   }
 
   /**
-   * 指定したドキュメントIDを更新
-   * @param path
-   * @param docId
-   * @param data
+   * 指定したドキュメントIDを追加
    */
-  static async updateDoc(path: string, docId: string, data: any) {
+  static async addData(path: string, docId: string, data: any) {
     // update()は新規作成できないためset
     const docRef = this.docRef(path, docId)
     await setDoc(docRef, data).catch((e) => {
+      throw e
+    })
+  }
+
+  /**
+   * 指定したドキュメントIDを更新
+   */
+  static async updateData(path: string, docId: string, data: any) {
+    // update()は新規作成できないためset
+    const docRef = this.docRef(path, docId)
+    await updateDoc(docRef, data).catch((e) => {
       throw e
     })
   }

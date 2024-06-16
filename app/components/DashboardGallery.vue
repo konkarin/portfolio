@@ -3,7 +3,16 @@
     <h3>Gallery Edit</h3>
     <div class="dashboardEdit__head">
       <ImgUploader />
-      <button class="btn" @click="deleteImgList()">Delete</button>
+      <div class="dashboardEdit__controler">
+        <button class="btn" @click="saveImgList()">Save</button>
+        <button
+          class="btn btn--danger"
+          @click="deleteImgList()"
+          :disabled="selectedImgPathList.length === 0"
+        >
+          Delete
+        </button>
+      </div>
     </div>
     <div class="dashboardEdit__gallery">
       <div v-if="imgList.length === 0">No Photos</div>
@@ -11,10 +20,12 @@
         v-for="(img, index) in imgList"
         :key="img.originalUrl"
         class="photoBox"
-        :style="{
-          width: `${(img.width * 200) / img.height}px`,
-          'flex-grow': `${(img.width * 200) / img.height}`,
-        }"
+        draggable="true"
+        @dragover.prevent
+        @dragenter="dragEnter($event)"
+        @dragleave="dragLeave($event)"
+        @dragstart="dragStart(index)"
+        @drop="drop($event, index)"
       >
         <label class="photoBox__select">
           <input
@@ -43,6 +54,7 @@ import type { Query } from '~/api/firestore'
 interface Data {
   imgList: DocumentData[]
   selectedImgPathList: string[]
+  draggingIndex: number
 }
 
 export default defineComponent({
@@ -50,6 +62,7 @@ export default defineComponent({
     return {
       imgList: [],
       selectedImgPathList: [],
+      draggingIndex: -1,
     }
   },
   computed: {
@@ -70,10 +83,45 @@ export default defineComponent({
       const path = `users/${this.user?.uid}/images`
 
       try {
-        return await db.getDocsData(path)
+        return await db.getOrderDocs(path, 'order')
       } catch (e) {
         console.error(e)
         return []
+      }
+    },
+
+    dragStart(index: number) {
+      this.draggingIndex = index
+    },
+    dragEnter(e: Event) {
+      ;(e.target as HTMLElement).classList.add('-dragenter')
+    },
+    dragLeave(e: Event) {
+      ;(e.target as HTMLElement).classList.remove('-dragenter')
+    },
+    drop(e: Event, index: number) {
+      if (this.draggingIndex === -1) return
+      ;(e.target as HTMLElement).classList.remove('-dragenter')
+
+      const draggingImg = this.imgList[this.draggingIndex]
+      this.imgList.splice(this.draggingIndex, 1)
+      this.imgList.splice(index, 0, draggingImg)
+      this.draggingIndex = -1
+    },
+
+    async saveImgList() {
+      const idList = this.imgList.map((img) => img.id as string)
+      const path = `users/${this.user?.uid}/images`
+      try {
+        await Promise.all(
+          idList.map((id, index) => {
+            return db.updateData(path, id, { order: index })
+          })
+        )
+        alert('Update successfully')
+      } catch (e) {
+        console.error(e)
+        alert('Some error occured')
       }
     },
 
@@ -135,25 +183,25 @@ export default defineComponent({
     text-align: right;
   }
 }
+.dashboardEdit__controler {
+  display: flex;
+  gap: 8px;
+}
 
 .dashboardEdit__gallery {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(100px, 1fr));
+  grid-auto-rows: 200px;
   gap: 10px;
-  &::after {
-    content: '';
-    flex-grow: 9999;
-  }
 }
 
 .photoBox {
   box-sizing: border-box;
-  width: 25%;
-  height: 100%;
 }
 
 .photoBox__thumbnail {
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .photoBox__checkbox {
@@ -166,8 +214,12 @@ export default defineComponent({
 
 .photoBox__photo {
   cursor: pointer;
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
+  object-fit: cover;
+  &.-dragenter {
+    opacity: 0.7;
+  }
 }
 </style>

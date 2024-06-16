@@ -89,7 +89,7 @@ export const actions = actionTree(
 const getImgList = async (authorId: string) => {
   const collectionPath = `/users/${authorId}/images`
 
-  return await db.getDocsData(collectionPath)
+  return await db.getOrderDocs(collectionPath, 'order')
 }
 
 const storePattern = {

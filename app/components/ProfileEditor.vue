@@ -54,7 +54,7 @@ export default defineComponent({
       }
 
       await db
-        .updateDoc('users', this.user?.uid || '', data)
+        .addData('users', this.user?.uid || '', data)
         .then(() => {
           // TODO: ポップアップにする
           alert('Saved')

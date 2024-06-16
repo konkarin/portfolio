@@ -34,7 +34,7 @@ export default defineNuxtComponent({
     if (this.imgList.length === 0) {
       const collectionPath = `/users/${this.$config.public.AUTHOR_ID}/images`
 
-      const imgList = await db.getDocsData(collectionPath)
+      const imgList = await db.getOrderDocs(collectionPath, 'order')
       this.$store.commit('updateImgList', imgList)
     }
 

@@ -209,7 +209,7 @@ export default defineNuxtComponent({
       }
 
       try {
-        await db.updateDoc(articlesPath, this.article.id, this.article)
+        await db.addData(articlesPath, this.article.id, this.article)
       } catch (e) {
         alert('Failed to update artilces')
         return
@@ -225,7 +225,7 @@ export default defineNuxtComponent({
 
         try {
           for (const tag of notExistsTags) {
-            await db.updateDoc(articleTagsPath, tag, {})
+            await db.addData(articleTagsPath, tag, {})
           }
         } catch (e) {
           alert('Failed to update tags')
