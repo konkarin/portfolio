@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { User } from '@firebase/auth'

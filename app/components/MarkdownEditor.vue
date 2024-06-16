@@ -17,7 +17,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 type Data = {

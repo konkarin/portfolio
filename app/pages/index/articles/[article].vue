@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 import { Article } from '@/types/index'
 

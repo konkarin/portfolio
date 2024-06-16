@@ -34,7 +34,6 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { DocumentData } from '@firebase/firestore'
 import { User } from '@firebase/auth'
 import { db } from '~/api/apis'

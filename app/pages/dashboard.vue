@@ -48,7 +48,6 @@
 
 <script lang="ts">
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from '@firebase/auth'
-import { defineComponent } from 'vue'
 
 interface Data {
   isLoading: boolean

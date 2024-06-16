@@ -5,8 +5,6 @@
 <script lang="ts">
 import 'highlight.js/styles/tomorrow-night.css'
 
-import { defineComponent } from 'vue'
-
 export default defineComponent({
   props: {
     htmlText: {
