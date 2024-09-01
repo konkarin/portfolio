@@ -8,6 +8,7 @@ export default defineNuxtConfig({
       enabled: true,
     },
   },
+
   routeRules: {
     '/': { prerender: true },
     '/about': { prerender: true },
@@ -15,8 +16,10 @@ export default defineNuxtConfig({
     '/articles': { prerender: true },
     '/dashboard/**': { ssr: false },
   },
+
   spaLoadingTemplate: false,
   srcDir: 'app',
+
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
@@ -43,13 +46,16 @@ export default defineNuxtConfig({
       link: [{ rel: 'icon', href: '/favicon.ico' }],
     },
   },
+
   css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
+
   components: [
     {
       path: '@/components/',
       pathPrefix: false,
     },
   ],
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -59,6 +65,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   hooks: {
     async 'nitro:config'(nitroConfig) {
       if (nitroConfig.dev) {
@@ -73,7 +80,13 @@ export default defineNuxtConfig({
       })
     },
   },
+
   runtimeConfig: {
     public: runtimePublicConfig,
+  },
+
+  compatibilityDate: '2024-09-01',
+  future: {
+    compatibilityVersion: 4,
   },
 })
