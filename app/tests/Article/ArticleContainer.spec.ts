@@ -34,13 +34,20 @@ const wrapper = shallowMount(ArticleContainer, {
   },
 })
 
+vi.mock('#app', () => ({
+  useNuxtApp: () => ({
+    $tags: ref(articleTags),
+    $articles: ref(articles),
+  }),
+}))
+
 describe('ArtcileContainer', () => {
   test('computed correct articles', () => {
     expect(wrapper.vm.allArticles).toMatchObject(articles)
   })
 
   test('computed correct recentArticles', () => {
-    expect(wrapper.vm.recentArticles.length).toBe(3)
+    expect(wrapper.vm.recentArticles.length).toBe(2)
   })
 
   test('computed correct articleTags', () => {

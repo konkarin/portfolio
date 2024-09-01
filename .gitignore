@@ -29,8 +29,9 @@ yarn-error.log*
 
 .nuxt
 
-# jest
+# test
 coverage
 
 # nuxt
 .output
+auto-imports.d.ts
