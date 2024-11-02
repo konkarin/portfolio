@@ -30,27 +30,27 @@
     "remark-preset-lint-recommended": "^5.0.0",
     "typed-vuex": "^0.3.1",
     "uuid": "^8.3.2",
-    "vue": "^3.4.29",
+    "vue": "^3.5.12",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/lodash.debounce": "^4.0.6",
-    "@types/node": "^18.11.18",
+    "@types/node": "^22.8.6",
     "@types/uuid": "^8.3.4",
     "@vue/eslint-config-prettier": "^7.1.0",
     "@vue/eslint-config-typescript": "^11.0.3",
     "@vue/test-utils": "^2.4.6",
     "babel-core": "7.0.0-bridge.0",
     "eslint": "^8.39.0",
-    "eslint-plugin-vue": "^9.17.0",
+    "eslint-plugin-vue": "^9.30.0",
     "firebase-tools": "^12.4.8",
     "happy-dom": "^14.12.3",
-    "nuxt": "^3.13.0",
+    "nuxt": "^3.13.2",
     "prettier": "^2.8.8",
     "typescript": "^5.4.5",
     "unplugin-auto-import": "^0.18.2",
-    "vitest": "^2.0.5",
-    "vue-tsc": "^2.0.21"
+    "vitest": "^2.1.4",
+    "vue-tsc": "^2.1.10"
   }
 }
