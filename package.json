@@ -50,9 +50,9 @@
     "happy-dom": "^14.12.3",
     "nuxt": "^3.13.2",
     "prettier": "^2.8.8",
-    "typescript": "^5.4.5",
+    "typescript": "^5.7.2",
     "unplugin-auto-import": "^0.18.2",
     "vitest": "^2.1.4",
-    "vue-tsc": "^2.1.10"
+    "vue-tsc": "^2.2.0"
   }
 }

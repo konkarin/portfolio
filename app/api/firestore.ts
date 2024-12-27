@@ -156,9 +156,11 @@ export default class Firestore {
     })
 
     if (order !== undefined) {
+      // @ts-expect-error
       conditions.push(orderBy(order.fieldPath, order.direction))
 
       if (order.limit) {
+        // @ts-expect-error
         conditions.push(limit(order.limit || 30))
       }
     }

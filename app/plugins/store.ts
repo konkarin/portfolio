@@ -69,7 +69,7 @@ export const actions = actionTree(
           const result = await getImgList(authorId)
 
           return result.map((img) => {
-            // FIXME: firestoreのtimestamp型をdevalueで解釈できないので一旦消す
+            // @ts-expect-error FIXME: firestoreのtimestamp型をdevalueで解釈できないので一旦消す
             delete img.exif
             return img
           })
