@@ -68,174 +68,149 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { db } from '@/api/apis'
 import type { Article } from '@/types/index'
 import Day from '~/utils/day'
 import { getArticleTags } from '~/utils/article'
 
-interface Data {
-  article: Article
-  tag: string
-  ogpImageUrl: string
-  customId: string
-  availableCustomIds: string[]
-  isValidCustomId: boolean
+const { $accessor } = useNuxtApp()
+const article = ref<Article>({
+  id: useRoute().params.article as string,
+  title: '',
+  text: '',
+  isPublished: false,
+  updatedDate: 0,
+  createdDate: Day.getUnixMS(),
+  releaseDate: 0,
+  tags: [],
+  ogpImageUrl: '',
+})
+const tag = ref('')
+const customId = ref('')
+const ogpImageUrl = ref('')
+const availableCustomIds = ref<string[]>([])
+const isValidCustomId = ref(true)
+const user = computed(() => {
+  return $accessor.user
+})
+const articleTitle = computed((): string => {
+  return article.value.title
+})
+const plainText = computed((): string => {
+  return article.value.text
+})
+const updatePublishing = () => {
+  article.value.isPublished = !article.value.isPublished
 }
+const setText = (val: string) => {
+  article.value.text = val
+}
+const validateCustomId = (id: string) => {
+  // 利用可能な文字は半角英数とハイフンアンダーバーのみ
+  const reg = /^[a-zA-Z0-9-_]*$/
+  isValidCustomId.value = !availableCustomIds.value.includes(id) && reg.test(id)
+}
+const getArticle = async () => {
+  const uid = $accessor.user?.uid
+  if (uid == null) return
 
-export default defineNuxtComponent({
-  data(): Data {
-    return {
-      article: {
-        id: this.$route.params.article as string,
-        title: '',
-        text: '',
-        isPublished: false,
-        updatedDate: 0,
-        createdDate: Day.getUnixMS(),
-        releaseDate: 0,
-        tags: [],
-        ogpImageUrl: '',
-      },
-      tag: '',
-      customId: '',
-      ogpImageUrl: '',
-      availableCustomIds: [],
-      isValidCustomId: true,
+  const collectionPath = `users/${uid}/articles`
+
+  const a = (await db.getDocById(collectionPath, article.value.id)) as Article
+
+  return a
+}
+const showArticle = async (): Promise<void> => {
+  const a = await getArticle()
+
+  if (a == null) return
+  article.value = a
+}
+const updateArticle = async () => {
+  if (article.value.title.length === 0) {
+    alert('Titleは必須です。')
+    return
+  }
+
+  if (!isValidCustomId.value) {
+    alert('利用できないCustomIDです')
+    return
+  }
+
+  const articlesPath = `users/${user.value?.uid}/articles`
+
+  article.value.tags = tag.value.replace(/\s+/g, '').split(',')
+  article.value.ogpImageUrl = ogpImageUrl.value
+  article.value.customId = customId.value
+
+  // 公開日の設定
+  if (article.value.isPublished) {
+    // 公開日が既にある場合は更新日を更新
+    if (article.value.releaseDate) {
+      article.value.updatedDate = Day.getUnixMS()
+    } else {
+      article.value.releaseDate = Day.getUnixMS()
     }
-  },
-  head(): { title: string } {
-    return {
-      title: `Editing ${this.articleTitle}`,
-    }
-  },
-  computed: {
-    user() {
-      return this.$store.state.user
-    },
-    articleTitle(): string {
-      return this.article.title
-    },
-    plainText(): string {
-      return this.article.text
-    },
-  },
-  async mounted() {
-    if (!this.$store.state.isAuth) {
-      this.$router.push({ path: '/dashboard/articles' })
-      return
-    }
+  }
+
+  try {
+    await db.addData(articlesPath, article.value.id, article.value)
+  } catch (e) {
+    alert('Failed to update artilces')
+    return
+  }
+
+  const articleTags = await getArticleTags(user.value?.uid || '')
+
+  // 書き込み時にDBに存在しないタグがあればDBに追加する
+  const notExistsTags = article.value.tags.filter((tag) => !articleTags.includes(tag))
+
+  if (notExistsTags) {
+    const articleTagsPath = `users/${user.value?.uid}/articleTags`
 
     try {
-      await this.showArticle()
+      for (const tag of notExistsTags) {
+        await db.addData(articleTagsPath, tag, {})
+      }
     } catch (e) {
-      console.error(e)
-      alert('Failed to get articles.\nPlease retry.')
+      alert('Failed to update tags')
       return
     }
+  }
 
-    this.tag = this.article.tags.join()
-    if (this.article.ogpImageUrl !== undefined) {
-      this.ogpImageUrl = this.article.ogpImageUrl
+  alert('Completed')
+}
+onMounted(async () => {
+  if (!$accessor.isAuth) {
+    useRouter().push({ path: '/dashboard/articles' })
+    return
+  }
+
+  try {
+    await showArticle()
+  } catch (e) {
+    console.error(e)
+    alert('Failed to get articles.\nPlease retry.')
+    return
+  }
+
+  tag.value = article.value.tags.join()
+  if (article.value.ogpImageUrl !== undefined) {
+    ogpImageUrl.value = article.value.ogpImageUrl
+  }
+
+  availableCustomIds.value = (await getArticles(useRuntimeConfig().public.AUTHOR_ID)).flatMap(
+    (article) => {
+      if (article.customId) return [article.id, article.customId]
+      else return article.id
     }
+  )
+  customId.value = article.value.customId || ''
+})
 
-    this.availableCustomIds = (await getArticles(useRuntimeConfig().public.AUTHOR_ID)).flatMap(
-      (article) => {
-        if (article.customId) return [article.id, article.customId]
-        else return article.id
-      }
-    )
-    this.customId = this.article.customId || ''
-  },
-  methods: {
-    updatePublishing() {
-      this.article.isPublished = !this.article.isPublished
-    },
-
-    setText(val: string) {
-      this.article.text = val
-    },
-
-    validateCustomId(id: string) {
-      // 利用可能な文字は半角英数とハイフンアンダーバーのみ
-      const reg = /^[a-zA-Z0-9-_]*$/
-      this.isValidCustomId = !this.availableCustomIds.includes(id) && reg.test(id)
-    },
-
-    async getArticle() {
-      const uid = this.$store.state.user?.uid
-
-      if (uid == null) return
-
-      const collectionPath = `users/${uid}/articles`
-
-      const article = (await db.getDocById(collectionPath, this.article.id)) as Article
-
-      return article
-    },
-
-    async showArticle(): Promise<void> {
-      const article = await this.getArticle()
-
-      if (article == null) return
-      this.article = article
-    },
-
-    async updateArticle() {
-      if (this.article.title.length === 0) {
-        alert('Titleは必須です。')
-        return
-      }
-
-      if (!this.isValidCustomId) {
-        alert('利用できないCustomIDです')
-        return
-      }
-
-      const articlesPath = `users/${this.user?.uid}/articles`
-
-      this.article.tags = this.tag.replace(/\s+/g, '').split(',')
-      this.article.ogpImageUrl = this.ogpImageUrl
-      this.article.customId = this.customId
-
-      // 公開日の設定
-      if (this.article.isPublished) {
-        // 公開日が既にある場合は更新日を更新
-        if (this.article.releaseDate) {
-          this.article.updatedDate = Day.getUnixMS()
-        } else {
-          this.article.releaseDate = Day.getUnixMS()
-        }
-      }
-
-      try {
-        await db.addData(articlesPath, this.article.id, this.article)
-      } catch (e) {
-        alert('Failed to update artilces')
-        return
-      }
-
-      const articleTags = await getArticleTags(this.user?.uid || '')
-
-      // 書き込み時にDBに存在しないタグがあればDBに追加する
-      const notExistsTags = this.article.tags.filter((tag) => !articleTags.includes(tag))
-
-      if (notExistsTags) {
-        const articleTagsPath = `users/${this.user?.uid}/articleTags`
-
-        try {
-          for (const tag of notExistsTags) {
-            await db.addData(articleTagsPath, tag, {})
-          }
-        } catch (e) {
-          alert('Failed to update tags')
-          return
-        }
-      }
-
-      alert('Completed')
-    },
-  },
+useHead({
+  title: `Editing ${articleTitle.value}`,
 })
 </script>
 
