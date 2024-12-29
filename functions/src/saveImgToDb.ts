@@ -20,6 +20,9 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   const originalFilePath: string = object.name
   const contentType: string = object.contentType
 
+  // users配下以外はFirestoreに保存・サムネ作成をしない
+  if (!originalFilePath.includes('ogps')) return
+
   // Exit if this is triggered on a file that is not an image.
   if (!contentType.startsWith('image/')) {
     console.log('This is not an image.')

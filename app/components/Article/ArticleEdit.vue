@@ -39,6 +39,7 @@
               class="dashboardEdit__input"
               type="text"
               placeholder="OGP画像のURLを入力"
+              @paste="onPaste"
             />
           </div>
           <div class="dashboardEdit__ogpPreview">
@@ -73,6 +74,7 @@ import { db } from '@/api/apis'
 import type { Article } from '@/types/index'
 import Day from '~/utils/day'
 import { getArticleTags } from '~/utils/article'
+import { v4 } from 'uuid'
 
 const { $accessor } = useNuxtApp()
 const article = ref<Article>({
@@ -181,6 +183,24 @@ const updateArticle = async () => {
 
   alert('Completed')
 }
+
+const { uploadImage, isUploading } = useImageUpload()
+
+const onPaste = async () => {
+  if (user.value == null) return
+
+  const blob = await loadClipboardImage()
+  if (!blob) return
+
+  const file = new File([await resizeImage(blob)], 'image.webp', { type: 'image/png' })
+
+  const url = await uploadImage(file, `users/${user.value.uid}/ogps/${v4()}`)
+  if (url) {
+    ogpImageUrl.value = ''
+    ogpImageUrl.value = url
+  }
+}
+
 onMounted(async () => {
   if (!$accessor.isAuth) {
     useRouter().push({ path: '/dashboard/articles' })
