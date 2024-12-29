@@ -16,95 +16,79 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
-type Data = {
-  htmlText: string
-  localValue: string
+type Props = { plainText: string }
+const props = defineProps<Props>()
+const emit = defineEmits(['input', 'save'])
+
+const htmlText = ref('')
+const localValue = ref('')
+const setMarkdown = async () => {
+  htmlText.value = await convertMarkdownTextToHTML(props.plainText)
 }
+const inputText = (e: Event) => {
+  if (e.target instanceof HTMLTextAreaElement) {
+    localValue.value = e.target.value
+    emit('input', localValue.value)
+  }
+}
+const handlePressTab = (e: KeyboardEvent) => {
+  const index = (e.target as HTMLTextAreaElement).selectionEnd
+  if (index === null) return
 
-export default defineComponent({
-  props: {
-    plainText: {
-      type: String,
-      required: true,
-    },
-  },
-  emits: ['input', 'save'],
-  data(): Data {
-    return {
-      htmlText: '',
-      localValue: '',
-    }
-  },
-  watch: {
-    // NOTE: inputText内でplainTextの変更が完了しないためwatchで対応
-    localValue: {
-      handler() {
-        this.setMarkdown()
-      },
-      immediate: true,
-    },
-    plainText: {
-      handler() {
-        this.localValue = this.plainText
-      },
-      immediate: true,
-    },
-  },
-  mounted() {
-    document.addEventListener('keydown', this.handleKeydownCmdS)
-  },
-  beforeUnmount() {
-    document.removeEventListener('keydown', this.handleKeydownCmdS)
-  },
-  methods: {
-    async setMarkdown() {
-      this.htmlText = await convertMarkdownTextToHTML(this.plainText)
-    },
-    inputText(e: Event) {
-      if (e.target instanceof HTMLTextAreaElement) {
-        this.localValue = e.target.value
-        this.$emit('input', this.localValue)
-      }
-    },
-    handlePressTab(e: KeyboardEvent) {
-      const index = (e.target as HTMLTextAreaElement).selectionEnd
-      if (index === null) return
+  if (e.shiftKey) {
+    const firstHalf = localValue.value.slice(0, index)
+    const arraySplittedByEnter = firstHalf.split('\n')
+    const target = arraySplittedByEnter.pop()
+    if (target === undefined || target.search('  ') === -1) return
 
-      if (e.shiftKey) {
-        const firstHalf = this.localValue.slice(0, index)
-        const arraySplittedByEnter = firstHalf.split('\n')
-        const target = arraySplittedByEnter.pop()
-        if (target === undefined || target.search('  ') === -1) return
+    arraySplittedByEnter.push(target.replace('  ', ''))
 
-        arraySplittedByEnter.push(target.replace('  ', ''))
+    localValue.value = arraySplittedByEnter.join('\n') + localValue.value.slice(index)
 
-        this.localValue = arraySplittedByEnter.join('\n') + this.localValue.slice(index)
+    setTimeout(() => {
+      ;(e.target as HTMLTextAreaElement).setSelectionRange(index - 2, index - 2)
+    }, 0)
+  } else {
+    localValue.value = localValue.value.slice(0, index) + '  ' + localValue.value.slice(index)
+    emit('input', localValue.value)
 
-        setTimeout(() => {
-          ;(e.target as HTMLTextAreaElement).setSelectionRange(index - 2, index - 2)
-        }, 0)
-      } else {
-        this.localValue = this.localValue.slice(0, index) + '  ' + this.localValue.slice(index)
-        this.$emit('input', this.localValue)
-
-        setTimeout(() => {
-          ;(e.target as HTMLTextAreaElement).setSelectionRange(index + 2, index + 2)
-        }, 0)
-      }
-    },
-    handlePressEsc(e: KeyboardEvent) {
-      ;(e.target as HTMLTextAreaElement).blur()
-    },
-    handleKeydownCmdS(e: KeyboardEvent) {
-      if (((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) && e.key === 's') {
-        e.preventDefault()
-        this.$emit('save')
-      }
-    },
+    setTimeout(() => {
+      ;(e.target as HTMLTextAreaElement).setSelectionRange(index + 2, index + 2)
+    }, 0)
+  }
+}
+const handlePressEsc = (e: KeyboardEvent) => {
+  ;(e.target as HTMLTextAreaElement).blur()
+}
+const handleKeydownCmdS = (e: KeyboardEvent) => {
+  if (((e.ctrlKey && !e.metaKey) || (!e.ctrlKey && e.metaKey)) && e.key === 's') {
+    e.preventDefault()
+    emit('save')
+  }
+}
+watch(
+  localValue,
+  () => {
+    setMarkdown()
   },
+  { immediate: true }
+)
+watch(
+  () => props.plainText,
+  () => {
+    localValue.value = props.plainText
+  },
+  { immediate: true }
+)
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeydownCmdS)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleKeydownCmdS)
 })
 </script>
 
