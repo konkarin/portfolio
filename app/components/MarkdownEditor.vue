@@ -8,6 +8,8 @@
         @input="inputText"
         @keydown.tab.prevent="handlePressTab"
         @keydown.esc.prevent="handlePressEsc"
+        @paste="onPaste"
+        @drop.prevent="onDrop"
       />
     </div>
     <div class="markdownEdit__container">
@@ -18,10 +20,13 @@
 
 <script setup lang="ts">
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
+import { v4 } from 'uuid'
 
 type Props = { plainText: string }
 const props = defineProps<Props>()
 const emit = defineEmits(['input', 'save'])
+
+const { $accessor } = useNuxtApp()
 
 const htmlText = ref('')
 const localValue = ref('')
@@ -34,6 +39,74 @@ const inputText = (e: Event) => {
     emit('input', localValue.value)
   }
 }
+
+const { uploadImage } = useImageUpload()
+
+const onPaste = async (e: ClipboardEvent) => {
+  const blob = await loadClipboardImage()
+  // 画像がクリップボードにない場合はデフォルトの処理を行う
+  if (!blob) return
+
+  e.preventDefault()
+
+  const textarea = e.target
+  if (!(textarea instanceof HTMLTextAreaElement)) return
+
+  // アップロード前にキャレットの位置を取得しておく
+  const start = textarea.selectionStart
+  const end = textarea.selectionEnd
+
+  const file = new File([await resizeImage(blob, 1200, 1200)], 'image.webp')
+
+  const url = await uploadImage(file, `users/${$accessor.user?.uid}/articles/${v4()}`)
+  if (url) {
+    const markdownUrl = `![](${url})`
+    insertTextAtCaret(markdownUrl, start, end, textarea)
+  }
+}
+
+const onDrop = async (e: DragEvent) => {
+  const textarea = e.target
+  if (!(textarea instanceof HTMLTextAreaElement)) return
+
+  const file = e.dataTransfer?.files[0]
+  if (!file) return
+
+  // アップロード前にキャレットの位置を取得しておく
+  const start = textarea.selectionStart
+  const end = textarea.selectionEnd
+
+  const resizedFile = new File([await resizeImage(file, 1200, 1200)], 'image.webp')
+
+  const url = await uploadImage(resizedFile, `users/${$accessor.user?.uid}/articles/${v4()}`)
+  if (url) {
+    const markdownUrl = `![](${url})`
+    if (textarea instanceof HTMLTextAreaElement) {
+      insertTextAtCaret(markdownUrl, start, end, textarea)
+    } else {
+      localValue.value = markdownUrl + localValue.value
+    }
+
+    emit('input', localValue.value)
+  }
+}
+
+const insertTextAtCaret = (
+  text: string,
+  start: number,
+  end: number,
+  target: HTMLTextAreaElement
+) => {
+  const before = localValue.value.substring(0, start)
+  const after = localValue.value.substring(end)
+  localValue.value = `${before}${text}${after}`
+  emit('input', localValue.value)
+
+  // キャレット位置を更新.value
+  const newCaretPosition = start + text.length
+  target.setSelectionRange(newCaretPosition, newCaretPosition)
+}
+
 const handlePressTab = (e: KeyboardEvent) => {
   const index = (e.target as HTMLTextAreaElement).selectionEnd
   if (index === null) return

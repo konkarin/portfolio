@@ -20,6 +20,9 @@ const loadImg = (url: string) => {
   })
 }
 
+/**
+ * blob画像をリサイズしてwebp形式に変換する
+ */
 export async function resizeImage(blob: Blob, targetWidth = 1200, targetHeight = 630) {
   return new Promise<Blob>((resolve, reject) => {
     const img = new Image()

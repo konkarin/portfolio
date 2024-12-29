@@ -39,7 +39,8 @@
               class="dashboardEdit__input"
               type="text"
               placeholder="OGP画像のURLを入力"
-              @paste="onPaste"
+              @paste="onPasteOgp"
+              @drop.prevent="onDropOgp"
             />
           </div>
           <div class="dashboardEdit__ogpPreview">
@@ -184,9 +185,11 @@ const updateArticle = async () => {
   alert('Completed')
 }
 
-const { uploadImage, isUploading } = useImageUpload()
+const { uploadImage } = useImageUpload()
 
-const onPaste = async () => {
+const createOgpPath = () => `users/${user.value?.uid}/ogps/${v4()}`
+
+const onPasteOgp = async () => {
   if (user.value == null) return
 
   const blob = await loadClipboardImage()
@@ -194,7 +197,22 @@ const onPaste = async () => {
 
   const file = new File([await resizeImage(blob)], 'image.webp', { type: 'image/png' })
 
-  const url = await uploadImage(file, `users/${user.value.uid}/ogps/${v4()}`)
+  const url = await uploadImage(file, createOgpPath())
+  if (url) {
+    ogpImageUrl.value = ''
+    ogpImageUrl.value = url
+  }
+}
+
+const onDropOgp = async (e: DragEvent) => {
+  if (user.value == null) return
+
+  const file = e.dataTransfer?.files[0]
+  if (!file) return
+
+  const resizedFile = new File([await resizeImage(file)], 'image.webp')
+
+  const url = await uploadImage(resizedFile, createOgpPath())
   if (url) {
     ogpImageUrl.value = ''
     ogpImageUrl.value = url
