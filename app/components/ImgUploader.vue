@@ -51,7 +51,7 @@ export default defineComponent({
       // ローディングを表示
       this.isUploading = true
 
-      const target = `users/${this.user.uid}/${uuidv4()}/original/${this.file.name}`
+      const target = `users/${this.user.uid}/gallery/${uuidv4()}/original/${this.file.name}`
 
       // 保存するファイル名に現在時刻を指定
       const storageRef = ref(getStorage(), target)
