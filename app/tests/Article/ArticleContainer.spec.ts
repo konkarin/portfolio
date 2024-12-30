@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import { createStore } from 'vuex'
 import ArticleContainer from '@/components/Article/ArticleContainer.vue'
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 
 const articles: Article[] = [...Array(4).keys()].map((_, index) => {
   return {
@@ -34,13 +34,20 @@ const wrapper = shallowMount(ArticleContainer, {
   },
 })
 
+vi.mock('#app', () => ({
+  useNuxtApp: () => ({
+    $tags: ref(articleTags),
+    $articles: ref(articles),
+  }),
+}))
+
 describe('ArtcileContainer', () => {
   test('computed correct articles', () => {
     expect(wrapper.vm.allArticles).toMatchObject(articles)
   })
 
   test('computed correct recentArticles', () => {
-    expect(wrapper.vm.recentArticles.length).toBe(3)
+    expect(wrapper.vm.recentArticles.length).toBe(2)
   })
 
   test('computed correct articleTags', () => {

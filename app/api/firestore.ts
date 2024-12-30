@@ -7,13 +7,14 @@ import {
   getFirestore,
   limit,
   orderBy,
-  OrderByDirection,
   query,
   QueryConstraint,
   serverTimestamp,
   setDoc,
+  updateDoc,
   where,
-  WhereFilterOp,
+  type OrderByDirection,
+  type WhereFilterOp,
 } from 'firebase/firestore'
 import { firebaseApp } from '../utils/firebase'
 
@@ -51,11 +52,7 @@ export default class Firestore {
       : doc(collection(this.db, path), ...queryConstraint)
   }
 
-  static async getDocs(
-    collectionPath: string,
-    whereQueries?: Query[],
-    order?: Order
-  ) {
+  static async getDocs(collectionPath: string, whereQueries?: Query[], order?: Order) {
     const conditions: QueryConstraint[] = []
 
     if (whereQueries !== undefined) {
@@ -86,40 +83,22 @@ export default class Firestore {
 
   /**
    * コレクション内のすべてのドキュメントのIDを取得
-   * @param collectionPath
-   * @param whereQueries
-   * @param order
    */
-  static async getDocIds(
-    collectionPath: string,
-    whereQueries?: Query[],
-    order?: Order
-  ) {
+  static async getDocIds(collectionPath: string, whereQueries?: Query[], order?: Order) {
     const docs = await this.getDocs(collectionPath, whereQueries, order)
     return docs.map((doc) => doc.id)
   }
 
   /**
    * コレクション内のすべてのドキュメントを取得
-   * @param collectionPath
-   * @param whereQueries
-   * @param order
    */
-  static async getDocsData(
-    collectionPath: string,
-    whereQueries?: Query[],
-    order?: Order
-  ) {
+  static async getDocsData(collectionPath: string, whereQueries?: Query[], order?: Order) {
     const docs = await this.getDocs(collectionPath, whereQueries, order)
-    return docs.map((doc) => doc.data())
+    return docs.map((doc) => ({ ...doc.data(), id: doc.id }))
   }
 
   /**
    * 指定した数の並べ替えたドキュメントを取得
-   * @param collectionPath
-   * @param fieldPath
-   * @param direction
-   * @param limitNumber
    */
   static async getOrderDocs(
     collectionPath: string,
@@ -127,22 +106,16 @@ export default class Firestore {
     direction?: OrderByDirection,
     limitNumber?: number
   ) {
-    const q = this.query(
-      collectionPath,
-      orderBy(fieldPath, direction),
-      limit(limitNumber || 30)
-    )
+    const q = this.query(collectionPath, orderBy(fieldPath, direction), limit(limitNumber || 30))
     const snap = await getDocs(q).catch((e) => {
       throw e
     })
 
-    return snap.docs.map((doc) => doc.data())
+    return snap.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
   }
 
   /**
    * 指定したドキュメントIDを取得
-   * @param collectionPath
-   * @param docId
    */
   static async getDocById(collectionPath: string, docId: string) {
     const docRef = this.docRef(collectionPath, docId)
@@ -155,15 +128,8 @@ export default class Firestore {
 
   /**
    * 指定したクエリでドキュメントを取得
-   * @param collectionPath
-   * @param queries
-   * @param order
    */
-  static async getOrderDocsByQueries(
-    collectionPath: string,
-    queries: Query,
-    order: Order
-  ) {
+  static async getOrderDocsByQueries(collectionPath: string, queries: Query, order: Order) {
     const q = this.query(
       collectionPath,
       where(queries.fieldPath, queries.filterStr, queries.value),
@@ -179,9 +145,6 @@ export default class Firestore {
 
   /**
    * 指定した複数のクエリでドキュメントを取得
-   * @param collectionPath
-   * @param whereQueries
-   * @param order
    */
   static async getDocsByCompoundQueries(
     collectionPath: string,
@@ -193,9 +156,11 @@ export default class Firestore {
     })
 
     if (order !== undefined) {
+      // @ts-expect-error
       conditions.push(orderBy(order.fieldPath, order.direction))
 
       if (order.limit) {
+        // @ts-expect-error
         conditions.push(limit(order.limit || 30))
       }
     }
@@ -209,15 +174,23 @@ export default class Firestore {
   }
 
   /**
-   * 指定したドキュメントIDを更新
-   * @param path
-   * @param docId
-   * @param data
+   * 指定したドキュメントIDを追加
    */
-  static async updateDoc(path: string, docId: string, data: any) {
+  static async addData(path: string, docId: string, data: any) {
     // update()は新規作成できないためset
     const docRef = this.docRef(path, docId)
     await setDoc(docRef, data).catch((e) => {
+      throw e
+    })
+  }
+
+  /**
+   * 指定したドキュメントIDを更新
+   */
+  static async updateData(path: string, docId: string, data: any) {
+    // update()は新規作成できないためset
+    const docRef = this.docRef(path, docId)
+    await updateDoc(docRef, data).catch((e) => {
       throw e
     })
   }

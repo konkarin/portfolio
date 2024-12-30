@@ -1,9 +1,9 @@
-import { Article } from '~/types'
+import type { Article } from '@/types'
 
 export default defineNuxtPlugin(async () => {
   const { AUTHOR_ID } = useRuntimeConfig().public
 
-  const { data: aritcles } = await useAsyncData(
+  const { data: articles } = await useAsyncData(
     'articles-plugins',
     () => {
       return getArticles(AUTHOR_ID)
@@ -29,7 +29,7 @@ export default defineNuxtPlugin(async () => {
 
   return {
     provide: {
-      aritcles,
+      articles,
       tags,
     },
   }

@@ -9,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 
 const { params } = useRoute()
 const { APP_URL } = useRuntimeConfig().public
 
-const { $tags: allTags, $aritcles: allArticles } = useNuxtApp()
+const { $tags: allTags, $articles: allArticles } = useNuxtApp()
 
 const filterdArticlesByTag = computed(() => {
   return allArticles.value.filter((article: Article) => {

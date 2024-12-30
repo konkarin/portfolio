@@ -12,8 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { User } from '@firebase/auth'
+import type { User } from '@firebase/auth'
 import { db } from '@/api/apis'
 
 type Data = {
@@ -55,7 +54,7 @@ export default defineComponent({
       }
 
       await db
-        .updateDoc('users', this.user?.uid || '', data)
+        .addData('users', this.user?.uid || '', data)
         .then(() => {
           // TODO: ポップアップにする
           alert('Saved')

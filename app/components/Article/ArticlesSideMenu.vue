@@ -20,9 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
-import { Article } from '@/types/index'
+import type { Article } from '@/types/index'
 
 export default defineComponent({
   props: {

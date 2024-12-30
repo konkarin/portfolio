@@ -13,10 +13,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
-import { User } from '@firebase/auth'
+import type { User } from '@firebase/auth'
 
 type Data = {
   isUploading: boolean
@@ -52,7 +51,7 @@ export default defineComponent({
       // ローディングを表示
       this.isUploading = true
 
-      const target = `users/${this.user.uid}/${uuidv4()}/original/${this.file.name}`
+      const target = `users/${this.user.uid}/gallery/${uuidv4()}/original/${this.file.name}`
 
       // 保存するファイル名に現在時刻を指定
       const storageRef = ref(getStorage(), target)

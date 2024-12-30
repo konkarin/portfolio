@@ -17,9 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import type { PropType } from 'vue'
-import { DocumentData } from '@firebase/firestore'
+import type { DocumentData } from '@firebase/firestore'
 
 export default defineComponent({
   props: {

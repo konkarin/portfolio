@@ -8,7 +8,7 @@
     "strict": true,
     "noEmit": true,
     "experimentalDecorators": true,
-    "types": ["@types/node", "@types/jest", "@types/uuid", "@types/lodash.debounce"]
+    "types": ["@types/node", "vitest/globals", "@types/uuid", "@types/lodash.debounce"]
   },
   "exclude": ["node_modules", "functions"]
 }

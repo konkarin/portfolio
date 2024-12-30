@@ -12,7 +12,7 @@ export const generateRoutes = async () => {
   // /articles/_article.vue用の記事
   const allArticles = await getArticles()
 
-  const articleRoutes = allArticles.flatMap((article) => {
+  const articleRoutes = allArticles.flatMap((article: any) => {
     const uuidRoute = {
       route: `/articles/${article.id}`,
       payload: article,
@@ -72,7 +72,7 @@ const getArticleRecordByTag = async () => {
       },
     ]
 
-    articleRecord[tag] = await db.getDocsData(articlesPath, queries)
+    if (tag) articleRecord[tag] = await db.getDocsData(articlesPath, queries)
   }
 
   return articleRecord

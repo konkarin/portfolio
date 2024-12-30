@@ -3,8 +3,7 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
-import { Article } from '~/types'
+import type { Article } from '@/types'
 
 export default defineNuxtComponent({
   name: 'PagesArticlesIndex',

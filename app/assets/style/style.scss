@@ -13,6 +13,7 @@
   --darkYellow: rgb(230, 156, 28);
   --yellow: rgb(255, 173, 31);
   --white: rgb(255, 255, 255);
+  --danger: rgb(225, 71, 71);
   --font: -apple-system, 'BlinkMacSystemFont', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', meiryo,
     sans-serif, 'Segoe UI Emoji';
 }
@@ -279,13 +280,25 @@ a {
   &--large {
     font-size: 3em;
   }
+  &.btn--danger {
+    background-color: var(--danger);
+    &:hover {
+      opacity: 0.8;
+      background-color: var(--danger);
+    }
+    &:disabled {
+      opacity: 0.5;
+      background-color: var(--gray);
+    }
+  }
   &:hover {
     cursor: pointer;
     background: var(--darkYellow);
   }
   &:disabled {
     cursor: default;
-    background: var(--middleYellow);
+    opacity: 0.5;
+    background: var(--gray);
   }
 }
 

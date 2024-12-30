@@ -41,6 +41,11 @@ const wrapper = shallowMount(ArticleView, {
       RouterLink: RouterLinkStub,
       NuxtLink: RouterLinkStub,
     },
+    mocks: {
+      $config: {
+        public: { APP_URL: 'konkarin-photo.web.app/' },
+      },
+    },
   },
 })
 

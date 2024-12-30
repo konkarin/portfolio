@@ -5,7 +5,6 @@ import { useAccessor, mutationTree, actionTree, getterTree } from 'typed-vuex'
 import type { DocumentData } from 'firebase/firestore'
 import type { User } from 'firebase/auth'
 import { db } from '@/api/apis'
-import { NuxtApp } from 'nuxt/app'
 
 interface State {
   isAuth: boolean
@@ -70,7 +69,7 @@ export const actions = actionTree(
           const result = await getImgList(authorId)
 
           return result.map((img) => {
-            // FIXME: firestoreのtimestamp型をdevalueで解釈できないので一旦消す
+            // @ts-expect-error FIXME: firestoreのtimestamp型をdevalueで解釈できないので一旦消す
             delete img.exif
             return img
           })
@@ -90,7 +89,7 @@ export const actions = actionTree(
 const getImgList = async (authorId: string) => {
   const collectionPath = `/users/${authorId}/images`
 
-  return await db.getDocsData(collectionPath)
+  return await db.getOrderDocs(collectionPath, 'order')
 }
 
 const storePattern = {
@@ -110,15 +109,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(store)
   nuxtApp.vueApp.config.globalProperties.$accessor = accessor
 
-  // Nuxt v2との互換性のためのcontext注入
-  // https://github.com/nuxt/nuxt/blob/d4b9e4b0553bcd617ecbc0b8b76871070b347fcb/packages/vue-app/template/index.js#L164-L165
-  // store.app = nuxtApp
-
-  if (process.server) {
+  if (import.meta.server) {
     store.dispatch('nuxtServerInit', config)
   }
 
-  if (process.server) {
+  if (import.meta.server) {
     nuxtApp.payload.storeState = store.state
   } else if (nuxtApp.payload.storeState) {
     store.replaceState(nuxtApp.payload.storeState as typeof store.state)
@@ -137,13 +132,5 @@ declare module 'vue' {
     $accessor: typeof accessor
     // Nuxt v2との互換性のための型定義
     $store: typeof store
-  }
-}
-
-// Nuxt v2との互換性のための型定義
-declare module 'vuex/types/index' {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  interface Store<S> {
-    app: NuxtApp
   }
 }

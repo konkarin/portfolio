@@ -20,6 +20,9 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   const originalFilePath: string = object.name
   const contentType: string = object.contentType
 
+  // gallery配下以外はFirestoreに保存・サムネ作成をしない
+  if (!originalFilePath.includes('gallery')) return
+
   // Exit if this is triggered on a file that is not an image.
   if (!contentType.startsWith('image/')) {
     console.log('This is not an image.')
@@ -76,6 +79,13 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
 
   const date = dayjs().format()
 
+  // NOTE: StorageのonFinalizeはcontextのauthにuidを持たないため、ファイルパスから取得
+  const uid = originalFilePath.split('/')[1]
+  const collectionRef = getFirestore().collection(`users/${uid}/images`)
+  // getCountFromServerを使うと現在の最後のorderを取得できないため、orderByで取得
+  const lastOrderSnapshot = await collectionRef.orderBy('order', 'desc').limit(1).get()
+  const lastOrder = lastOrderSnapshot.empty ? 0 : lastOrderSnapshot.docs[0]?.data().order ?? 0
+
   const data = {
     originalFileName,
     // NOTE: bucketのgetSignedUrlだと有効期限切れたら死ぬから下記で回避
@@ -91,11 +101,8 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
     exif,
     width: size.width,
     height: size.height,
+    order: lastOrder + 1,
   }
-
-  // NOTE: StorageのonFinalizeはcontextのauthにuidを持たないため、ファイルパスから取得
-  const uid = originalFilePath.split('/')[1]
-  const collectionRef = getFirestore().collection(`users/${uid}/images`)
 
   try {
     await collectionRef.add(data)
