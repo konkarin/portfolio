@@ -85,7 +85,7 @@ export default defineNuxtConfig({
     public: runtimePublicConfig,
   },
 
-  compatibilityDate: '2024-09-01',
+  compatibilityDate: '2024-12-30',
   future: {
     compatibilityVersion: 4,
   },
