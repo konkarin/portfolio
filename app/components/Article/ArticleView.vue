@@ -95,6 +95,9 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  &:has(img) > h1 {
+    margin-top: 3rem;
+  }
 }
 
 .articleView__eyeCatch {
