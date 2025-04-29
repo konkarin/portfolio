@@ -12,9 +12,3 @@
     />
   </svg>
 </template>
-
-<script>
-export default {
-  name: 'IconPencil',
-}
-</script>

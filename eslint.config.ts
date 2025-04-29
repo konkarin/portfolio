@@ -1,32 +1,42 @@
-/* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution')
+import { globalIgnores } from 'eslint/config'
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import pluginVue from 'eslint-plugin-vue'
+import pluginVitest from '@vitest/eslint-plugin'
+import pluginOxlint from 'eslint-plugin-oxlint'
+import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
-module.exports = {
-  env: {
-    browser: true,
-    node: true,
+// To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
+// import { configureVueProject } from '@vue/eslint-config-typescript'
+// configureVueProject({ scriptLangs: ['ts', 'tsx'] })
+// More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
+
+export default defineConfigWithVueTs(
+  {
+    name: 'app/files-to-lint',
+    files: ['**/*.{ts,mts,tsx,vue}'],
   },
-  extends: [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    '@vue/eslint-config-typescript',
-    '@vue/eslint-config-prettier/skip-formatting',
-  ],
-  parserOptions: {
-    ecmaVersion: 'latest',
+
+  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', 'functions/**', '.nuxt/**']),
+
+  {
+    extends: [...pluginVue.configs['flat/essential']],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
   },
-  rules: {
-    'no-console': 'off',
-    'no-restricted-imports': [
-      'error',
-      {
-        paths: [
-          {
-            name: 'vue',
-            importNames: ['default'],
-          },
-        ],
-      },
-    ],
+  {
+    extends: [vueTsConfigs.recommended],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'warn',
+      'vue/block-lang': 'warn',
+    },
   },
-}
+
+  {
+    ...pluginVitest.configs.recommended,
+    files: ['app/**/*.spec.ts'],
+  },
+  ...pluginOxlint.configs['flat/recommended'],
+  skipFormatting
+)
