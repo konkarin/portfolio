@@ -1,5 +1,3 @@
-import { defineNuxtPlugin } from '#app'
-
 import { createStore } from 'vuex'
 import { useAccessor, mutationTree, actionTree, getterTree } from 'typed-vuex'
 import type { DocumentData } from 'firebase/firestore'
