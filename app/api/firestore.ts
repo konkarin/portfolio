@@ -104,7 +104,7 @@ export default class Firestore {
     collectionPath: string,
     fieldPath: string,
     direction?: OrderByDirection,
-    limitNumber?: number
+    limitNumber?: number,
   ) {
     const q = this.query(collectionPath, orderBy(fieldPath, direction), limit(limitNumber || 30))
     const snap = await getDocs(q).catch((e) => {
@@ -134,7 +134,7 @@ export default class Firestore {
       collectionPath,
       where(queries.fieldPath, queries.filterStr, queries.value),
       orderBy(order.fieldPath, order.direction),
-      limit(order.limit || 30)
+      limit(order.limit || 30),
     )
     const snap = await getDocs(q).catch((e) => {
       throw e
@@ -149,7 +149,7 @@ export default class Firestore {
   static async getDocsByCompoundQueries(
     collectionPath: string,
     whereQueries: Query[],
-    order?: Order
+    order?: Order,
   ) {
     const conditions = whereQueries.map((q) => {
       return where(q.fieldPath, q.filterStr, q.value)

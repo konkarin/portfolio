@@ -116,7 +116,7 @@ export default defineComponent({
         await Promise.all(
           idList.map((id, index) => {
             return db.updateData(path, id, { order: index })
-          })
+          }),
         )
         alert('Update successfully')
       } catch (e) {
@@ -145,7 +145,7 @@ export default defineComponent({
           }
 
           return db.getDocIds(path, [query])
-        })
+        }),
       )
 
       const deleteImgIds = result.flatMap((ids) => {
@@ -157,7 +157,7 @@ export default defineComponent({
         await Promise.allSettled(
           deleteImgIds.map((id) => {
             return db.deleteDoc(path, id)
-          })
+          }),
         )
 
         // TODO: トーストとかにしたい

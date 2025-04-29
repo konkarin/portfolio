@@ -12,7 +12,7 @@ export default defineNuxtPlugin(async () => {
       default(): Ref<Article[]> {
         return ref([])
       },
-    }
+    },
   )
 
   const { data: tags } = await useAsyncData(
@@ -24,7 +24,7 @@ export default defineNuxtPlugin(async () => {
       default(): Ref<string[]> {
         return ref([])
       },
-    }
+    },
   )
 
   return {

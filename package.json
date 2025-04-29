@@ -9,6 +9,7 @@
     "start": "nuxt preview",
     "generate": "nuxt generate",
     "lint": "eslint . --ext .ts,.js,.vue --fix",
+    "format": "prettier --write .",
     "lint:style": "stylelint **/*.{vue,css} --ignore-path .gitignore",
     "test": "vitest",
     "deploy:sta": "npm run generate && firebase deploy --only hosting --project=staging-konkarin-photo",

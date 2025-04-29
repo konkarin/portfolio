@@ -78,12 +78,12 @@ export const actions = actionTree(
           default(): DocumentData[] {
             return []
           },
-        }
+        },
       )
 
       commit('updateImgList', imgList.value)
     },
-  }
+  },
 )
 
 const getImgList = async (authorId: string) => {

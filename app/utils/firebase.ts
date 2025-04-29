@@ -12,8 +12,7 @@ const firebaseConfig = {
   measurementId: runtimePublicConfig.MEASUREMENT_ID,
 }
 
-export const firebaseApp =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
+export const firebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
 
 // DEBUG:
 if (process.env.NODE_ENV === 'development') {

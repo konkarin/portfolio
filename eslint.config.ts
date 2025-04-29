@@ -38,5 +38,5 @@ export default defineConfigWithVueTs(
     files: ['app/**/*.spec.ts'],
   },
   ...pluginOxlint.configs['flat/recommended'],
-  skipFormatting
+  skipFormatting,
 )
