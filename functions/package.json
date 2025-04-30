@@ -23,6 +23,7 @@
     "image-size": "^0.9.3"
   },
   "devDependencies": {
+    "@types/child-process-promise": "^2.2.6",
     "firebase-functions-test": "^0.2.0"
   },
   "overrides": {
