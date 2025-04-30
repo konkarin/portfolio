@@ -3,7 +3,10 @@ import { getStorage } from 'firebase-admin/storage'
 import { onDocumentDeleted } from 'firebase-functions/v2/firestore'
 
 export const deleteFileFromStorage = onDocumentDeleted(
-  '/users/{uid}/images/{imageId}',
+  {
+    region: 'asia-northeast1',
+    document: '/users/{uid}/images/{imageId}',
+  },
   async (event) => {
     const config = JSON.parse(process.env.FIREBASE_CONFIG)
 

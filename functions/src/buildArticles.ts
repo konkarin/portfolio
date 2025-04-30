@@ -3,6 +3,7 @@ import { onDocumentWritten } from 'firebase-functions/v2/firestore'
 
 export const buildArticles = onDocumentWritten(
   {
+    region: 'asia-northeast1',
     secrets: ['CIRCLE_CI_TOKEN'],
     document: '/users/{uid}/articles/{articleId}',
   },
