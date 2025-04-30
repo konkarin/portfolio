@@ -6,22 +6,6 @@ executors:
       - image: cimg/node:20.19.0
 
 commands:
-  set-env:
-    steps:
-      - run:
-          name: set env
-          command: |
-            TARGET_ENV=""
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              TARGET_ENV="production"
-            fi
-            echo "export TARGET_ENV=${TARGET_ENV}" >> $BASH_ENV
-
-  switch-env:
-    description: 'switch env by branch'
-    steps:
-      - run: sed -i -e "s/{{TARGET_ENV}}/${TARGET_ENV}/g" config.ts
-
   install-modules:
     description: 'install node_modules'
     steps:
@@ -42,12 +26,10 @@ jobs:
     executor: default-executor
     steps:
       - checkout
-      - set-env
-      - switch-env
       - install-modules
       - run:
           name: build
-          command: npm run generate
+          command: APP_ENV=staging npm run generate
       - build-functions
       - run:
           name: deploy to Firebase
@@ -58,12 +40,10 @@ jobs:
     executor: default-executor
     steps:
       - checkout
-      - set-env
-      - switch-env
       - install-modules
       - run:
           name: build
-          command: npm run generate
+          command: APP_ENV=production npm run generate
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools

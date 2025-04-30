@@ -1,5 +1,3 @@
-const targetEnv: string = '{{TARGET_ENV}}'
-
 const production = {
   API_KEY: 'AIzaSyAeEviiI6BRwheQrmiXpBeztb_XcUdZw8E',
   AUTH_DOMAIN: 'konkarin-photo.firebaseapp.com',
@@ -24,4 +22,4 @@ const development = {
   APP_URL: 'https://staging-konkarin-photo.web.app',
 } as const
 
-export const runtimePublicConfig = targetEnv === 'production' ? production : development
+export const runtimePublicConfig = process.env.APP_ENV === 'production' ? production : development
