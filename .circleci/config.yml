@@ -43,7 +43,7 @@ jobs:
       - install-modules
       - run:
           name: build
-          command: APP_ENV=production npm run generate
+          command: APP_ENV=staging npm run generate
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
@@ -53,12 +53,10 @@ jobs:
     executor: default-executor
     steps:
       - checkout
-      - set-env
-      - switch-env
       - install-modules
       - run:
           name: build
-          command: npm run generate
+          command: APP_ENV=production npm run generate
       - build-functions
       - run:
           name: deploy to Firebase Hosting
@@ -69,12 +67,10 @@ jobs:
     executor: default-executor
     steps:
       - checkout
-      - set-env
-      - switch-env
       - install-modules
       - run:
           name: build
-          command: npm run generate
+          command: APP_ENV=production npm run generate
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
