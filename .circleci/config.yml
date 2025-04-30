@@ -3,7 +3,7 @@ version: 2.1
 executors:
   default-executor:
     docker:
-      - image: cimg/node:18.18.0
+      - image: cimg/node:20.19.0
 
 commands:
   set-env:
