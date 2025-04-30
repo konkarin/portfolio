@@ -3,22 +3,20 @@ import * as os from 'os'
 import * as path from 'path'
 import dayjs from 'dayjs'
 import { parse } from 'exifr'
-import { storage } from 'firebase-functions'
 import { getStorage } from 'firebase-admin/storage'
 import { getFirestore } from 'firebase-admin/firestore'
 
 import imageSize from 'image-size'
 import { spawn } from 'child-process-promise'
+import { onObjectFinalized } from 'firebase-functions/v2/storage'
 
-export type ObjectMetadata = storage.ObjectMetadata
-
-export const saveImgToDb = async (object: ObjectMetadata) => {
+export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, async (object) => {
   const fileBucket: string = object.bucket
 
-  if (!object.name || !object.contentType) return
+  if (!object.data.name || !object.data.contentType) return
   // images/{uid}/{imageId: uuid}/original/hogehoge.jpg
-  const originalFilePath: string = object.name
-  const contentType: string = object.contentType
+  const originalFilePath: string = object.data.name
+  const contentType: string = object.data.contentType
 
   // gallery配下以外はFirestoreに保存・サムネ作成をしない
   if (!originalFilePath.includes('gallery')) return
@@ -60,7 +58,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
     // /images/{uid}/{imageId: uuid}/original
     path.dirname(originalFilePath),
     '../thumb',
-    originalFileName
+    originalFileName,
   )
 
   const metadata = {
@@ -84,17 +82,17 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   const collectionRef = getFirestore().collection(`users/${uid}/images`)
   // getCountFromServerを使うと現在の最後のorderを取得できないため、orderByで取得
   const lastOrderSnapshot = await collectionRef.orderBy('order', 'desc').limit(1).get()
-  const lastOrder = lastOrderSnapshot.empty ? 0 : lastOrderSnapshot.docs[0]?.data().order ?? 0
+  const lastOrder = lastOrderSnapshot.empty ? 0 : (lastOrderSnapshot.docs[0]?.data().order ?? 0)
 
   const data = {
     originalFileName,
     // NOTE: bucketのgetSignedUrlだと有効期限切れたら死ぬから下記で回避
     originalUrl: `https://firebasestorage.googleapis.com/v0/b/${fileBucket}/o/${encodeURIComponent(
-      originalFilePath
+      originalFilePath,
     )}?alt=media`,
     originalFilePath,
     thumbUrl: `https://firebasestorage.googleapis.com/v0/b/${fileBucket}/o/${encodeURIComponent(
-      thumbFilePath
+      thumbFilePath,
     )}?alt=media`,
     thumbFilePath,
     date,
@@ -110,7 +108,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   } catch (e) {
     console.error(e)
   }
-}
+})
 
 const getSize = (tempFilePath: string): { width: number; height: number } => {
   const image = imageSize(tempFilePath)
