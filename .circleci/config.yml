@@ -25,13 +25,7 @@ commands:
   install-modules:
     description: 'install node_modules'
     steps:
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-      - run: npm ci
-      - save_cache:
-          key: dependency-cache-{{ checksum "package-lock.json" }}
-          paths:
-            - ./node_modules
+      - run: npm i
 
   build-functions:
     description: 'init cloud functions'
