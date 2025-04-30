@@ -9,6 +9,7 @@ import { getFirestore } from 'firebase-admin/firestore'
 import imageSize from 'image-size'
 import { spawn } from 'child-process-promise'
 import { onObjectFinalized } from 'firebase-functions/v2/storage'
+import { log, error } from 'firebase-functions/logger'
 
 export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, async (object) => {
   const fileBucket: string = object.bucket
@@ -23,13 +24,13 @@ export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, asyn
 
   // Exit if this is triggered on a file that is not an image.
   if (!contentType.startsWith('image/')) {
-    console.log('This is not an image.')
+    log('This is not an image.')
     return
   }
 
   // Exit if the image is already a thumbnail.
   if (path.dirname(originalFilePath).includes('thumb')) {
-    console.log('Already a Thumbnail.')
+    log('Already a Thumbnail.')
     return
   }
 
@@ -41,7 +42,7 @@ export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, asyn
   const tempFilePath = path.join(os.tmpdir(), originalFileName)
 
   await bucket.file(originalFilePath).download({ destination: tempFilePath })
-  console.log('Image downloaded locally to', tempFilePath)
+  log('Image downloaded locally to', tempFilePath)
 
   // Get image size
   const size = getSize(tempFilePath)
@@ -51,7 +52,7 @@ export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, asyn
 
   // Generate a thumbnail using ImageMagick.
   await spawn('convert', [tempFilePath, '-thumbnail', '800x800>', tempFilePath])
-  console.log('Thumbnail created at', tempFilePath)
+  log('Thumbnail created at', tempFilePath)
 
   // We add a 'thumb_' prefix to thumbnails file name. That's where we'll upload the thumbnail.
   const thumbFilePath = path.join(
@@ -104,9 +105,9 @@ export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, asyn
 
   try {
     await collectionRef.add(data)
-    console.log('Completed')
+    log('Completed')
   } catch (e) {
-    console.error(e)
+    error(e)
   }
 })
 
@@ -139,20 +140,20 @@ const getExif = async (tempFilePath: string) => {
   }
 
   const data = await parse(tempFilePath, options).catch((e: Error) => {
-    console.error(e)
+    error(e)
     return {}
   })
 
   if (data === undefined) {
-    console.log('Exif does not exist')
+    log('Exif does not exist')
     return {}
   }
 
   if (data.errors) {
-    console.error('Exif parse error')
+    error('Exif parse error')
     return {}
   }
 
-  console.log('Get Exif')
+  log('Get Exif')
   return data
 }

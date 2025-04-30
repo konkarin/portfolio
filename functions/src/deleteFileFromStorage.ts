@@ -1,6 +1,7 @@
 import * as path from 'path'
 import { getStorage } from 'firebase-admin/storage'
 import { onDocumentDeleted } from 'firebase-functions/v2/firestore'
+import { log, error } from 'firebase-functions/logger'
 
 export const deleteFileFromStorage = onDocumentDeleted(
   {
@@ -28,9 +29,9 @@ export const deleteFileFromStorage = onDocumentDeleted(
     try {
       // NOTE: bucket.file(target).delete()だとディレクトリは消せない
       await bucket.deleteFiles({ prefix: target })
-      console.log('Delete Completed: ', target)
+      log('Delete Completed: ', target)
     } catch (e) {
-      console.error(e)
+      error(e)
     }
 
     return null

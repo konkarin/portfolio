@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { onDocumentWritten } from 'firebase-functions/v2/firestore'
+import { log, error } from 'firebase-functions/logger'
 
 export const buildArticles = onDocumentWritten(
   {
@@ -10,7 +11,7 @@ export const buildArticles = onDocumentWritten(
   async (event) => {
     const snap = event.data
     if (!snap?.before.get('isPublished') && !snap?.after.get('isPublished')) {
-      console.log('No articles to update')
+      log('No articles to update')
     } else {
       await requestCI()
     }
@@ -40,9 +41,9 @@ const requestCI = async () => {
       headers,
     })
     .catch((e) => {
-      console.error(e)
+      error(e)
       throw e
     })
 
-  console.log('triggered success')
+  log('triggered success')
 }
