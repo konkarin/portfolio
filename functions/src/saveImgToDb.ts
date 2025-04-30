@@ -7,8 +7,8 @@ import { storage } from 'firebase-functions'
 import { getStorage } from 'firebase-admin/storage'
 import { getFirestore } from 'firebase-admin/firestore'
 
-const imageSize = require('image-size')
-const spawn = require('child-process-promise').spawn
+import imageSize from 'image-size'
+import { spawn } from 'child-process-promise'
 
 export type ObjectMetadata = storage.ObjectMetadata
 
@@ -60,7 +60,7 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
     // /images/{uid}/{imageId: uuid}/original
     path.dirname(originalFilePath),
     '../thumb',
-    originalFileName,
+    originalFileName
   )
 
   const metadata = {
@@ -84,17 +84,17 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
   const collectionRef = getFirestore().collection(`users/${uid}/images`)
   // getCountFromServerを使うと現在の最後のorderを取得できないため、orderByで取得
   const lastOrderSnapshot = await collectionRef.orderBy('order', 'desc').limit(1).get()
-  const lastOrder = lastOrderSnapshot.empty ? 0 : (lastOrderSnapshot.docs[0]?.data().order ?? 0)
+  const lastOrder = lastOrderSnapshot.empty ? 0 : lastOrderSnapshot.docs[0]?.data().order ?? 0
 
   const data = {
     originalFileName,
     // NOTE: bucketのgetSignedUrlだと有効期限切れたら死ぬから下記で回避
     originalUrl: `https://firebasestorage.googleapis.com/v0/b/${fileBucket}/o/${encodeURIComponent(
-      originalFilePath,
+      originalFilePath
     )}?alt=media`,
     originalFilePath,
     thumbUrl: `https://firebasestorage.googleapis.com/v0/b/${fileBucket}/o/${encodeURIComponent(
-      thumbFilePath,
+      thumbFilePath
     )}?alt=media`,
     thumbFilePath,
     date,
@@ -114,6 +114,13 @@ export const saveImgToDb = async (object: ObjectMetadata) => {
 
 const getSize = (tempFilePath: string): { width: number; height: number } => {
   const image = imageSize(tempFilePath)
+
+  if (!image.width || !image.height) {
+    return {
+      width: 0,
+      height: 0,
+    }
+  }
 
   return {
     width: image.width,
