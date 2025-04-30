@@ -148,6 +148,11 @@ const getExif = async (tempFilePath: string) => {
     return {}
   }
 
+  if (data.errors) {
+    console.error('Exif parse error')
+    return {}
+  }
+
   console.log('Get Exif')
   return data
 }
