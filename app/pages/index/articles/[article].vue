@@ -31,7 +31,7 @@ export default defineNuxtComponent({
     const { params, path } = useRoute()
 
     const existsArtcile = props.articles.some(
-      (article) => params.article === article.id || params.article === article.customId
+      (article) => params.article === article.id || params.article === article.customId,
     )
     if (!existsArtcile) {
       throw createError({
@@ -43,7 +43,7 @@ export default defineNuxtComponent({
 
     const article = computed(() => {
       const data = props.articles.find(
-        (article) => params.article === article.id || params.article === article.customId
+        (article) => params.article === article.id || params.article === article.customId,
       )
       return data || emptyAritcle
     })

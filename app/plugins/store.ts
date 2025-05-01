@@ -1,5 +1,3 @@
-import { defineNuxtPlugin } from '#app'
-
 import { createStore } from 'vuex'
 import { useAccessor, mutationTree, actionTree, getterTree } from 'typed-vuex'
 import type { DocumentData } from 'firebase/firestore'
@@ -78,12 +76,12 @@ export const actions = actionTree(
           default(): DocumentData[] {
             return []
           },
-        }
+        },
       )
 
       commit('updateImgList', imgList.value)
     },
-  }
+  },
 )
 
 const getImgList = async (authorId: string) => {

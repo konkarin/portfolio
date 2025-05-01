@@ -95,7 +95,7 @@ const insertTextAtCaret = (
   text: string,
   start: number,
   end: number,
-  target: HTMLTextAreaElement
+  target: HTMLTextAreaElement,
 ) => {
   const before = localValue.value.substring(0, start)
   const after = localValue.value.substring(end)
@@ -147,14 +147,14 @@ watch(
   () => {
     setMarkdown()
   },
-  { immediate: true }
+  { immediate: true },
 )
 watch(
   () => props.plainText,
   () => {
     localValue.value = props.plainText
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 onMounted(() => {

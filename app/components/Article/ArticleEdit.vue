@@ -159,7 +159,7 @@ const updateArticle = async () => {
 
   try {
     await db.addData(articlesPath, article.value.id, article.value)
-  } catch (e) {
+  } catch {
     alert('Failed to update artilces')
     return
   }
@@ -176,7 +176,7 @@ const updateArticle = async () => {
       for (const tag of notExistsTags) {
         await db.addData(articleTagsPath, tag, {})
       }
-    } catch (e) {
+    } catch {
       alert('Failed to update tags')
       return
     }
@@ -242,7 +242,7 @@ onMounted(async () => {
     (article) => {
       if (article.customId) return [article.id, article.customId]
       else return article.id
-    }
+    },
   )
   customId.value = article.value.customId || ''
 })

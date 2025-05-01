@@ -13,7 +13,7 @@ export default defineNuxtComponent({
   components: {
     HeaderNav,
   },
-  head(): any {
+  head() {
     return {
       title: `konkarin's photos & blog`,
       meta: [

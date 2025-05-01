@@ -19,18 +19,12 @@
     "dayjs": "^1.10.4",
     "exifr": "^6.0.0",
     "firebase-admin": "^11.11.1",
-    "firebase-functions": "^3.24.1",
+    "firebase-functions": "^4.9.0",
     "image-size": "^0.9.3"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.16.0",
-    "@typescript-eslint/parser": "^6.16.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^8.10.0",
-    "eslint-plugin-import": "^2.29.1",
-    "firebase-functions-test": "^0.2.0",
-    "prettier": "^2.2.1",
-    "typescript": "^4.5.5"
+    "@types/child-process-promise": "^2.2.6",
+    "firebase-functions-test": "^0.2.0"
   },
   "overrides": {
     "stream-shift": "1.0.2"

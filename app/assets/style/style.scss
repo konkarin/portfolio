@@ -14,7 +14,8 @@
   --yellow: rgb(255, 173, 31);
   --white: rgb(255, 255, 255);
   --danger: rgb(225, 71, 71);
-  --font: -apple-system, 'BlinkMacSystemFont', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', meiryo,
+  --font:
+    -apple-system, 'BlinkMacSystemFont', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', meiryo,
     sans-serif, 'Segoe UI Emoji';
 }
 
@@ -494,7 +495,9 @@ a {
 }
 
 .articleItem__eyeCatchInner {
-  transition: opacity 0.3s, transform 0.3s;
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
   height: 100%;
 }
 

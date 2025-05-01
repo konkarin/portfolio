@@ -1,15 +1,22 @@
 import axios from 'axios'
-import { Change, firestore } from 'firebase-functions'
+import { onDocumentWritten } from 'firebase-functions/v2/firestore'
+import { log, error } from 'firebase-functions/logger'
 
-export type ChangeDocumentSnapshot = Change<firestore.DocumentSnapshot>
-
-export const buildArticles = async (snap: ChangeDocumentSnapshot) => {
-  if (!snap.before.get('isPublished') && !snap.after.get('isPublished')) {
-    console.log('No articles to update')
-  } else {
-    await requestCI()
-  }
-}
+export const buildArticles = onDocumentWritten(
+  {
+    region: 'asia-northeast1',
+    secrets: ['CIRCLE_CI_TOKEN'],
+    document: '/users/{uid}/articles/{articleId}',
+  },
+  async (event) => {
+    const snap = event.data
+    if (!snap?.before.get('isPublished') && !snap?.after.get('isPublished')) {
+      log('No articles to update')
+    } else {
+      await requestCI()
+    }
+  },
+)
 
 const requestCI = async () => {
   // NOTE: https://firebase.google.com/docs/functions/config-env?hl=ja#automatically_populated_environment_variables
@@ -34,9 +41,9 @@ const requestCI = async () => {
       headers,
     })
     .catch((e) => {
-      console.error(e)
+      error(e)
       throw e
     })
 
-  console.log('triggered success')
+  log('triggered success')
 }
