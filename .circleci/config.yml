@@ -7,12 +7,23 @@ executors:
 
 commands:
   install-modules:
-    description: 'install node_modules'
     steps:
       - run: npm i
 
+  set-env:
+    steps:
+      - run:
+          name: set env
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+              echo "Setting staging environment"
+              cp -f config/stg.ts config.ts
+            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "Setting production environment"
+              cp -f config/prod.ts config.ts
+            fi
+
   build-functions:
-    description: 'init cloud functions'
     steps:
       - run:
           name: install cloud functions dependencies
@@ -27,9 +38,10 @@ jobs:
     steps:
       - checkout
       - install-modules
+      - set-env
       - run:
           name: build
-          command: APP_ENV=staging npm run generate
+          command: npm run generate
       - build-functions
       - run:
           name: deploy to Firebase
@@ -41,9 +53,10 @@ jobs:
     steps:
       - checkout
       - install-modules
+      - set-env
       - run:
           name: build
-          command: APP_ENV=staging npm run generate
+          command: npm run generate
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
@@ -54,9 +67,10 @@ jobs:
     steps:
       - checkout
       - install-modules
+      - set-env
       - run:
           name: build
-          command: APP_ENV=production npm run generate
+          command: npm run generate
       - build-functions
       - run:
           name: deploy to Firebase Hosting
@@ -68,9 +82,10 @@ jobs:
     steps:
       - checkout
       - install-modules
+      - set-env
       - run:
           name: build
-          command: APP_ENV=production npm run generate
+          command: npm run generate
       - run:
           name: deploy to Firebase Hosting
           # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
