@@ -8,7 +8,7 @@
     "strict": true,
     "target": "es2017",
     "baseUrl": ".",
-    // NOTE: 下記エラーに対応
+    // NOTE: node_modules/dayjs/index.d.ts:3:1の下記エラーに対応
     // This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     "esModuleInterop": true,
     "skipLibCheck": true
