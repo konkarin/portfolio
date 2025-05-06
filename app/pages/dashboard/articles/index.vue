@@ -2,7 +2,7 @@
   <DashboardArticleList />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 useHead({
   title: 'Articles',
 })
