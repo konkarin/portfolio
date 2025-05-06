@@ -44,133 +44,111 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
 import type { User } from '@firebase/auth'
 
 import { db } from '~/api/apis'
 import type { Query } from '~/api/firestore'
 
-interface Data {
-  imgList: DocumentData[]
-  selectedImgPathList: string[]
-  draggingIndex: number
+const { $store } = useNuxtApp()
+const imgList = ref<DocumentData[]>([])
+const selectedImgPathList = ref<string[]>([])
+const draggingIndex = ref(-1)
+const user = computed((): User | null => {
+  return $store.state.user
+})
+const getImgList = async (): Promise<DocumentData[]> => {
+  const path = `users/${user.value?.uid}/images`
+
+  try {
+    return await db.getOrderDocs(path, 'order')
+  } catch (e) {
+    console.error(e)
+    return []
+  }
 }
+const dragStart = (index: number) => {
+  draggingIndex.value = index
+}
+const dragEnter = (e: Event) => {
+  ;(e.target as HTMLElement).classList.add('-dragenter')
+}
+const dragLeave = (e: Event) => {
+  ;(e.target as HTMLElement).classList.remove('-dragenter')
+}
+const drop = (e: Event, index: number) => {
+  const draggingImg = imgList.value[draggingIndex.value]
+  if (draggingIndex.value === -1 || !draggingImg) return
+  ;(e.target as HTMLElement).classList.remove('-dragenter')
+  imgList.value.splice(draggingIndex.value, 1)
+  imgList.value.splice(index, 0, draggingImg)
+  draggingIndex.value = -1
+}
+const saveImgList = async () => {
+  const idList = imgList.value.map((img) => img.id as string)
+  const path = `users/${user.value?.uid}/images`
+  try {
+    await Promise.all(
+      idList.map((id, index) => {
+        return db.updateData(path, id, { order: index })
+      }),
+    )
+    alert('Update successfully')
+  } catch (e) {
+    console.error(e)
+    alert('Some error occured')
+  }
+}
+const deleteImgList = async (): Promise<void> => {
+  // 画像が選択されてない場合アラートを表示
+  if (selectedImgPathList.value.length === 0) {
+    alert('Please select images')
+    return
+  }
 
-export default defineComponent({
-  data(): Data {
-    return {
-      imgList: [],
-      selectedImgPathList: [],
-      draggingIndex: -1,
-    }
-  },
-  computed: {
-    user(): User | null {
-      return this.$store.state.user
-    },
-  },
-  watch: {
-    async user(user: User) {
-      if (user != null) this.imgList = await this.getImgList()
-    },
-  },
-  async mounted() {
-    if (this.user) this.imgList = await this.getImgList()
-  },
-  methods: {
-    async getImgList(): Promise<DocumentData[]> {
-      const path = `users/${this.user?.uid}/images`
+  const path = `users/${user.value?.uid}/images`
 
-      try {
-        return await db.getOrderDocs(path, 'order')
-      } catch (e) {
-        console.error(e)
-        return []
-      }
-    },
-
-    dragStart(index: number) {
-      this.draggingIndex = index
-    },
-    dragEnter(e: Event) {
-      ;(e.target as HTMLElement).classList.add('-dragenter')
-    },
-    dragLeave(e: Event) {
-      ;(e.target as HTMLElement).classList.remove('-dragenter')
-    },
-    drop(e: Event, index: number) {
-      if (this.draggingIndex === -1) return
-      ;(e.target as HTMLElement).classList.remove('-dragenter')
-
-      const draggingImg = this.imgList[this.draggingIndex]
-      this.imgList.splice(this.draggingIndex, 1)
-      this.imgList.splice(index, 0, draggingImg)
-      this.draggingIndex = -1
-    },
-
-    async saveImgList() {
-      const idList = this.imgList.map((img) => img.id as string)
-      const path = `users/${this.user?.uid}/images`
-      try {
-        await Promise.all(
-          idList.map((id, index) => {
-            return db.updateData(path, id, { order: index })
-          }),
-        )
-        alert('Update successfully')
-      } catch (e) {
-        console.error(e)
-        alert('Some error occured')
-      }
-    },
-
-    // 選択した画像のFirestoreドキュメントを削除する
-    async deleteImgList(): Promise<void> {
-      // 画像が選択されてない場合アラートを表示
-      if (this.selectedImgPathList.length === 0) {
-        alert('Please select images')
-        return
+  // 選択した画像のdocumentを取得
+  const result = await Promise.all(
+    selectedImgPathList.value.map((imgPath) => {
+      const query: Query = {
+        fieldPath: 'originalFilePath',
+        filterStr: '==',
+        value: imgPath,
       }
 
-      const path = `users/${this.user?.uid}/images`
+      return db.getDocIds(path, [query])
+    }),
+  )
 
-      // 選択した画像のdocumentを取得
-      const result = await Promise.all(
-        this.selectedImgPathList.map((imgPath) => {
-          const query: Query = {
-            fieldPath: 'originalFilePath',
-            filterStr: '==',
-            value: imgPath,
-          }
+  const deleteImgIds = result.flatMap((ids) => {
+    return ids
+  })
 
-          return db.getDocIds(path, [query])
-        }),
-      )
+  try {
+    // まとめて削除
+    await Promise.allSettled(
+      deleteImgIds.map((id) => {
+        return db.deleteDoc(path, id)
+      }),
+    )
 
-      const deleteImgIds = result.flatMap((ids) => {
-        return ids
-      })
-
-      try {
-        // まとめて削除
-        await Promise.allSettled(
-          deleteImgIds.map((id) => {
-            return db.deleteDoc(path, id)
-          }),
-        )
-
-        // TODO: トーストとかにしたい
-        alert('Remove successfully')
-        // TODO: firestoreを監視したい
-        this.imgList = await this.getImgList()
-      } catch (e) {
-        // TODO: トーストとかにしたい
-        alert('Some error occured')
-        console.error(e)
-      }
-    },
-  },
+    // TODO: トーストとかにしたい
+    alert('Remove successfully')
+    // TODO: firestoreを監視したい
+    imgList.value = await getImgList()
+  } catch (e) {
+    // TODO: トーストとかにしたい
+    alert('Some error occured')
+    console.error(e)
+  }
+}
+watch(user, async (user) => {
+  if (user != null) imgList.value = await getImgList()
+})
+onMounted(async () => {
+  if (user.value) imgList.value = await getImgList()
 })
 </script>
 

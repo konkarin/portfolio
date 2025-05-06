@@ -15,52 +15,40 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '@/api/apis'
 import type { Article } from '@/types/index'
 
-interface Data {
-  articles: Array<Article>
+const { $store } = useNuxtApp()
+const router = useRouter()
+
+const articles = ref<Article[]>([])
+const getArticles = async () => {
+  const collectionPath = `users/${$store.state.user?.uid}/articles`
+
+  // TODO: 型引数を渡す方がいい？
+  const article = (await db.getOrderDocs(collectionPath, 'createdDate', 'desc')) as Article[]
+
+  return article
 }
+const setArticles = async () => {
+  articles.value = await getArticles()
+}
+const addArticle = () => {
+  router.push({ path: `/dashboard/articles/${uuidv4()}` })
+}
+const removeArticle = async (docId: string) => {
+  const collectionPath = `users/${$store.state.user?.uid}/articles`
 
-export default defineComponent({
-  data(): Data {
-    return {
-      articles: [],
-    }
-  },
-  mounted() {
-    this.setArticles()
-  },
-  methods: {
-    async getArticles() {
-      const collectionPath = `users/${this.$store.state.user?.uid}/articles`
-
-      // TODO: 型引数を渡す方がいい？
-      const article = (await db.getOrderDocs(collectionPath, 'createdDate', 'desc')) as Article[]
-
-      return article
-    },
-
-    async setArticles() {
-      this.articles = await this.getArticles()
-    },
-
-    addArticle() {
-      this.$router.push({ path: `/dashboard/articles/${uuidv4()}` })
-    },
-
-    async removeArticle(docId: string) {
-      const collectionPath = `users/${this.$store.state.user?.uid}/articles`
-
-      await db.deleteDoc(collectionPath, docId).catch((e) => {
-        console.error(e)
-        alert('削除に失敗しました')
-      })
-      // TODO: onSnapshotでリアルタイムに反映させたい
-      alert('削除しました')
-    },
-  },
+  await db.deleteDoc(collectionPath, docId).catch((e) => {
+    console.error(e)
+    alert('削除に失敗しました')
+  })
+  // TODO: onSnapshotでリアルタイムに反映させたい
+  alert('削除しました')
+}
+onMounted(() => {
+  setArticles()
 })
 </script>
