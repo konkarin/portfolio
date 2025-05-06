@@ -5,7 +5,7 @@
     </div>
     <header v-if="!isLoading" class="auth-area">
       <template v-if="isAuth">
-        <button class="btn sign-out" @click="signOut()">Sign out</button>
+        <button class="btn sign-out" @click="_signOut()">Sign out</button>
       </template>
       <template v-else>
         <button class="btn sign-in" @click="signIn()">Sign in</button>
@@ -46,74 +46,58 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from '@firebase/auth'
 
-interface Data {
-  isLoading: boolean
-  isUploading: boolean
+const isLoading = ref(true)
+const isUploading = ref(false)
+
+const { $store } = useNuxtApp()
+const isAuth = computed((): boolean => {
+  return $store.state.isAuth
+})
+onMounted((): void => {
+  getAuth().onAuthStateChanged((user) => {
+    $store.commit('updateAuth', !!user)
+    if (user) {
+      $store.commit('updateUser', { uid: user.uid })
+    }
+
+    isLoading.value = false
+  })
+})
+
+const signIn = (): void => {
+  const provider = new GoogleAuthProvider()
+  signInWithPopup(getAuth(), provider)
+}
+const _signOut = async (): Promise<void> => {
+  isLoading.value = true
+  await signOut(getAuth())
+  isLoading.value = false
 }
 
-export default defineComponent({
-  name: 'PagesDashboard',
-  data(): Data {
-    return {
-      isLoading: true,
-      isUploading: false,
-    }
-  },
-  setup() {
-    const { APP_URL } = useRuntimeConfig().public
-
-    useHead({
-      title: 'Dashboard',
-      meta: [
-        { hid: 'og:type', property: 'og:type', content: 'article' },
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: `Dashboard - konkarin's photos & blog`,
-        },
-        {
-          hid: 'og:url',
-          property: 'og:url',
-          content: `${APP_URL}/Dashboard`,
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: 'https://konkarin.photo/HomeImg.jpg',
-        },
-      ],
-    })
-  },
-  computed: {
-    isAuth(): boolean {
-      return this.$store.state.isAuth
+const { APP_URL } = useRuntimeConfig().public
+useHead({
+  title: 'Dashboard',
+  meta: [
+    { hid: 'og:type', property: 'og:type', content: 'article' },
+    {
+      hid: 'og:title',
+      property: 'og:title',
+      content: `Dashboard - konkarin's photos & blog`,
     },
-  },
-  mounted(): void {
-    getAuth().onAuthStateChanged((user) => {
-      this.$store.commit('updateAuth', !!user)
-      if (user) {
-        this.$store.commit('updateUser', { uid: user.uid })
-      }
-
-      this.isLoading = false
-    })
-  },
-  methods: {
-    signIn(): void {
-      const provider = new GoogleAuthProvider()
-      signInWithPopup(getAuth(), provider)
+    {
+      hid: 'og:url',
+      property: 'og:url',
+      content: `${APP_URL}/Dashboard`,
     },
-
-    async signOut(): Promise<void> {
-      this.isLoading = true
-      await signOut(getAuth())
-      this.isLoading = false
+    {
+      hid: 'og:image',
+      property: 'og:image',
+      content: 'https://konkarin.photo/HomeImg.jpg',
     },
-  },
+  ],
 })
 </script>
 
