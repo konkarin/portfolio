@@ -8,18 +8,14 @@
   </div>
 </template>
 
-<script lang="ts">
-export default defineNuxtComponent({
-  props: {
-    error: {
-      type: Object,
-      default: null,
-    },
-  },
-  head() {
-    return {
-      title: 'エラー',
-    }
-  },
+<script setup lang="ts">
+defineProps<{
+  error: {
+    message?: string
+  }
+}>()
+
+useHead({
+  title: 'エラー',
 })
 </script>

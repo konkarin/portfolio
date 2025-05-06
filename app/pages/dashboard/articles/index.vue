@@ -3,12 +3,7 @@
 </template>
 
 <script lang="ts">
-export default defineNuxtComponent({
-  name: 'PagesDashboardArticlesIndex',
-  head() {
-    return {
-      title: 'Articles',
-    }
-  },
+useHead({
+  title: 'Articles',
 })
 </script>
