@@ -58,7 +58,7 @@ const isAuth = computed((): boolean => {
 })
 onMounted((): void => {
   getAuth().onAuthStateChanged((user) => {
-    $store.commit('updateAuth', !!user)
+    $store.commit('updateAuth', Boolean(user))
     if (user) {
       $store.commit('updateUser', { uid: user.uid })
     }

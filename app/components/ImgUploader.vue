@@ -23,12 +23,16 @@ const file = ref<File | null>(null)
 const user = computed(() => {
   return $store.state.user
 })
+const { showToast } = useToast()
 const setFile = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files && target.files[0]) {
     file.value = target.files[0]
   } else {
-    alert('Please select a file')
+    showToast({
+      title: 'Please select a file',
+      type: 'error',
+    })
   }
 }
 const uploadFile = async (): Promise<void> => {
@@ -48,13 +52,20 @@ const uploadFile = async (): Promise<void> => {
       cacheControl: 'public, max-age=31536000, s-maxage=31536000',
     })
 
-    alert('Uploaded successfully')
+    showToast({
+      title: 'Uploaded successfully',
+      type: 'success',
+    })
     file.value = null
 
     // TODO: 写真一覧を更新
     // getImages()
   } catch (e) {
-    alert(e)
+    console.error(e)
+    showToast({
+      title: 'Failed to upload',
+      type: 'error',
+    })
   }
 }
 </script>

@@ -52,9 +52,6 @@ import { db } from '~/api/apis'
 import type { Query } from '~/api/firestore'
 
 const { $store } = useNuxtApp()
-const imgList = ref<DocumentData[]>([])
-const selectedImgPathList = ref<string[]>([])
-const draggingIndex = ref(-1)
 const user = computed((): User | null => {
   return $store.state.user
 })
@@ -68,6 +65,15 @@ const getImgList = async (): Promise<DocumentData[]> => {
     return []
   }
 }
+const imgList = ref<DocumentData[]>([])
+watch(user, async (user) => {
+  if (user != null) imgList.value = await getImgList()
+})
+onMounted(async () => {
+  if (user.value) imgList.value = await getImgList()
+})
+
+const draggingIndex = ref(-1)
 const dragStart = (index: number) => {
   draggingIndex.value = index
 }
@@ -85,6 +91,7 @@ const drop = (e: Event, index: number) => {
   imgList.value.splice(index, 0, draggingImg)
   draggingIndex.value = -1
 }
+
 const saveImgList = async () => {
   const idList = imgList.value.map((img) => img.id as string)
   const path = `users/${user.value?.uid}/images`
@@ -94,16 +101,28 @@ const saveImgList = async () => {
         return db.updateData(path, id, { order: index })
       }),
     )
-    alert('Update successfully')
+    showToast({
+      title: 'Update successfully',
+      type: 'success',
+    })
   } catch (e) {
     console.error(e)
-    alert('Some error occured')
+    showToast({
+      title: 'Some error occured',
+      type: 'error',
+    })
   }
 }
+
+const selectedImgPathList = ref<string[]>([])
+const { showToast } = useToast()
 const deleteImgList = async (): Promise<void> => {
   // 画像が選択されてない場合アラートを表示
   if (selectedImgPathList.value.length === 0) {
-    alert('Please select images')
+    showToast({
+      title: 'Please select images',
+      type: 'error',
+    })
     return
   }
 
@@ -134,22 +153,20 @@ const deleteImgList = async (): Promise<void> => {
       }),
     )
 
-    // TODO: トーストとかにしたい
-    alert('Remove successfully')
+    showToast({
+      title: 'Remove successfully',
+      type: 'success',
+    })
     // TODO: firestoreを監視したい
     imgList.value = await getImgList()
   } catch (e) {
-    // TODO: トーストとかにしたい
-    alert('Some error occured')
+    showToast({
+      title: 'Some error occured',
+      type: 'error',
+    })
     console.error(e)
   }
 }
-watch(user, async (user) => {
-  if (user != null) imgList.value = await getImgList()
-})
-onMounted(async () => {
-  if (user.value) imgList.value = await getImgList()
-})
 </script>
 
 <style lang="scss" scoped>

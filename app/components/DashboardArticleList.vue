@@ -38,15 +38,22 @@ const setArticles = async () => {
 const addArticle = () => {
   router.push({ path: `/dashboard/articles/${uuidv4()}` })
 }
+const { showToast } = useToast()
 const removeArticle = async (docId: string) => {
   const collectionPath = `users/${$store.state.user?.uid}/articles`
 
   await db.deleteDoc(collectionPath, docId).catch((e) => {
     console.error(e)
-    alert('削除に失敗しました')
+    showToast({
+      title: '削除に失敗しました',
+      type: 'error',
+    })
   })
   // TODO: onSnapshotでリアルタイムに反映させたい
-  alert('削除しました')
+  showToast({
+    title: '削除しました',
+    type: 'success',
+  })
 }
 onMounted(() => {
   setArticles()

@@ -28,6 +28,7 @@ const getProfile = async () => {
   if (data === undefined) return ''
   return data.profile as string
 }
+const { showToast } = useToast()
 const saveProfile = async () => {
   const data = {
     profile: plainText.value as string,
@@ -36,18 +37,26 @@ const saveProfile = async () => {
   await db
     .addData('users', user.value?.uid || '', data)
     .then(() => {
-      // TODO: ポップアップにする
-      alert('Saved')
+      showToast({
+        title: 'Saved',
+        type: 'success',
+      })
     })
     .catch((e) => {
-      alert('Failed to update profiles.\nPlease retry.')
+      showToast({
+        title: 'Failed to update profiles.\nPlease retry.',
+        type: 'error',
+      })
       console.error(e)
     })
 }
 onMounted(async () => {
   plainText.value = await getProfile().catch((e) => {
+    showToast({
+      title: 'Failed to update profiles.\nPlease retry.',
+      type: 'error',
+    })
     console.error(e)
-    alert('Failed to get profiles.\nPlease retry.')
     return ''
   })
 })
