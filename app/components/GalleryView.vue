@@ -10,61 +10,52 @@
   </main>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { db } from '@/api/apis'
 
-export default defineNuxtComponent({
-  head() {
-    return {
-      title: 'Gallery',
-    }
-  },
-  computed: {
-    photoModal() {
-      return this.$store.state.photoModal
-    },
-    imgList() {
-      return this.$store.state.imgList
-    },
-    isLoadingImg() {
-      return this.$store.state.isLoadingImg
-    },
-  },
-  async mounted() {
-    if (this.imgList.length === 0) {
-      const collectionPath = `/users/${this.$config.public.AUTHOR_ID}/images`
+const { $store } = useNuxtApp()
+const photoModal = computed(() => {
+  return $store.state.photoModal
+})
+const imgList = computed(() => {
+  return $store.state.imgList
+})
+const isLoadingImg = computed(() => {
+  return $store.state.isLoadingImg
+})
+const closeModal = (): void => {
+  const payload = {
+    url: '',
+    show: false,
+  }
 
-      const imgList = await db.getOrderDocs(collectionPath, 'order')
-      this.$store.commit('updateImgList', imgList)
-    }
+  $store.commit('switchPhotoModal', payload)
+}
 
-    if (typeof this.$route.query.path === 'string') {
-      const imageDoc = this.imgList.find((img) => {
-        return img.originalFilePath.includes(this.$route.query.path)
-      })
+const route = useRoute()
+onMounted(async () => {
+  if (imgList.value.length === 0) {
+    const collectionPath = `/users/${useRuntimeConfig().public.AUTHOR_ID}/images`
 
-      if (imageDoc === undefined) return
+    const imgList = await db.getOrderDocs(collectionPath, 'order')
+    $store.commit('updateImgList', imgList)
+  }
 
-      this.$store.commit('switchPhotoModal', {
-        url: imageDoc.originalUrl,
-        show: true,
-      })
-    }
-  },
-  methods: {
-    closeModal(): void {
-      const payload = {
-        url: '',
-        show: false,
-      }
+  if (typeof route.query.path === 'string') {
+    const imageDoc = imgList.value.find((img) => {
+      return img.originalFilePath.includes(route.query.path)
+    })
 
-      this.$store.commit('switchPhotoModal', payload)
-    },
+    if (imageDoc === undefined) return
 
-    // ims.srcが404の時、Modalを非表示にしたい
-    // substituteSrc (index) {
-    //   this.imgList[index].thumburl = 'https://pbs.twimg.com/profile_images/1211962587442642944/iOxDr-Ba_400x400.jpg'
-    // }
-  },
+    $store.commit('switchPhotoModal', {
+      url: imageDoc.originalUrl,
+      show: true,
+    })
+  }
+})
+
+useHead({
+  title: 'Gallery',
 })
 </script>

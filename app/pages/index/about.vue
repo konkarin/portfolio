@@ -17,62 +17,53 @@
   </main>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { db } from '@/api/apis'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
-export default defineNuxtComponent({
-  name: 'PagesAbout',
-  async setup() {
-    const { AUTHOR_ID, APP_URL } = useRuntimeConfig().public
+const { AUTHOR_ID, APP_URL } = useRuntimeConfig().public
 
-    const { data: profile } = await useAsyncData(async () => {
-      const data = await db.getDocById('users', AUTHOR_ID).catch((e) => {
-        console.error(e)
-        return {
-          profile: '',
-        }
-      })
-
-      return await convertMarkdownTextToHTML(data?.profile || '')
-    })
-
-    useHead({
-      title: 'About',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: 'About konkarin.',
-        },
-        { hid: 'og:type', property: 'og:type', content: 'article' },
-        {
-          hid: 'og:title',
-          property: 'og:title',
-          content: "About - konkarin's photos & blog",
-        },
-        {
-          hid: 'og:url',
-          property: 'og:url',
-          content: `${APP_URL}/about`,
-        },
-        {
-          hid: 'og:description',
-          property: 'og:description',
-          content: 'About konkarin.',
-        },
-        {
-          hid: 'og:image',
-          property: 'og:image',
-          content: 'https://konkarin.photo/HomeImg.jpg',
-        },
-      ],
-    })
-
+const { data: profile } = await useAsyncData(async () => {
+  const data = await db.getDocById('users', AUTHOR_ID).catch((e) => {
+    console.error(e)
     return {
-      profile,
+      profile: '',
     }
-  },
+  })
+
+  return await convertMarkdownTextToHTML(data?.profile || '')
+})
+
+useHead({
+  title: 'About',
+  meta: [
+    {
+      hid: 'description',
+      name: 'description',
+      content: 'About konkarin.',
+    },
+    { hid: 'og:type', property: 'og:type', content: 'article' },
+    {
+      hid: 'og:title',
+      property: 'og:title',
+      content: "About - konkarin's photos & blog",
+    },
+    {
+      hid: 'og:url',
+      property: 'og:url',
+      content: `${APP_URL}/about`,
+    },
+    {
+      hid: 'og:description',
+      property: 'og:description',
+      content: 'About konkarin.',
+    },
+    {
+      hid: 'og:image',
+      property: 'og:image',
+      content: 'https://konkarin.photo/HomeImg.jpg',
+    },
+  ],
 })
 </script>
 

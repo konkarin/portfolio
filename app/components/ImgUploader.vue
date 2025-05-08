@@ -12,66 +12,49 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { v4 as uuidv4 } from 'uuid'
-import { getStorage, ref, uploadBytes } from 'firebase/storage'
-import type { User } from '@firebase/auth'
+import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage'
 
-type Data = {
-  isUploading: boolean
-  file: File | null
-}
+const { $store } = useNuxtApp()
 
-export default defineComponent({
-  data(): Data {
-    return {
-      isUploading: false,
-      file: null,
-    }
-  },
-  computed: {
-    user(): User | null {
-      return this.$store.state.user
-    },
-  },
-  methods: {
-    setFile(e: Event) {
-      const target = e.target as HTMLInputElement
-      if (target.files && target.files[0]) {
-        this.file = target.files[0]
-      } else {
-        alert('Please select a file')
-      }
-    },
-
-    // 画像をアップロード
-    async uploadFile(): Promise<void> {
-      if (this.user === null || this.file === null) return
-
-      // ローディングを表示
-      this.isUploading = true
-
-      const target = `users/${this.user.uid}/gallery/${uuidv4()}/original/${this.file.name}`
-
-      // 保存するファイル名に現在時刻を指定
-      const storageRef = ref(getStorage(), target)
-
-      // ストレージに保存
-      try {
-        await uploadBytes(storageRef, this.file, {
-          cacheControl: 'public, max-age=31536000, s-maxage=31536000',
-        })
-
-        alert('Uploaded successfully')
-        this.file = null
-
-        // TODO: 写真一覧を更新
-        // this.getImages()
-      } catch (e) {
-        alert(e)
-        this.$router.go({ name: 'Settings' } as any)
-      }
-    },
-  },
+const isUploading = ref(false)
+const file = ref<File | null>(null)
+const user = computed(() => {
+  return $store.state.user
 })
+const setFile = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    file.value = target.files[0]
+  } else {
+    alert('Please select a file')
+  }
+}
+const uploadFile = async (): Promise<void> => {
+  if (user.value === null || file.value === null) return
+
+  // ローディングを表示
+  isUploading.value = true
+
+  const target = `users/${user.value.uid}/gallery/${uuidv4()}/original/${file.value.name}`
+
+  // 保存するファイル名に現在時刻を指定
+  const storage = storageRef(getStorage(), target)
+
+  // ストレージに保存
+  try {
+    await uploadBytes(storage, file.value, {
+      cacheControl: 'public, max-age=31536000, s-maxage=31536000',
+    })
+
+    alert('Uploaded successfully')
+    file.value = null
+
+    // TODO: 写真一覧を更新
+    // getImages()
+  } catch (e) {
+    alert(e)
+  }
+}
 </script>

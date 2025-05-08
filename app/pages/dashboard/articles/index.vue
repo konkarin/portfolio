@@ -2,13 +2,8 @@
   <DashboardArticleList />
 </template>
 
-<script lang="ts">
-export default defineNuxtComponent({
-  name: 'PagesDashboardArticlesIndex',
-  head() {
-    return {
-      title: 'Articles',
-    }
-  },
+<script setup lang="ts">
+useHead({
+  title: 'Articles',
 })
 </script>

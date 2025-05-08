@@ -11,59 +11,44 @@
   </section>
 </template>
 
-<script lang="ts">
-import type { User } from '@firebase/auth'
+<script setup lang="ts">
 import { db } from '@/api/apis'
 
-type Data = {
-  plainText: string
+const { $store } = useNuxtApp()
+
+const plainText = ref('')
+const user = computed(() => {
+  return $store.state.user
+})
+const setPlainText = (val: string) => {
+  plainText.value = val
 }
+const getProfile = async () => {
+  const data = await db.getDocById('users', user.value?.uid || '')
+  if (data === undefined) return ''
+  return data.profile as string
+}
+const saveProfile = async () => {
+  const data = {
+    profile: plainText.value as string,
+  }
 
-export default defineComponent({
-  data(): Data {
-    return {
-      plainText: '',
-    }
-  },
-  computed: {
-    user(): User | null {
-      return this.$store.state.user
-    },
-  },
-  async mounted() {
-    this.plainText = await this.getProfile().catch((e) => {
-      console.error(e)
-      alert('Failed to get profiles.\nPlease retry.')
-      return ''
+  await db
+    .addData('users', user.value?.uid || '', data)
+    .then(() => {
+      // TODO: ポップアップにする
+      alert('Saved')
     })
-  },
-  methods: {
-    setPlainText(val: string) {
-      this.plainText = val
-    },
-
-    async getProfile() {
-      const data = await db.getDocById('users', this.user?.uid || '')
-      if (data === undefined) return ''
-      return data.profile as string
-    },
-
-    async saveProfile() {
-      const data = {
-        profile: this.plainText as string,
-      }
-
-      await db
-        .addData('users', this.user?.uid || '', data)
-        .then(() => {
-          // TODO: ポップアップにする
-          alert('Saved')
-        })
-        .catch((e) => {
-          alert('Failed to update profiles.\nPlease retry.')
-          console.error(e)
-        })
-    },
-  },
+    .catch((e) => {
+      alert('Failed to update profiles.\nPlease retry.')
+      console.error(e)
+    })
+}
+onMounted(async () => {
+  plainText.value = await getProfile().catch((e) => {
+    console.error(e)
+    alert('Failed to get profiles.\nPlease retry.')
+    return ''
+  })
 })
 </script>
