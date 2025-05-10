@@ -130,14 +130,21 @@ const showArticle = async (): Promise<void> => {
   if (a == null) return
   article.value = a
 }
+const { showToast } = useToast()
 const updateArticle = async () => {
   if (article.value.title.length === 0) {
-    alert('Titleは必須です。')
+    showToast({
+      title: 'Titleは必須です。',
+      type: 'error',
+    })
     return
   }
 
   if (!isValidCustomId.value) {
-    alert('利用できないCustomIDです')
+    showToast({
+      title: '利用できないCustomIDです',
+      type: 'error',
+    })
     return
   }
 
@@ -160,7 +167,10 @@ const updateArticle = async () => {
   try {
     await db.addData(articlesPath, article.value.id, article.value)
   } catch {
-    alert('Failed to update artilces')
+    showToast({
+      title: 'Failed to update articles.',
+      type: 'error',
+    })
     return
   }
 
@@ -177,12 +187,18 @@ const updateArticle = async () => {
         await db.addData(articleTagsPath, tag, {})
       }
     } catch {
-      alert('Failed to update tags')
+      showToast({
+        title: 'Failed to update tags',
+        type: 'error',
+      })
       return
     }
   }
 
-  alert('Completed')
+  showToast({
+    title: 'Completed',
+    type: 'success',
+  })
 }
 
 const { uploadImage } = useImageUpload()
@@ -229,7 +245,10 @@ onMounted(async () => {
     await showArticle()
   } catch (e) {
     console.error(e)
-    alert('Failed to get articles.\nPlease retry.')
+    showToast({
+      title: 'Failed to get articles.\nPlease retry.',
+      type: 'error',
+    })
     return
   }
 
