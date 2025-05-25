@@ -33,35 +33,6 @@ commands:
           command: cd functions && npm run build
 
 jobs:
-  deploy_sta:
-    executor: default-executor
-    steps:
-      - checkout
-      - install-modules
-      - set-env
-      - run:
-          name: build
-          command: npm run generate
-      - build-functions
-      - run:
-          name: deploy to Firebase
-          # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
-          command: ./node_modules/.bin/firebase deploy -f --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
-
-  deploy_sta_hosting:
-    executor: default-executor
-    steps:
-      - checkout
-      - install-modules
-      - set-env
-      - run:
-          name: build
-          command: npm run generate
-      - run:
-          name: deploy to Firebase Hosting
-          # devDependenciesに firebase-tools が必須 npm i -D firebase-tools
-          command: ./node_modules/.bin/firebase deploy --only hosting --token=$STAGING_FIREBASE_TOKEN --project=$STAGING_FIREBASE_PJ
-
   deploy_prod:
     executor: default-executor
     steps:
@@ -93,12 +64,6 @@ jobs:
 
 workflows:
   version: 2
-  deploy_sta:
-    jobs:
-      - deploy_sta:
-          filters:
-            branches:
-              only: develop
 
   deploy_prod:
     jobs:
