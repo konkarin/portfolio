@@ -1,0 +1,40 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set environment
+        run: |
+          echo "Setting staging environment"
+          cp -f config/stg.ts config.ts
+
+      - name: Build
+        run: npm run generate
+
+      - name: Install Cloud Functions dependencies
+        run: cd functions && npm ci
+
+      - name: Build Cloud Functions
+        run: cd functions && npm run build
+
+      - name: Deploy to Firebase
+        run: npx firebase deploy -f --token=${{ secrets.STAGING_FIREBASE_TOKEN }} --project=staging-konkarin-photo
