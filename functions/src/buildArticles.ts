@@ -33,16 +33,13 @@ const triggerGitHubWorkflow = async () => {
   const url = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflow}/dispatches`
   const data = {
     ref: config.projectId === 'konkarin-photo' ? 'master' : 'develop',
-    inputs: {
-      reason: 'Article was updated',
-    },
   }
 
   const headers = {
-    Accept: 'application/vnd.github.v3+json',
+    Accept: 'application/vnd.github+json',
     'Content-Type': 'application/json',
     Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-    'User-Agent': 'Firebase-Function',
+    'X-GitHub-Api-Version': '2022-11-28',
   }
 
   await axios
