@@ -14,15 +14,6 @@
     <main v-if="isAuth" class="dashboard">
       <nav v-if="!$route.params.article" class="dashboard__nav">
         <NuxtLink
-          to="/dashboard/profile"
-          class="dashboard__navItem"
-          :class="{
-            'dashboard__navItem--active': $route.path === '/dashboard/profile',
-          }"
-        >
-          Profile
-        </NuxtLink>
-        <NuxtLink
           to="/dashboard/gallery"
           class="dashboard__navItem"
           :class="{

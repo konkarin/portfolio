@@ -177,24 +177,6 @@ a {
   }
 }
 
-@media screen and (max-width: $sm) {
-  .profile {
-    display: block;
-    width: 100%;
-    padding-left: 15px;
-    padding-top: 1em;
-    h2 {
-      margin-top: 1em;
-    }
-    h3 {
-      font-size: 1.2em;
-    }
-    p {
-      font-size: 0.9em;
-    }
-  }
-}
-
 /* gallery */
 .gallery {
   display: flex;

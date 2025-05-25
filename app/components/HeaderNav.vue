@@ -8,13 +8,6 @@
       Home
     </NuxtLink>
     <NuxtLink
-      to="/about"
-      class="headerNav__item"
-      :class="{ 'headerNav__item--active': $route.path === '/about' }"
-    >
-      About
-    </NuxtLink>
-    <NuxtLink
       to="/gallery"
       class="headerNav__item"
       :class="{ 'headerNav__item--active': $route.path === '/gallery' }"
