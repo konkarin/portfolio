@@ -1,13 +1,7 @@
 name: Deploy Hosting to Staging
 
 on:
-  workflow_dispatch: # This allows manual triggering
-    inputs:
-      reason:
-        description: 'Reason for deployment'
-        required: false
-        default: 'Manual trigger'
-        type: string
+  workflow_dispatch:
 
 jobs:
   deploy-hosting:
