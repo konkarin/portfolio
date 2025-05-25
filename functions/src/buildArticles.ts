@@ -5,7 +5,7 @@ import { log, error } from 'firebase-functions/logger'
 export const buildArticles = onDocumentWritten(
   {
     region: 'asia-northeast1',
-    secrets: ['CIRCLE_CI_TOKEN'],
+    secrets: ['GITHUB_TOKEN'],
     document: '/users/{uid}/articles/{articleId}',
   },
   async (event) => {
@@ -13,27 +13,36 @@ export const buildArticles = onDocumentWritten(
     if (!snap?.before.get('isPublished') && !snap?.after.get('isPublished')) {
       log('No articles to update')
     } else {
-      await requestCI()
+      await triggerGitHubWorkflow()
     }
   },
 )
 
-const requestCI = async () => {
+const triggerGitHubWorkflow = async () => {
   // NOTE: https://firebase.google.com/docs/functions/config-env?hl=ja#automatically_populated_environment_variables
   const config = JSON.parse(process.env.FIREBASE_CONFIG)
-  const branch = config.projectId === 'konkarin-photo' ? 'master' : 'develop'
-  const job = config.projectId === 'konkarin-photo' ? 'deploy_prod_hosting' : 'deploy_sta_hosting'
+  const workflow =
+    config.projectId === 'konkarin-photo'
+      ? 'deploy-production-hosting.yml'
+      : 'deploy-staging-hosting.yml'
 
-  const url = `https://circleci.com/api/v1.1/project/github/konkarin/portfolio/tree/${branch}`
+  // GitHubリポジトリ情報
+  const owner = 'konkarin'
+  const repo = 'portfolio'
+
+  const url = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/${workflow}/dispatches`
   const data = {
-    build_parameters: {
-      CIRCLE_JOB: job,
+    ref: config.projectId === 'konkarin-photo' ? 'master' : 'develop',
+    inputs: {
+      reason: 'Article was updated',
     },
   }
 
   const headers = {
+    Accept: 'application/vnd.github.v3+json',
     'Content-Type': 'application/json',
-    'Circle-Token': process.env.CIRCLE_CI_TOKEN,
+    Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+    'User-Agent': 'Firebase-Function',
   }
 
   await axios
@@ -41,9 +50,9 @@ const requestCI = async () => {
       headers,
     })
     .catch((e) => {
-      error(e)
+      error(`Failed to trigger GitHub workflow: ${e.message}`)
       throw e
     })
 
-  log('triggered success')
+  log(`GitHub Actions workflow ${workflow} triggered successfully`)
 }

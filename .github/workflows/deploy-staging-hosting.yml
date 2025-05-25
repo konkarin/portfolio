@@ -1,0 +1,41 @@
+name: Deploy Hosting to Staging
+
+on:
+  workflow_dispatch: # This allows manual triggering
+    inputs:
+      reason:
+        description: 'Reason for deployment'
+        required: false
+        default: 'Manual trigger'
+        type: string
+
+jobs:
+  deploy-hosting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log deployment reason
+        run: echo "Deploying to staging because - ${{ github.event.inputs.reason || 'Manual trigger' }}"
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set environment
+        run: |
+          echo "Setting staging environment"
+          cp -f config/stg.ts config.ts
+
+      - name: Build
+        run: npm run generate
+
+      - name: Deploy to Firebase Hosting
+        run: npx firebase deploy --only hosting --token=${{ secrets.STAGING_FIREBASE_TOKEN }} --project=staging-konkarin-photo
