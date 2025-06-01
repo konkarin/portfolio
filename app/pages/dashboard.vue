@@ -97,4 +97,36 @@ useHead({
   width: 150px;
   position: sticky;
 }
+
+.dashboard {
+  max-width: 1200px;
+  margin: 3rem auto 0;
+
+  @media screen and (max-width: $sm) {
+    .dashboard {
+      margin: 0;
+      padding: 2rem 1rem;
+    }
+  }
+}
+
+.dashboard__nav {
+  position: fixed;
+}
+
+.dashboard__navItem {
+  display: flex;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.1em;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+  &:hover {
+    text-decoration: none;
+    color: var(--black);
+  }
+}
+
+.dashboard__navItem--active {
+  color: var(--black);
+}
 </style>

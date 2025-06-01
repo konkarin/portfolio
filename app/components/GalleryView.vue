@@ -1,5 +1,5 @@
 <template>
-  <main class="wrapper">
+  <main class="gallery">
     <div v-if="isLoadingImg" class="overlay">
       <div class="loader" />
     </div>
@@ -59,3 +59,9 @@ useHead({
   title: 'Gallery',
 })
 </script>
+
+<style lang="scss" scoped>
+.gallery {
+  padding: 0 4rem 2rem;
+}
+</style>

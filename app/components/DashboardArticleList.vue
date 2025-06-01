@@ -1,6 +1,5 @@
 <template>
   <section class="dashboard__content dashboardArticleList">
-    <h1 class="dashboard__title">Articles</h1>
     <div class="dashboardArticleList__header">
       <button class="btn" @click="addArticle">Add new</button>
     </div>
@@ -59,3 +58,9 @@ onMounted(() => {
   setArticles()
 })
 </script>
+
+<style lang="scss" scoped>
+.dashboard__title {
+  display: flex;
+}
+</style>

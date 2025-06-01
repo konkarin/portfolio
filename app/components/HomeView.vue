@@ -266,11 +266,11 @@ h2 {
 .link-button {
   padding: 0.5rem 1rem;
   border-radius: 50px;
-  background-color: #f2df0c;
+  background-color: var(--yellow);
   font-weight: bold;
   transition: opacity 0.3s;
   &:hover {
-    opacity: 0.6;
+    opacity: 0.7;
   }
 }
 

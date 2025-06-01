@@ -1,6 +1,5 @@
 <template>
   <section class="dashboard__content">
-    <h3>Gallery Edit</h3>
     <div class="dashboardEdit__head">
       <ImgUploader />
       <div class="dashboardEdit__controler">

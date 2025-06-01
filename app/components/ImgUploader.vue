@@ -1,8 +1,8 @@
 <template>
   <div class="imgUploader__container">
     <div class="imgUploader__content">
-      <label class="imgUploader__selectImg">
-        <Photo class="imgUploader__selectBtn selectBtn selectBtn--large" />
+      <label class="btn imgUploader__selectImg">
+        Add
         <input type="file" accept=".jpeg, .jpg, .png" @change="setFile" />
       </label>
     </div>
@@ -63,3 +63,27 @@ const uploadFile = async (file: File): Promise<void> => {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.imgUploader {
+}
+
+.imgUploader__container {
+  display: flex;
+  align-items: center;
+}
+.imgUploader__selectImg {
+  input {
+    display: none;
+  }
+}
+
+.selectBtn {
+  color: var(--yellow);
+  font-size: 2rem;
+  &:hover {
+    background-color: var(--lightGray);
+    border-radius: 50%;
+  }
+}
+</style>
