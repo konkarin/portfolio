@@ -1,5 +1,5 @@
 <template>
-  <main class="home-image" />
+  <HomeView />
 </template>
 
 <script setup lang="ts">
@@ -8,14 +8,6 @@ defineOptions({
 })
 
 const { APP_URL } = useRuntimeConfig().public
-const { imgList } = useNuxtApp().$store.state
-
-onMounted(async () => {
-  if (imgList.length === 0) return
-
-  // 画像のプリロード
-  await loadImgList(imgList)
-})
 
 useHead({
   title: 'Home',

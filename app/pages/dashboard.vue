@@ -29,7 +29,7 @@
             'dashboard__navItem--active': $route.path === '/dashboard/articles',
           }"
         >
-          Articles
+          Blog
         </NuxtLink>
       </nav>
       <NuxtPage />

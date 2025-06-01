@@ -24,11 +24,13 @@ export default defineComponent({
   line-height: 1.9;
 
   & a {
-    color: var(--yellow);
+    color: var(--darkYellow);
     line-break: anywhere;
     word-break: break-all;
+    text-decoration: underline;
+    text-decoration-color: var(--darkYellow);
     &:hover {
-      text-decoration: underline;
+      text-decoration: none;
     }
   }
 

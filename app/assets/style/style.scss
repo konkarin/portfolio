@@ -7,11 +7,9 @@
   --gray: rgb(179, 179, 179);
   --lightGray: rgb(179, 179, 179, 0.1);
   --brightGray: rgb(240, 240, 240);
-  --yellow: rgb(255, 173, 31);
-  --middleYellow: rgb(255, 173, 31, 0.5);
   --lightYellow: rgb(255, 173, 31, 0.1);
-  --darkYellow: rgb(230, 156, 28);
-  --yellow: rgb(255, 173, 31);
+  --darkYellow: #8f7000;
+  --yellow: #f2df0c;
   --white: rgb(255, 255, 255);
   --danger: rgb(225, 71, 71);
   --font:
@@ -29,12 +27,7 @@ html {
   color: var(--black);
   -webkit-text-size-adjust: 100%;
   font-family: var(--font);
-}
-
-@media screen and (max-width: $md) {
-  html {
-    font-size: 15px;
-  }
+  background-color: #fcfbf8;
 }
 
 h1 {
@@ -62,7 +55,7 @@ a {
   font-size: 2rem;
   text-align: center;
   &__link {
-    color: var(--yellow);
+    color: var(--darkYellow);
     @media screen and (min-width: $md) {
       &:hover {
         text-decoration: underline;
@@ -82,20 +75,6 @@ a {
 
 .textMessage {
   margin: 1rem 4rem;
-}
-
-/* home */
-.home-image {
-  background-image: url('/HomeImg.jpg');
-  background-size: cover;
-  background-position: 50%;
-  height: calc(100vh - 61px);
-}
-
-@media screen and (max-width: $md) {
-  .home-image {
-    height: calc(100vh - 38px);
-  }
 }
 
 /* wrapper */
@@ -206,7 +185,7 @@ a {
   padding: 0.3em 1em;
   text-decoration: none;
   background-color: var(--yellow);
-  color: var(--white);
+  color: var(--black);
   border: 0;
   border-radius: 0.5em;
   transition: 0.4s;
@@ -307,7 +286,7 @@ a {
 
     &:hover {
       .sideMenuItem__title {
-        color: var(--yellow);
+        color: var(--darkYellow);
       }
     }
 
@@ -400,7 +379,7 @@ a {
   @media (hover: hover) {
     &:hover {
       text-decoration: none;
-      color: var(--yellow);
+      color: var(--darkYellow);
       & .articleItem__eyeCatchInner {
         transform: scale(1.05);
         opacity: 0.8;
@@ -447,7 +426,6 @@ a {
   font-size: 3rem;
   filter: grayscale(1);
   background: #eee;
-  opacity: 0.6;
 }
 
 .articleItem__titleContainer {
