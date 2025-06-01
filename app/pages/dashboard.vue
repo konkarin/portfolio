@@ -118,7 +118,6 @@ useHead({
   display: flex;
   padding: 0.5rem 1.5rem;
   font-size: 1.1em;
-  letter-spacing: 0.1em;
   color: var(--gray);
   &:hover {
     text-decoration: none;

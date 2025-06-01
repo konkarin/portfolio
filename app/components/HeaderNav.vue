@@ -39,7 +39,6 @@
   display: inline-block;
   color: var(--gray);
   font-size: 1rem;
-  letter-spacing: 0.1em;
   padding: 0 0.6rem;
   text-decoration: none;
   transition: 0.3s;
