@@ -2,11 +2,8 @@ import { generateRoutes } from './routes'
 import { runtimePublicConfig } from './config'
 
 export default defineNuxtConfig({
-  devtools: {
-    enabled: true,
-    timeline: {
-      enabled: true,
-    },
+  experimental: {
+    componentIslands: true,
   },
 
   routeRules: {
@@ -62,6 +59,9 @@ export default defineNuxtConfig({
           additionalData: '@use "@/assets/style/variables.scss" as *;',
         },
       },
+    },
+    experimental: {
+      enableNativePlugin: true,
     },
   },
 

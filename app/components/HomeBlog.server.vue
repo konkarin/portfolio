@@ -1,109 +1,37 @@
 <template>
-  <main class="wrapper">
-    <article class="wrapper-inner">
-      <HomeProfile />
-      <HomeRss />
-      <HomeBlog />
-    </article>
-  </main>
+  <section>
+    <h2>Blog</h2>
+    <ul class="blog">
+      <li v-for="article in recentArticles" :key="article.id" class="post">
+        <NuxtLink :to="`/articles/${article.customId || article.id}`">
+          <div class="post-inner">
+            <p class="post-title">
+              {{ article.title }}
+            </p>
+            <p class="post-text">{{ article.text.slice(0, 80) }}...</p>
+          </div>
+          <div class="post-img">
+            <img v-if="article.ogpImageUrl" :src="article.ogpImageUrl" alt="" />
+            <div class="post-dummyImg" v-else>🦊</div>
+          </div>
+        </NuxtLink>
+      </li>
+    </ul>
+    <div class="blog-footer">
+      <NuxtLink to="articles" class="link-button">View All Posts</NuxtLink>
+    </div>
+  </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const recentArticles = computed(() => {
+  return useNuxtApp().$articles.value?.slice(0, 2) || []
+})
+</script>
 
 <style lang="scss" scoped>
 h2 {
   margin: 1rem 0;
-}
-.wrapper-inner {
-  max-width: 65ch;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.profile {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.profile-image {
-  display: flex;
-  justify-content: center;
-  > div {
-    background-position: center;
-    background-repeat: no-repeat;
-    aspect-ratio: 1 / 1;
-    background-size: cover;
-    border-radius: 50%;
-    min-height: 8rem;
-    width: 8rem;
-    background-image: url('https://pbs.twimg.com/profile_images/1819236852714422272/m0kTpheH_400x400.jpg');
-  }
-}
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.profile-name {
-  color: #1c1b0d;
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
-  text-align: center;
-}
-
-.profile-title,
-.profile-location {
-  color: #9c9549;
-  font-size: 1rem;
-  font-weight: normal;
-  line-height: normal;
-  text-align: center;
-}
-
-.accounts {
-  display: flex;
-  gap: 0.5rem;
-  > a {
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-    border-bottom: 1px solid #000;
-    &:hover {
-      border-bottom: 1px solid transparent;
-    }
-  }
-}
-
-.tech-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  padding: 0;
-}
-
-.tech {
-  > a {
-    display: flex;
-    gap: 0.2rem;
-    padding: 2px;
-    text-decoration: underline;
-    &:hover {
-      text-decoration: none;
-    }
-  }
-}
-
-.favicon {
-  width: 24px;
-  height: 24px;
-  display: inline;
-  border-radius: 4px;
 }
 
 .blog {
