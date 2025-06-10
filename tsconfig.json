@@ -1,14 +1,7 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
-    "esModuleInterop": true,
-    "allowJs": true,
-    "sourceMap": true,
-    "strict": true,
-    "noEmit": true,
-    "experimentalDecorators": true,
-    "types": ["@types/node", "vitest/globals", "@types/uuid", "@types/lodash.debounce"]
+    "types": ["@types/node", "vitest/globals", "@types/uuid"]
   },
   "exclude": ["node_modules", "functions"]
 }
