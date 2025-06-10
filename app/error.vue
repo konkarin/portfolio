@@ -19,3 +19,14 @@ useHead({
   title: 'エラー',
 })
 </script>
+
+<style lang="scss" scoped>
+.error {
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.error__btn {
+  margin-top: 1rem;
+}
+</style>

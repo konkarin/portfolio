@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-show="isUploading || isLoading" class="overlay">
-      <div class="loader" />
+      <Loader />
     </div>
     <header v-if="!isLoading" class="auth-area">
       <template v-if="isAuth">
@@ -14,15 +14,6 @@
     <main v-if="isAuth" class="dashboard">
       <nav v-if="!$route.params.article" class="dashboard__nav">
         <NuxtLink
-          to="/dashboard/gallery"
-          class="dashboard__navItem"
-          :class="{
-            'dashboard__navItem--active': $route.path === '/dashboard/gallery',
-          }"
-        >
-          Gallery
-        </NuxtLink>
-        <NuxtLink
           to="/dashboard/articles"
           class="dashboard__navItem"
           :class="{
@@ -30,6 +21,15 @@
           }"
         >
           Blog
+        </NuxtLink>
+        <NuxtLink
+          to="/dashboard/gallery"
+          class="dashboard__navItem"
+          :class="{
+            'dashboard__navItem--active': $route.path === '/dashboard/gallery',
+          }"
+        >
+          Gallery
         </NuxtLink>
       </nav>
       <NuxtPage />
@@ -93,6 +93,11 @@ useHead({
 </script>
 
 <style lang="scss" scoped>
+.sign-in,
+.sign-out {
+  margin: 0 0 0 auto;
+}
+
 .dashboardTab {
   width: 150px;
   position: sticky;
@@ -127,5 +132,13 @@ useHead({
 
 .dashboard__navItem--active {
   color: var(--black);
+}
+
+.auth-area {
+  display: flex;
+  // margin-top: 1rem;
+  // margin-right: 1rem;
+  max-width: 1200px;
+  margin: 1rem auto 0;
 }
 </style>

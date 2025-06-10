@@ -63,4 +63,13 @@ onMounted(() => {
 .dashboard__title {
   display: flex;
 }
+
+.dashboardArticleList__header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dashboardArticleList__body {
+  margin-top: 1rem;
+}
 </style>

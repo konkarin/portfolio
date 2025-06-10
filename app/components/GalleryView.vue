@@ -1,7 +1,7 @@
 <template>
   <main class="gallery">
     <div v-if="isLoadingImg" class="overlay">
-      <div class="loader" />
+      <Loader />
     </div>
     <ImgContainer :img-list="imgList" />
     <transition name="fade-modal">
@@ -63,5 +63,16 @@ useHead({
 <style lang="scss" scoped>
 .gallery {
   padding: 0 4rem 2rem;
+  display: flex;
+  padding-top: 1em;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+.gallery-enter-active {
+  transition: opacity 0.5s ease-in;
+}
+.gallery-enter {
+  opacity: 0;
 }
 </style>
