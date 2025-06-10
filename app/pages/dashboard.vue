@@ -42,6 +42,8 @@ const signIn = (): void => {
   const provider = new GoogleAuthProvider()
   signInWithPopup(getAuth(), provider)
 }
+
+useRouterCommand('home')
 </script>
 
 <style lang="scss" scoped>
