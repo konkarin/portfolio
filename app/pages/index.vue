@@ -22,4 +22,20 @@ useHead({
     },
   ],
 })
+
+const keyList = ref<string>('')
+function handleKeydown(event: KeyboardEvent) {
+  console.log(event.key)
+  keyList.value += event.key
+
+  if (keyList.value.includes('/dashboard')) {
+    useRouter().push('/dashboard/articles')
+  }
+}
+onMounted(() => {
+  window.addEventListener('keydown', handleKeydown)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleKeydown)
+})
 </script>
