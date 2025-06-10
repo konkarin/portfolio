@@ -1,13 +1,10 @@
 <template>
   <div class="imgUploader__container">
     <div class="imgUploader__content">
-      <label class="imgUploader__selectImg">
-        <Photo class="imgUploader__selectBtn selectBtn selectBtn--large" />
+      <label class="btn imgUploader__selectImg">
+        Add
         <input type="file" accept=".jpeg, .jpg, .png" @change="setFile" />
       </label>
-    </div>
-    <div class="imgUploader__content">
-      <button class="btn" :disabled="file === null" @click="uploadFile()">upload</button>
     </div>
   </div>
 </template>
@@ -16,39 +13,36 @@
 import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage'
 
-const { $store } = useNuxtApp()
+const { $accessor } = useNuxtApp()
 
 const isUploading = ref(false)
-const file = ref<File | null>(null)
+const fileRef = ref<File | null>(null)
 const user = computed(() => {
-  return $store.state.user
+  return $accessor.user
 })
-const { showToast } = useToast()
 const setFile = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files && target.files[0]) {
-    file.value = target.files[0]
-  } else {
-    showToast({
-      title: 'Please select a file',
-      type: 'error',
-    })
+    fileRef.value = target.files[0]
+    uploadFile(fileRef.value)
   }
 }
-const uploadFile = async (): Promise<void> => {
-  if (user.value === null || file.value === null) return
+
+const { showToast } = useToast()
+const uploadFile = async (file: File): Promise<void> => {
+  if (user.value === null) return
 
   // ローディングを表示
   isUploading.value = true
 
-  const target = `users/${user.value.uid}/gallery/${uuidv4()}/original/${file.value.name}`
+  const target = `users/${user.value.uid}/gallery/${uuidv4()}/original/${file.name}`
 
   // 保存するファイル名に現在時刻を指定
   const storage = storageRef(getStorage(), target)
 
   // ストレージに保存
   try {
-    await uploadBytes(storage, file.value, {
+    await uploadBytes(storage, file, {
       cacheControl: 'public, max-age=31536000, s-maxage=31536000',
     })
 
@@ -56,7 +50,7 @@ const uploadFile = async (): Promise<void> => {
       title: 'Uploaded successfully',
       type: 'success',
     })
-    file.value = null
+    fileRef.value = null
 
     // TODO: 写真一覧を更新
     // getImages()
@@ -69,3 +63,27 @@ const uploadFile = async (): Promise<void> => {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.imgUploader {
+}
+
+.imgUploader__container {
+  display: flex;
+  align-items: center;
+}
+.imgUploader__selectImg {
+  input {
+    display: none;
+  }
+}
+
+.selectBtn {
+  color: var(--yellow);
+  font-size: 2rem;
+  &:hover {
+    background-color: var(--lightGray);
+    border-radius: 50%;
+  }
+}
+</style>

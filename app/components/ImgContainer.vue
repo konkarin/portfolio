@@ -1,14 +1,6 @@
 <template>
   <section class="imgContainer">
-    <div
-      v-for="img in imgList"
-      :key="img.originalUrl"
-      class="photoBox"
-      :style="{
-        width: `${(img.width * 200) / img.height}px`,
-        'flex-grow': `${(img.width * 200) / img.height}`,
-      }"
-    >
+    <div v-for="img in imgList" :key="img.originalUrl" class="photoBox">
       <div class="photoBox__thumbnail" @click="openModal(img.originalUrl)">
         <img class="photoBox__photo" :src="img.thumbUrl" />
       </div>
@@ -31,8 +23,9 @@ export default defineComponent({
       const payload = {
         url,
         show: true,
+        exif: {},
       }
-      this.$store.commit('switchPhotoModal', payload)
+      this.$accessor.switchPhotoModal(payload)
     },
   },
 })
@@ -41,23 +34,34 @@ export default defineComponent({
 <style lang="scss" scoped>
 .imgContainer {
   margin-top: 2rem;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 10px;
-  &::after {
-    content: '';
-    flex-grow: 9999;
+  grid-template-columns: 1fr;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 
 .photoBox {
   box-sizing: border-box;
-  width: 25%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
+  width: 100%;
 }
 
 .photoBox__thumbnail {
   overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .photoBox__checkbox {
@@ -71,7 +75,7 @@ export default defineComponent({
 .photoBox__photo {
   cursor: pointer;
   height: 100%;
-  display: block;
+  object-fit: cover;
   // NOTE: max-width: 100%だと画像自体の大きさ以上に拡大されない
   width: 100%;
   transition-duration: 0.3s;

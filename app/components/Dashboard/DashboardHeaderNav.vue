@@ -3,23 +3,16 @@
     <div class="headerNav__icon"></div>
     <div>
       <NuxtLink
-        to="/"
+        to="/dashboard/gallery"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path === '/' }"
-      >
-        Home
-      </NuxtLink>
-      <NuxtLink
-        to="/gallery"
-        class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path === '/gallery' }"
+        :class="{ 'headerNav__item--active': $route.path === '/dashboard/gallery' }"
       >
         Gallery
       </NuxtLink>
       <NuxtLink
-        to="/articles"
+        to="/dashboard/articles"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path.includes('/articles') }"
+        :class="{ 'headerNav__item--active': $route.path.includes('/dashboard/articles') }"
       >
         Blog
       </NuxtLink>

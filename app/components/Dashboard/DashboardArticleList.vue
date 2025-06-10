@@ -1,6 +1,5 @@
 <template>
   <section class="dashboard__content dashboardArticleList">
-    <h1 class="dashboard__title">Articles</h1>
     <div class="dashboardArticleList__header">
       <button class="btn" @click="addArticle">Add new</button>
     </div>
@@ -20,12 +19,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { db } from '@/api/apis'
 import type { Article } from '@/types/index'
 
-const { $store } = useNuxtApp()
+const { $accessor } = useNuxtApp()
 const router = useRouter()
 
 const articles = ref<Article[]>([])
 const getArticles = async () => {
-  const collectionPath = `users/${$store.state.user?.uid}/articles`
+  const collectionPath = `users/${$accessor.user?.uid}/articles`
 
   // TODO: 型引数を渡す方がいい？
   const article = (await db.getOrderDocs(collectionPath, 'createdDate', 'desc')) as Article[]
@@ -40,7 +39,7 @@ const addArticle = () => {
 }
 const { showToast } = useToast()
 const removeArticle = async (docId: string) => {
-  const collectionPath = `users/${$store.state.user?.uid}/articles`
+  const collectionPath = `users/${$accessor.user?.uid}/articles`
 
   await db.deleteDoc(collectionPath, docId).catch((e) => {
     console.error(e)
@@ -59,3 +58,17 @@ onMounted(() => {
   setArticles()
 })
 </script>
+
+<style lang="scss" scoped>
+.dashboard__title {
+  display: flex;
+}
+
+.dashboardArticleList__header {
+  display: flex;
+}
+
+.dashboardArticleList__body {
+  margin-top: 1rem;
+}
+</style>

@@ -2,16 +2,12 @@ import { generateRoutes } from './routes'
 import { runtimePublicConfig } from './config'
 
 export default defineNuxtConfig({
-  devtools: {
-    enabled: true,
-    timeline: {
-      enabled: true,
-    },
+  experimental: {
+    componentIslands: true,
   },
 
   routeRules: {
     '/': { prerender: true },
-    '/about': { prerender: true },
     '/gallery': { prerender: true },
     '/articles': { prerender: true },
     '/dashboard/**': { ssr: false },
@@ -88,5 +84,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-12-30',
   future: {
     compatibilityVersion: 4,
+  },
+  typescript: {
+    shim: true,
   },
 })

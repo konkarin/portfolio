@@ -128,7 +128,5 @@ export default defineNuxtPlugin((nuxtApp) => {
 declare module 'vue' {
   interface ComponentCustomProperties {
     $accessor: typeof accessor
-    // Nuxt v2との互換性のための型定義
-    $store: typeof store
   }
 }

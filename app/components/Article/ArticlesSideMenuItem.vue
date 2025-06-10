@@ -32,3 +32,9 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.sideMenuItem__subTitle {
+  color: var(--gray);
+}
+</style>

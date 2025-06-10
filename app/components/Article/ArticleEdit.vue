@@ -275,4 +275,65 @@ useHead({
 .dashboardEdit__error {
   color: red;
 }
+
+.articleEdit {
+  padding-bottom: 5rem;
+
+  &__title {
+    width: 100%;
+    height: 2.5rem;
+    border: 0;
+    padding: 0;
+    outline: 0;
+    resize: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 1.6;
+    background-color: #fbfcff;
+  }
+}
+
+.dashboardEdit__ogpContainer {
+}
+
+.dashboardEdit__headContainer {
+  display: grid;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.dashboardEdit__tagContainer {
+  display: flex;
+  gap: 5px;
+}
+
+.dashboardEdit__ogpInput {
+  display: flex;
+  gap: 5px;
+  flex-grow: 1;
+}
+
+.dashboardEdit__ogpPreview {
+  max-height: 100px;
+}
+
+.dashboardEdit__ogpPreviewImg {
+  max-height: 100px;
+}
+
+.dashboardEdit__btnWrapper {
+  display: flex;
+}
+
+.dashboardEdit__btn {
+  margin-left: 1rem;
+}
+
+.dashboardEdit__input {
+  outline: 0;
+  border-radius: 4px;
+  border: 1px solid #cbcbcb;
+  background-color: #fbfcff;
+  flex-grow: 1;
+}
 </style>

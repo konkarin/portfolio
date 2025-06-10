@@ -6,7 +6,7 @@
 export default defineComponent({
   name: 'PagesDashboardIndex',
   mounted() {
-    if (this.$store.state.user) this.$router.replace({ path: '/dashboard/profile' })
+    if (this.$accessor.user) this.$router.replace({ path: '/dashboard/articles' })
   },
 })
 </script>

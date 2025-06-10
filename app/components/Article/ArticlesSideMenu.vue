@@ -35,3 +35,38 @@ export default defineComponent({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+.sideMenu {
+  position: sticky;
+  top: 80px;
+  width: 300px;
+  height: calc(100vh - 140px);
+  padding-left: 3rem;
+}
+
+.sideMenu__content {
+  overflow-y: auto;
+  margin-top: 2rem;
+  &:first-child {
+    margin-top: 1rem;
+  }
+}
+
+.sideMenu__title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--black);
+}
+
+@media screen and (max-width: $md) {
+  .sideMenu {
+    margin-top: 6rem;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+}
+</style>

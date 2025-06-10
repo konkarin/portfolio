@@ -22,31 +22,14 @@
     <div class="articleView__content">
       <MarkdownPreview :html-text="htmlText" />
     </div>
-    <footer class="articleView__footer">
-      <a
-        :href="twitterShareUrl"
-        class="articleView__footerLink shareBtn shareBtn--md"
-        target="_blank"
-        rel="nofollow noopener noreferrer"
-        data-test="twitterShare"
-      >
-        <Twitter />
-      </a>
-    </footer>
   </article>
 </template>
 
 <script lang="ts">
 import type { Article } from '@/types/index'
 import Day from '@/utils/day'
-import MarkdownPreview from '@/components/MarkdownPreview.vue'
-import Twitter from '@/components/svg/Twitter.vue'
 
 export default defineComponent({
-  components: {
-    MarkdownPreview,
-    Twitter,
-  },
   props: {
     article: {
       type: Object as PropType<Article>,
@@ -109,12 +92,5 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   color: var(--gray);
-}
-
-.articleView__footer {
-  display: flex;
-}
-.articleView__footerLink {
-  display: inline-flex;
 }
 </style>

@@ -1,10 +1,8 @@
 <template>
-  <div class="artcileList">
-    <template v-if="articles.length > 0">
-      <ArticleItem v-for="article in articles" :key="article.id" :article="article" />
-    </template>
-    <div v-else>記事がありません</div>
-  </div>
+  <ul v-if="articles.length > 0" class="artcileList">
+    <ArticleItem v-for="article in articles" :key="article.id" :article="article" />
+  </ul>
+  <div v-else><div>記事がありません</div></div>
 </template>
 
 <script lang="ts">
