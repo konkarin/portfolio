@@ -6,10 +6,10 @@
 
 <style>
 .page-enter-active {
-  transition: opacity 0.1s ease-in;
+  transition: opacity 0.2s ease-in;
 }
 .page-leave-active {
-  transition: opacity 0.1s ease-out;
+  transition: opacity 0.2s ease-out;
 }
 .page-enter-from,
 .page-leave-to {
