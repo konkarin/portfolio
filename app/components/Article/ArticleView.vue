@@ -28,12 +28,8 @@
 <script lang="ts">
 import type { Article } from '@/types/index'
 import Day from '@/utils/day'
-import MarkdownPreview from '@/components/MarkdownPreview.vue'
 
 export default defineComponent({
-  components: {
-    MarkdownPreview,
-  },
   props: {
     article: {
       type: Object as PropType<Article>,
