@@ -23,8 +23,9 @@ export default defineComponent({
       const payload = {
         url,
         show: true,
+        exif: {},
       }
-      this.$store.commit('switchPhotoModal', payload)
+      this.$accessor.switchPhotoModal(payload)
     },
   },
 })

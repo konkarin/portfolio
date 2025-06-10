@@ -19,12 +19,12 @@ import { v4 as uuidv4 } from 'uuid'
 import { db } from '@/api/apis'
 import type { Article } from '@/types/index'
 
-const { $store } = useNuxtApp()
+const { $accessor } = useNuxtApp()
 const router = useRouter()
 
 const articles = ref<Article[]>([])
 const getArticles = async () => {
-  const collectionPath = `users/${$store.state.user?.uid}/articles`
+  const collectionPath = `users/${$accessor.user?.uid}/articles`
 
   // TODO: 型引数を渡す方がいい？
   const article = (await db.getOrderDocs(collectionPath, 'createdDate', 'desc')) as Article[]
@@ -39,7 +39,7 @@ const addArticle = () => {
 }
 const { showToast } = useToast()
 const removeArticle = async (docId: string) => {
-  const collectionPath = `users/${$store.state.user?.uid}/articles`
+  const collectionPath = `users/${$accessor.user?.uid}/articles`
 
   await db.deleteDoc(collectionPath, docId).catch((e) => {
     console.error(e)

@@ -50,9 +50,9 @@ import type { User } from '@firebase/auth'
 import { db } from '~/api/apis'
 import type { Query } from '~/api/firestore'
 
-const { $store } = useNuxtApp()
+const { $accessor } = useNuxtApp()
 const user = computed((): User | null => {
-  return $store.state.user
+  return $accessor.user
 })
 const getImgList = async (): Promise<DocumentData[]> => {
   const path = `users/${user.value?.uid}/images`

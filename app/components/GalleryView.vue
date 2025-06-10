@@ -13,23 +13,23 @@
 <script setup lang="ts">
 import { db } from '@/api/apis'
 
-const { $store } = useNuxtApp()
+const { $accessor } = useNuxtApp()
 const photoModal = computed(() => {
-  return $store.state.photoModal
+  return $accessor.photoModal
 })
 const imgList = computed(() => {
-  return $store.state.imgList
+  return $accessor.imgList
 })
 const isLoadingImg = computed(() => {
-  return $store.state.isLoadingImg
+  return $accessor.isLoadingImg
 })
 const closeModal = (): void => {
   const payload = {
     url: '',
     show: false,
+    exif: {},
   }
-
-  $store.commit('switchPhotoModal', payload)
+  $accessor.switchPhotoModal(payload)
 }
 
 const route = useRoute()
@@ -38,7 +38,7 @@ onMounted(async () => {
     const collectionPath = `/users/${useRuntimeConfig().public.AUTHOR_ID}/images`
 
     const imgList = await db.getOrderDocs(collectionPath, 'order')
-    $store.commit('updateImgList', imgList)
+    $accessor.updateImgList(imgList)
   }
 
   if (typeof route.query.path === 'string') {
@@ -48,9 +48,10 @@ onMounted(async () => {
 
     if (imageDoc === undefined) return
 
-    $store.commit('switchPhotoModal', {
+    $accessor.switchPhotoModal({
       url: imageDoc.originalUrl,
       show: true,
+      exif: {},
     })
   }
 })

@@ -23,15 +23,15 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from '@firebase/auth'
 const isLoading = ref(true)
 const isUploading = ref(false)
 
-const { $store } = useNuxtApp()
+const { $accessor } = useNuxtApp()
 const isAuth = computed((): boolean => {
-  return $store.state.isAuth
+  return $accessor.isAuth
 })
 onMounted((): void => {
   getAuth().onAuthStateChanged((user) => {
-    $store.commit('updateAuth', Boolean(user))
+    $accessor.updateAuth(Boolean(user))
     if (user) {
-      $store.commit('updateUser', { uid: user.uid })
+      $accessor.updateUser(user)
     }
 
     isLoading.value = false

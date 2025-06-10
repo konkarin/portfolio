@@ -13,12 +13,12 @@
 import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage'
 
-const { $store } = useNuxtApp()
+const { $accessor } = useNuxtApp()
 
 const isUploading = ref(false)
 const fileRef = ref<File | null>(null)
 const user = computed(() => {
-  return $store.state.user
+  return $accessor.user
 })
 const setFile = (e: Event) => {
   const target = e.target as HTMLInputElement
