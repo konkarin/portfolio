@@ -65,24 +65,20 @@ const ogImage = computed(() => {
 useHead({
   title: article.value.title || '記事がありません。',
   meta: [
-    { hid: 'og:type', property: 'og:type', content: 'article' },
+    { property: 'og:type', content: 'article' },
     {
-      hid: 'og:title',
       property: 'og:title',
       content: `${article.value.title} - konkarin's photos & blog`,
     },
     {
-      hid: 'og:url',
       property: 'og:url',
       content: `${APP_URL}/articles/${articleId.value}`,
     },
     {
-      hid: 'og:image',
       property: 'og:image',
       content: ogImage.value,
     },
     {
-      hid: 'og:description',
       property: 'og:description',
       content: ogDescription.value,
     },

@@ -16,6 +16,7 @@
 const { data } = await useFetch(
   'https://api.rss2json.com/v1/api.json?rss_url=https://zenn.dev/kon_karin/feed',
 )
+// @ts-expect-error 外部APIなので型を無視
 const techArticles = computed(() => (data.value?.items ?? []).slice(0, 3))
 </script>
 
