@@ -294,6 +294,9 @@ useHead({
 }
 
 .dashboardEdit__ogpContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .dashboardEdit__headContainer {
@@ -323,6 +326,7 @@ useHead({
 
 .dashboardEdit__btnWrapper {
   display: flex;
+  justify-content: flex-end;
 }
 
 .dashboardEdit__btn {

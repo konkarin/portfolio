@@ -60,12 +60,12 @@ useRouterCommand('home')
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 4rem;
+}
 
-  @media screen and (max-width: $sm) {
-    .dashboard {
-      margin: 0;
-      padding: 2rem 1rem;
-    }
+@media screen and (max-width: $sm) {
+  .dashboard {
+    margin: 0;
+    padding: 2rem 1rem;
   }
 }
 
