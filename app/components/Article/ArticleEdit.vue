@@ -76,8 +76,9 @@ import type { Article } from '@/types/index'
 import Day from '~/utils/day'
 import { getArticleTags } from '~/utils/article'
 import { v4 } from 'uuid'
+import { useAuthInject } from '@/composables/useAuth'
 
-const { $accessor } = useNuxtApp()
+const { user, isAuth } = useAuthInject()
 const article = ref<Article>({
   id: useRoute().params.article as string,
   title: '',
@@ -94,9 +95,6 @@ const customId = ref('')
 const ogpImageUrl = ref('')
 const availableCustomIds = ref<string[]>([])
 const isValidCustomId = ref(true)
-const user = computed(() => {
-  return $accessor.user
-})
 const articleTitle = computed((): string => {
   return article.value.title
 })
@@ -115,7 +113,7 @@ const validateCustomId = (id: string) => {
   isValidCustomId.value = !availableCustomIds.value.includes(id) && reg.test(id)
 }
 const getArticle = async () => {
-  const uid = $accessor.user?.uid
+  const uid = user.value?.uid
   if (uid == null) return
 
   const collectionPath = `users/${uid}/articles`
@@ -236,7 +234,7 @@ const onDropOgp = async (e: DragEvent) => {
 }
 
 onMounted(async () => {
-  if (!$accessor.isAuth) {
+  if (!isAuth.value) {
     useRouter().push({ path: '/dashboard/articles' })
     return
   }

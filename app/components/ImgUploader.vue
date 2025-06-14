@@ -12,14 +12,12 @@
 <script setup lang="ts">
 import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage'
+import { useAuthInject } from '@/composables/useAuth'
 
-const { $accessor } = useNuxtApp()
+const { user } = useAuthInject()
 
 const isUploading = ref(false)
 const fileRef = ref<File | null>(null)
-const user = computed(() => {
-  return $accessor.user
-})
 const setFile = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files && target.files[0]) {
