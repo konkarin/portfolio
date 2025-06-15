@@ -60,6 +60,15 @@ export default defineNuxtConfig({
         },
       },
     },
+    build: {
+      minify: false,
+      rollupOptions: {
+        preserveEntrySignatures: 'strict',
+        output: {
+          preserveModules: true,
+        },
+      },
+    },
   },
 
   hooks: {
