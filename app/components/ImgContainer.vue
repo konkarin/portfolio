@@ -8,27 +8,23 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
+import { useModalInject } from '@/composables/useModal'
 
-export default defineComponent({
-  props: {
-    imgList: {
-      type: Array as PropType<DocumentData[]>,
-      required: true,
-    },
-  },
-  methods: {
-    openModal(url: string) {
-      const payload = {
-        url,
-        show: true,
-        exif: {},
-      }
-      this.$accessor.switchPhotoModal(payload)
-    },
-  },
-})
+defineProps<{
+  imgList: DocumentData[]
+}>()
+
+const { switchPhotoModal } = useModalInject()
+
+const openModal = (url: string) => {
+  switchPhotoModal({
+    url,
+    show: true,
+    exif: {},
+  })
+}
 </script>
 
 <style lang="scss" scoped>

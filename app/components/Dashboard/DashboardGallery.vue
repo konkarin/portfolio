@@ -49,11 +49,9 @@ import type { User } from '@firebase/auth'
 
 import { db } from '~/api/apis'
 import type { Query } from '~/api/firestore'
+import { useAuthInject } from '@/composables/useAuth'
 
-const { $accessor } = useNuxtApp()
-const user = computed((): User | null => {
-  return $accessor.user
-})
+const { user } = useAuthInject()
 const getImgList = async (): Promise<DocumentData[]> => {
   const path = `users/${user.value?.uid}/images`
 

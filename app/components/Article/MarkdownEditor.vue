@@ -21,12 +21,13 @@
 <script setup lang="ts">
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
 import { v4 } from 'uuid'
+import { useAuthInject } from '@/composables/useAuth'
 
 type Props = { plainText: string }
 const props = defineProps<Props>()
 const emit = defineEmits(['input', 'save'])
 
-const { $accessor } = useNuxtApp()
+const { user } = useAuthInject()
 
 const htmlText = ref('')
 const localValue = ref('')
@@ -56,9 +57,9 @@ const onPaste = async (e: ClipboardEvent) => {
   const start = textarea.selectionStart
   const end = textarea.selectionEnd
 
-  const file = new File([await resizeImage(blob, 1200, 1200)], 'image.webp')
+  const file = new File([await resizeImage(blob, { maxSize: 1200 })], 'image.webp')
 
-  const url = await uploadImage(file, `users/${$accessor.user?.uid}/articles/${v4()}`)
+  const url = await uploadImage(file, `users/${user.value?.uid}/articles/${v4()}`)
   if (url) {
     const markdownUrl = `![](${url})`
     insertTextAtCaret(markdownUrl, start, end, textarea)
@@ -76,9 +77,9 @@ const onDrop = async (e: DragEvent) => {
   const start = textarea.selectionStart
   const end = textarea.selectionEnd
 
-  const resizedFile = new File([await resizeImage(file, 1200, 1200)], 'image.webp')
+  const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp')
 
-  const url = await uploadImage(resizedFile, `users/${$accessor.user?.uid}/articles/${v4()}`)
+  const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}`)
   if (url) {
     const markdownUrl = `![](${url})`
     if (textarea instanceof HTMLTextAreaElement) {

@@ -19,19 +19,21 @@
 
 <script setup lang="ts">
 import { getAuth, GoogleAuthProvider, signInWithPopup } from '@firebase/auth'
+import { useAuth, AUTH_KEY } from '@/composables/useAuth'
 
 const isLoading = ref(true)
 const isUploading = ref(false)
 
-const { $accessor } = useNuxtApp()
-const isAuth = computed((): boolean => {
-  return $accessor.isAuth
-})
+const auth = useAuth()
+provide(AUTH_KEY, auth)
+
+const { isAuth, updateAuth, updateUser } = auth
+
 onMounted((): void => {
   getAuth().onAuthStateChanged((user) => {
-    $accessor.updateAuth(Boolean(user))
+    updateAuth(Boolean(user))
     if (user) {
-      $accessor.updateUser(user)
+      updateUser(user)
     }
 
     isLoading.value = false

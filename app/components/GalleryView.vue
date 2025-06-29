@@ -1,9 +1,6 @@
 <template>
   <main class="gallery">
-    <div v-if="isLoadingImg" class="overlay">
-      <Loader />
-    </div>
-    <ImgContainer :img-list="imgList" />
+    <ImgContainer :img-list="imgList || []" />
     <transition name="fade-modal">
       <PhotoModal v-if="photoModal.show" :img-src="photoModal.url" @close="closeModal" />
     </transition>
@@ -11,44 +8,49 @@
 </template>
 
 <script setup lang="ts">
+import type { DocumentData } from 'firebase/firestore'
 import { db } from '@/api/apis'
+import { useModal, MODAL_KEY } from '@/composables/useModal'
 
-const { $accessor } = useNuxtApp()
-const photoModal = computed(() => {
-  return $accessor.photoModal
-})
-const imgList = computed(() => {
-  return $accessor.imgList
-})
-const isLoadingImg = computed(() => {
-  return $accessor.isLoadingImg
-})
+const loadImgList = async (): Promise<DocumentData[]> => {
+  const authorId = useRuntimeConfig().public.AUTHOR_ID
+  const collectionPath = `/users/${authorId}/images`
+  const result = await db.getOrderDocs(collectionPath, 'order')
+
+  const processedResult = result.map((img) => {
+    // @ts-expect-error FIXME: firestoreのtimestamp型をdevalueで解釈できないので一旦消す
+    delete img.exif
+    return img
+  })
+
+  return processedResult
+}
+
+const modal = useModal()
+provide(MODAL_KEY, modal)
+const { photoModal, switchPhotoModal } = modal
+
 const closeModal = (): void => {
-  const payload = {
+  switchPhotoModal({
     url: '',
     show: false,
     exif: {},
-  }
-  $accessor.switchPhotoModal(payload)
+  })
 }
 
 const route = useRoute()
+
+const { data: imgList } = await useAsyncData('gallery-images', () => loadImgList())
+
 onMounted(async () => {
-  if (imgList.value.length === 0) {
-    const collectionPath = `/users/${useRuntimeConfig().public.AUTHOR_ID}/images`
-
-    const imgList = await db.getOrderDocs(collectionPath, 'order')
-    $accessor.updateImgList(imgList)
-  }
-
   if (typeof route.query.path === 'string') {
-    const imageDoc = imgList.value.find((img) => {
+    const imageDoc = imgList.value?.find((img) => {
       return img.originalFilePath.includes(route.query.path)
     })
 
     if (imageDoc === undefined) return
 
-    $accessor.switchPhotoModal({
+    switchPhotoModal({
       url: imageDoc.originalUrl,
       show: true,
       exif: {},

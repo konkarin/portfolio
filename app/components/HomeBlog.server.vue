@@ -8,7 +8,7 @@
             <p class="post-title">
               {{ article.title }}
             </p>
-            <p class="post-text">{{ article.text.slice(0, 80) }}...</p>
+            <p class="post-text">{{ sliceText(article.text) }}...</p>
           </div>
           <div class="post-img">
             <img v-if="article.ogpImageUrl" :src="article.ogpImageUrl" alt="" />
@@ -24,9 +24,18 @@
 </template>
 
 <script setup lang="ts">
+import { fromMarkdown } from 'mdast-util-from-markdown'
+import { toString } from 'mdast-util-to-string'
+
 const recentArticles = computed(() => {
   return useNuxtApp().$articles.value?.slice(0, 2) || []
 })
+
+const sliceText = (markdown: string, length = 80) => {
+  const tree = fromMarkdown(markdown)
+  const plainText = toString(tree)
+  return plainText.length > length ? plainText.slice(0, length) + '...' : plainText
+}
 </script>
 
 <style lang="scss" scoped>

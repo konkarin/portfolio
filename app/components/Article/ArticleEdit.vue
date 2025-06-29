@@ -76,8 +76,9 @@ import type { Article } from '@/types/index'
 import Day from '~/utils/day'
 import { getArticleTags } from '~/utils/article'
 import { v4 } from 'uuid'
+import { useAuthInject } from '@/composables/useAuth'
 
-const { $accessor } = useNuxtApp()
+const { user, isAuth } = useAuthInject()
 const article = ref<Article>({
   id: useRoute().params.article as string,
   title: '',
@@ -94,9 +95,6 @@ const customId = ref('')
 const ogpImageUrl = ref('')
 const availableCustomIds = ref<string[]>([])
 const isValidCustomId = ref(true)
-const user = computed(() => {
-  return $accessor.user
-})
 const articleTitle = computed((): string => {
   return article.value.title
 })
@@ -115,7 +113,7 @@ const validateCustomId = (id: string) => {
   isValidCustomId.value = !availableCustomIds.value.includes(id) && reg.test(id)
 }
 const getArticle = async () => {
-  const uid = $accessor.user?.uid
+  const uid = user.value?.uid
   if (uid == null) return
 
   const collectionPath = `users/${uid}/articles`
@@ -211,7 +209,11 @@ const onPasteOgp = async () => {
   const blob = await loadClipboardImage()
   if (!blob) return
 
-  const file = new File([await resizeImage(blob)], 'image.webp', { type: 'image/png' })
+  const file = new File(
+    [await resizeImage(blob, { targetWidth: 1200, targetHeight: 630, mode: 'cover' })],
+    'image.webp',
+    { type: 'image/png' },
+  )
 
   const url = await uploadImage(file, createOgpPath())
   if (url) {
@@ -226,7 +228,10 @@ const onDropOgp = async (e: DragEvent) => {
   const file = e.dataTransfer?.files[0]
   if (!file) return
 
-  const resizedFile = new File([await resizeImage(file)], 'image.webp')
+  const resizedFile = new File(
+    [await resizeImage(file, { targetWidth: 1200, targetHeight: 630, mode: 'cover' })],
+    'image.webp',
+  )
 
   const url = await uploadImage(resizedFile, createOgpPath())
   if (url) {
@@ -236,7 +241,7 @@ const onDropOgp = async (e: DragEvent) => {
 }
 
 onMounted(async () => {
-  if (!$accessor.isAuth) {
+  if (!isAuth.value) {
     useRouter().push({ path: '/dashboard/articles' })
     return
   }
