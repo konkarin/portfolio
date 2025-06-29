@@ -35,7 +35,7 @@ const closeToast = (id: string) => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .toast-container {
   position: fixed;
   bottom: 20px;

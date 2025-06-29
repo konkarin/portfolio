@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <ToastProvider>
     <div v-show="isUploading || isLoading" class="overlay">
       <Loader />
     </div>
@@ -14,7 +14,7 @@
     <header v-else class="auth-area">
       <button class="btn sign-in" @click="signIn()">Sign in</button>
     </header>
-  </div>
+  </ToastProvider>
 </template>
 
 <script setup lang="ts">
