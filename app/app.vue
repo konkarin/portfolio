@@ -1,7 +1,5 @@
 <template>
-  <ToastProvider>
-    <NuxtPage />
-  </ToastProvider>
+  <NuxtPage />
 </template>
 
 <style>
