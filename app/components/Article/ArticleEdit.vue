@@ -209,7 +209,11 @@ const onPasteOgp = async () => {
   const blob = await loadClipboardImage()
   if (!blob) return
 
-  const file = new File([await resizeImage(blob)], 'image.webp', { type: 'image/png' })
+  const file = new File(
+    [await resizeImage(blob, { targetWidth: 1200, targetHeight: 630, mode: 'cover' })],
+    'image.webp',
+    { type: 'image/png' },
+  )
 
   const url = await uploadImage(file, createOgpPath())
   if (url) {
@@ -224,7 +228,10 @@ const onDropOgp = async (e: DragEvent) => {
   const file = e.dataTransfer?.files[0]
   if (!file) return
 
-  const resizedFile = new File([await resizeImage(file)], 'image.webp')
+  const resizedFile = new File(
+    [await resizeImage(file, { targetWidth: 1200, targetHeight: 630, mode: 'cover' })],
+    'image.webp',
+  )
 
   const url = await uploadImage(resizedFile, createOgpPath())
   if (url) {

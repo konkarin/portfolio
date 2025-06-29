@@ -57,7 +57,7 @@ const onPaste = async (e: ClipboardEvent) => {
   const start = textarea.selectionStart
   const end = textarea.selectionEnd
 
-  const file = new File([await resizeImage(blob, 1200, 1200)], 'image.webp')
+  const file = new File([await resizeImage(blob, { maxSize: 1200 })], 'image.webp')
 
   const url = await uploadImage(file, `users/${user.value?.uid}/articles/${v4()}`)
   if (url) {
@@ -77,7 +77,7 @@ const onDrop = async (e: DragEvent) => {
   const start = textarea.selectionStart
   const end = textarea.selectionEnd
 
-  const resizedFile = new File([await resizeImage(file, 1200, 1200)], 'image.webp')
+  const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp')
 
   const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}`)
   if (url) {
