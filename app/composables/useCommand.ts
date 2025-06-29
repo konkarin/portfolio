@@ -2,7 +2,6 @@ export function useRouterCommand(path: 'root' | 'home') {
   const keyList = ref<string>('')
 
   function handleKeydown(event: KeyboardEvent) {
-    console.log(event.key)
     keyList.value += event.key
 
     if (keyList.value.includes(`/${path}`)) {
