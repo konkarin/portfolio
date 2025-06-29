@@ -82,7 +82,7 @@ const getIconByType = () => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .toast {
   position: relative;
   display: flex;
