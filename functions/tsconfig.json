@@ -1,18 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "node16",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "lib",
+    "baseUrl": "./src",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017",
-    "baseUrl": ".",
-    // NOTE: node_modules/dayjs/index.d.ts:3:1の下記エラーに対応
-    // This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
-    "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "compileOnSave": true,
   "exclude": ["node_modules", "lib"]
 }
