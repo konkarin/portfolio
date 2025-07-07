@@ -6,7 +6,7 @@ import { parse } from 'exifr'
 import { getStorage } from 'firebase-admin/storage'
 import { getFirestore } from 'firebase-admin/firestore'
 
-import imageSize from 'image-size'
+import { imageSizeFromFile } from 'image-size/fromFile'
 import { spawn } from 'child-process-promise'
 import { onObjectFinalized } from 'firebase-functions/v2/storage'
 import { log, error } from 'firebase-functions/logger'
@@ -45,7 +45,7 @@ export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, asyn
   log('Image downloaded locally to', tempFilePath)
 
   // Get image size
-  const size = getSize(tempFilePath)
+  const { width, height } = await getSize(tempFilePath)
 
   // Get Exif info.
   const exif = await getExif(tempFilePath)
@@ -98,8 +98,8 @@ export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, asyn
     thumbFilePath,
     date,
     exif,
-    width: size.width,
-    height: size.height,
+    width,
+    height,
     order: lastOrder + 1,
   }
 
@@ -111,8 +111,8 @@ export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, asyn
   }
 })
 
-const getSize = (tempFilePath: string): { width: number; height: number } => {
-  const image = imageSize(tempFilePath)
+const getSize = async (tempFilePath: string): Promise<{ width: number; height: number }> => {
+  const image = await imageSizeFromFile(tempFilePath)
 
   if (!image.width || !image.height) {
     return {
