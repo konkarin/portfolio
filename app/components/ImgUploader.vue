@@ -61,7 +61,7 @@ const uploadFile = async (file: File): Promise<void> => {
 
     setTimeout(() => {
       emit('uploaded')
-    }, 1000)
+    }, 3000)
   } catch (e) {
     console.error(e)
     showToast({
