@@ -1,11 +1,13 @@
 <template>
   <div class="imgUploader__container">
-    <div class="imgUploader__content">
-      <label class="btn imgUploader__selectImg">
-        Add
-        <input type="file" accept=".jpeg, .jpg, .png" @change="setFile" />
-      </label>
-    </div>
+    <BaseButton @click="openFileDialog"> Add </BaseButton>
+    <input
+      ref="fileInput"
+      type="file"
+      accept=".jpeg, .jpg, .png"
+      style="display: none"
+      @change="setFile"
+    />
   </div>
 </template>
 
@@ -14,15 +16,23 @@ import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage'
 import { useAuthInject } from '@/composables/useAuth'
 
+const emit = defineEmits<{
+  uploaded: []
+}>()
+
 const { user } = useAuthInject()
 
 const isUploading = ref(false)
-const fileRef = ref<File | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const openFileDialog = () => {
+  fileInput.value?.click()
+}
+
 const setFile = (e: Event) => {
   const target = e.target as HTMLInputElement
   if (target.files && target.files[0]) {
-    fileRef.value = target.files[0]
-    uploadFile(fileRef.value)
+    uploadFile(target.files[0])
   }
 }
 
@@ -48,10 +58,10 @@ const uploadFile = async (file: File): Promise<void> => {
       title: 'Uploaded successfully',
       type: 'success',
     })
-    fileRef.value = null
 
-    // TODO: 写真一覧を更新
-    // getImages()
+    setTimeout(() => {
+      emit('uploaded')
+    }, 1000)
   } catch (e) {
     console.error(e)
     showToast({
@@ -60,12 +70,12 @@ const uploadFile = async (file: File): Promise<void> => {
     })
   }
 }
+
+useKeyCombination(openFileDialog, { key: 'u', ctrlKey: true })
+useKeyCombination(openFileDialog, { key: 'u', metaKey: true })
 </script>
 
 <style lang="scss" scoped>
-.imgUploader {
-}
-
 .imgUploader__container {
   display: flex;
   align-items: center;
