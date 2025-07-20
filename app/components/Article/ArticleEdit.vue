@@ -1,6 +1,21 @@
 <template>
   <section class="articleEdit">
-    <!-- TODO: 戻るボタンほしい -->
+    <div class="articleEdit__header">
+      <div>
+        <NuxtLink to="/dashboard/articles" aria-label="記事一覧へ" class="articleEdit__back">
+          ←
+        </NuxtLink>
+      </div>
+      <div class="articleEdit__headerRight">
+        <ToggleBtn :value="article.isPublished" @toggle="updatePublishing">公開する</ToggleBtn>
+        <BaseButton
+          :disabled="article.title === '' || tag === '' || !isValidCustomId"
+          @click="updateArticle"
+        >
+          保存
+        </BaseButton>
+      </div>
+    </div>
     <textarea
       v-model="article.title"
       placeholder="Title"
@@ -9,61 +24,46 @@
     />
     <div class="dashboardEdit__head">
       <div class="dashboardEdit__headContainer">
-        <div class="dashboardEdit__tagContainer">
-          <b>Tags:</b>
+        <label class="dashboardEdit__tagContainer">
+          <b>Tags</b>
           <input
             v-model="tag"
             class="dashboardEdit__input"
             type="text"
             placeholder="コンマ区切りで入力"
           />
-        </div>
-        <div class="dashboardEdit__tagContainer">
-          <b>CustomID:</b>
-          <input
-            v-model="customId"
-            class="dashboardEdit__input"
-            type="text"
-            placeholder="CustomIDを入力"
-            @input="validateCustomId(($event.target as HTMLInputElement).value)"
-          />
+        </label>
+        <div>
+          <label class="dashboardEdit__tagContainer">
+            <b>CustomID</b>
+            <input
+              v-model="customId"
+              class="dashboardEdit__input"
+              type="text"
+              placeholder="CustomIDを入力"
+              @input="validateCustomId(($event.target as HTMLInputElement).value)"
+            />
+          </label>
           <div v-if="!isValidCustomId">
             <div class="dashboardEdit__error">利用できないCustomIDだよ</div>
           </div>
         </div>
         <div class="dashboardEdit__ogpContainer">
-          <div class="dashboardEdit__ogpInput">
+          <label class="dashboardEdit__ogpInput">
             <b>OGP画像</b>
             <input
               v-model="ogpImageUrl"
               class="dashboardEdit__input"
               type="text"
-              placeholder="OGP画像のURLを入力"
+              placeholder="OGP画像のURLを入力、または画像を貼り付け"
               @paste="onPasteOgp"
               @drop.prevent="onDropOgp"
             />
-          </div>
+          </label>
           <div class="dashboardEdit__ogpPreview">
             <img :src="ogpImageUrl" class="dashboardEdit__ogpPreviewImg" />
           </div>
         </div>
-      </div>
-
-      <div class="dashboardEdit__btnWrapper">
-        <ToggleBtn
-          class="dashboardEdit__btn"
-          :toggle-btn="article.isPublished"
-          @toggle="updatePublishing"
-        >
-          公開する
-        </ToggleBtn>
-        <button
-          class="dashboardEdit__btn btn"
-          :disabled="article.title === '' || tag === '' || !isValidCustomId"
-          @click="updateArticle"
-        >
-          保存
-        </button>
       </div>
     </div>
     <MarkdownEditor :plain-text="plainText" @input="setText" @save="updateArticle" />
@@ -306,18 +306,20 @@ useHead({
 
 .dashboardEdit__headContainer {
   display: grid;
-  gap: 4px;
+  gap: 8px;
   flex-grow: 1;
 }
 
 .dashboardEdit__tagContainer {
   display: flex;
-  gap: 5px;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .dashboardEdit__ogpInput {
   display: flex;
-  gap: 5px;
+  flex-direction: column;
+  gap: 4px;
   flex-grow: 1;
 }
 
@@ -329,13 +331,27 @@ useHead({
   max-height: 100px;
 }
 
-.dashboardEdit__btnWrapper {
+.articleEdit__header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 }
 
-.dashboardEdit__btn {
-  margin-left: 1rem;
+.articleEdit__headerRight {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.articleEdit__back {
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  &:hover {
+    background-color: var(--brightGray);
+  }
 }
 
 .dashboardEdit__input {
@@ -344,5 +360,8 @@ useHead({
   border: 1px solid #cbcbcb;
   background-color: #fbfcff;
   flex-grow: 1;
+  padding: 8px 12px;
+  height: 40px;
+  box-sizing: border-box;
 }
 </style>

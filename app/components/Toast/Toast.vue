@@ -139,21 +139,6 @@ const getIconByType = () => {
   opacity: 0.9;
 }
 
-.toast-close-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 8px;
-  opacity: 0.7;
-}
-
-.toast-close-btn:hover {
-  opacity: 1;
-}
-
 @keyframes slide-in {
   from {
     transform: translateX(100%);

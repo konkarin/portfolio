@@ -2,8 +2,8 @@
   <div class="error">
     <PageTitle v-if="error">{{ error.message }}</PageTitle>
     <PageTitle v-else>エラーが発生しました</PageTitle>
-    <div>
-      <button class="btn error__btn" @click="clearError({ redirect: '/' })">トップへ戻る</button>
+    <div class="error__button">
+      <BaseButton @click="clearError({ redirect: '/' })">トップへ戻る</BaseButton>
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ useHead({
   text-align: center;
 }
 
-.error__btn {
+.error__button {
   margin-top: 1rem;
 }
 </style>

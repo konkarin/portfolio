@@ -12,7 +12,7 @@
       </main>
     </template>
     <header v-else class="auth-area">
-      <button class="btn sign-in" @click="signIn()">Sign in</button>
+      <BaseButton class="sign-in" @click="signIn()">Sign in</BaseButton>
     </header>
   </ToastProvider>
 </template>
@@ -61,7 +61,7 @@ useRouterCommand('home')
 .dashboard {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 4rem;
+  padding: 2rem 4rem;
 }
 
 @media screen and (max-width: $sm) {

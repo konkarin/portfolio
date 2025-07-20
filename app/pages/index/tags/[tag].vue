@@ -59,3 +59,16 @@ export default {
   name: 'PagesTag',
 }
 </script>
+
+<style lang="scss" scoped>
+.article {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: $md) {
+  .article {
+    display: block;
+  }
+}
+</style>

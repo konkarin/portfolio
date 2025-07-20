@@ -1,7 +1,7 @@
 <template>
   <section class="dashboard__content dashboardArticleList">
     <div class="dashboardArticleList__header">
-      <button class="btn" @click="addArticle">Add new</button>
+      <BaseButton @click="addArticle">Add new</BaseButton>
     </div>
     <div class="dashboardArticleList__body">
       <DashboardArticle
