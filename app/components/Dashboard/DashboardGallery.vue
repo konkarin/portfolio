@@ -156,6 +156,7 @@ const deleteImgList = async (): Promise<void> => {
       title: 'Remove successfully',
       type: 'success',
     })
+    selectedImgPathList.value = []
     // TODO: firestoreを監視したい
     imgList.value = await getImgList()
   } catch (e) {
