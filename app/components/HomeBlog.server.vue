@@ -8,7 +8,7 @@
             <p class="post-title">
               {{ article.title }}
             </p>
-            <p class="post-text">{{ sliceText(article.text) }}...</p>
+            <p class="post-text">{{ sliceText(article.text) }}</p>
           </div>
           <div class="post-img">
             <img v-if="article.ogpImageUrl" :src="article.ogpImageUrl" alt="" />

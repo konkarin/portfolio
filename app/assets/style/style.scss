@@ -88,45 +88,6 @@ a {
   align-items: center;
 }
 
-.btn {
-  display: inline-flex;
-  font-size: 1em;
-  font-weight: bold;
-  height: 38px;
-  line-height: 1.8;
-  padding: 0.3em 1em;
-  text-decoration: none;
-  background-color: var(--yellow);
-  color: var(--black);
-  border: 0;
-  border-radius: 0.5em;
-  transition: 0.4s;
-  &--large {
-    font-size: 3em;
-  }
-  &.btn--danger {
-    color: var(--white);
-    background-color: var(--danger);
-    &:hover {
-      opacity: 0.8;
-      background-color: var(--danger);
-    }
-    &:disabled {
-      opacity: 0.5;
-      background-color: var(--gray);
-    }
-  }
-  &:hover {
-    cursor: pointer;
-    opacity: 0.7;
-  }
-  &:disabled {
-    cursor: default;
-    opacity: 0.5;
-    background: var(--gray);
-  }
-}
-
 .dashboard__content {
   padding-bottom: 5rem;
   width: 100%;

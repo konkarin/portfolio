@@ -1,16 +1,16 @@
 <template>
   <section class="dashboard__content">
     <div class="dashboardEdit__head">
-      <ImgUploader />
+      <ImgUploader @uploaded="updateImgList()" />
       <div class="dashboardEdit__controler">
-        <button class="btn" @click="saveImgList()">Save</button>
-        <button
-          class="btn btn--danger"
+        <BaseButton @click="saveImgList()">Save</BaseButton>
+        <BaseButton
+          :disabled="!selectedImgPathList.length"
+          variant="danger"
           @click="deleteImgList()"
-          :disabled="selectedImgPathList.length === 0"
         >
           Delete
-        </button>
+        </BaseButton>
       </div>
     </div>
     <div class="dashboardEdit__gallery">
@@ -45,7 +45,6 @@
 
 <script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
-import type { User } from '@firebase/auth'
 
 import { db } from '~/api/apis'
 import type { Query } from '~/api/firestore'
@@ -64,11 +63,14 @@ const getImgList = async (): Promise<DocumentData[]> => {
 }
 const imgList = ref<DocumentData[]>([])
 watch(user, async (user) => {
-  if (user != null) imgList.value = await getImgList()
+  if (user) await updateImgList()
 })
 onMounted(async () => {
-  if (user.value) imgList.value = await getImgList()
+  if (user.value) await updateImgList()
 })
+const updateImgList = async () => {
+  imgList.value = await getImgList()
+}
 
 const draggingIndex = ref(-1)
 const dragStart = (index: number) => {
