@@ -5,9 +5,14 @@
       <li v-for="article in recentArticles" :key="article.id" class="post">
         <NuxtLink :to="`/articles/${article.customId || article.id}`">
           <div class="post-inner">
-            <p class="post-title">
-              {{ article.title }}
-            </p>
+            <div>
+              <p class="post-subTitle">
+                {{ releaseDate(article.releaseDate) }}
+              </p>
+              <p class="post-title">
+                {{ article.title }}
+              </p>
+            </div>
             <p class="post-text">{{ sliceText(article.text) }}</p>
           </div>
           <div class="post-img">
@@ -26,6 +31,7 @@
 <script setup lang="ts">
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { toString } from 'mdast-util-to-string'
+import Day from '@/utils/day'
 
 const recentArticles = computed(() => {
   return useNuxtApp().$articles.value?.slice(0, 2) || []
@@ -35,6 +41,12 @@ const sliceText = (markdown: string, length = 80) => {
   const tree = fromMarkdown(markdown)
   const plainText = toString(tree)
   return plainText.length > length ? plainText.slice(0, length) + '...' : plainText
+}
+
+const releaseDate = (date?: number) => {
+  const format = 'YYYY-MM-DD'
+
+  return Day.getDate(date, format)
 }
 </script>
 
@@ -65,9 +77,8 @@ h2 {
     }
   }
 
-  &:hover .post-title {
-    color: var(--darkYellow);
-  }
+  &:hover .post-title,
+  &:hover .post-subTitle,
   &:hover .post-text {
     color: var(--darkYellow);
   }
@@ -95,6 +106,10 @@ h2 {
 
 .post-title {
   font-weight: bold;
+}
+
+.post-subTitle {
+  font-size: 14px;
 }
 
 .post-text {
