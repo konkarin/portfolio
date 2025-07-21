@@ -29,7 +29,6 @@ const openModal = (url: string) => {
 
 <style lang="scss" scoped>
 .imgContainer {
-  margin-top: 2rem;
   display: grid;
   gap: 10px;
   grid-template-columns: 1fr;
