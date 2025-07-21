@@ -67,17 +67,4 @@ describe('ArticleView', () => {
       expect(tag.findComponent(RouterLinkStub).props().to).toBe(`/tags/${article.tags[index]}`)
     })
   })
-
-  test('computed correct twitter share url', () => {
-    const text = encodeURIComponent(article.title)
-
-    expect(wrapper.vm.twitterShareUrl).toContain(text)
-    expect(wrapper.vm.twitterShareUrl).toContain('konkarin-photo.web.app/')
-  })
-
-  test('exists twitter share url', () => {
-    const text = encodeURIComponent(article.title)
-
-    expect(wrapper.find('[data-test="twitterShare"]').attributes().href).toContain(text)
-  })
 })

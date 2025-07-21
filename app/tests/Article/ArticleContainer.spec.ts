@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import { createStore } from 'vuex'
+
 import ArticleContainer from '@/components/Article/ArticleContainer.vue'
 import type { Article } from '@/types/index'
 
@@ -18,16 +18,9 @@ const articles: Article[] = [...Array(4).keys()].map((_, index) => {
 
 const articleTags = ['test']
 
-const store = createStore({
-  state: {
-    articles,
-    articleTags,
-  },
-})
-
 const wrapper = shallowMount(ArticleContainer, {
   global: {
-    plugins: [store],
+    plugins: [],
   },
   stubs: {
     NuxtPage: { template: '<div></div>' },
