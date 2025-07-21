@@ -60,7 +60,7 @@ export default defineComponent({
   border-bottom: 1px solid var(--black);
 }
 
-@media screen and (max-width: $md) {
+@media screen and (max-width: $lg) {
   .sideMenu {
     margin-top: 6rem;
     display: block;

@@ -77,9 +77,7 @@ h2 {
     }
   }
 
-  &:hover .post-title,
-  &:hover .post-subTitle,
-  &:hover .post-text {
+  &:hover .post-title {
     color: var(--darkYellow);
   }
   @media (hover: hover) {
@@ -110,10 +108,11 @@ h2 {
 
 .post-subTitle {
   font-size: 14px;
+  color: var(--gray);
 }
 
 .post-text {
-  color: #666;
+  color: var(--gray);
   font-size: 0.9rem;
   @media (max-width: 768px) {
     visibility: hidden;
@@ -150,7 +149,7 @@ h2 {
   justify-content: center;
   height: 100%;
   align-items: center;
-  font-size: 3rem;
+  font-size: 4rem;
   filter: grayscale(1);
   background: #eee;
   height: 100%;

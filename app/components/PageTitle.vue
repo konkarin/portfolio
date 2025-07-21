@@ -10,7 +10,7 @@
   text-align: center;
   &__link {
     color: var(--darkYellow);
-    @media screen and (min-width: $md) {
+    @media screen and (min-width: $lg) {
       &:hover {
         text-decoration: underline;
       }

@@ -58,7 +58,7 @@ a {
   margin: 0 auto;
   padding: 0 4rem 4rem;
 }
-@media screen and (max-width: $sm) {
+@media screen and (max-width: $lg) {
   .wrapper {
     margin: 0;
     padding: 2rem 1rem;
@@ -94,50 +94,6 @@ a {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-.articleItem {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding-top: 0.5rem;
-  padding-bottom: 1rem;
-  color: var(--black);
-  &:first-child {
-    padding-top: 0;
-  }
-  @media (hover: hover) {
-    &:hover {
-      text-decoration: none;
-      color: var(--darkYellow);
-      & .articleItem__eyeCatchInner {
-        transform: scale(1.05);
-        opacity: 0.8;
-      }
-    }
-  }
-}
-
-.articleItem__title {
-  display: block;
-  width: 100%;
-  font-size: 1.5em;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.articleTag {
-  color: var(--white);
-  background: var(--gray);
-  padding: 0.1em 0.4em 0.2em;
-  border-radius: 3px;
-
-  &--link {
-    transition: 0.3s;
-    &:hover {
-      opacity: 0.6;
-    }
-  }
 }
 
 .sideMenuItem {
