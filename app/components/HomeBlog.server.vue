@@ -108,7 +108,7 @@ h2 {
 
 .post-subTitle {
   font-size: 14px;
-  color: var(--gray);
+  color: #666;
 }
 
 .post-text {

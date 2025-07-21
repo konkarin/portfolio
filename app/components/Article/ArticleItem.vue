@@ -103,7 +103,7 @@ const strippedText = computed(() => {
 }
 
 .articleItem__subTitle {
-  color: var(--gray);
+  color: #666;
 }
 
 .articleItem__title {
@@ -112,6 +112,6 @@ const strippedText = computed(() => {
 
 .articleItem__text {
   font-size: 0.9rem;
-  color: var(--gray);
+  color: #666;
 }
 </style>
