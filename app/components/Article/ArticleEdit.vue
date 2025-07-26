@@ -66,7 +66,8 @@
         </div>
       </div>
     </div>
-    <MarkdownEditor :plain-text="plainText" @input="setText" @save="updateArticle" />
+
+    <EditorContent :editor="editor" />
   </section>
 </template>
 
@@ -77,6 +78,8 @@ import Day from '~/utils/day'
 import { getArticleTags } from '~/utils/article'
 import { v4 } from 'uuid'
 import { useAuthInject } from '@/composables/useAuth'
+
+import { EditorContent } from '@tiptap/vue-3'
 
 const { user, isAuth } = useAuthInject()
 const article = ref<Article>({
@@ -98,14 +101,11 @@ const isValidCustomId = ref(true)
 const articleTitle = computed((): string => {
   return article.value.title
 })
-const plainText = computed((): string => {
-  return article.value.text
+const { editor, markdownText } = useMarkdownEditor((text) => {
+  article.value.text = text
 })
 const updatePublishing = () => {
   article.value.isPublished = !article.value.isPublished
-}
-const setText = (val: string) => {
-  article.value.text = val
 }
 const validateCustomId = (id: string) => {
   // 利用可能な文字は半角英数とハイフンアンダーバーのみ
@@ -114,19 +114,21 @@ const validateCustomId = (id: string) => {
 }
 const getArticle = async () => {
   const uid = user.value?.uid
-  if (uid == null) return
-
+  if (uid == null)
+    return {
+      id: useRoute().params.article as string,
+      title: '',
+      text: '',
+      isPublished: false,
+      updatedDate: 0,
+      createdDate: Day.getUnixMS(),
+      releaseDate: 0,
+      tags: [],
+      ogpImageUrl: '',
+    }
   const collectionPath = `users/${uid}/articles`
 
-  const a = (await db.getDocById(collectionPath, article.value.id)) as Article
-
-  return a
-}
-const showArticle = async (): Promise<void> => {
-  const a = await getArticle()
-
-  if (a == null) return
-  article.value = a
+  return (await db.getDocById(collectionPath, article.value.id)) as Article
 }
 const { showToast } = useToast()
 const updateArticle = async () => {
@@ -162,8 +164,18 @@ const updateArticle = async () => {
     }
   }
 
+  const md = markdownText()
+
+  const text = await convertHTMLTextToMarkdown(editor.value?.getHTML() || '')
+
+  console.log(md === text, { md, text })
+  const request = {
+    ...article.value,
+    text,
+  }
+
   try {
-    await db.addData(articlesPath, article.value.id, article.value)
+    await db.addData(articlesPath, article.value.id, request)
   } catch {
     showToast({
       title: 'Failed to update articles.',
@@ -247,7 +259,10 @@ onMounted(async () => {
   }
 
   try {
-    await showArticle()
+    const _article = await getArticle()
+    _article.text = await convertMarkdownTextToHTML(_article.text)
+    article.value = _article
+    editor.value?.commands.setContent(article.value.text)
   } catch (e) {
     console.error(e)
     showToast({
@@ -363,5 +378,170 @@ useHead({
   padding: 8px 12px;
   height: 40px;
   box-sizing: border-box;
+}
+</style>
+
+<style lang="scss">
+.tiptap {
+  line-height: 1.9;
+  min-height: 400px;
+  margin-top: 1rem;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #cbcbcb;
+  background-color: #fbfcff;
+
+  :first-child {
+    margin-top: 0;
+  }
+
+  & a {
+    color: var(--darkYellow);
+    line-break: anywhere;
+    word-break: break-all;
+    text-decoration: underline;
+    text-decoration-color: var(--darkYellow);
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  h1 {
+    margin-top: 2em;
+    border-bottom: 1px solid #ddd;
+  }
+
+  & h2 {
+    margin-top: 2em;
+    border-bottom: 1px solid #ddd;
+  }
+
+  & h3 {
+    margin-top: 1.5em;
+  }
+
+  & h4 {
+    margin-top: 1.5em;
+  }
+
+  & h5 {
+    margin-top: 1.5em;
+  }
+
+  & h6 {
+    font-size: 0.9rem;
+  }
+
+  & h1 + h2 {
+    margin-top: 1.5em;
+  }
+
+  & h2 + h3 {
+    margin-top: 1.5em;
+  }
+
+  & h3 + h4 {
+    margin-top: 1em;
+  }
+
+  & h4 + h5 {
+    margin-top: 1em;
+  }
+
+  & h5 + h6 {
+    margin-top: 1em;
+  }
+
+  & p {
+    margin-top: 1.5rem;
+  }
+  & p:first-child {
+    margin-top: 0.5rem;
+  }
+
+  & ul {
+    padding-left: 1.2em;
+    list-style-type: disc;
+  }
+
+  & ol {
+    padding-left: 1.2em;
+    list-style-type: decimal;
+  }
+
+  & li {
+    margin: 0.4rem 0;
+    > p {
+      margin: 0;
+    }
+  }
+
+  & blockquote {
+    margin: 1.4rem 0;
+    border-left: 3px solid #b3bfc7;
+    padding: 2px 0 2px 0.7em;
+    color: #626e77;
+    :first-child {
+      margin: 0;
+    }
+  }
+
+  & h2 + p {
+    margin-top: 1rem;
+  }
+
+  & h3 + p {
+    margin-top: 0.5rem;
+  }
+
+  & pre > code {
+    border-radius: 3px;
+    font-size: 0.9rem;
+    display: block;
+    overflow-x: auto;
+    background: #1d1f21;
+    color: #c5c8c6;
+    padding: 1.1em;
+  }
+
+  & p > code {
+    background: #215aa012;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  & img {
+    max-height: 60vh;
+    margin: 1.5rem auto;
+  }
+
+  & table {
+    margin: 1.2rem auto;
+    width: auto;
+    border-collapse: collapse;
+    font-size: 0.95em;
+    line-height: 1.5;
+    word-break: normal;
+    display: block;
+    overflow: auto;
+  }
+
+  & td,
+  th {
+    padding: 0.5rem;
+    border: 1px solid #d6e3ed;
+  }
+
+  & th {
+    font-weight: 700;
+    background: #edf2f7;
+  }
+
+  & td {
+    padding: 0.5rem;
+    border: 1px solid #d6e3ed;
+    background: #fff;
+  }
 }
 </style>
