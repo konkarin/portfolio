@@ -20,12 +20,14 @@
       </div>
     </div>
     <div class="articleItem__text">
-      {{ strippedText }}
+      {{ sliecedText }}
     </div>
   </NuxtLink>
 </template>
 
 <script setup lang="ts">
+import { remark } from 'remark'
+import strip from 'strip-markdown'
 import Day from '@/utils/day'
 import type { Article } from '@/types/index'
 
@@ -40,10 +42,16 @@ const releaseDate = computed(() => {
 
 const articleId = computed(() => article.customId || article.id)
 
-const strippedText = computed(() => {
-  const stripped = article.text.replace(/(<([^>]+)>)/gi, '')
-  return stripped.length > 100 ? stripped.slice(0, 100) + '...' : stripped
-})
+const file = await remark()
+  .use(strip)
+  .process(article.text)
+  .catch((e) => {
+    console.error({ e })
+    return article.text
+  })
+
+const strippedText = file.toString()
+const sliecedText = strippedText.length > 100 ? strippedText.slice(0, 100) + '...' : strippedText
 </script>
 
 <style scoped lang="scss">
