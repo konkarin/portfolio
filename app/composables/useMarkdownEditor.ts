@@ -1,9 +1,15 @@
+import { Plugin, PluginKey } from 'prosemirror-state'
+
 import { Extension } from '@tiptap/core'
 import Highlight from '@tiptap/extension-highlight'
 import Typography from '@tiptap/extension-typography'
 import StarterKit from '@tiptap/starter-kit'
+import Image from '@tiptap/extension-image'
+import FileHandler from '@tiptap/extension-file-handler'
+
 import { useEditor } from '@tiptap/vue-3'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
+import { v4 } from 'uuid'
 
 /* よくあるキーボード操作を実現する拡張機能
  * StarterKit に含まれるノードを対象として実装する
@@ -63,24 +69,90 @@ const SmartKeyboardShortcuts = Extension.create({
   },
 })
 
-const extensions = [
-  StarterKit.extend({
-    addKeyboardShortcuts() {
-      return {
-        Tab: () => {
-          if (this.editor.isActive('codeBlock')) {
-            return this.editor.commands.insertContent('\t')
-          }
-        },
-      }
-    },
-  }),
-  Highlight,
-  Typography,
-  SmartKeyboardShortcuts,
-]
-
 export function useMarkdownEditor(callback: (editorText: string) => void) {
+  const { uploadImage } = useImageUpload()
+  const { user } = useAuthInject()
+
+  const extensions = [
+    Extension.create({
+      name: 'disableImagePaste',
+      addProseMirrorPlugins() {
+        return [
+          new Plugin({
+            key: new PluginKey('disableImagePaste'),
+            props: {
+              // useEditorのeditorPropsで制御すると画像のペーストができなくなるので拡張機能でやる
+              handlePaste(_, event) {
+                if (event.clipboardData?.files.length) {
+                  return true
+                } else {
+                  return false
+                }
+              },
+            },
+          }),
+        ]
+      },
+    }),
+    Highlight,
+    Typography,
+    SmartKeyboardShortcuts,
+    Image,
+    StarterKit.extend({
+      addKeyboardShortcuts() {
+        return {
+          Tab: () => {
+            if (this.editor.isActive('codeBlock')) {
+              return this.editor.commands.insertContent('\t')
+            }
+          },
+        }
+      },
+    }),
+    FileHandler.configure({
+      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
+      async onDrop(currentEditor, files, pos) {
+        for await (const file of files) {
+          const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp')
+          const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}`)
+          if (url) {
+            currentEditor
+              .chain()
+              .insertContentAt(pos, {
+                type: 'image',
+                attrs: {
+                  src: url,
+                },
+              })
+              .focus()
+              .run()
+          }
+        }
+      },
+      async onPaste(currentEditor, files) {
+        for await (const file of files) {
+          if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+            continue
+          }
+
+          const resizedImage = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp')
+
+          const url = await uploadImage(resizedImage, `users/${user.value?.uid}/articles/${v4()}`)
+          currentEditor
+            .chain()
+            .insertContentAt(currentEditor.state.selection.anchor, {
+              type: 'image',
+              attrs: {
+                src: url,
+              },
+            })
+            .focus()
+            .run()
+        }
+      },
+    }),
+  ]
+
   const editor = useEditor({
     extensions,
     content: '',

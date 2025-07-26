@@ -18,7 +18,9 @@
     "vue-type": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@tiptap/extension-file-handler": "^3.0.7",
     "@tiptap/extension-highlight": "^3.0.7",
+    "@tiptap/extension-image": "^3.0.7",
     "@tiptap/extension-typography": "^3.0.7",
     "@tiptap/starter-kit": "^3.0.7",
     "@tiptap/static-renderer": "^3.0.7",
