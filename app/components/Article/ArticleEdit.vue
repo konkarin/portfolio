@@ -9,7 +9,7 @@
       <div class="articleEdit__headerRight">
         <ToggleBtn :value="article.isPublished" @toggle="updatePublishing">公開する</ToggleBtn>
         <BaseButton
-          :disabled="article.title === '' || tag === '' || !isValidCustomId"
+          :disabled="!isDirty || article.title === '' || inputTag === '' || !isValidCustomId"
           @click="updateArticle"
         >
           保存
@@ -21,6 +21,7 @@
       placeholder="Title"
       class="articleEdit__title dashboardEdit__title"
       maxlength="64"
+      @input="isDirty ||= true"
     />
     <div class="dashboardEdit__head">
       <div class="dashboardEdit__headContainer">
@@ -32,7 +33,7 @@
               class="dashboardEdit__input"
               type="text"
               placeholder="CustomIDを入力"
-              @input="validateCustomId(($event.target as HTMLInputElement).value)"
+              @input="onInputCustomId"
             />
           </label>
           <div v-if="!isValidCustomId">
@@ -42,10 +43,11 @@
         <label class="dashboardEdit__inputContainer">
           <b>Tags</b>
           <input
-            v-model="tag"
+            v-model="inputTag"
             class="dashboardEdit__input"
             type="text"
             placeholder="コンマ区切りで入力"
+            @input="isDirty ||= true"
           />
         </label>
       </div>
@@ -57,8 +59,9 @@
             class="dashboardEdit__input"
             type="text"
             placeholder="OGP画像のURLを入力、または画像を貼り付け"
-            @paste="onPasteOgp"
-            @drop.prevent="onDropOgp"
+            @paste="onPasteImage"
+            @drop.prevent="onDropImage"
+            @input="isDirty ||= true"
           />
         </label>
         <div class="dashboardEdit__ogpPreview">
@@ -75,221 +78,43 @@
 </template>
 
 <script setup lang="ts">
-import { db } from '@/api/apis'
-import type { Article } from '@/types/index'
-import Day from '~/utils/day'
-import { getArticleTags } from '~/utils/article'
-import { v4 } from 'uuid'
-import { useAuthInject } from '@/composables/useAuth'
-
 import { EditorContent } from '@tiptap/vue-3'
+import { useArticleEditor } from './useArticleEditor'
 
-const { user, isAuth } = useAuthInject()
-const article = ref<Article>({
-  id: useRoute().params.article as string,
-  title: '',
-  text: '',
-  isPublished: false,
-  updatedDate: 0,
-  createdDate: Day.getUnixMS(),
-  releaseDate: 0,
-  tags: [],
-  ogpImageUrl: '',
-})
-const tag = ref('')
-const customId = ref('')
-const ogpImageUrl = ref('')
-const availableCustomIds = ref<string[]>([])
-const isValidCustomId = ref(true)
-const articleTitle = computed((): string => {
-  return article.value.title
-})
-const { editor } = useMarkdownEditor((text) => {
-  article.value.text = text
-})
-const updatePublishing = () => {
-  article.value.isPublished = !article.value.isPublished
-}
-const validateCustomId = (id: string) => {
-  // 利用可能な文字は半角英数とハイフンアンダーバーのみ
-  const reg = /^[a-zA-Z0-9-_]*$/
-  isValidCustomId.value = !availableCustomIds.value.includes(id) && reg.test(id)
-}
-const getArticle = async () => {
-  const uid = user.value?.uid
-  if (uid == null)
-    return {
-      id: useRoute().params.article as string,
-      title: '',
-      text: '',
-      isPublished: false,
-      updatedDate: 0,
-      createdDate: Day.getUnixMS(),
-      releaseDate: 0,
-      tags: [],
-      ogpImageUrl: '',
-    }
-  const collectionPath = `users/${uid}/articles`
+const {
+  isDirty,
+  editor,
+  article,
+  inputTag,
+  ogpImageUrl,
+  customId,
+  isValidCustomId,
+  validateCustomId,
+  uploadOgp,
+  updatePublishing,
+  updateArticle,
+} = useArticleEditor()
 
-  return (await db.getDocById(collectionPath, article.value.id)) as Article | undefined
-}
-const { showToast } = useToast()
-const updateArticle = async () => {
-  if (article.value.title.length === 0) {
-    showToast({
-      title: 'Titleは必須です。',
-      type: 'error',
-    })
-    return
-  }
-
-  if (!isValidCustomId.value) {
-    showToast({
-      title: '利用できないCustomIDです',
-      type: 'error',
-    })
-    return
-  }
-
-  const articlesPath = `users/${user.value?.uid}/articles`
-
-  article.value.tags = tag.value.replace(/\s+/g, '').split(',')
-  article.value.ogpImageUrl = ogpImageUrl.value
-  article.value.customId = customId.value
-
-  // 公開日の設定
-  if (article.value.isPublished) {
-    // 公開日が既にある場合は更新日を更新
-    if (article.value.releaseDate) {
-      article.value.updatedDate = Day.getUnixMS()
-    } else {
-      article.value.releaseDate = Day.getUnixMS()
-    }
-  }
-
-  const text = await convertHTMLTextToMarkdown(editor.value?.getHTML() || '')
-
-  const request = {
-    ...article.value,
-    text,
-  }
-
-  try {
-    await db.addData(articlesPath, article.value.id, request)
-  } catch {
-    showToast({
-      title: 'Failed to update articles.',
-      type: 'error',
-    })
-    return
-  }
-
-  const articleTags = await getArticleTags(user.value?.uid || '')
-
-  // 書き込み時にDBに存在しないタグがあればDBに追加する
-  const notExistsTags = article.value.tags.filter((tag) => !articleTags.includes(tag))
-
-  if (notExistsTags) {
-    const articleTagsPath = `users/${user.value?.uid}/articleTags`
-
-    try {
-      for (const tag of notExistsTags) {
-        await db.addData(articleTagsPath, tag, {})
-      }
-    } catch {
-      showToast({
-        title: 'Failed to update tags',
-        type: 'error',
-      })
-      return
-    }
-  }
-
-  showToast({
-    title: 'Completed',
-    type: 'success',
-  })
+function onInputCustomId(e: Event) {
+  validateCustomId((e.target as HTMLInputElement).value)
+  isDirty.value ||= true
 }
 
-const { uploadImage } = useImageUpload()
-
-const createOgpPath = () => `users/${user.value?.uid}/ogps/${v4()}`
-
-const imageOptions = {
-  targetWidth: 1200,
-  targetHeight: 630,
-  mode: 'cover',
-} as const
-
-const onPasteOgp = async () => {
-  if (user.value == null) return
-
+async function onPasteImage(e: ClipboardEvent) {
   const blob = await loadClipboardImage()
   if (!blob) return
-
-  const file = new File([await resizeImage(blob, imageOptions)], 'image.webp', {
-    type: 'image/png',
-  })
-
-  const url = await uploadImage(file, createOgpPath())
-  if (url) {
-    ogpImageUrl.value = ''
-    ogpImageUrl.value = url
-  }
+  uploadOgp(blob)
 }
 
-const onDropOgp = async (e: DragEvent) => {
-  if (user.value == null) return
-
+function onDropImage(e: DragEvent) {
   const file = e.dataTransfer?.files[0]
   if (!file) return
-
-  const resizedFile = new File([await resizeImage(file, imageOptions)], 'image.webp')
-
-  const url = await uploadImage(resizedFile, createOgpPath())
-  if (url) {
-    ogpImageUrl.value = ''
-    ogpImageUrl.value = url
-  }
+  uploadOgp(file)
 }
 
-onMounted(async () => {
-  if (!isAuth.value) {
-    useRouter().push({ path: '/dashboard/articles' })
-    return
-  }
-
-  try {
-    const _article = await getArticle()
-    if (_article == null) {
-      return
-    }
-    _article.text = await convertMarkdownTextToHTML(_article.text)
-    article.value = _article
-    editor.value?.commands.setContent(article.value.text)
-  } catch (e) {
-    console.error(e)
-    showToast({
-      title: 'Failed to get articles.\nPlease retry.',
-      type: 'error',
-    })
-    return
-  }
-
-  tag.value = article.value.tags.join()
-  if (article.value.ogpImageUrl !== undefined) {
-    ogpImageUrl.value = article.value.ogpImageUrl
-  }
-
-  availableCustomIds.value = (await getArticles(useRuntimeConfig().public.AUTHOR_ID)).flatMap(
-    (article) => {
-      if (article.customId) return [article.id, article.customId]
-      else return article.id
-    },
-  )
-  customId.value = article.value.customId || ''
+const articleTitle = computed(() => {
+  return article.value.title
 })
-
 useHead({
   title: `Editing ${articleTitle.value}`,
 })
