@@ -48,24 +48,24 @@
             placeholder="コンマ区切りで入力"
           />
         </label>
-        </div>
-        <div class="dashboardEdit__ogpContainer">
-          <label class="dashboardEdit__ogpInput">
-            <b>OGP画像</b>
-            <input
-              v-model="ogpImageUrl"
-              class="dashboardEdit__input"
-              type="text"
-              placeholder="OGP画像のURLを入力、または画像を貼り付け"
-              @paste="onPasteOgp"
-              @drop.prevent="onDropOgp"
-            />
-          </label>
-          <div class="dashboardEdit__ogpPreview">
-            <img :src="ogpImageUrl" class="dashboardEdit__ogpPreviewImg" />
-          </div>
+      </div>
+      <div class="dashboardEdit__ogpContainer">
+        <label class="dashboardEdit__ogpInput">
+          <b>OGP画像</b>
+          <input
+            v-model="ogpImageUrl"
+            class="dashboardEdit__input"
+            type="text"
+            placeholder="OGP画像のURLを入力、または画像を貼り付け"
+            @paste="onPasteOgp"
+            @drop.prevent="onDropOgp"
+          />
+        </label>
+        <div class="dashboardEdit__ogpPreview">
+          <img :src="ogpImageUrl" class="dashboardEdit__ogpPreviewImg" />
         </div>
       </div>
+    </div>
 
     <div class="dashboardEdit__mainTextContainer">
       <b>本文</b>
@@ -131,7 +131,7 @@ const getArticle = async () => {
     }
   const collectionPath = `users/${uid}/articles`
 
-  return (await db.getDocById(collectionPath, article.value.id)) as Article
+  return (await db.getDocById(collectionPath, article.value.id)) as Article | undefined
 }
 const { showToast } = useToast()
 const updateArticle = async () => {
@@ -264,6 +264,9 @@ onMounted(async () => {
 
   try {
     const _article = await getArticle()
+    if (_article == null) {
+      return
+    }
     _article.text = await convertMarkdownTextToHTML(_article.text)
     article.value = _article
     editor.value?.commands.setContent(article.value.text)
@@ -308,16 +311,16 @@ useHead({
 }
 
 .articleEdit__title {
-    width: 100%;
-    height: 2.5rem;
-    border: 0;
-    padding: 0;
-    outline: 0;
-    resize: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-    line-height: 1.6;
-    background-color: #fbfcff;
+  width: 100%;
+  height: 2.5rem;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  resize: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1.6;
+  background-color: #fbfcff;
 }
 
 .articleEdit__header {
