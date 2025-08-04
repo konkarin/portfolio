@@ -1,5 +1,3 @@
-import { Plugin, PluginKey } from 'prosemirror-state'
-
 import { Extension } from '@tiptap/core'
 import Highlight from '@tiptap/extension-highlight'
 import Typography from '@tiptap/extension-typography'
@@ -11,17 +9,26 @@ import { useEditor } from '@tiptap/vue-3'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 import { v4 } from 'uuid'
 
-/* よくあるキーボード操作を実現する拡張機能
+/**
+ * よくあるキーボード操作を実現する拡張機能
  * StarterKit に含まれるノードを対象として実装する
+ * @see https://sogo.dev/posts/2025/05/tiptap-enter-keyboard-shortcuts
  */
 const SmartKeyboardShortcuts = Extension.create({
   name: 'smartKeyboardShortcuts',
   priority: 101, // StarterKit より先に実行するようにする
-
   addKeyboardShortcuts() {
+    const { editor } = this
     return {
-      Enter: () => {
-        const { editor } = this
+      Tab() {
+        if (editor.isActive('codeBlock')) {
+          return editor.commands.insertContent('\t')
+        } else {
+          return false
+        }
+      },
+      //  Enter押したら書式リセットする
+      Enter() {
         const { state } = editor
         const { $from } = state.selection
 
@@ -69,46 +76,15 @@ const SmartKeyboardShortcuts = Extension.create({
   },
 })
 
+const baseExtensions = [Highlight, Typography, SmartKeyboardShortcuts, Image, StarterKit]
+
 export function useMarkdownEditor(callback: (editorText: string) => void) {
   const { uploadImage } = useImageUpload()
   const { user } = useAuthInject()
 
   const extensions = [
-    Extension.create({
-      name: 'disableImagePaste',
-      addProseMirrorPlugins() {
-        return [
-          new Plugin({
-            key: new PluginKey('disableImagePaste'),
-            props: {
-              // useEditorのeditorPropsで制御すると画像のペーストができなくなるので拡張機能でやる
-              handlePaste(_, event) {
-                if (event.clipboardData?.files.length) {
-                  return true
-                } else {
-                  return false
-                }
-              },
-            },
-          }),
-        ]
-      },
-    }),
-    Highlight,
-    Typography,
-    SmartKeyboardShortcuts,
-    Image,
-    StarterKit.extend({
-      addKeyboardShortcuts() {
-        return {
-          Tab: () => {
-            if (this.editor.isActive('codeBlock')) {
-              return this.editor.commands.insertContent('\t')
-            }
-          },
-        }
-      },
-    }),
+    ...baseExtensions,
+    // FileHandler内でユーザー情報を使いたいので、inject後に定義する
     FileHandler.configure({
       allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
       async onDrop(currentEditor, files, pos) {
