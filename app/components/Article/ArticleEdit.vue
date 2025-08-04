@@ -24,17 +24,8 @@
     />
     <div class="dashboardEdit__head">
       <div class="dashboardEdit__headContainer">
-        <label class="dashboardEdit__tagContainer">
-          <b>Tags</b>
-          <input
-            v-model="tag"
-            class="dashboardEdit__input"
-            type="text"
-            placeholder="コンマ区切りで入力"
-          />
-        </label>
-        <div>
-          <label class="dashboardEdit__tagContainer">
+        <div class="dashboardEdit__customIdContainer">
+          <label class="dashboardEdit__inputContainer">
             <b>CustomID</b>
             <input
               v-model="customId"
@@ -47,6 +38,16 @@
           <div v-if="!isValidCustomId">
             <div class="dashboardEdit__error">利用できないCustomIDだよ</div>
           </div>
+        </div>
+        <label class="dashboardEdit__inputContainer">
+          <b>Tags</b>
+          <input
+            v-model="tag"
+            class="dashboardEdit__input"
+            type="text"
+            placeholder="コンマ区切りで入力"
+          />
+        </label>
         </div>
         <div class="dashboardEdit__ogpContainer">
           <label class="dashboardEdit__ogpInput">
@@ -65,9 +66,11 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <EditorContent :editor="editor" />
+    <div class="dashboardEdit__mainTextContainer">
+      <b>本文</b>
+      <EditorContent :editor="editor" />
+    </div>
   </section>
 </template>
 
@@ -298,8 +301,12 @@ useHead({
 
 .articleEdit {
   padding-bottom: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-  &__title {
+.articleEdit__title {
     width: 100%;
     height: 2.5rem;
     border: 0;
@@ -310,40 +317,6 @@ useHead({
     font-weight: bold;
     line-height: 1.6;
     background-color: #fbfcff;
-  }
-}
-
-.dashboardEdit__ogpContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.dashboardEdit__headContainer {
-  display: grid;
-  gap: 8px;
-  flex-grow: 1;
-}
-
-.dashboardEdit__tagContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.dashboardEdit__ogpInput {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex-grow: 1;
-}
-
-.dashboardEdit__ogpPreview {
-  max-height: 100px;
-}
-
-.dashboardEdit__ogpPreviewImg {
-  max-height: 100px;
 }
 
 .articleEdit__header {
@@ -369,12 +342,59 @@ useHead({
   }
 }
 
+.dashboardEdit__head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboardEdit__headContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.dashboardEdit__customIdContainer {
+  flex-grow: 1;
+}
+
+.dashboardEdit__inputContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 4px;
+}
+
+.dashboardEdit__ogpContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.dashboardEdit__ogpInput {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: calc(50% - 4px);
+}
+
+.dashboardEdit__ogpPreview {
+  flex-grow: 1;
+}
+
+.dashboardEdit__ogpPreviewImg {
+  max-height: 68px;
+}
+
+.dashboardEdit__mainTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .dashboardEdit__input {
   outline: 0;
   border-radius: 4px;
   border: 1px solid #cbcbcb;
   background-color: #fbfcff;
-  flex-grow: 1;
   padding: 8px 12px;
   height: 40px;
   box-sizing: border-box;
@@ -385,7 +405,6 @@ useHead({
 .tiptap {
   line-height: 1.9;
   min-height: 400px;
-  margin-top: 1rem;
   padding: 8px 12px;
   border-radius: 4px;
   border: 1px solid #cbcbcb;
@@ -395,15 +414,13 @@ useHead({
     margin-top: 0;
   }
 
-  & a {
+  a {
     color: var(--darkYellow);
     line-break: anywhere;
     word-break: break-all;
     text-decoration: underline;
     text-decoration-color: var(--darkYellow);
-    &:hover {
-      text-decoration: none;
-    }
+    pointer-events: none;
   }
 
   h1 {
