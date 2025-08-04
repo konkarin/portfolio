@@ -1,4 +1,6 @@
-import { Extension } from '@tiptap/core'
+import { Plugin, PluginKey } from 'prosemirror-state'
+
+import { Extension, generateJSON } from '@tiptap/core'
 import Highlight from '@tiptap/extension-highlight'
 import Typography from '@tiptap/extension-typography'
 import StarterKit from '@tiptap/starter-kit'
@@ -6,7 +8,6 @@ import Image from '@tiptap/extension-image'
 import FileHandler from '@tiptap/extension-file-handler'
 
 import { useEditor } from '@tiptap/vue-3'
-import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 import { v4 } from 'uuid'
 
 /**
@@ -73,6 +74,30 @@ const SmartKeyboardShortcuts = Extension.create({
         return true
       },
     }
+  },
+  // ペースト時にmarkdownテキストをtiptapのJSONに変換してからエディタに挿入する
+  addProseMirrorPlugins() {
+    const { editor } = this
+    return [
+      new Plugin({
+        key: new PluginKey('convertMarkdownOnPaste'),
+        props: {
+          handlePaste(_, event) {
+            const mdContents = event.clipboardData?.getData('text/plain') || ''
+            if (mdContents === '') {
+              return false
+            }
+
+            convertMarkdownTextToHTML(mdContents).then((html) => {
+              const json = generateJSON(html, baseExtensions)
+
+              editor.commands.insertContent(json)
+            })
+            return true
+          },
+        },
+      }),
+    ]
   },
 })
 
