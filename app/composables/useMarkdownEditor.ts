@@ -136,7 +136,7 @@ export function useMarkdownEditor(callback: (editorText: string) => void) {
       callback(editor.getHTML())
     },
     editorProps: {
-      handleKeyDown: (view, event) => {
+      handleKeyDown(view, event) {
         // リストアイテム内にいる場合はTabでエディタからフォーカスを失わないようにする
         if (event.key === 'Tab' && !event.ctrlKey && !event.metaKey) {
           const { $from } = view.state.selection
@@ -149,12 +149,5 @@ export function useMarkdownEditor(callback: (editorText: string) => void) {
     },
   })
 
-  function markdownText() {
-    return renderToMarkdown({
-      content: editor.value?.getJSON() || {},
-      extensions,
-    })
-  }
-
-  return { editor, markdownText }
+  return { editor }
 }

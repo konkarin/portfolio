@@ -104,7 +104,7 @@ const isValidCustomId = ref(true)
 const articleTitle = computed((): string => {
   return article.value.title
 })
-const { editor, markdownText } = useMarkdownEditor((text) => {
+const { editor } = useMarkdownEditor((text) => {
   article.value.text = text
 })
 const updatePublishing = () => {
@@ -167,11 +167,8 @@ const updateArticle = async () => {
     }
   }
 
-  const md = markdownText()
-
   const text = await convertHTMLTextToMarkdown(editor.value?.getHTML() || '')
 
-  console.log(md === text, { md, text })
   const request = {
     ...article.value,
     text,
