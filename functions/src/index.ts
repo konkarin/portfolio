@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
+
 import { buildArticles } from './buildArticles'
 import { deleteFileFromStorage } from './deleteFileFromStorage'
 import { saveImgToDb } from './saveImgToDb'

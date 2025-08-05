@@ -1,5 +1,6 @@
 import { getApp, getApps, initializeApp } from 'firebase/app'
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
+
 import { runtimePublicConfig } from '../../config'
 
 const firebaseConfig = {

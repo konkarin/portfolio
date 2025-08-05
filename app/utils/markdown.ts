@@ -1,13 +1,13 @@
-import { unified } from 'unified'
-import parse from 'remark-parse'
-import gfm from 'remark-gfm'
 import highlight from 'rehype-highlight'
-import rehype from 'remark-rehype'
-import stringify from 'rehype-stringify'
-import breaks from 'remark-breaks'
 import rehypeParse from 'rehype-parse'
 import rehypeRemark from 'rehype-remark'
+import stringify from 'rehype-stringify'
+import breaks from 'remark-breaks'
+import gfm from 'remark-gfm'
+import parse from 'remark-parse'
+import rehype from 'remark-rehype'
 import remarkStringify from 'remark-stringify'
+import { unified } from 'unified'
 
 export const convertMarkdownTextToHTML = async (markdownText: string) => {
   const hast = await unified()

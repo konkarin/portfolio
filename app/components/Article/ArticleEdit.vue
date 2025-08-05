@@ -79,6 +79,7 @@
 
 <script setup lang="ts">
 import { EditorContent } from '@tiptap/vue-3'
+
 import { useArticleEditor } from './useArticleEditor'
 
 const {
@@ -95,12 +96,12 @@ const {
   updateArticle,
 } = useArticleEditor()
 
-function onInputCustomId(e: Event) {
-  validateCustomId((e.target as HTMLInputElement).value)
+function onInputCustomId() {
+  validateCustomId(customId.value)
   isDirty.value ||= true
 }
 
-async function onPasteImage(e: ClipboardEvent) {
+async function onPasteImage() {
   const blob = await loadClipboardImage()
   if (!blob) return
   uploadOgp(blob)

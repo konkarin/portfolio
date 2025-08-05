@@ -1,4 +1,5 @@
 import { mount, RouterLinkStub } from '@vue/test-utils'
+
 import ArticlesSideMenuItem from '@/components/Article/ArticlesSideMenuItem.vue'
 
 const article = {

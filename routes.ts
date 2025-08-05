@@ -1,8 +1,10 @@
-import type { DocumentData } from 'firebase/firestore'
 // NOTE: nuxt generate時に呼ばれるときはalias pathが使えない https://github.com/nuxt/nuxt/issues/7017
+import type { DocumentData } from 'firebase/firestore'
+
 import { db } from './app/api/apis'
 import type { Query } from './app/api/firestore'
 import { runtimePublicConfig } from './config'
+
 
 interface Articles {
   [key: string]: DocumentData[]

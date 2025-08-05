@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { getAuth, GoogleAuthProvider, signInWithPopup } from '@firebase/auth'
+
 import { useAuth, AUTH_KEY } from '@/composables/useAuth'
 
 const isLoading = ref(true)

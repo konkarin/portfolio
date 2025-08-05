@@ -1,13 +1,12 @@
-import { Plugin, PluginKey } from 'prosemirror-state'
 
 import { Extension, generateJSON } from '@tiptap/core'
+import FileHandler from '@tiptap/extension-file-handler'
 import Highlight from '@tiptap/extension-highlight'
+import Image from '@tiptap/extension-image'
 import Typography from '@tiptap/extension-typography'
 import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
-import FileHandler from '@tiptap/extension-file-handler'
-
 import { useEditor } from '@tiptap/vue-3'
+import { Plugin, PluginKey } from 'prosemirror-state'
 import { v4 } from 'uuid'
 
 export function useMarkdownEditor(callback: (editorText: string) => void) {

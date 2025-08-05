@@ -3,6 +3,7 @@ import { shallowMount } from '@vue/test-utils'
 import ArticleContainer from '@/components/Article/ArticleContainer.vue'
 import type { Article } from '@/types/index'
 
+
 const articles: Article[] = [...Array(4).keys()].map((_, index) => {
   return {
     createdDate: 1616932800000,

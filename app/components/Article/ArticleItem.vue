@@ -28,8 +28,9 @@
 <script setup lang="ts">
 import { remark } from 'remark'
 import strip from 'strip-markdown'
-import Day from '@/utils/day'
+
 import type { Article } from '@/types/index'
+import Day from '@/utils/day'
 
 const { article } = defineProps<{
   article: Article

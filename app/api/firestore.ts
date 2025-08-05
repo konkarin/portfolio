@@ -16,6 +16,7 @@ import {
   type OrderByDirection,
   type WhereFilterOp,
 } from 'firebase/firestore'
+
 import { firebaseApp } from '../utils/firebase'
 
 export interface Query {

@@ -1,15 +1,15 @@
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
+
+import { spawn } from 'child-process-promise'
 import dayjs from 'dayjs'
 import { parse } from 'exifr'
-import { getStorage } from 'firebase-admin/storage'
 import { getFirestore } from 'firebase-admin/firestore'
-
-import { imageSizeFromFile } from 'image-size/fromFile'
-import { spawn } from 'child-process-promise'
-import { onObjectFinalized } from 'firebase-functions/v2/storage'
+import { getStorage } from 'firebase-admin/storage'
 import { log, error } from 'firebase-functions/logger'
+import { onObjectFinalized } from 'firebase-functions/v2/storage'
+import { imageSizeFromFile } from 'image-size/fromFile'
 
 export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, async (object) => {
   const fileBucket: string = object.bucket

@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { convertMarkdownTextToHTML } from '@/utils/markdown'
 import type { Article } from '@/types/index'
+import { convertMarkdownTextToHTML } from '@/utils/markdown'
 
 const emptyAritcle: Article = {
   id: '',

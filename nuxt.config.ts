@@ -1,5 +1,5 @@
-import { generateRoutes } from './routes'
 import { runtimePublicConfig } from './config'
+import { generateRoutes } from './routes'
 
 export default defineNuxtConfig({
   experimental: {

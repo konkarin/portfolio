@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
+
 import { useModalInject } from '@/composables/useModal'
 
 defineProps<{
