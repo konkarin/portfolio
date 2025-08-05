@@ -5,7 +5,6 @@ import { db } from './app/api/apis'
 import type { Query } from './app/api/firestore'
 import { runtimePublicConfig } from './config'
 
-
 interface Articles {
   [key: string]: DocumentData[]
 }
