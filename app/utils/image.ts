@@ -33,13 +33,7 @@ const loadImg = (url: string) => {
  * 高解像度の画像は適切にリサイズし、低解像度の画像はそのままにする
  */
 export async function resizeImage(blob: Blob, options: ResizeOptions = {}) {
-  const {
-    maxSize = 1920,
-    targetWidth,
-    targetHeight,
-    quality = 0.9,
-    mode = 'contain',
-  } = options
+  const { maxSize = 1920, targetWidth, targetHeight, quality = 0.9, mode = 'contain' } = options
 
   return new Promise<Blob>((resolve, reject) => {
     const img = new Image()

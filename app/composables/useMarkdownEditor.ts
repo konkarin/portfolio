@@ -1,4 +1,3 @@
-
 import { Extension, generateJSON } from '@tiptap/core'
 import FileHandler from '@tiptap/extension-file-handler'
 import Highlight from '@tiptap/extension-highlight'

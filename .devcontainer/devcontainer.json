@@ -12,9 +12,7 @@
   // "forwardPorts": [],
 
   // Mount a named volume to persist home directory data
-  "mounts": [
-    "source=vscode-home,target=/home/node,type=volume"
-  ],
+  "mounts": ["source=vscode-home,target=/home/node,type=volume"],
 
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "./.devcontainer/post-create.sh"

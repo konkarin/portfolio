@@ -1,7 +1,6 @@
 import type { User } from 'firebase/auth'
 import { ref, inject, type Ref } from 'vue'
 
-
 export interface AuthState {
   isAuth: Ref<boolean>
   user: Ref<User | null>
