@@ -111,10 +111,16 @@ export function useMarkdownEditor(callback: (editorText: string) => void) {
     ...baseExtensions,
     // FileHandler内でユーザー情報を使いたいので、inject後に定義する
     FileHandler.configure({
-      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif'],
+      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
       async onDrop(currentEditor, files, pos) {
         for await (const file of files) {
-          const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp')
+          if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
+            continue
+          }
+
+          const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp', {
+            type: 'image/webp',
+          })
           const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}`)
           if (url) {
             currentEditor
@@ -132,11 +138,15 @@ export function useMarkdownEditor(callback: (editorText: string) => void) {
       },
       async onPaste(currentEditor, files) {
         for await (const file of files) {
-          if (!['image/jpeg', 'image/png', 'image/gif'].includes(file.type)) {
+          if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
             continue
           }
 
-          const resizedImage = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp')
+          const resizedImage = new File(
+            [await resizeImage(file, { maxSize: 1200 })],
+            'image.webp',
+            { type: 'image/webp' },
+          )
 
           const url = await uploadImage(resizedImage, `users/${user.value?.uid}/articles/${v4()}`)
           currentEditor
