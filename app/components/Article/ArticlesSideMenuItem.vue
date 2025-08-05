@@ -10,8 +10,8 @@
 </template>
 
 <script lang="ts">
-import Day from '@/utils/day'
 import type { Article } from '@/types/index'
+import Day from '@/utils/day'
 
 export default defineComponent({
   props: {

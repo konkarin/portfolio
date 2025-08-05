@@ -12,8 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import { v4 as uuidv4 } from 'uuid'
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage'
+import { v4 as uuidv4 } from 'uuid'
+
 import { useAuthInject } from '@/composables/useAuth'
 
 const emit = defineEmits<{

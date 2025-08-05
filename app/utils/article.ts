@@ -1,6 +1,7 @@
 import { db } from '@/api/apis'
-import type { Article } from '@/types/index'
 import type { Query, Order } from '@/api/firestore'
+import type { Article } from '@/types/index'
+
 
 export async function getArticles(authorId: string) {
   const articlesPath = `users/${authorId}/articles`

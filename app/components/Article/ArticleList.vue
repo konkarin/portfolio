@@ -2,7 +2,9 @@
   <ul v-if="articles.length > 0" class="artcileList">
     <ArticleItem v-for="article in articles" :key="article.id" :article="article" />
   </ul>
-  <div v-else><div>記事がありません</div></div>
+  <div v-else>
+    <div>記事がありません</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -20,14 +22,15 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .artcileList {
-  width: calc(100% - 300px);
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  justify-items: center;
 }
 
 @media screen and (max-width: $md) {
   .artcileList {
-    width: 100%;
+    grid-template-columns: 1fr;
   }
 }
 </style>

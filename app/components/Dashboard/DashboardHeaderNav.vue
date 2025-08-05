@@ -44,7 +44,7 @@
   color: var(--black);
 }
 
-@media screen and (min-width: $md) {
+@media screen and (min-width: $lg) {
   .headerNav__item {
     transition: color 0.2s;
     &:hover {

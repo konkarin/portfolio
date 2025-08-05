@@ -66,7 +66,7 @@ export default {
   justify-content: space-between;
 }
 
-@media screen and (max-width: $md) {
+@media screen and (max-width: $lg) {
   .article {
     display: block;
   }

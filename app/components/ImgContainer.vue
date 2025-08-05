@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
+
 import { useModalInject } from '@/composables/useModal'
 
 defineProps<{
@@ -29,7 +30,6 @@ const openModal = (url: string) => {
 
 <style lang="scss" scoped>
 .imgContainer {
-  margin-top: 2rem;
   display: grid;
   gap: 10px;
   grid-template-columns: 1fr;

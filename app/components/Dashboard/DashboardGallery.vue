@@ -46,9 +46,10 @@
 <script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
 
+
+import { useAuthInject } from '@/composables/useAuth'
 import { db } from '~/api/apis'
 import type { Query } from '~/api/firestore'
-import { useAuthInject } from '@/composables/useAuth'
 
 const { user } = useAuthInject()
 const getImgList = async (): Promise<DocumentData[]> => {
@@ -156,6 +157,7 @@ const deleteImgList = async (): Promise<void> => {
       title: 'Remove successfully',
       type: 'success',
     })
+    selectedImgPathList.value = []
     // TODO: firestoreを監視したい
     imgList.value = await getImgList()
   } catch (e) {

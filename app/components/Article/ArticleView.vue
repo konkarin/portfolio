@@ -66,7 +66,7 @@ export default defineComponent({
   gap: 3rem;
   width: calc(100% - 300px);
 }
-@media screen and (max-width: $md) {
+@media screen and (max-width: $lg) {
   .articleView {
     width: 100%;
     padding-bottom: 1rem;
@@ -92,5 +92,19 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   color: var(--gray);
+}
+
+.articleTag {
+  color: var(--white);
+  background: var(--gray);
+  padding: 0.1em 0.4em 0.2em;
+  border-radius: 3px;
+
+  &--link {
+    transition: 0.3s;
+    &:hover {
+      opacity: 0.6;
+    }
+  }
 }
 </style>

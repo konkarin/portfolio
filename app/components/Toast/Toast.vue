@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { type ToastType } from '@/composables/useToast'
 import Check from '@/components/svg/Check.vue'
-import Warning from '@/components/svg/Warning.vue'
 import Info from '@/components/svg/Info.vue'
+import Warning from '@/components/svg/Warning.vue'
+import { type ToastType } from '@/composables/useToast'
 
 interface Props {
   id: string

@@ -1,7 +1,8 @@
 import * as path from 'path'
+
 import { getStorage } from 'firebase-admin/storage'
-import { onDocumentDeleted } from 'firebase-functions/v2/firestore'
 import { log, error } from 'firebase-functions/logger'
+import { onDocumentDeleted } from 'firebase-functions/v2/firestore'
 
 export const deleteFileFromStorage = onDocumentDeleted(
   {

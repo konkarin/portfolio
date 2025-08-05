@@ -20,8 +20,8 @@
 </template>
 
 <script lang="ts">
-import Day from '@/utils/day'
 import type { Article } from '@/types/index'
+import Day from '@/utils/day'
 
 export default defineComponent({
   props: {
@@ -45,6 +45,33 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.articleItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 1rem;
+  color: var(--black);
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: none;
+      color: var(--darkYellow);
+      & .articleItem__eyeCatchInner {
+        transform: scale(1.05);
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.articleItem__title {
+  display: block;
+  width: 100%;
+  font-size: 1.5em;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
 .edit {
   position: relative;
   width: 30px;

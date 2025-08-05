@@ -1,9 +1,10 @@
-import { globalIgnores } from 'eslint/config'
-import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
-import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
-import pluginOxlint from 'eslint-plugin-oxlint'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
+import { globalIgnores } from 'eslint/config'
+import pluginImport from 'eslint-plugin-import'
+import pluginOxlint from 'eslint-plugin-oxlint'
+import pluginVue from 'eslint-plugin-vue'
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
@@ -22,6 +23,23 @@ export default defineConfigWithVueTs(
     extends: [...pluginVue.configs['flat/essential']],
     rules: {
       'vue/multi-word-component-names': 'off',
+    },
+  },
+  {
+    plugins: {
+      import: pluginImport,
+    },
+    rules: {
+      'import/order': [
+        'warn',
+        {
+          groups: ['builtin', 'external', 'internal'],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+          },
+        },
+      ],
     },
   },
   {

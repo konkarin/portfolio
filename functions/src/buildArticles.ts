@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { onDocumentWritten } from 'firebase-functions/v2/firestore'
 import { log, error } from 'firebase-functions/logger'
+import { onDocumentWritten } from 'firebase-functions/v2/firestore'
 
 export const buildArticles = onDocumentWritten(
   {
