@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': { prerender: true },
-    '/gallery': { prerender: true },
+    '/photos': { prerender: true },
     '/articles': { prerender: true },
     '/dashboard/**': { ssr: false },
   },

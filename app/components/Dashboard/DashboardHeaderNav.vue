@@ -3,11 +3,11 @@
     <div class="headerNav__icon"></div>
     <div>
       <NuxtLink
-        to="/dashboard/gallery"
+        to="/dashboard/photos"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path === '/dashboard/gallery' }"
+        :class="{ 'headerNav__item--active': $route.path === '/dashboard/photos' }"
       >
-        Gallery
+        Photos
       </NuxtLink>
       <NuxtLink
         to="/dashboard/articles"

@@ -13,7 +13,7 @@
         </BaseButton>
       </div>
     </div>
-    <div class="dashboardEdit__gallery">
+    <div class="dashboardEdit__photos">
       <div v-if="imgList.length === 0">No Photos</div>
       <div
         v-for="(img, index) in imgList"
@@ -183,7 +183,7 @@ const deleteImgList = async (): Promise<void> => {
   gap: 8px;
 }
 
-.dashboardEdit__gallery {
+.dashboardEdit__photos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;

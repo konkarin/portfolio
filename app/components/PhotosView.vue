@@ -1,5 +1,5 @@
 <template>
-  <main class="gallery">
+  <main class="photos">
     <ImgContainer :img-list="imgList || []" />
     <transition name="fade-modal">
       <PhotoModal v-if="photoModal.show" :img-src="photoModal.url" @close="closeModal" />
@@ -41,7 +41,7 @@ const closeModal = (): void => {
 
 const route = useRoute()
 
-const { data: imgList } = await useAsyncData('gallery-images', () => loadImgList())
+const { data: imgList } = await useAsyncData('photos-images', () => loadImgList())
 
 onMounted(async () => {
   if (typeof route.query.path === 'string') {
@@ -60,12 +60,12 @@ onMounted(async () => {
 })
 
 useHead({
-  title: 'Gallery',
+  title: 'Photos',
 })
 </script>
 
 <style lang="scss" scoped>
-.gallery {
+.photos {
   padding: 0 4rem 2rem;
   display: flex;
   padding-top: 1em;
@@ -73,10 +73,10 @@ useHead({
   flex-direction: row;
   justify-content: center;
 }
-.gallery-enter-active {
+.photos-enter-active {
   transition: opacity 0.5s ease-in;
 }
-.gallery-enter {
+.photos-enter {
   opacity: 0;
 }
 </style>
