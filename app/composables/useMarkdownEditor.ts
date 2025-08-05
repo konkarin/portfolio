@@ -10,6 +10,90 @@ import FileHandler from '@tiptap/extension-file-handler'
 import { useEditor } from '@tiptap/vue-3'
 import { v4 } from 'uuid'
 
+export function useMarkdownEditor(callback: (editorText: string) => void) {
+  const { uploadImage } = useImageUpload()
+  const { user } = useAuthInject()
+
+  const extensions = [
+    ...baseExtensions,
+    // FileHandler内でユーザー情報を使いたいので、inject後に定義する
+    FileHandler.configure({
+      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+      async onDrop(currentEditor, files, pos) {
+        for await (const file of files) {
+          if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
+            continue
+          }
+
+          const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp', {
+            type: 'image/webp',
+          })
+          const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}`)
+          if (url) {
+            currentEditor
+              .chain()
+              .insertContentAt(pos, {
+                type: 'image',
+                attrs: {
+                  src: url,
+                },
+              })
+              .focus()
+              .run()
+          }
+        }
+      },
+      async onPaste(currentEditor, files) {
+        for await (const file of files) {
+          if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
+            continue
+          }
+
+          const resizedImage = new File(
+            [await resizeImage(file, { maxSize: 1200 })],
+            'image.webp',
+            { type: 'image/webp' },
+          )
+
+          const url = await uploadImage(resizedImage, `users/${user.value?.uid}/articles/${v4()}`)
+          currentEditor
+            .chain()
+            .insertContentAt(currentEditor.state.selection.anchor, {
+              type: 'image',
+              attrs: {
+                src: url,
+              },
+            })
+            .focus()
+            .run()
+        }
+      },
+    }),
+  ]
+
+  const editor = useEditor({
+    extensions,
+    content: '',
+    onUpdate({ editor }) {
+      callback(editor.getHTML())
+    },
+    editorProps: {
+      handleKeyDown(view, event) {
+        // リストアイテム内にいる場合はTabでエディタからフォーカスを失わないようにする
+        if (event.key === 'Tab' && !event.ctrlKey && !event.metaKey) {
+          const { $from } = view.state.selection
+          const node = $from.node(-1)
+          if (node && node.type.name === 'listItem') {
+            event.stopPropagation()
+          }
+        }
+      },
+    },
+  })
+
+  return { editor }
+}
+
 /**
  * よくあるキーボード操作を実現する拡張機能
  * StarterKit に含まれるノードを対象として実装する
@@ -102,87 +186,3 @@ const SmartKeyboardShortcuts = Extension.create({
 })
 
 const baseExtensions = [Highlight, Typography, SmartKeyboardShortcuts, Image, StarterKit]
-
-export function useMarkdownEditor(callback: (editorText: string) => void) {
-  const { uploadImage } = useImageUpload()
-  const { user } = useAuthInject()
-
-  const extensions = [
-    ...baseExtensions,
-    // FileHandler内でユーザー情報を使いたいので、inject後に定義する
-    FileHandler.configure({
-      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-      async onDrop(currentEditor, files, pos) {
-        for await (const file of files) {
-          if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
-            continue
-          }
-
-          const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp', {
-            type: 'image/webp',
-          })
-          const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}`)
-          if (url) {
-            currentEditor
-              .chain()
-              .insertContentAt(pos, {
-                type: 'image',
-                attrs: {
-                  src: url,
-                },
-              })
-              .focus()
-              .run()
-          }
-        }
-      },
-      async onPaste(currentEditor, files) {
-        for await (const file of files) {
-          if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
-            continue
-          }
-
-          const resizedImage = new File(
-            [await resizeImage(file, { maxSize: 1200 })],
-            'image.webp',
-            { type: 'image/webp' },
-          )
-
-          const url = await uploadImage(resizedImage, `users/${user.value?.uid}/articles/${v4()}`)
-          currentEditor
-            .chain()
-            .insertContentAt(currentEditor.state.selection.anchor, {
-              type: 'image',
-              attrs: {
-                src: url,
-              },
-            })
-            .focus()
-            .run()
-        }
-      },
-    }),
-  ]
-
-  const editor = useEditor({
-    extensions,
-    content: '',
-    onUpdate({ editor }) {
-      callback(editor.getHTML())
-    },
-    editorProps: {
-      handleKeyDown(view, event) {
-        // リストアイテム内にいる場合はTabでエディタからフォーカスを失わないようにする
-        if (event.key === 'Tab' && !event.ctrlKey && !event.metaKey) {
-          const { $from } = view.state.selection
-          const node = $from.node(-1)
-          if (node && node.type.name === 'listItem') {
-            event.stopPropagation()
-          }
-        }
-      },
-    },
-  })
-
-  return { editor }
-}
