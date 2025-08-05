@@ -8,7 +8,7 @@ export default defineNuxtConfig({
 
   routeRules: {
     '/': { prerender: true },
-    '/gallery': { prerender: true },
+    '/photos': { prerender: true },
     '/articles': { prerender: true },
     '/dashboard/**': { ssr: false },
   },
@@ -19,6 +19,9 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
+      htmlAttrs: {
+        lang: 'ja',
+      },
       titleTemplate: "%s - konkarin's photos & blog",
       meta: [
         { charset: 'utf-8' },

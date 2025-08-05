@@ -1,9 +1,9 @@
 <template>
-  <DashboardGallery />
+  <DashboardPhotos />
 </template>
 
 <script setup lang="ts">
 useHead({
-  title: 'GalleryEdit',
+  title: 'PhotosEdit',
 })
 </script>

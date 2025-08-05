@@ -10,11 +10,11 @@
         Home
       </NuxtLink>
       <NuxtLink
-        to="/gallery"
+        to="/photos"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path === '/gallery' }"
+        :class="{ 'headerNav__item--active': $route.path === '/photos' }"
       >
-        Gallery
+        Photos
       </NuxtLink>
       <NuxtLink
         to="/articles"

@@ -1,16 +1,16 @@
 <template>
-  <GalleryView />
+  <PhotosView />
 </template>
 
 <script setup lang="ts">
 defineOptions({
-  name: 'PagesGallery',
+  name: 'PagesPhotos',
 })
 
 const { APP_URL } = useRuntimeConfig().public
 
 useHead({
-  title: 'Gallery',
+  title: 'Photos',
   meta: [
     {
       name: 'description',
@@ -19,11 +19,11 @@ useHead({
     { property: 'og:type', content: 'article' },
     {
       property: 'og:title',
-      content: "Gallery - konkarin's photos & blog",
+      content: "Photos - konkarin's photos & blog",
     },
     {
       property: 'og:url',
-      content: `${APP_URL}/gallery`,
+      content: `${APP_URL}/photos`,
     },
     {
       property: 'og:description',

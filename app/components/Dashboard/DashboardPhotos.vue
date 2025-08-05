@@ -13,7 +13,7 @@
         </BaseButton>
       </div>
     </div>
-    <div class="dashboardEdit__gallery">
+    <div class="dashboardEdit__photos">
       <div v-if="imgList.length === 0">No Photos</div>
       <div
         v-for="(img, index) in imgList"
@@ -45,7 +45,6 @@
 
 <script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
-
 
 import { useAuthInject } from '@/composables/useAuth'
 import { db } from '~/api/apis'
@@ -184,14 +183,14 @@ const deleteImgList = async (): Promise<void> => {
   gap: 8px;
 }
 
-.dashboardEdit__gallery {
+.dashboardEdit__photos {
   display: grid;
-  grid-template-columns: repeat(4, minmax(100px, 1fr));
-  grid-auto-rows: 200px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
 }
 
 .photoBox {
+  aspect-ratio: 1 / 1;
   box-sizing: border-box;
 }
 
