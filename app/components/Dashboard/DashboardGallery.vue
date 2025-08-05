@@ -46,7 +46,6 @@
 <script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
 
-
 import { useAuthInject } from '@/composables/useAuth'
 import { db } from '~/api/apis'
 import type { Query } from '~/api/firestore'
@@ -186,12 +185,12 @@ const deleteImgList = async (): Promise<void> => {
 
 .dashboardEdit__gallery {
   display: grid;
-  grid-template-columns: repeat(4, minmax(100px, 1fr));
-  grid-auto-rows: 200px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 10px;
 }
 
 .photoBox {
+  aspect-ratio: 1 / 1;
   box-sizing: border-box;
 }
 
