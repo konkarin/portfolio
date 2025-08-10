@@ -122,6 +122,8 @@ export function useArticleEditor() {
       }
     }
 
+    // NOTE: @tiptap/static-renderer/pm/markdownのrednerToMarkdownを使うと、
+    // リストのインデントが消えるので自前で変換する
     const text = await convertHTMLTextToMarkdown(editor.value?.getHTML() || '')
 
     const request = {
