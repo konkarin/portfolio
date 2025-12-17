@@ -22,7 +22,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'ja',
       },
-      titleTemplate: "%s - konkarin's photos & blog",
+      titleTemplate: "%s - konkarin's blog & photos",
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -94,10 +94,19 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-12-30',
+
   future: {
     compatibilityVersion: 4,
   },
+
   typescript: {
     shim: true,
+  },
+
+  modules: ['@nuxtjs/sitemap'],
+
+  site: {
+    url: 'https://konkarin.photo',
+    name: "konkarin's blog & photos",
   },
 })

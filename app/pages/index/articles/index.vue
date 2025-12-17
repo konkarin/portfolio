@@ -20,7 +20,7 @@ useHead({
     { property: 'og:type', content: 'article' },
     {
       property: 'og:title',
-      content: "Articles - konkarin's photos & blog",
+      content: "Articles - konkarin's blog & photos",
     },
     {
       property: 'og:url',
