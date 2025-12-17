@@ -55,7 +55,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-oxlint": "1.9.0",
     "eslint-plugin-vue": "10.4.0",
-    "firebase-tools": "^13.35.1",
+    "firebase-tools": "^14.11.2",
     "happy-dom": "^14.12.3",
     "nuxt": "4.0.3",
     "oxlint": "1.9.0",
