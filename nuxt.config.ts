@@ -109,4 +109,8 @@ export default defineNuxtConfig({
     url: 'https://konkarin.photo',
     name: "konkarin's blog & photos",
   },
+
+  sitemap: {
+    exclude: ['/dashboard/**'],
+  },
 })
