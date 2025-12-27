@@ -22,7 +22,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'ja',
       },
-      titleTemplate: "%s - konkarin's blog & photos",
+      titleTemplate: '%s - konkarin.photo',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -107,7 +107,7 @@ export default defineNuxtConfig({
 
   site: {
     url: 'https://konkarin.photo',
-    name: "konkarin's blog & photos",
+    name: 'konkarin.photo',
   },
 
   sitemap: {

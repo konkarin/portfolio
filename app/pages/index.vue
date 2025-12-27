@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 useHead({
-  title: `konkarin's blog & photos`,
+  title: `konkarin.photo`,
   meta: [
     { property: 'og:type', content: 'article' },
     {

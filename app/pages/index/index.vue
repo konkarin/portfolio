@@ -14,12 +14,12 @@ useHead({
   meta: [
     {
       name: 'description',
-      content: "konkarin's blog & photos.",
+      content: 'konkarin.photo',
     },
     { property: 'og:type', content: 'article' },
     {
       property: 'og:title',
-      content: "konkarin's blog & photos",
+      content: 'konkarin.photo',
     },
     {
       property: 'og:url',
@@ -27,7 +27,7 @@ useHead({
     },
     {
       property: 'og:description',
-      content: "konkarin's blog & photos.",
+      content: 'konkarin.photo',
     },
     {
       property: 'og:image',

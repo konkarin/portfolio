@@ -36,7 +36,7 @@ useHead({
     { property: 'og:type', content: 'article' },
     {
       property: 'og:title',
-      content: `Articles of '${params.tag}' - konkarin's blog & photos`,
+      content: `Articles of '${params.tag}' - konkarin.photo`,
     },
     {
       property: 'og:url',

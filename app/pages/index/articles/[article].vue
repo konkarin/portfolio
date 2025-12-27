@@ -68,7 +68,7 @@ useHead({
     { property: 'og:type', content: 'article' },
     {
       property: 'og:title',
-      content: `${article.value.title} - konkarin's blog & photos`,
+      content: `${article.value.title} - konkarin.photo`,
     },
     {
       property: 'og:url',
