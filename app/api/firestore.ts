@@ -5,7 +5,6 @@ import {
   getDoc,
   getDocs,
   getFirestore,
-  limit,
   orderBy,
   query,
   QueryConstraint,
@@ -28,7 +27,6 @@ export interface Query {
 export interface Order {
   fieldPath: string
   direction?: OrderByDirection
-  limit?: number
 }
 
 export default class Firestore {
@@ -68,10 +66,6 @@ export default class Firestore {
 
     if (order !== undefined) {
       conditions.push(orderBy(order.fieldPath, order.direction))
-
-      if (order.limit !== undefined) {
-        conditions.push(limit(order.limit || 30))
-      }
     }
 
     const q = this.query(collectionPath, ...conditions)
@@ -105,9 +99,8 @@ export default class Firestore {
     collectionPath: string,
     fieldPath: string,
     direction?: OrderByDirection,
-    limitNumber?: number,
   ) {
-    const q = this.query(collectionPath, orderBy(fieldPath, direction), limit(limitNumber || 30))
+    const q = this.query(collectionPath, orderBy(fieldPath, direction))
     const snap = await getDocs(q).catch((e) => {
       throw e
     })
@@ -135,7 +128,6 @@ export default class Firestore {
       collectionPath,
       where(queries.fieldPath, queries.filterStr, queries.value),
       orderBy(order.fieldPath, order.direction),
-      limit(order.limit || 30),
     )
     const snap = await getDocs(q).catch((e) => {
       throw e
@@ -159,11 +151,6 @@ export default class Firestore {
     if (order !== undefined) {
       // @ts-expect-error
       conditions.push(orderBy(order.fieldPath, order.direction))
-
-      if (order.limit) {
-        // @ts-expect-error
-        conditions.push(limit(order.limit || 30))
-      }
     }
 
     const q = this.query(collectionPath, ...conditions)
