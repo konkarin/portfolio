@@ -43,6 +43,9 @@ export default defineComponent({
   width: 300px;
   height: calc(100vh - 140px);
   padding-left: 3rem;
+  // .articleViewと合わせる
+  max-width: 70ch;
+  margin: 0 auto;
 }
 
 .sideMenu__content {

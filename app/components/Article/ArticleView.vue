@@ -65,6 +65,9 @@ export default defineComponent({
   flex-direction: column;
   gap: 3rem;
   width: calc(100% - 300px);
+  // .sideMenuと合わせる
+  max-width: 70ch;
+  margin: 0 auto;
 }
 @media screen and (max-width: $lg) {
   .articleView {
