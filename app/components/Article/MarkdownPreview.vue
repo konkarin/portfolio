@@ -84,14 +84,26 @@ export default defineComponent({
     margin-top: 1.5rem;
   }
 
-  & ul {
+  ul {
     padding-left: 1.2em;
     list-style-type: disc;
+    ul {
+      list-style-type: circle;
+      ul {
+        list-style-type: square;
+      }
+    }
   }
 
   & ol {
     padding-left: 1.2em;
     list-style-type: decimal;
+    ol {
+      list-style-type: lower-alpha;
+      ol {
+        list-style-type: lower-roman;
+      }
+    }
   }
 
   & li {
