@@ -11,8 +11,5 @@
 </template>
 
 <script setup lang="ts">
-const { articles: allArticles } = await useArticles()
-const recentArticles = computed(() => {
-  return allArticles.value?.slice(0, 2) || []
-})
+const { articles: recentArticles } = await useArticles({ limit: 2 })
 </script>

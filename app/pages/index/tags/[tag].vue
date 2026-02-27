@@ -2,30 +2,21 @@
   <main class="wrapper">
     <PageTitle>タグ: {{ $route.params.tag }}</PageTitle>
     <div class="article">
-      <ArticleList :articles="filterdArticlesByTag" />
+      <ArticleList :articles="articlesByTag || []" />
       <ArticlesSideMenu :recent-articles="recentArticles" :tags="allTags || []" />
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import type { Article } from '@/types/index'
-
 const { params } = useRoute()
 const { APP_URL } = useRuntimeConfig().public
 
-const { articles: allArticles } = await useArticles()
+const { articles: articlesByTag } = await useArticles({
+  tag: params.tag as string,
+})
+const { articles: recentArticles } = await useArticles({ limit: 2 })
 const { tags: allTags } = await useArticleTags()
-
-const filterdArticlesByTag = computed(() => {
-  return allArticles.value.filter((article: Article) => {
-    return article.tags.includes(params.tag as string)
-  })
-})
-
-const recentArticles = computed(() => {
-  return allArticles.value?.slice(0, 2) || []
-})
 
 useHead({
   title: `Articles of '${params.tag}'`,

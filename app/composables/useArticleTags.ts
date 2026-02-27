@@ -1,10 +1,14 @@
-export const useArticleTags = async () => {
+export interface UseArticleTagsOptions {
+  limit?: number
+}
+
+export const useArticleTags = async (options: UseArticleTagsOptions = {}) => {
   const { AUTHOR_ID } = useRuntimeConfig().public
 
   const { data: tags } = await useAsyncData(
-    'tags',
+    `tags-${options.limit ?? 'all'}`,
     () => {
-      return getArticleTags(AUTHOR_ID)
+      return getArticleTags(AUTHOR_ID, options.limit)
     },
     {
       default(): string[] {

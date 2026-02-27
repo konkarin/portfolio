@@ -1,12 +1,20 @@
 import type { Article } from '@/types'
 
-export const useArticles = async () => {
+export interface UseArticlesOptions {
+  limit?: number
+  tag?: string
+}
+
+export const useArticles = async (options: UseArticlesOptions = {}) => {
   const { AUTHOR_ID } = useRuntimeConfig().public
 
   const { data: articles } = await useAsyncData(
-    'articles',
+    `articles-${options.tag ?? 'all'}-${options.limit ?? 'all'}`,
     () => {
-      return getArticles(AUTHOR_ID)
+      return getArticles(AUTHOR_ID, {
+        limitCount: options.limit,
+        tag: options.tag,
+      })
     },
     {
       default(): Article[] {

@@ -22,12 +22,6 @@ const articleTags = computed(() => {
 })
 
 const recentArticles = computed(() => allArticles.value?.slice(0, 2) || [])
-
-defineExpose({
-  allArticles,
-  articleTags,
-  recentArticles,
-})
 </script>
 
 <style lang="scss" scoped>
