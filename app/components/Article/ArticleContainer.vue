@@ -8,7 +8,8 @@
 </template>
 
 <script setup lang="ts">
-const { $tags: allTags, $articles: allArticles } = useNuxtApp()
+const { articles: allArticles } = await useArticles()
+const { tags: allTags } = await useArticleTags()
 
 const articleTags = computed(() => {
   if (allTags.value === null) {

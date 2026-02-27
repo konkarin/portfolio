@@ -18,6 +18,14 @@ const articles: Article[] = [...Array(4).keys()].map((_, index) => {
 
 const articleTags = ['test']
 
+vi.mock('@/composables/useArticles', () => ({
+  useArticles: vi.fn(() => Promise.resolve({ articles: ref(articles) })),
+}))
+
+vi.mock('@/composables/useArticleTags', () => ({
+  useArticleTags: vi.fn(() => Promise.resolve({ tags: ref(articleTags) })),
+}))
+
 const wrapper = shallowMount(ArticleContainer, {
   global: {
     plugins: [],
@@ -26,13 +34,6 @@ const wrapper = shallowMount(ArticleContainer, {
     NuxtPage: { template: '<div></div>' },
   },
 })
-
-vi.mock('#app', () => ({
-  useNuxtApp: () => ({
-    $tags: ref(articleTags),
-    $articles: ref(articles),
-  }),
-}))
 
 describe('ArtcileContainer', () => {
   test('computed correct articles', () => {

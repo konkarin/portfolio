@@ -14,7 +14,8 @@ import type { Article } from '@/types/index'
 const { params } = useRoute()
 const { APP_URL } = useRuntimeConfig().public
 
-const { $tags: allTags, $articles: allArticles } = useNuxtApp()
+const { articles: allArticles } = await useArticles()
+const { tags: allTags } = await useArticleTags()
 
 const filterdArticlesByTag = computed(() => {
   return allArticles.value.filter((article: Article) => {
