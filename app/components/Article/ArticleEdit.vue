@@ -9,7 +9,7 @@
       <div class="articleEdit__headerRight">
         <ToggleBtn :value="article.isPublished" @toggle="updatePublishing">公開する</ToggleBtn>
         <BaseButton
-          :disabled="!isDirty || article.title === '' || inputTag === '' || !isValidCustomId"
+          :disabled="!canSave"
           @click="updateArticle"
         >
           保存
@@ -119,6 +119,21 @@ const articleTitle = computed(() => {
 useHead({
   title: `Editing ${articleTitle.value}`,
 })
+
+const canSave = computed(() => {
+  return (
+    isDirty.value && article.value.title !== '' && inputTag.value !== '' && isValidCustomId.value
+  )
+})
+
+const onSaveShortcut = () => {
+  if (canSave.value) {
+    updateArticle()
+  }
+}
+
+useKeyCombination(onSaveShortcut, { key: 's', ctrlKey: true })
+useKeyCombination(onSaveShortcut, { key: 's', metaKey: true })
 </script>
 
 <style lang="scss" scoped>

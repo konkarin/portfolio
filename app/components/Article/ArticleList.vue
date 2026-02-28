@@ -1,5 +1,5 @@
 <template>
-  <ul v-if="articles.length > 0" class="artcileList">
+  <ul v-if="articles && articles.length > 0" class="artcileList">
     <ArticleItem v-for="article in articles" :key="article.id" :article="article" />
   </ul>
   <div v-else>
@@ -7,17 +7,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { Article } from '@/types/index'
-
-export default defineComponent({
-  props: {
-    articles: {
-      type: Array as PropType<Article[]>,
-      required: true,
-    },
-  },
-})
+<script setup lang="ts">
+const route = useRoute()
+const tag = route.params.tag as string | undefined
+const { articles } = await useArticles({ tag })
 </script>
 
 <style scoped lang="scss">

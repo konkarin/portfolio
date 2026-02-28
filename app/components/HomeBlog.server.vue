@@ -11,7 +11,5 @@
 </template>
 
 <script setup lang="ts">
-const recentArticles = computed(() => {
-  return useNuxtApp().$articles.value?.slice(0, 2) || []
-})
+const { articles: recentArticles } = await useArticles({ limit: 2 })
 </script>

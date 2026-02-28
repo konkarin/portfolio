@@ -11,7 +11,7 @@
     <div class="sideMenu__content">
       <div class="sideMenu__title">タグ</div>
       <div v-for="tag in tags" :key="tag" class="sideMenuItem">
-        <NuxtLink :to="`/tags/${tag}`" class="sideMenuItem__title">
+        <NuxtLink :to="`/tags/${tag}`" class="sideMenuItem__title" no-prefetch>
           {{ tag }}
         </NuxtLink>
       </div>
@@ -19,21 +19,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import type { Article } from '@/types/index'
+<script setup lang="ts">
+const { articles: allArticles } = await useArticles()
+const { tags: allTags } = await useArticleTags()
 
-export default defineComponent({
-  props: {
-    recentArticles: {
-      type: Array as PropType<Article[]>,
-      required: true,
-    },
-    tags: {
-      type: Array as PropType<string[]>,
-      required: true,
-    },
-  },
+const tags = computed(() => {
+  if (allTags.value === null) {
+    return []
+  }
+
+  return allTags.value.filter((tag) => {
+    return allArticles.value.some((article) => article.tags.includes(tag))
+  })
 })
+
+const recentArticles = computed(() => allArticles.value?.slice(0, 2) || [])
 </script>
 
 <style lang="scss" scoped>

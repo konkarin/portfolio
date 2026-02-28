@@ -5,6 +5,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
   orderBy,
   query,
   QueryConstraint,
@@ -51,7 +52,12 @@ export default class Firestore {
       : doc(collection(this.db, path), ...queryConstraint)
   }
 
-  static async getDocs(collectionPath: string, whereQueries?: Query[], order?: Order) {
+  static async getDocs(
+    collectionPath: string,
+    whereQueries?: Query[],
+    order?: Order,
+    limitCount?: number,
+  ) {
     const conditions: QueryConstraint[] = []
 
     if (whereQueries !== undefined) {
@@ -68,6 +74,10 @@ export default class Firestore {
       conditions.push(orderBy(order.fieldPath, order.direction))
     }
 
+    if (limitCount !== undefined) {
+      conditions.push(limit(limitCount))
+    }
+
     const q = this.query(collectionPath, ...conditions)
     const snap = await getDocs(q).catch((e) => {
       throw e
@@ -79,16 +89,26 @@ export default class Firestore {
   /**
    * コレクション内のすべてのドキュメントのIDを取得
    */
-  static async getDocIds(collectionPath: string, whereQueries?: Query[], order?: Order) {
-    const docs = await this.getDocs(collectionPath, whereQueries, order)
+  static async getDocIds(
+    collectionPath: string,
+    whereQueries?: Query[],
+    order?: Order,
+    limitCount?: number,
+  ) {
+    const docs = await this.getDocs(collectionPath, whereQueries, order, limitCount)
     return docs.map((doc) => doc.id)
   }
 
   /**
    * コレクション内のすべてのドキュメントを取得
    */
-  static async getDocsData(collectionPath: string, whereQueries?: Query[], order?: Order) {
-    const docs = await this.getDocs(collectionPath, whereQueries, order)
+  static async getDocsData(
+    collectionPath: string,
+    whereQueries?: Query[],
+    order?: Order,
+    limitCount?: number,
+  ) {
+    const docs = await this.getDocs(collectionPath, whereQueries, order, limitCount)
     return docs.map((doc) => ({ ...doc.data(), id: doc.id }))
   }
 
@@ -123,12 +143,22 @@ export default class Firestore {
   /**
    * 指定したクエリでドキュメントを取得
    */
-  static async getOrderDocsByQueries(collectionPath: string, queries: Query, order: Order) {
-    const q = this.query(
-      collectionPath,
+  static async getOrderDocsByQueries(
+    collectionPath: string,
+    queries: Query,
+    order: Order,
+    limitCount?: number,
+  ) {
+    const conditions: QueryConstraint[] = [
       where(queries.fieldPath, queries.filterStr, queries.value),
       orderBy(order.fieldPath, order.direction),
-    )
+    ]
+
+    if (limitCount !== undefined) {
+      conditions.push(limit(limitCount))
+    }
+
+    const q = this.query(collectionPath, ...conditions)
     const snap = await getDocs(q).catch((e) => {
       throw e
     })

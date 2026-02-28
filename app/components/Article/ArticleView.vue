@@ -1,5 +1,5 @@
 <template>
-  <article class="articleView">
+  <article v-if="article" class="articleView">
     <header class="articleView__header">
       <img v-if="article.ogpImageUrl" class="articleView__eyeCatch" :src="article.ogpImageUrl" />
       <h1>{{ article.title }}</h1>
@@ -14,6 +14,7 @@
           :to="`/tags/${tag}`"
           class="articleTag articleTag--link"
           data-test="articleTag"
+          no-prefetch
         >
           {{ tag }}
         </NuxtLink>
@@ -25,37 +26,77 @@
   </article>
 </template>
 
-<script lang="ts">
-import type { Article } from '@/types/index'
+<script setup lang="ts">
 import Day from '@/utils/day'
+import { convertMarkdownTextToHTML } from '@/utils/markdown'
+import { useArticle } from '~/composables/useArticle'
 
-export default defineComponent({
-  props: {
-    article: {
-      type: Object as PropType<Article>,
-      required: true,
+const { params, path } = useRoute()
+const { article } = await useArticle(params.article as string)
+
+if (!article.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: '記事が見つかりませんでした。',
+    fatal: true,
+  })
+}
+
+const { APP_URL } = useRuntimeConfig().public
+
+const articleId = computed(() => article.value?.customId || article.value?.id)
+
+const ogDescription = computed(() => {
+  const text = article.value?.text || ''
+  if (text === '') {
+    return ''
+  } else if (text.length > 100) {
+    return text.slice(0, 100)
+  } else {
+    return text
+  }
+})
+
+const ogImage = computed(() => {
+  const img = article.value?.ogpImageUrl
+  return img || 'https://konkarin.photo/HomeImg.jpg'
+})
+
+onMounted(() => {
+  if (article.value?.customId && !path.includes(article.value.customId)) {
+    history.pushState(null, '', `/articles/${article.value.customId}`)
+  }
+})
+
+const htmlText = await convertMarkdownTextToHTML(article.value?.text || '')
+
+const releaseDate = computed(() => Day.getDate(article.value?.releaseDate || 0, 'YYYY-MM-DD'))
+const updatedDate = computed(() => {
+  if (article.value?.updatedDate === undefined || article.value?.updatedDate === 0) return ''
+  return Day.getDate(article.value.updatedDate, 'YYYY-MM-DD')
+})
+
+useHead({
+  title: article.value?.title || '記事がありません。',
+  meta: [
+    { property: 'og:type', content: 'article' },
+    {
+      property: 'og:title',
+      content: `${article.value?.title} - konkarin.photo`,
     },
-    htmlText: {
-      type: String,
-      required: true,
+    {
+      property: 'og:url',
+      content: `${APP_URL}/articles/${articleId.value}`,
     },
-  },
-  computed: {
-    releaseDate(): string {
-      return Day.getDate(this.article.releaseDate, 'YYYY-MM-DD')
+    {
+      property: 'og:image',
+      content: ogImage.value,
     },
-    updatedDate(): string {
-      if (this.article.updatedDate === undefined || this.article.updatedDate === 0) return ''
-      return Day.getDate(this.article.updatedDate, 'YYYY-MM-DD')
+    {
+      property: 'og:description',
+      content: ogDescription.value,
     },
-    articleId() {
-      return this.article.customId || this.article.id
-    },
-    twitterShareUrl(): string {
-      const text = encodeURIComponent(this.article.title)
-      return `https://twitter.com/share?url=${this.$config.public.APP_URL}/articles/${this.articleId}&text=${text}`
-    },
-  },
+  ],
 })
 </script>
 
