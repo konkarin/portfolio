@@ -6,6 +6,10 @@ export default defineNuxtConfig({
     componentIslands: true,
   },
 
+  devServer: {
+    port: 4000,
+  },
+
   routeRules: {
     '/': { prerender: true },
     '/photos': { prerender: true },
@@ -70,6 +74,15 @@ export default defineNuxtConfig({
         output: {
           preserveModules: true,
         },
+      },
+    },
+    server: {
+      /**
+       * Windowsアプリでファイル編集した際に監視されない問題があるため、usePolling:trueにすることで監視を強制させる
+       * @see https://vitejs.dev/config/server-options.html#server-watch
+       */
+      watch: {
+        usePolling: true,
       },
     },
   },
