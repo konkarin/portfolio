@@ -1,3 +1,6 @@
+import { remark } from 'remark'
+import strip from 'strip-markdown'
+
 import type { Article } from '@/types'
 
 export interface UseArticlesOptions {
@@ -10,11 +13,32 @@ export const useArticles = async (options: UseArticlesOptions = {}) => {
 
   const { data: articles } = await useAsyncData(
     `articles-${options.tag ?? 'all'}-${options.limit ?? 'all'}`,
-    () => {
-      return getArticles(AUTHOR_ID, {
+    async () => {
+      const articles = await getArticles(AUTHOR_ID, {
         limitCount: options.limit,
         tag: options.tag,
       })
+
+      return await Promise.all(
+        articles.map(async (article) => {
+          const file = await remark()
+            .use(strip)
+            .process(article.text)
+            .catch((e) => {
+              console.error({ e })
+              return article.text
+            })
+
+          const strippedText = file.toString()
+          const sliecedText =
+            strippedText.length > 80 ? strippedText.slice(0, 80) + '...' : strippedText
+
+          return {
+            ...article,
+            text: sliecedText,
+          }
+        }),
+      )
     },
     {
       default(): Article[] {

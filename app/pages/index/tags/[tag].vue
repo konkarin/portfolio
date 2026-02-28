@@ -2,8 +2,8 @@
   <main class="wrapper">
     <PageTitle>タグ: {{ $route.params.tag }}</PageTitle>
     <div class="article">
-      <ArticleList :articles="articlesByTag || []" />
-      <ArticlesSideMenu :recent-articles="recentArticles" :tags="allTags || []" />
+      <ArticleList />
+      <ArticlesSideMenu />
     </div>
   </main>
 </template>
@@ -11,12 +11,6 @@
 <script setup lang="ts">
 const { params } = useRoute()
 const { APP_URL } = useRuntimeConfig().public
-
-const { articles: articlesByTag } = await useArticles({
-  tag: params.tag as string,
-})
-const { articles: recentArticles } = await useArticles({ limit: 2 })
-const { tags: allTags } = await useArticleTags()
 
 useHead({
   title: `Articles of '${params.tag}'`,

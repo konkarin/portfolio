@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="articleItem__text">
-      {{ sliecedText }}
+      {{ article.text }}
     </div>
   </NuxtLink>
 </template>

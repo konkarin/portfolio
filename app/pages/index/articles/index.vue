@@ -1,14 +1,10 @@
 <template>
-  <ArticleList :articles="articles" />
+  <ArticleContainer>
+    <ArticleList />
+  </ArticleContainer>
 </template>
 
 <script setup lang="ts">
-import type { Article } from '@/types'
-
-defineProps<{
-  articles: Article[]
-}>()
-
 const { APP_URL } = useRuntimeConfig().public
 useHead({
   title: 'Articles',

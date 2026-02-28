@@ -10,7 +10,7 @@
             {{ article.title }}
           </p>
         </div>
-        <p class="post-text">{{ sliecedText }}</p>
+        <p class="post-text">{{ article.text }}</p>
       </div>
       <div class="post-img">
         <img v-if="article.ogpImageUrl" :src="article.ogpImageUrl" alt="" />
@@ -21,26 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import { remark } from 'remark'
-import strip from 'strip-markdown'
-
 import type { Article } from '@/types'
 import Day from '@/utils/day'
 
 const { article } = defineProps<{
   article: Article
 }>()
-
-const file = await remark()
-  .use(strip)
-  .process(article.text)
-  .catch((e) => {
-    console.error({ e })
-    return article.text
-  })
-
-const strippedText = file.toString()
-const sliecedText = strippedText.length > 80 ? strippedText.slice(0, 80) + '...' : strippedText
 
 const releaseDate = (date?: number) => {
   const format = 'YYYY-MM-DD'
