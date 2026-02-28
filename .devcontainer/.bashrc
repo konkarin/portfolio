@@ -186,3 +186,5 @@ alias ci='npm ci'
 alias fix='npm run eslintfix'
 alias tc='npm run typecheck'
 alias lint='npm run eslint'
+
+alias g='gemini'
