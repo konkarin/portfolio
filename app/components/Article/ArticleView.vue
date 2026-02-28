@@ -14,6 +14,7 @@
           :to="`/tags/${tag}`"
           class="articleTag articleTag--link"
           data-test="articleTag"
+          no-prefetch
         >
           {{ tag }}
         </NuxtLink>
