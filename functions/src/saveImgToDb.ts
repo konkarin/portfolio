@@ -2,7 +2,6 @@ import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
 
-import { spawn } from 'child-process-promise'
 import dayjs from 'dayjs'
 import { parse } from 'exifr'
 import { getFirestore } from 'firebase-admin/firestore'
@@ -11,119 +10,70 @@ import { log, error } from 'firebase-functions/logger'
 import { onObjectFinalized } from 'firebase-functions/v2/storage'
 import { imageSizeFromFile } from 'image-size/fromFile'
 
-export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, async (object) => {
-  const fileBucket: string = object.bucket
+/**
+ * サムネイルのアップロードをトリガーに、オリジナル画像からメタデータを抽出して Firestore に保存する
+ */
+export const saveImgToDb = onObjectFinalized({ region: 'asia-northeast1' }, async (event) => {
+  const { bucket: fileBucket, name: thumbFilePath, contentType } = event.data
 
-  if (!object.data.name || !object.data.contentType) return
-  // images/{uid}/{imageId: uuid}/original/hogehoge.jpg
-  const originalFilePath: string = object.data.name
-  const contentType: string = object.data.contentType
-
-  // gallery配下以外はFirestoreに保存・サムネ作成をしない
-  if (!originalFilePath.includes('gallery')) return
-
-  // Exit if this is triggered on a file that is not an image.
-  if (!contentType.startsWith('image/')) {
-    log('This is not an image.')
-    return
-  }
-
-  // Exit if the image is already a thumbnail.
-  if (path.dirname(originalFilePath).includes('thumb')) {
-    log('Already a Thumbnail.')
-    return
-  }
-
-  // Get the file name.
-  const originalFileName = path.basename(originalFilePath)
-
-  // Download file from bucket.
-  const bucket = getStorage().bucket(fileBucket)
-  const tempFilePath = path.join(os.tmpdir(), originalFileName)
-
-  await bucket.file(originalFilePath).download({ destination: tempFilePath })
-  log('Image downloaded locally to', tempFilePath)
-
-  // Get image size
-  const { width, height } = await getSize(tempFilePath)
-
-  // Get Exif info.
-  const exif = await getExif(tempFilePath)
-
-  // Generate a thumbnail using ImageMagick.
-  await spawn('convert', [tempFilePath, '-thumbnail', '800x800>', tempFilePath])
-  log('Thumbnail created at', tempFilePath)
-
-  // We add a 'thumb_' prefix to thumbnails file name. That's where we'll upload the thumbnail.
-  const thumbFilePath = path.join(
-    // /images/{uid}/{imageId: uuid}/original
-    path.dirname(originalFilePath),
-    '../thumb',
-    originalFileName,
-  )
-
-  const metadata = {
-    contentType,
-    cacheControl: 'public, max-age=31536000, s-maxage=31536000',
-  }
-
-  // Uploading the thumbnail.
-  await bucket.upload(tempFilePath, {
-    destination: thumbFilePath,
-    metadata,
-  })
-
-  // Once the thumbnail has been uploaded delete the local file to free up disk space.
-  fs.unlinkSync(tempFilePath)
-
-  const date = dayjs().format()
-
-  // NOTE: StorageのonFinalizeはcontextのauthにuidを持たないため、ファイルパスから取得
-  const uid = originalFilePath.split('/')[1]
-  const collectionRef = getFirestore().collection(`users/${uid}/images`)
-  // getCountFromServerを使うと現在の最後のorderを取得できないため、orderByで取得
-  const lastOrderSnapshot = await collectionRef.orderBy('order', 'desc').limit(1).get()
-  const lastOrder = lastOrderSnapshot.empty ? 0 : (lastOrderSnapshot.docs[0]?.data().order ?? 0)
-
-  const data = {
-    originalFileName,
-    // NOTE: bucketのgetSignedUrlだと有効期限切れたら死ぬから下記で回避
-    originalUrl: `https://firebasestorage.googleapis.com/v0/b/${fileBucket}/o/${encodeURIComponent(
-      originalFilePath,
-    )}?alt=media`,
-    originalFilePath,
-    thumbUrl: `https://firebasestorage.googleapis.com/v0/b/${fileBucket}/o/${encodeURIComponent(
-      thumbFilePath,
-    )}?alt=media`,
-    thumbFilePath,
-    date,
-    exif,
-    width,
-    height,
-    order: lastOrder + 1,
-  }
+  if (!thumbFilePath || !contentType) return
+  // gallery配下のthumbフォルダのみ対象
+  if (!thumbFilePath.includes('gallery') || !thumbFilePath.includes('/thumb/')) return
 
   try {
+    const bucket = getStorage().bucket(fileBucket)
+    const fileName = path.basename(thumbFilePath)
+
+    // オリジナルのパスを取得 (.../thumb/file.jpg -> .../original/file.jpg)
+    const originalFilePath = path.join(path.dirname(thumbFilePath), '../original', fileName)
+
+    // オリジナル画像からサイズ・EXIF情報を取得するためにダウンロード
+    const tempOriginalPath = path.join(os.tmpdir(), `orig_${fileName}`)
+    await bucket.file(originalFilePath).download({ destination: tempOriginalPath })
+
+    const { width, height } = await getSize(tempOriginalPath)
+    const exif = await getExif(tempOriginalPath)
+
+    // 不要になった一時ファイルの削除
+    fs.unlinkSync(tempOriginalPath)
+
+    // Firestoreへの書き込み
+    const uid = thumbFilePath.split('/')[1]
+    const collectionRef = getFirestore().collection(`users/${uid}/images`)
+
+    // orderの決定
+    const lastOrderSnapshot = await collectionRef.orderBy('order', 'desc').limit(1).get()
+    const lastOrder = lastOrderSnapshot.empty ? 0 : (lastOrderSnapshot.docs[0]?.data().order ?? 0)
+
+    const data = {
+      originalFileName: fileName,
+      originalUrl: createStorageUrl(fileBucket, originalFilePath),
+      originalFilePath,
+      thumbUrl: createStorageUrl(fileBucket, thumbFilePath),
+      thumbFilePath,
+      date: dayjs().format(),
+      exif,
+      width,
+      height,
+      order: lastOrder + 1,
+    }
+
     await collectionRef.add(data)
-    log('Completed')
+    log('Metadata saved to Firestore successfully')
   } catch (e) {
-    error(e)
+    error('Failed to save metadata to Firestore:', e)
   }
 })
 
+const createStorageUrl = (bucket: string, filePath: string) => {
+  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(filePath)}?alt=media`
+}
+
 const getSize = async (tempFilePath: string): Promise<{ width: number; height: number }> => {
   const image = await imageSizeFromFile(tempFilePath)
-
-  if (!image.width || !image.height) {
-    return {
-      width: 0,
-      height: 0,
-    }
-  }
-
   return {
-    width: image.width,
-    height: image.height,
+    width: image?.width ?? 0,
+    height: image?.height ?? 0,
   }
 }
 
@@ -139,21 +89,16 @@ const getExif = async (tempFilePath: string) => {
     silentErrors: true,
   }
 
-  const data = await parse(tempFilePath, options).catch((e: Error) => {
+  try {
+    const data = await parse(tempFilePath, options)
+    if (!data || data.errors) {
+      log('Exif parse error or does not exist')
+      return {}
+    }
+    log('Get Exif')
+    return data
+  } catch (e) {
     error(e)
     return {}
-  })
-
-  if (data === undefined) {
-    log('Exif does not exist')
-    return {}
   }
-
-  if (data.errors) {
-    error('Exif parse error')
-    return {}
-  }
-
-  log('Get Exif')
-  return data
 }

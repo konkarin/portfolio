@@ -212,7 +212,7 @@ function useOgp() {
       },
     )
 
-    const url = await uploadImage(resizedImage, `users/${user.value?.uid}/ogps/${v4()}`)
+    const url = await uploadImage(resizedImage, `users/${user.value?.uid}/ogps/original/${v4()}`)
     if (url) {
       ogpImageUrl.value = url
     }
