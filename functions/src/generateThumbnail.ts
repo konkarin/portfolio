@@ -17,7 +17,7 @@ export const generateThumbnail = onObjectFinalized({ region: 'asia-northeast1' }
   if (!contentType.startsWith('image/')) return
 
   // 既にサムネイルフォルダ内にある場合はスキップ
-  if (path.dirname(filePath).includes('/thumb/')) {
+  if (filePath.includes('/thumb/')) {
     log('Already a Thumbnail.')
     return
   }
