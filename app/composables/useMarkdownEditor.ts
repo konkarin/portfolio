@@ -26,7 +26,7 @@ export function useMarkdownEditor(callback: (editorText: string) => void) {
           const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp', {
             type: 'image/webp',
           })
-          const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}`)
+          const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}/original`)
           if (url) {
             currentEditor
               .chain()
@@ -53,7 +53,7 @@ export function useMarkdownEditor(callback: (editorText: string) => void) {
             { type: 'image/webp' },
           )
 
-          const url = await uploadImage(resizedImage, `users/${user.value?.uid}/articles/${v4()}`)
+          const url = await uploadImage(resizedImage, `users/${user.value?.uid}/articles/${v4()}/original`)
           currentEditor
             .chain()
             .insertContentAt(currentEditor.state.selection.anchor, {

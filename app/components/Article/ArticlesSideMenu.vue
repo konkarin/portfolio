@@ -20,20 +20,39 @@
 </template>
 
 <script setup lang="ts">
-const { articles: allArticles } = await useArticles()
-const { tags: allTags } = await useArticleTags()
+const { AUTHOR_ID } = useRuntimeConfig().public
 
-const tags = computed(() => {
-  if (allTags.value === null) {
-    return []
-  }
+const { data } = await useAsyncData(
+  'side-menu-data',
+  async () => {
+    const [allArticles, allTags] = await Promise.all([
+      getArticles(AUTHOR_ID),
+      getArticleTags(AUTHOR_ID),
+    ])
 
-  return allTags.value.filter((tag) => {
-    return allArticles.value.some((article) => article.tags.includes(tag))
-  })
-})
+    const tags = allTags.filter((tag) => {
+      return allArticles.some((article) => article.tags.includes(tag))
+    })
 
-const recentArticles = computed(() => allArticles.value?.slice(0, 2) || [])
+    const recentArticles = allArticles.slice(0, 2)
+
+    return {
+      tags,
+      recentArticles,
+    }
+  },
+  {
+    default() {
+      return {
+        tags: [],
+        recentArticles: [],
+      }
+    },
+  },
+)
+
+const tags = computed(() => data.value.tags)
+const recentArticles = computed(() => data.value.recentArticles)
 </script>
 
 <style lang="scss" scoped>

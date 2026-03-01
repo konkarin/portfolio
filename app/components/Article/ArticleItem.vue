@@ -3,10 +3,11 @@
     <div class="articleItem__eyeCatchOuter">
       <div class="articleItem__eyeCatchInner">
         <img
-          v-if="article.ogpImageUrl"
+          v-if="article.thumbnailImageUrl || article.ogpImageUrl"
           class="articleItem__eyeCatch"
-          :src="article.ogpImageUrl"
+          :src="article.thumbnailImageUrl || article.ogpImageUrl"
           loading="lazy"
+          alt=""
         />
         <div v-else class="articleItem__emptyEyeCatch">🦊</div>
       </div>

@@ -20,6 +20,7 @@ export function useArticleEditor() {
     releaseDate: 0,
     tags: [],
     ogpImageUrl: '',
+    thumbnailImageUrl: '',
   })
   const updatePublishing = () => {
     isDirty.value ||= true
@@ -38,6 +39,7 @@ export function useArticleEditor() {
         releaseDate: 0,
         tags: [],
         ogpImageUrl: '',
+        thumbnailImageUrl: '',
       }
     const collectionPath = `users/${uid}/articles`
 
@@ -45,7 +47,7 @@ export function useArticleEditor() {
   }
 
   const { customId, isValidCustomId, validateCustomId } = useCustomId()
-  const { ogpImageUrl, uploadOgp } = useOgp()
+  const { ogpImageUrl, thumbnailImageUrl, uploadOgp } = useOgp()
   const { editor } = useMarkdownEditor((text) => {
     if (!loading.value) {
       isDirty.value ||= true
@@ -110,6 +112,7 @@ export function useArticleEditor() {
 
     article.value.tags = inputTag.value.replace(/\s+/g, '').split(',')
     article.value.ogpImageUrl = ogpImageUrl.value
+    article.value.thumbnailImageUrl = thumbnailImageUrl.value
     article.value.customId = customId.value
 
     // 公開日の設定
@@ -191,6 +194,7 @@ export function useArticleEditor() {
 
 function useOgp() {
   const ogpImageUrl = ref('')
+  const thumbnailImageUrl = computed(() => ogpImageUrl.value.replace('%2Foriginal%2F', '%2Fthumb%2F'))
 
   const { user } = useAuthInject()
   const { uploadImage } = useImageUpload()
@@ -212,7 +216,7 @@ function useOgp() {
       },
     )
 
-    const url = await uploadImage(resizedImage, `users/${user.value?.uid}/ogps/${v4()}`)
+    const url = await uploadImage(resizedImage, `users/${user.value?.uid}/ogps/${v4()}/original`)
     if (url) {
       ogpImageUrl.value = url
     }
@@ -220,6 +224,7 @@ function useOgp() {
 
   return {
     ogpImageUrl,
+    thumbnailImageUrl,
     uploadOgp,
   }
 }

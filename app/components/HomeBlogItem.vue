@@ -13,7 +13,11 @@
         <p class="post-text">{{ article.text }}</p>
       </div>
       <div class="post-img">
-        <img v-if="article.ogpImageUrl" :src="article.ogpImageUrl" alt="" />
+        <img
+          v-if="article.thumbnailImageUrl || article.ogpImageUrl"
+          :src="article.thumbnailImageUrl || article.ogpImageUrl"
+          alt=""
+        />
         <div class="post-dummyImg" v-else>🦊</div>
       </div>
     </NuxtLink>

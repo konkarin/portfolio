@@ -8,5 +8,6 @@ export interface Article {
   releaseDate?: number
   tags: string[]
   ogpImageUrl?: string
+  thumbnailImageUrl?: string // 2026年以降のデータにだけ存在する
   customId?: string
 }
