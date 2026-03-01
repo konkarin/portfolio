@@ -17,7 +17,7 @@ export const generateThumbnail = onObjectFinalized({ region: 'asia-northeast1' }
   if (!contentType.startsWith('image/')) return
 
   // 既にサムネイルフォルダ内にある場合はスキップ
-  if (path.dirname(filePath).includes('thumb')) {
+  if (path.dirname(filePath).includes('/thumb/')) {
     log('Already a Thumbnail.')
     return
   }
@@ -35,8 +35,8 @@ export const generateThumbnail = onObjectFinalized({ region: 'asia-northeast1' }
     await spawn('convert', [tempFilePath, '-thumbnail', '800x800>', tempFilePath])
     log('Thumbnail created at', tempFilePath)
 
-    // 3. サムネイルの保存先パス作成 (同じディレクトリ内の thumb/ フォルダ)
-    const thumbFilePath = path.join(path.dirname(filePath), 'thumb', fileName)
+    // 3. サムネイルの保存先パス作成 (original/ を thumb/ に置換)
+    const thumbFilePath = filePath.replace('/original/', '/thumb/')
     const metadata = {
       contentType,
       cacheControl: 'public, max-age=31536000, s-maxage=31536000',
