@@ -3,11 +3,12 @@
     <div class="articleItem__eyeCatchOuter">
       <div class="articleItem__eyeCatchInner">
         <img
-          v-if="article.thumbnailImageUrl || article.ogpImageUrl"
+          v-if="(article.thumbnailImageUrl || article.ogpImageUrl) && !isImageError"
           class="articleItem__eyeCatch"
           :src="article.thumbnailImageUrl || article.ogpImageUrl"
           loading="lazy"
           alt=""
+          @error="isImageError = true"
         />
         <div v-else class="articleItem__emptyEyeCatch">🦊</div>
       </div>
@@ -29,7 +30,7 @@
 <script setup lang="ts">
 import { remark } from 'remark'
 import strip from 'strip-markdown'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import type { Article } from '@/types/index'
 import Day from '@/utils/day'
@@ -37,6 +38,8 @@ import Day from '@/utils/day'
 const { article } = defineProps<{
   article: Article
 }>()
+
+const isImageError = ref(false)
 
 const releaseDate = computed(() => {
   const format = 'YYYY-MM-DD'
