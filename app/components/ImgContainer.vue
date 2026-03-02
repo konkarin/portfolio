@@ -1,7 +1,7 @@
 <template>
   <section class="imgContainer">
     <div v-for="img in imgList" :key="img.originalUrl" class="photoBox">
-      <div class="photoBox__thumbnail" @click="openModal(img.originalUrl)">
+      <div class="photoBox__thumbnail" @click="openModal(img.id)">
         <img class="photoBox__photo" :src="img.thumbUrl" />
       </div>
     </div>
@@ -11,20 +11,16 @@
 <script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
 
-import { useModalInject } from '@/composables/useModal'
+import { useRouter } from '#app'
 
 defineProps<{
   imgList: DocumentData[]
 }>()
 
-const { switchPhotoModal } = useModalInject()
+const router = useRouter()
 
-const openModal = (url: string) => {
-  switchPhotoModal({
-    url,
-    show: true,
-    exif: {},
-  })
+const openModal = (id: string) => {
+  router.push(`/photos/${id}`)
 }
 </script>
 
