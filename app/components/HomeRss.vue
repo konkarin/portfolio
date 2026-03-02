@@ -4,7 +4,7 @@
     <ul class="tech-list">
       <li v-for="article in techArticles" :key="article.link" class="tech">
         <a :href="article.link" target="_blank">
-          <img src="https://static.zenn.studio/images/icon.png" class="favicon" />
+          <img src="https://static.zenn.studio/images/icon.png" class="favicon" alt="" />
           <span>{{ article.title }}</span>
         </a>
       </li>
