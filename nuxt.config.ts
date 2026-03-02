@@ -52,12 +52,7 @@ export default defineNuxtConfig({
 
   css: ['@/assets/style/_reset.css', '@/assets/style/style.scss'],
 
-  components: [
-    {
-      path: '@/components/',
-      pathPrefix: false,
-    },
-  ],
+  components: false,
 
   vite: {
     css: {
@@ -104,6 +99,10 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: runtimePublicConfig,
+  },
+
+  imports: {
+    autoImport: false,
   },
 
   compatibilityDate: '2024-12-30',

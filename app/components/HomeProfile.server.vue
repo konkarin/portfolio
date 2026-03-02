@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import Github from '@/components/svg/Github.vue'
+import Twitter from '@/components/svg/Twitter.vue'
+</script>
+
 <template>
   <section class="server-component">
     <h2>About me</h2>

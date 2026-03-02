@@ -1,21 +1,10 @@
 import path from 'path'
 
 import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    AutoImport({
-      imports: [
-        'vue',
-        {
-          '#app': ['useNuxtApp'],
-        },
-      ],
-    }),
-  ],
+  plugins: [vue()],
   test: {
     globals: true,
     environment: 'happy-dom',

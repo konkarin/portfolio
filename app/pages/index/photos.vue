@@ -3,6 +3,8 @@
 </template>
 
 <script setup lang="ts">
+import { useRuntimeConfig, useHead } from '#app'
+import PhotosView from '@/components/PhotosView.vue'
 defineOptions({
   name: 'PagesPhotos',
 })

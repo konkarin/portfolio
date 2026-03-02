@@ -3,6 +3,8 @@
 </template>
 
 <script setup lang="ts">
+import { useRuntimeConfig, useHead } from '#app'
+import HomeView from '@/components/HomeView.vue'
 defineOptions({
   name: 'PageIndex',
 })

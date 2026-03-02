@@ -13,6 +13,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
+import { useFetch } from '#app'
+
 const { data } = await useFetch(
   'https://api.rss2json.com/v1/api.json?rss_url=https://zenn.dev/kon_karin/feed',
 )

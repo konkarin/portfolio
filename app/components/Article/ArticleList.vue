@@ -8,6 +8,10 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from '#app'
+import ArticleItem from '@/components/Article/ArticleItem.vue'
+import { useArticles } from '@/composables/useArticles'
+
 const route = useRoute()
 const tag = route.params.tag as string | undefined
 const { articles } = await useArticles({ tag })

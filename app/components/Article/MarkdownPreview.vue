@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts">
+import { defineComponent } from 'vue'
 import 'highlight.js/styles/github-dark.css'
 
 export default defineComponent({

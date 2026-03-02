@@ -1,14 +1,15 @@
+<script setup lang="ts">
+import ArticlesSideMenu from '@/components/Article/ArticlesSideMenu.vue'
+</script>
+
 <template>
-  <main class="wrapper">
+  <div class="wrapper">
     <div class="articleContainer">
       <slot />
       <ArticlesSideMenu />
     </div>
-  </main>
+  </div>
 </template>
-
-<script setup lang="ts">
-</script>
 
 <style lang="scss" scoped>
 .articleContainer {

@@ -8,12 +8,7 @@
       </div>
       <div class="articleEdit__headerRight">
         <ToggleBtn :value="article.isPublished" @toggle="updatePublishing">公開する</ToggleBtn>
-        <BaseButton
-          :disabled="!canSave"
-          @click="updateArticle"
-        >
-          保存
-        </BaseButton>
+        <BaseButton :disabled="!canSave" @click="updateArticle"> 保存 </BaseButton>
       </div>
     </div>
     <textarea
@@ -79,8 +74,14 @@
 
 <script setup lang="ts">
 import { EditorContent } from '@tiptap/vue-3'
+import { computed } from 'vue'
 
+import { useHead } from '#app'
 import { useArticleEditor } from './useArticleEditor'
+import BaseButton from '@/components/BaseButton.vue'
+import ToggleBtn from '@/components/ToggleBtn.vue'
+import { useKeyCombination } from '@/composables/useCommand'
+import { loadClipboardImage } from '@/utils/image'
 
 const {
   isDirty,

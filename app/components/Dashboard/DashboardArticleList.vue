@@ -16,9 +16,14 @@
 
 <script setup lang="ts">
 import { v4 as uuidv4 } from 'uuid'
+import { ref, onMounted } from 'vue'
 
+import { useRouter } from '#app'
 import { db } from '@/api/apis'
+import BaseButton from '@/components/BaseButton.vue'
+import DashboardArticle from '@/components/Dashboard/DashboardArticle.vue'
 import { useAuthInject } from '@/composables/useAuth'
+import { useToast } from '@/composables/useToast'
 import type { Article } from '@/types/index'
 
 const { user } = useAuthInject()

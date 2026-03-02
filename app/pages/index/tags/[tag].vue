@@ -9,6 +9,10 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute, useRuntimeConfig, useHead } from '#app'
+import ArticleList from '@/components/Article/ArticleList.vue'
+import ArticlesSideMenu from '@/components/Article/ArticlesSideMenu.vue'
+import PageTitle from '@/components/PageTitle.vue'
 const { params } = useRoute()
 const { APP_URL } = useRuntimeConfig().public
 

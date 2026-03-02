@@ -10,6 +10,8 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, type PropType } from 'vue'
+
 import type { Article } from '@/types/index'
 import Day from '@/utils/day'
 

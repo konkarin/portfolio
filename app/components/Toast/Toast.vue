@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+
 import Check from '@/components/svg/Check.vue'
 import Info from '@/components/svg/Info.vue'
 import Warning from '@/components/svg/Warning.vue'

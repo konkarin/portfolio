@@ -45,10 +45,14 @@
 
 <script setup lang="ts">
 import type { DocumentData } from '@firebase/firestore'
+import { ref, watch, onMounted } from 'vue'
 
+import { db } from '@/api/apis'
+import type { Query } from '@/api/firestore'
+import BaseButton from '@/components/BaseButton.vue'
+import ImgUploader from '@/components/ImgUploader.vue'
 import { useAuthInject } from '@/composables/useAuth'
-import { db } from '~/api/apis'
-import type { Query } from '~/api/firestore'
+import { useToast } from '@/composables/useToast'
 
 const { user } = useAuthInject()
 const getImgList = async (): Promise<DocumentData[]> => {

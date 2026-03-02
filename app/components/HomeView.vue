@@ -1,3 +1,9 @@
+<script setup lang="ts">
+import HomeBlog from '@/components/HomeBlog.server.vue'
+import HomeProfile from '@/components/HomeProfile.server.vue'
+import HomeRss from '@/components/HomeRss.vue'
+</script>
+
 <template>
   <main class="wrapper">
     <article class="wrapper-inner">

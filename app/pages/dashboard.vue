@@ -19,8 +19,14 @@
 
 <script setup lang="ts">
 import { getAuth, GoogleAuthProvider, signInWithPopup } from '@firebase/auth'
+import { ref, provide, onMounted } from 'vue'
 
+import BaseButton from '@/components/BaseButton.vue'
+import DashboardHeaderNav from '@/components/Dashboard/DashboardHeaderNav.vue'
+import Loader from '@/components/Loader.vue'
+import ToastProvider from '@/components/Toast/ToastProvider.vue'
 import { useAuth, AUTH_KEY } from '@/composables/useAuth'
+import { useRouterCommand } from '@/composables/useCommand'
 
 const isLoading = ref(true)
 const isUploading = ref(false)

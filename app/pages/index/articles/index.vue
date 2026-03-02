@@ -5,6 +5,9 @@
 </template>
 
 <script setup lang="ts">
+import { useRuntimeConfig, useHead } from '#app'
+import ArticleContainer from '@/components/Article/ArticleContainer.vue'
+import ArticleList from '@/components/Article/ArticleList.vue'
 const { APP_URL } = useRuntimeConfig().public
 useHead({
   title: 'Articles',
