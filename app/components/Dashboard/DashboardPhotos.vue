@@ -47,8 +47,8 @@
 import type { DocumentData } from '@firebase/firestore'
 
 import { useAuthInject } from '@/composables/useAuth'
-import { db } from '~/api/apis'
-import type { Query } from '~/api/firestore'
+import { db } from '@/api/apis'
+import type { Query } from '@/api/firestore'
 
 const { user } = useAuthInject()
 const getImgList = async (): Promise<DocumentData[]> => {

@@ -1,7 +1,7 @@
 import { v4 } from 'uuid'
 
-import { db } from '~/api/apis'
-import type { Article } from '~/types'
+import { db } from '@/api/apis'
+import type { Article } from '@/types'
 
 export function useArticleEditor() {
   const { user, isAuth } = useAuthInject()
@@ -194,7 +194,9 @@ export function useArticleEditor() {
 
 function useOgp() {
   const ogpImageUrl = ref('')
-  const thumbnailImageUrl = computed(() => ogpImageUrl.value.replace('%2Foriginal%2F', '%2Fthumb%2F'))
+  const thumbnailImageUrl = computed(() =>
+    ogpImageUrl.value.replace('%2Foriginal%2F', '%2Fthumb%2F'),
+  )
 
   const { user } = useAuthInject()
   const { uploadImage } = useImageUpload()

@@ -27,9 +27,9 @@
 </template>
 
 <script setup lang="ts">
+import { useArticle } from '@/composables/useArticle'
 import Day from '@/utils/day'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'
-import { useArticle } from '~/composables/useArticle'
 
 const { params, path } = useRoute()
 const { article } = await useArticle(params.article as string)
