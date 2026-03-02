@@ -2,13 +2,18 @@
   <NuxtLink :to="`/articles/${articleId}`" class="articleItem">
     <div class="articleItem__eyeCatchOuter">
       <div class="articleItem__eyeCatchInner">
-        <img
-          v-if="article.thumbnailImageUrl || article.ogpImageUrl"
-          class="articleItem__eyeCatch"
-          :src="article.thumbnailImageUrl || article.ogpImageUrl"
-          loading="lazy"
-          alt=""
-        />
+        <template v-if="imageUrl && !isImageError">
+          <div v-if="!isImageLoaded" class="articleItem__skeleton"></div>
+          <img
+            v-show="isImageLoaded"
+            ref="imgRef"
+            class="articleItem__eyeCatch"
+            :src="imageUrl"
+            alt=""
+            @load="isImageLoaded = true"
+            @error="isImageError = true"
+          />
+        </template>
         <div v-else class="articleItem__emptyEyeCatch">🦊</div>
       </div>
     </div>
@@ -21,15 +26,13 @@
       </div>
     </div>
     <div class="articleItem__text">
-      {{ slicedText }}
+      {{ article.text }}
     </div>
   </NuxtLink>
 </template>
 
 <script setup lang="ts">
-import { remark } from 'remark'
-import strip from 'strip-markdown'
-import { computed } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import type { Article } from '@/types/index'
 import Day from '@/utils/day'
@@ -38,23 +41,24 @@ const { article } = defineProps<{
   article: Article
 }>()
 
+const isImageError = ref(false)
+const isImageLoaded = ref(false)
+const imgRef = ref<HTMLImageElement | null>(null)
+
+const imageUrl = computed(() => article.thumbnailImageUrl || article.ogpImageUrl || '')
+
 const releaseDate = computed(() => {
   const format = 'YYYY-MM-DD'
   return Day.getDate(article.releaseDate, format)
 })
 
+onMounted(() => {
+  if (imgRef.value?.complete) {
+    isImageLoaded.value = true
+  }
+})
+
 const articleId = computed(() => article.customId || article.id)
-
-const file = await remark()
-  .use(strip)
-  .process(article.text)
-  .catch((e) => {
-    console.error({ e })
-    return article.text
-  })
-
-const strippedText = file.toString()
-const slicedText = strippedText.length > 100 ? strippedText.slice(0, 100) + '...' : strippedText
 </script>
 
 <style scoped lang="scss">
@@ -95,12 +99,36 @@ const slicedText = strippedText.length > 100 ? strippedText.slice(0, 100) + '...
     opacity 0.3s,
     transform 0.3s;
   height: 100%;
+  position: relative;
 }
 
 .articleItem__eyeCatch {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.articleItem__skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #eee;
+  animation: pulse 1.5s infinite ease-in-out;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
 }
 
 .articleItem__emptyEyeCatch {

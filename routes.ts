@@ -13,22 +13,24 @@ export const generateRoutes = async () => {
   // /articles/_article.vue用の記事
   const allArticles = await getArticles()
 
-  const articleRoutes = allArticles.flatMap((article: Record<string, string>) => {
-    const uuidRoute = {
-      route: `/articles/${article.id}`,
-      payload: article,
-    }
-    if (article.customId) {
-      return [
-        uuidRoute,
-        {
-          route: `/articles/${article.customId}`,
-          payload: article,
-        },
-      ]
-    }
-    return uuidRoute
-  })
+  const articleRoutes = allArticles.flatMap(
+    (article: Record<string, string>) => {
+      const uuidRoute = {
+        route: `/articles/${article.id}`,
+        payload: article,
+      }
+      if (article.customId) {
+        return [
+          uuidRoute,
+          {
+            route: `/articles/${article.customId}`,
+            payload: article,
+          },
+        ]
+      }
+      return uuidRoute
+    },
+  )
 
   const allTags = await getArticleTags()
 
@@ -50,7 +52,17 @@ export const generateRoutes = async () => {
       return payload.articlesByTag.length > 0
     })
 
-  return [...articleRoutes, ...tagRoutes]
+  const photoIds = await getPhotoIds()
+  const photoRoutes = photoIds.map((id) => ({
+    route: `/photos/${id}`,
+  }))
+
+  return [...articleRoutes, ...tagRoutes, ...photoRoutes]
+}
+
+const getPhotoIds = async () => {
+  const collectionPath = `users/${runtimePublicConfig.AUTHOR_ID}/images`
+  return await db.getDocIds(collectionPath)
 }
 
 const getArticleRecordByTag = async () => {

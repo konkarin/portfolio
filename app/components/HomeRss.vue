@@ -4,7 +4,7 @@
     <ul class="tech-list">
       <li v-for="article in techArticles" :key="article.link" class="tech">
         <a :href="article.link" target="_blank">
-          <img src="https://static.zenn.studio/images/icon.png" class="favicon" />
+          <img src="https://static.zenn.studio/images/icon.png" class="favicon" alt="" />
           <span>{{ article.title }}</span>
         </a>
       </li>
@@ -13,15 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-
 import { useFetch } from '#app'
 
-const { data } = await useFetch(
+const { data: techArticles } = await useFetch(
   'https://api.rss2json.com/v1/api.json?rss_url=https://zenn.dev/kon_karin/feed',
+  {
+    transform: (data: any) => (data?.items ?? []).slice(0, 3),
+  },
 )
-// @ts-expect-error 外部APIなので型を無視
-const techArticles = computed(() => (data.value?.items ?? []).slice(0, 3))
 </script>
 
 <style lang="scss" scoped>

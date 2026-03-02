@@ -2,16 +2,26 @@
   <main class="photos">
     <ImgContainer :img-list="imgList || []" />
     <transition name="fade-modal">
-      <PhotoModal v-if="photoModal.show" :img-src="photoModal.url" @close="closeModal" />
+      <PhotoModal
+        v-if="photoModal.show"
+        :key="photoModal.url"
+        :img-src="photoModal.url"
+        @close="closeModal"
+      />
     </transition>
   </main>
 </template>
 
 <script setup lang="ts">
 import type { DocumentData } from 'firebase/firestore'
-import { provide, onMounted } from 'vue'
+import { provide, watch } from 'vue'
 
-import { useRuntimeConfig, useRoute, useAsyncData, useHead } from '#app'
+import {
+  useRuntimeConfig,
+  useRoute,
+  useRouter,
+  useAsyncData,
+} from '#app'
 import { db } from '@/api/apis'
 import ImgContainer from '@/components/ImgContainer.vue'
 import PhotoModal from '@/components/PhotoModal.vue'
@@ -35,37 +45,47 @@ const modal = useModal()
 provide(MODAL_KEY, modal)
 const { photoModal, switchPhotoModal } = modal
 
-const closeModal = (): void => {
-  switchPhotoModal({
-    url: '',
-    show: false,
-    exif: {},
-  })
-}
-
 const route = useRoute()
+const router = useRouter()
 
-const { data: imgList } = await useAsyncData('photos-images', () => loadImgList())
-
-onMounted(async () => {
-  if (typeof route.query.path === 'string') {
-    const imageDoc = imgList.value?.find((img) => {
-      return img.originalFilePath.includes(route.query.path)
-    })
-
-    if (imageDoc === undefined) return
-
+const closeModal = (): void => {
+  if (route.params.id) {
+    router.push('/photos')
+  } else {
     switchPhotoModal({
-      url: imageDoc.originalUrl,
-      show: true,
+      url: '',
+      show: false,
       exif: {},
     })
   }
-})
+}
 
-useHead({
-  title: 'Photos',
-})
+const { data: imgList } = await useAsyncData('photos-images', () =>
+  loadImgList(),
+)
+
+watch(
+  [() => route.params.id, imgList],
+  ([id, list]) => {
+    if (id && list) {
+      const imageDoc = list.find((img) => img.id === id)
+      if (imageDoc) {
+        switchPhotoModal({
+          url: imageDoc.originalUrl,
+          show: true,
+          exif: {},
+        })
+      }
+    } else if (!id) {
+      switchPhotoModal({
+        url: '',
+        show: false,
+        exif: {},
+      })
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style lang="scss" scoped>
