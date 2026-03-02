@@ -1,4 +1,5 @@
 import { getStorage, uploadBytes, ref as storageRef } from 'firebase/storage'
+import { ref } from 'vue'
 
 export function useImageUpload() {
   const isUploading = ref(false)

@@ -11,5 +11,8 @@
 </template>
 
 <script setup lang="ts">
+import HomeBlogItem from '@/components/HomeBlogItem.vue'
+import { useArticles } from '@/composables/useArticles'
+
 const { articles: recentArticles } = await useArticles({ limit: 2 })
 </script>

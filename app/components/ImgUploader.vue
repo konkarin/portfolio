@@ -14,8 +14,12 @@
 <script setup lang="ts">
 import { getStorage, ref as storageRef, uploadBytes } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid'
+import { ref } from 'vue'
 
+import BaseButton from '@/components/BaseButton.vue'
 import { useAuthInject } from '@/composables/useAuth'
+import { useKeyCombination } from '@/composables/useCommand'
+import { useToast } from '@/composables/useToast'
 
 const emit = defineEmits<{
   uploaded: []

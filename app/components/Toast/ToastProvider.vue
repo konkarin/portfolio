@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import type { Toast } from '@/composables/useToast'
+import { ref, provide } from 'vue'
+
+import Toast from '@/components/Toast/Toast.vue'
+import type { Toast as ToastType } from '@/composables/useToast'
 import { ToastKey } from '@/composables/useToast'
 
-const toasts = ref<Toast[]>([])
-const addToast = (toast: Toast) => {
+const toasts = ref<ToastType[]>([])
+const addToast = (toast: ToastType) => {
   toasts.value.push(toast)
 }
 provide(ToastKey, addToast)

@@ -9,8 +9,12 @@
 
 <script setup lang="ts">
 import type { DocumentData } from 'firebase/firestore'
+import { provide, onMounted } from 'vue'
 
+import { useRuntimeConfig, useRoute, useAsyncData, useHead } from '#app'
 import { db } from '@/api/apis'
+import ImgContainer from '@/components/ImgContainer.vue'
+import PhotoModal from '@/components/PhotoModal.vue'
 import { useModal, MODAL_KEY } from '@/composables/useModal'
 
 const loadImgList = async (): Promise<DocumentData[]> => {

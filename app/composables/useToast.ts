@@ -1,3 +1,5 @@
+import { inject, type InjectionKey } from 'vue'
+
 export type ToastType = 'success' | 'error' | 'info'
 
 export interface Toast {

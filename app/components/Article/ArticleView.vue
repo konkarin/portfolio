@@ -27,6 +27,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted } from 'vue'
+
+import { useRoute, useRuntimeConfig, useHead, createError } from '#app'
+import MarkdownPreview from '@/components/Article/MarkdownPreview.vue'
 import { useArticle } from '@/composables/useArticle'
 import Day from '@/utils/day'
 import { convertMarkdownTextToHTML } from '@/utils/markdown'

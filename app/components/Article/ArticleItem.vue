@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="articleItem__text">
-      {{ article.text }}
+      {{ slicedText }}
     </div>
   </NuxtLink>
 </template>
@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import { remark } from 'remark'
 import strip from 'strip-markdown'
+import { computed } from 'vue'
 
 import type { Article } from '@/types/index'
 import Day from '@/utils/day'
@@ -53,7 +54,7 @@ const file = await remark()
   })
 
 const strippedText = file.toString()
-const sliecedText = strippedText.length > 100 ? strippedText.slice(0, 100) + '...' : strippedText
+const slicedText = strippedText.length > 100 ? strippedText.slice(0, 100) + '...' : strippedText
 </script>
 
 <style scoped lang="scss">

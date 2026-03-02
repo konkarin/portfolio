@@ -20,6 +20,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
+import { useRuntimeConfig, useAsyncData } from '#app'
+import ArticlesSideMenuItem from '@/components/Article/ArticlesSideMenuItem.vue'
+import { getArticles, getArticleTags } from '@/utils/article'
+
 const { AUTHOR_ID } = useRuntimeConfig().public
 
 const { data } = await useAsyncData(

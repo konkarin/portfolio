@@ -1,3 +1,7 @@
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+import { useRouter } from '#app'
+
 export function useRouterCommand(path: 'root' | 'home') {
   const keyList = ref<string>('')
 

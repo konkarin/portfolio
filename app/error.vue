@@ -9,6 +9,9 @@
 </template>
 
 <script setup lang="ts">
+import { useHead, clearError } from '#app'
+import BaseButton from '@/components/BaseButton.vue'
+import PageTitle from '@/components/PageTitle.vue'
 defineProps<{
   error: {
     message?: string

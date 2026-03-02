@@ -8,6 +8,11 @@ import { useEditor } from '@tiptap/vue-3'
 import { Plugin, PluginKey } from 'prosemirror-state'
 import { v4 } from 'uuid'
 
+import { useAuthInject } from '@/composables/useAuth'
+import { useImageUpload } from '@/composables/useImageUpload'
+import { resizeImage } from '@/utils/image'
+import { convertMarkdownTextToHTML } from '@/utils/markdown'
+
 export function useMarkdownEditor(callback: (editorText: string) => void) {
   const { uploadImage } = useImageUpload()
   const { user } = useAuthInject()
@@ -26,7 +31,10 @@ export function useMarkdownEditor(callback: (editorText: string) => void) {
           const resizedFile = new File([await resizeImage(file, { maxSize: 1200 })], 'image.webp', {
             type: 'image/webp',
           })
-          const url = await uploadImage(resizedFile, `users/${user.value?.uid}/articles/${v4()}/original`)
+          const url = await uploadImage(
+            resizedFile,
+            `users/${user.value?.uid}/articles/${v4()}/original`,
+          )
           if (url) {
             currentEditor
               .chain()
@@ -53,7 +61,10 @@ export function useMarkdownEditor(callback: (editorText: string) => void) {
             { type: 'image/webp' },
           )
 
-          const url = await uploadImage(resizedImage, `users/${user.value?.uid}/articles/${v4()}/original`)
+          const url = await uploadImage(
+            resizedImage,
+            `users/${user.value?.uid}/articles/${v4()}/original`,
+          )
           currentEditor
             .chain()
             .insertContentAt(currentEditor.state.selection.anchor, {

@@ -6,6 +6,9 @@
 </template>
 
 <script setup lang="ts">
+import { useHead } from '#app'
+import HeaderNav from '@/components/HeaderNav.vue'
+import { useRouterCommand } from '@/composables/useCommand'
 useHead({
   title: `konkarin.photo`,
   meta: [

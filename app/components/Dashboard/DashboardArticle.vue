@@ -20,10 +20,18 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, type PropType } from 'vue'
+
+import Pencil from '@/components/svg/Pencil.vue'
+import Trash from '@/components/svg/Trash.vue'
 import type { Article } from '@/types/index'
 import Day from '@/utils/day'
 
 export default defineComponent({
+  components: {
+    Pencil,
+    Trash,
+  },
   props: {
     article: {
       type: Object as PropType<Article>,
