@@ -12,7 +12,10 @@ import Twitter from '@/components/svg/Twitter.vue'
       </div>
       <div>
         <p>
-          こん と申します。Webフロントエンドを主に開発しています。<br />コーヒー飲みながら猫と暮らしています。たまにキャンプします。
+          こん と申します。コーヒー飲みながら猫と暮らしています。たまにキャンプします。
+        </p>
+        <p>
+          Engineering Manager @Yappli (ex-CRI Middleware)
         </p>
         <p class="accounts">
           <a href="https://x.com/k0n_karin" target="_blank"><Twitter />Twitter</a>
