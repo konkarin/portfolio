@@ -6,10 +6,6 @@ export default defineNuxtConfig({
     componentIslands: true,
   },
 
-  devServer: {
-    port: 4000,
-  },
-
   routeRules: {
     '/': { prerender: true },
     '/photos': { prerender: true },
