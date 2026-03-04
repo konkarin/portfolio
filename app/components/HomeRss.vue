@@ -2,10 +2,16 @@
   <section>
     <h2>Tech</h2>
     <ul class="tech-list">
-      <li v-for="article in techArticles" :key="article.link" class="tech">
+      <li v-for="article in zenn" :key="article.link" class="tech">
         <a :href="article.link" target="_blank">
           <img src="https://static.zenn.studio/images/icon.png" class="favicon" alt="" />
           <span>{{ article.title }}</span>
+        </a>
+      </li>
+      <li v-for="slide in slides" :key="slide.link" class="tech">
+        <a :href="slide.link" target="_blank">
+          <img src="https://d1eu30co0ohy4w.cloudfront.net/favicon.ico" class="favicon" alt="" />
+          <span>{{ slide.title }}</span>
         </a>
       </li>
     </ul>
@@ -15,12 +21,61 @@
 <script setup lang="ts">
 import { useFetch } from '#app'
 
-const { data: techArticles } = await useFetch(
+interface Root {
+  status: string
+  feed: Feed
+  items: Item[]
+}
+
+interface Feed {
+  url: string
+  title: string
+  link: string
+  author: string
+  description: string
+  image: string
+}
+
+interface Item {
+  title: string
+  pubDate: string
+  link: string
+  guid: string
+  author: string
+  thumbnail: string
+  description: string
+  content: string
+  enclosure: Enclosure
+  categories: any[]
+}
+
+interface Enclosure {
+  link: string
+  type: string
+}
+
+const { data: zenn } = await useFetch(
   'https://api.rss2json.com/v1/api.json?rss_url=https://zenn.dev/kon_karin/feed',
   {
-    transform: (data: any) => (data?.items ?? []).slice(0, 3),
+    transform,
   },
 )
+
+const { data: slides } = await useFetch(
+  'https://api.rss2json.com/v1/api.json?rss_url=https://speakerdeck.com/konkarin.rss',
+  {
+    transform,
+  },
+)
+
+function transform(data: Root) {
+  return (data?.items ?? []).slice(0, 2).map((item: Item) => {
+    return {
+      title: item.title,
+      link: item.link,
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
