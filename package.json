@@ -26,7 +26,7 @@
     "@tiptap/static-renderer": "^3.0.9",
     "@tiptap/vue-3": "^3.0.9",
     "dayjs": "^1.10.2",
-    "firebase": "^9.23.0",
+    "firebase": "^10.9.0",
     "highlight.js": "^11.1.1",
     "rehype-highlight": "^7.0.1",
     "rehype-parse": "^9.0.1",
