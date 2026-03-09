@@ -21,6 +21,20 @@
       </div>
     </header>
     <div class="articleView__content">
+      <aside v-if="toc.length > 0" class="articleView__toc">
+        <p class="articleView__tocTitle">目次</p>
+        <nav>
+          <ul>
+            <li
+              v-for="heading in toc"
+              :key="heading.id"
+              :class="[`articleView__tocItem--h${heading.level}`]"
+            >
+              <a :href="`#${heading.id}`">{{ heading.text }}</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
       <MarkdownPreview :html-text="htmlText" />
     </div>
   </article>
@@ -33,7 +47,7 @@ import { useRoute, useRuntimeConfig, useHead, createError } from '#app'
 import MarkdownPreview from '@/components/Article/MarkdownPreview.vue'
 import { useArticle } from '@/composables/useArticle'
 import Day from '@/utils/day'
-import { convertMarkdownTextToHTML } from '@/utils/markdown'
+import { convertMarkdownTextToHTML, getHeadings } from '@/utils/markdown'
 
 const { params, path } = useRoute()
 const { article } = await useArticle(params.article as string)
@@ -73,6 +87,7 @@ onMounted(() => {
 })
 
 const htmlText = await convertMarkdownTextToHTML(article.value?.text || '')
+const toc = computed(() => getHeadings(article.value?.text || ''))
 
 const releaseDate = computed(() => Day.getDate(article.value?.releaseDate || 0, 'YYYY-MM-DD'))
 const updatedDate = computed(() => {
@@ -134,6 +149,63 @@ useHead({
 .articleView__eyeCatch {
   object-fit: cover;
   aspect-ratio: 16 / 9;
+}
+
+.articleView__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.articleView__toc {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--lightBlack);
+  border-radius: 8px;
+
+  ul {
+    list-style-type: disc;
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+
+  li {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+
+    &::marker {
+      color: var(--black);
+    }
+  }
+
+  a {
+    color: var(--darkYellow);
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: inline-block;
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.7;
+    }
+  }
+}
+
+.articleView__tocTitle {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.articleView__tocItem--h1 {
+  margin-left: 0;
+}
+.articleView__tocItem--h2 {
+  margin-left: 0;
+}
+.articleView__tocItem--h3 {
+  margin-left: 1rem;
+}
+.articleView__tocItem--h4 {
+  margin-left: 2rem;
 }
 
 .articleView__subTitle {
