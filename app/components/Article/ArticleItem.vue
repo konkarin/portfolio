@@ -5,11 +5,13 @@
         <template v-if="imageUrl && !isImageError">
           <div v-if="!isImageLoaded" class="articleItem__skeleton"></div>
           <img
-            v-show="isImageLoaded"
             ref="imgRef"
             class="articleItem__eyeCatch"
+            :class="{ 'articleItem__eyeCatch--loaded': isImageLoaded }"
             :src="imageUrl"
             alt=""
+            loading="lazy"
+            decoding="async"
             @load="isImageLoaded = true"
             @error="isImageError = true"
           />
@@ -106,6 +108,12 @@ const articleId = computed(() => article.customId || article.id)
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.articleItem__eyeCatch--loaded {
+  opacity: 1;
 }
 
 .articleItem__skeleton {
