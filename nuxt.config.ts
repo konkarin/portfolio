@@ -4,6 +4,14 @@ import { generateRoutes } from './routes'
 export default defineNuxtConfig({
   experimental: {
     componentIslands: true,
+    defaults: {
+      // NuxtLinkのprefetchを可視時(visibility)からホバー/フォーカス時(interaction)に変更する。
+      // デフォルトでは一覧ページでリンクが画面に入った時点で全記事のpayload.jsonが
+      // 先読みされてしまい無駄な通信が発生するため、クリック意図が見えた時のみ先読みする。
+      nuxtLink: {
+        prefetchOn: { visibility: false, interaction: true },
+      },
+    },
   },
 
   routeRules: {
@@ -55,15 +63,6 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           additionalData: '@use "@/assets/style/variables.scss" as *;',
-        },
-      },
-    },
-    build: {
-      minify: false,
-      rollupOptions: {
-        preserveEntrySignatures: 'strict',
-        output: {
-          preserveModules: true,
         },
       },
     },
