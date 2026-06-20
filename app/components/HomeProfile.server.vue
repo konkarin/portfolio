@@ -15,7 +15,7 @@ import Twitter from '@/components/svg/Twitter.vue'
           こん と申します。コーヒー飲みながら猫と暮らしています。たまにキャンプします。
         </p>
         <p>
-          Engineering Manager @Yappli (ex-CRI Middleware)
+          Frontend Engineer @Henry (ex-Yappli, ex-CRI Middleware)
         </p>
         <p class="accounts">
           <a href="https://x.com/k0n_karin" target="_blank"><Twitter />Twitter</a>
