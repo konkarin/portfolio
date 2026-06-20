@@ -1,6 +1,6 @@
 <template>
   <div v-if="articles && articles.length > 0">
-    <ul ref="listRef" class="artcileList">
+    <ul class="artcileList">
       <ArticleItem
         v-for="article in paginatedArticles"
         :key="article.id"
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { useRoute } from '#app'
 import ArticleItem from '@/components/Article/ArticleItem.vue'
@@ -34,7 +34,6 @@ const tag = route.params.tag as string | undefined
 const { articles } = await useArticles({ tag })
 
 const currentPage = ref(1)
-const listRef = ref<HTMLElement | null>(null)
 
 const totalPages = computed(() =>
   Math.max(1, Math.ceil((articles.value?.length ?? 0) / PER_PAGE)),
@@ -45,11 +44,10 @@ const paginatedArticles = computed(() => {
   return articles.value?.slice(start, start + PER_PAGE) ?? []
 })
 
-const onPageChange = async (page: number) => {
+const onPageChange = (page: number) => {
   currentPage.value = page
-  // 再描画でスムーズスクロールが中断されるため、DOM更新を待ってから一覧の先頭へスクロールする
-  await nextTick()
-  listRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  // ページ切り替え時は画面最上部までスクロールする
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 </script>
 
