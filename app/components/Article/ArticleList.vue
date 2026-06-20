@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 
 import { useRoute } from '#app'
 import ArticleItem from '@/components/Article/ArticleItem.vue'
@@ -45,9 +45,10 @@ const paginatedArticles = computed(() => {
   return articles.value?.slice(start, start + PER_PAGE) ?? []
 })
 
-const onPageChange = (page: number) => {
+const onPageChange = async (page: number) => {
   currentPage.value = page
-  // ページ切り替え後は一覧の先頭までスクロールする
+  // 再描画でスムーズスクロールが中断されるため、DOM更新を待ってから一覧の先頭へスクロールする
+  await nextTick()
   listRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 </script>
