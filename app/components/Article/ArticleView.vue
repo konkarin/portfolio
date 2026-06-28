@@ -43,11 +43,10 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 
-import { useRoute, useRuntimeConfig, useHead, createError } from '#app'
+import { useRoute, useRuntimeConfig, useHead, createError, useAsyncData } from '#app'
 import MarkdownPreview from '@/components/Article/MarkdownPreview.vue'
 import { useArticle } from '@/composables/useArticle'
 import Day from '@/utils/day'
-import { convertMarkdownTextToHTML, getHeadings } from '@/utils/markdown'
 
 const { params, path } = useRoute()
 const { article } = await useArticle(params.article as string)
@@ -86,8 +85,25 @@ onMounted(() => {
   }
 })
 
-const htmlText = await convertMarkdownTextToHTML(article.value?.text || '')
-const toc = computed(() => getHeadings(article.value?.text || ''))
+// markdown変換ライブラリ(remark/rehype/highlight.js, 計~570KB)はサイズが大きいため、
+// 動的importでクライアントバンドルから分離する。記事ページはプリレンダされるため、
+// 変換はビルド時(サーバー)に実行され、結果はpayloadにキャッシュされる。
+// クライアントのhydration時はキャッシュを読むだけでハンドラは再実行されず、
+// 変換ライブラリのチャンクもフェッチされない。
+const { data: rendered } = await useAsyncData(
+  `article-rendered-${article.value?.id}`,
+  async () => {
+    const { convertMarkdownTextToHTML, getHeadings } = await import('@/utils/markdown')
+    const text = article.value?.text || ''
+    return {
+      htmlText: await convertMarkdownTextToHTML(text),
+      toc: getHeadings(text),
+    }
+  },
+)
+
+const htmlText = computed(() => rendered.value?.htmlText || '')
+const toc = computed(() => rendered.value?.toc || [])
 
 const releaseDate = computed(() => Day.getDate(article.value?.releaseDate || 0, 'YYYY-MM-DD'))
 const updatedDate = computed(() => {
