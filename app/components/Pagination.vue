@@ -115,9 +115,13 @@ const goTo = (page: number) => {
   border: 1px solid var(--gray);
   border-radius: 0.5em;
   transition: 0.3s;
-  &:hover:not(:disabled) {
-    cursor: pointer;
-    background-color: var(--yellow);
+  // ホバー可能なデバイス（マウス等）のみホバー色を適用する
+  // タッチデバイスでタップ後にホバー色が残留するのを防ぐ
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      cursor: pointer;
+      background-color: var(--yellow);
+    }
   }
   &:disabled {
     cursor: default;
