@@ -19,9 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 
-import { useRoute } from '#app'
+import { useRoute, useRouter } from '#app'
 import ArticleItem from '@/components/Article/ArticleItem.vue'
 import Pagination from '@/components/Pagination.vue'
 import { useArticles } from '@/composables/useArticles'
@@ -30,14 +30,20 @@ import { useArticles } from '@/composables/useArticles'
 const PER_PAGE = 8
 
 const route = useRoute()
+const router = useRouter()
 const tag = route.params.tag as string | undefined
 const { articles } = await useArticles({ tag })
-
-const currentPage = ref(1)
 
 const totalPages = computed(() =>
   Math.max(1, Math.ceil((articles.value?.length ?? 0) / PER_PAGE)),
 )
+
+// URLクエリの page を元に現在ページを算出する（不正値や範囲外は1〜totalPagesに丸める）
+const currentPage = computed(() => {
+  const raw = Number(route.query.page)
+  if (!Number.isInteger(raw) || raw < 1) return 1
+  return Math.min(raw, totalPages.value)
+})
 
 const paginatedArticles = computed(() => {
   const start = (currentPage.value - 1) * PER_PAGE
@@ -45,7 +51,10 @@ const paginatedArticles = computed(() => {
 })
 
 const onPageChange = (page: number) => {
-  currentPage.value = page
+  // URLクエリを更新する（1ページ目はクエリを付けずURLをすっきりさせる）
+  router.push({
+    query: { ...route.query, page: page === 1 ? undefined : String(page) },
+  })
   // ページ切り替え時は画面最上部までスクロールする
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
