@@ -218,15 +218,19 @@ useHead({
 
 .articleView__tocItem--h1 {
   margin-left: 0;
+  list-style-type: disc;
 }
 .articleView__tocItem--h2 {
   margin-left: 1rem;
+  list-style-type: disc;
 }
 .articleView__tocItem--h3 {
   margin-left: 2rem;
+  list-style-type: circle;
 }
 .articleView__tocItem--h4 {
   margin-left: 3rem;
+  list-style-type: square;
 }
 
 .articleView__subTitle {
