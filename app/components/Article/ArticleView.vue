@@ -218,13 +218,13 @@ useHead({
   margin-left: 0;
 }
 .articleView__tocItem--h2 {
-  margin-left: 0;
-}
-.articleView__tocItem--h3 {
   margin-left: 1rem;
 }
-.articleView__tocItem--h4 {
+.articleView__tocItem--h3 {
   margin-left: 2rem;
+}
+.articleView__tocItem--h4 {
+  margin-left: 3rem;
 }
 
 .articleView__subTitle {
