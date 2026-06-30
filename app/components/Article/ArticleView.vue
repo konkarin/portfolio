@@ -96,7 +96,10 @@ const { data: rendered } = await useAsyncData(
     const { convertMarkdownTextToHTML, getHeadings } = await import('@/utils/markdown')
     const text = article.value?.text || ''
     return {
-      htmlText: await convertMarkdownTextToHTML(text),
+      // ogp: true は記事内の単独行リンクをOGPカードに変換する。
+      // この変換はprerender時(Node)に実行され結果はpayloadにキャッシュされるため、
+      // ブラウザ側で外部URLへのfetch(CORS)は発生しない。
+      htmlText: await convertMarkdownTextToHTML(text, { ogp: true }),
       toc: getHeadings(text),
     }
   },

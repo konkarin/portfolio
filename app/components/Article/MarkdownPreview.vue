@@ -35,6 +35,83 @@ export default defineComponent({
     }
   }
 
+  // 単独行リンクから生成されるOGPカード
+  & a.ogpCard {
+    display: flex;
+    align-items: stretch;
+    margin: 1.5rem 0;
+    border: 1px solid var(--lightBlack);
+    border-radius: 8px;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+    word-break: normal;
+    transition: 0.3s;
+    &:hover {
+      text-decoration: none;
+      opacity: 0.7;
+    }
+  }
+
+  .ogpCard__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+    min-width: 0;
+    padding: 0.9rem 1.1rem;
+  }
+
+  .ogpCard__title {
+    font-weight: 700;
+    line-height: 1.4;
+    // 2行で省略
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .ogpCard__desc {
+    font-size: 0.85rem;
+    color: var(--gray);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .ogpCard__site {
+    font-size: 0.8rem;
+    color: var(--gray);
+  }
+
+  .ogpCard__thumb {
+    flex-shrink: 0;
+    width: 200px;
+    background: var(--lightBlack);
+
+    img {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      margin: 0;
+      object-fit: cover;
+    }
+  }
+
+  @media screen and (max-width: $sm) {
+    & a.ogpCard {
+      flex-direction: column-reverse;
+    }
+
+    .ogpCard__thumb {
+      width: 100%;
+      aspect-ratio: 1200 / 630;
+    }
+  }
+
   h1 {
     margin-top: 2em;
     border-bottom: 1px solid #ddd;
