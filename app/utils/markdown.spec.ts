@@ -1,3 +1,5 @@
+import { afterEach, vi } from 'vitest'
+
 import { convertMarkdownTextToHTML, getHeadings } from '@/utils/markdown'
 
 describe('markdown', () => {
@@ -24,6 +26,71 @@ describe('markdown', () => {
       '<img src="https://staging-konkarin-photo.web.app/HomeImg.jpg" alt="Home image">',
     )
     expect(html).toContain(`<code>console.log(hoge)</code>`)
+  })
+
+  describe('OGPカード変換 (ogpオプション)', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
+
+    // OGPメタ情報を含むHTMLを返すfetchのモックを設定する
+    const stubFetch = (html: string, ok = true) => {
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok,
+          headers: { get: () => 'text/html; charset=utf-8' },
+          text: async () => html,
+        }),
+      )
+    }
+
+    test('単独行のリンクはOGPカードに変換される', async () => {
+      stubFetch(`
+        <html><head>
+          <meta property="og:title" content="サンプルタイトル" />
+          <meta property="og:description" content="サンプル説明" />
+          <meta property="og:image" content="https://example.com/ogp.png" />
+          <meta property="og:site_name" content="Example" />
+        </head><body></body></html>
+      `)
+
+      const html = await convertMarkdownTextToHTML('https://example.com/article\n', { ogp: true })
+
+      expect(html).toContain('class="ogpCard"')
+      expect(html).toContain('href="https://example.com/article"')
+      expect(html).toContain('サンプルタイトル')
+      expect(html).toContain('サンプル説明')
+      expect(html).toContain('https://example.com/ogp.png')
+    })
+
+    test('ogpオプションが無い場合は通常のリンクのまま', async () => {
+      stubFetch('<html></html>')
+
+      const html = await convertMarkdownTextToHTML('https://example.com/article\n')
+
+      expect(html).not.toContain('ogpCard')
+      expect(html).toContain('<a href="https://example.com/article">')
+      expect(fetch).not.toHaveBeenCalled()
+    })
+
+    test('文言付きリンクはカード化しない', async () => {
+      stubFetch('<html><head><meta property="og:title" content="t" /></head></html>')
+
+      const html = await convertMarkdownTextToHTML('[ラベル](https://example.com)\n', { ogp: true })
+
+      expect(html).not.toContain('ogpCard')
+      expect(html).toContain('<a href="https://example.com">ラベル</a>')
+    })
+
+    test('OGP取得に失敗した場合は通常のリンクにフォールバックする', async () => {
+      stubFetch('', false)
+
+      const html = await convertMarkdownTextToHTML('https://example.com/article\n', { ogp: true })
+
+      expect(html).not.toContain('ogpCard')
+      expect(html).toContain('<a href="https://example.com/article">')
+    })
   })
 
   test('getHeadings extracts headings from markdown', () => {
