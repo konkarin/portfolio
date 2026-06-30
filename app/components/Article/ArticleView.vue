@@ -188,7 +188,9 @@ useHead({
   }
 
   li {
-    margin: 0.5rem 0;
+    // ショートハンドのmarginはmargin-leftも0で上書きしてしまい、
+    // 見出しレベル別のインデント(.articleView__tocItem--h*)が効かなくなるため縦方向のみ指定する
+    margin-block: 0.5rem;
     line-height: 1.5;
 
     &::marker {
