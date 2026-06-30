@@ -1,6 +1,6 @@
 <template>
   <main class="wrapper">
-    <PageTitle>タグ: {{ $route.params.tag }}</PageTitle>
+    <PageTitle>タグ: {{ params.tag }}</PageTitle>
     <div class="article">
       <ArticleList />
       <ArticlesSideMenu />

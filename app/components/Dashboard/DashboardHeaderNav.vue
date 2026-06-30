@@ -5,20 +5,26 @@
       <NuxtLink
         to="/dashboard/photos"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path === '/dashboard/photos' }"
+        :class="{ 'headerNav__item--active': route.path === '/dashboard/photos' }"
       >
         Photos
       </NuxtLink>
       <NuxtLink
         to="/dashboard/articles"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path.includes('/dashboard/articles') }"
+        :class="{ 'headerNav__item--active': route.path.includes('/dashboard/articles') }"
       >
         Blog
       </NuxtLink>
     </div>
   </nav>
 </template>
+
+<script setup lang="ts">
+import { useRoute } from '#app'
+
+const route = useRoute()
+</script>
 
 <style lang="scss" scoped>
 .headerNav {
