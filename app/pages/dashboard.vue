@@ -5,7 +5,7 @@
     </div>
     <template v-if="isAuth">
       <header>
-        <DashboardHeaderNav v-if="!$route.params.article" />
+        <DashboardHeaderNav v-if="!route.params.article" />
       </header>
       <main class="dashboard">
         <NuxtPage />
@@ -21,12 +21,15 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup } from '@firebase/auth'
 import { ref, provide, onMounted } from 'vue'
 
+import { useRoute } from '#app'
 import BaseButton from '@/components/BaseButton.vue'
 import DashboardHeaderNav from '@/components/Dashboard/DashboardHeaderNav.vue'
 import Loader from '@/components/Loader.vue'
 import ToastProvider from '@/components/Toast/ToastProvider.vue'
 import { useAuth, AUTH_KEY } from '@/composables/useAuth'
 import { useRouterCommand } from '@/composables/useCommand'
+
+const route = useRoute()
 
 const isLoading = ref(true)
 const isUploading = ref(false)

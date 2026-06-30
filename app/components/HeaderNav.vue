@@ -5,27 +5,33 @@
       <NuxtLink
         to="/"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path === '/' }"
+        :class="{ 'headerNav__item--active': route.path === '/' }"
       >
         Home
       </NuxtLink>
       <NuxtLink
         to="/photos"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path === '/photos' }"
+        :class="{ 'headerNav__item--active': route.path === '/photos' }"
       >
         Photos
       </NuxtLink>
       <NuxtLink
         to="/articles"
         class="headerNav__item"
-        :class="{ 'headerNav__item--active': $route.path.includes('/articles') }"
+        :class="{ 'headerNav__item--active': route.path.includes('/articles') }"
       >
         Blog
       </NuxtLink>
     </div>
   </nav>
 </template>
+
+<script setup lang="ts">
+import { useRoute } from '#app'
+
+const route = useRoute()
+</script>
 
 <style lang="scss" scoped>
 .headerNav {

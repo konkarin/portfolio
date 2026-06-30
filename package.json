@@ -46,7 +46,6 @@
   "devDependencies": {
     "@nuxtjs/sitemap": "7.5.0",
     "@types/node": "25.3.3",
-    "@types/uuid": "11.0.0",
     "@vitest/eslint-plugin": "1.6.9",
     "@vue/eslint-config-prettier": "10.2.0",
     "@vue/eslint-config-typescript": "14.6.0",
