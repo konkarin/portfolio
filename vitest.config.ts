@@ -8,6 +8,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
+    setupFiles: ['./vitest.setup.ts'],
     alias: {
       '@': path.resolve(__dirname, './app'),
       '#app': path.resolve(__dirname, 'node_modules/nuxt/dist/app'),

@@ -45,6 +45,9 @@
   },
   "devDependencies": {
     "@nuxtjs/sitemap": "7.5.0",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/user-event": "14.6.1",
+    "@testing-library/vue": "8.1.0",
     "@types/node": "25.3.3",
     "@vitest/eslint-plugin": "1.6.9",
     "@vue/eslint-config-prettier": "10.2.0",

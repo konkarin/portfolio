@@ -1,3 +1,5 @@
+import { afterEach, vi } from 'vitest'
+
 import { convertMarkdownTextToHTML, getHeadings } from '@/utils/markdown'
 
 describe('markdown', () => {
@@ -24,6 +26,98 @@ describe('markdown', () => {
       '<img src="https://staging-konkarin-photo.web.app/HomeImg.jpg" alt="Home image">',
     )
     expect(html).toContain(`<code>console.log(hoge)</code>`)
+  })
+
+  describe('OGPカード変換 (ogpオプション)', () => {
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
+
+    // OGPメタ情報を含むHTMLを返すfetchのモックを設定する
+    // html(文字列)またはバイト列でOGP HTMLを返すfetchのモックを設定する。
+    // contentTypeでcharsetを差し替えられるようにして文字化け対策を検証する。
+    const stubFetch = (
+      body: string | Uint8Array,
+      { ok = true, contentType = 'text/html; charset=utf-8' } = {},
+    ) => {
+      const buffer =
+        typeof body === 'string' ? new TextEncoder().encode(body) : body
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok,
+          headers: { get: () => contentType },
+          arrayBuffer: async () =>
+            buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
+        }),
+      )
+    }
+
+    test('単独行のリンクはOGPカードに変換される', async () => {
+      stubFetch(`
+        <html><head>
+          <meta property="og:title" content="サンプルタイトル" />
+          <meta property="og:description" content="サンプル説明" />
+          <meta property="og:image" content="https://example.com/ogp.png" />
+          <meta property="og:site_name" content="Example" />
+        </head><body></body></html>
+      `)
+
+      const html = await convertMarkdownTextToHTML('https://example.com/article\n', { ogp: true })
+
+      expect(html).toContain('class="ogpCard"')
+      expect(html).toContain('href="https://example.com/article"')
+      expect(html).toContain('サンプルタイトル')
+      expect(html).toContain('サンプル説明')
+      expect(html).toContain('https://example.com/ogp.png')
+    })
+
+    test('Shift_JISのサイトでも文字化けせずデコードされる', async () => {
+      // 「日本語」のShift_JISバイト列
+      const sjisTitle = new Uint8Array([0x93, 0xfa, 0x96, 0x7b, 0x8c, 0xea])
+      const ascii = (s: string) => new TextEncoder().encode(s)
+      // ASCII部分 + Shift_JISの本文 を連結してバイト列のHTMLを作る。
+      // charsetはmetaタグでのみ宣言し(HTTPヘッダには付けない)、meta判定を検証する。
+      const body = new Uint8Array([
+        ...ascii('<html><head><meta charset="shift_jis">'),
+        ...ascii('<meta property="og:title" content="'),
+        ...sjisTitle,
+        ...ascii('"></head></html>'),
+      ])
+      stubFetch(body, { contentType: 'text/html' })
+
+      const html = await convertMarkdownTextToHTML('https://example.com/jp\n', { ogp: true })
+
+      expect(html).toContain('日本語')
+    })
+
+    test('ogpオプションが無い場合は通常のリンクのまま', async () => {
+      stubFetch('<html></html>')
+
+      const html = await convertMarkdownTextToHTML('https://example.com/article\n')
+
+      expect(html).not.toContain('ogpCard')
+      expect(html).toContain('<a href="https://example.com/article">')
+      expect(fetch).not.toHaveBeenCalled()
+    })
+
+    test('文言付きリンクはカード化しない', async () => {
+      stubFetch('<html><head><meta property="og:title" content="t" /></head></html>')
+
+      const html = await convertMarkdownTextToHTML('[ラベル](https://example.com)\n', { ogp: true })
+
+      expect(html).not.toContain('ogpCard')
+      expect(html).toContain('<a href="https://example.com">ラベル</a>')
+    })
+
+    test('OGP取得に失敗した場合は通常のリンクにフォールバックする', async () => {
+      stubFetch('', { ok: false })
+
+      const html = await convertMarkdownTextToHTML('https://example.com/article\n', { ogp: true })
+
+      expect(html).not.toContain('ogpCard')
+      expect(html).toContain('<a href="https://example.com/article">')
+    })
   })
 
   test('getHeadings extracts headings from markdown', () => {

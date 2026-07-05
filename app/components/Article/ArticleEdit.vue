@@ -35,16 +35,14 @@
             <div class="dashboardEdit__error">利用できないCustomIDだよ</div>
           </div>
         </div>
-        <label class="dashboardEdit__inputContainer">
+        <div class="dashboardEdit__inputContainer">
           <b>Tags</b>
-          <input
-            v-model="inputTag"
-            class="dashboardEdit__input"
-            type="text"
-            placeholder="コンマ区切りで入力"
-            @input="isDirty ||= true"
+          <TagCombobox
+            v-model="article.tags"
+            :suggestions="availableTags"
+            @update:model-value="isDirty = true"
           />
-        </label>
+        </div>
       </div>
       <div class="dashboardEdit__ogpContainer">
         <label class="dashboardEdit__ogpInput">
@@ -78,6 +76,7 @@ import { computed } from 'vue'
 
 import { useHead } from '#app'
 import { useArticleEditor } from './useArticleEditor'
+import TagCombobox from '@/components/Article/TagCombobox.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import ToggleBtn from '@/components/ToggleBtn.vue'
 import { useKeyCombination } from '@/composables/useCommand'
@@ -87,7 +86,7 @@ const {
   isDirty,
   editor,
   article,
-  inputTag,
+  availableTags,
   ogpImageUrl,
   customId,
   isValidCustomId,
@@ -123,7 +122,10 @@ useHead({
 
 const canSave = computed(() => {
   return (
-    isDirty.value && article.value.title !== '' && inputTag.value !== '' && isValidCustomId.value
+    isDirty.value &&
+    article.value.title !== '' &&
+    article.value.tags.length > 0 &&
+    isValidCustomId.value
   )
 })
 
