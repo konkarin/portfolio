@@ -36,11 +36,38 @@ export const fetchOgp = async (url: string, timeoutMs = 5000): Promise<OgpData |
     const contentType = res.headers.get('content-type') || ''
     if (!contentType.includes('text/html')) return null
 
-    const html = await res.text()
+    // res.text()はcharset未指定時にUTF-8決め打ちでデコードするため、
+    // Shift_JIS/EUC-JP等のサイトで文字化けする。バイト列で受けてcharsetを判定する。
+    const buffer = await res.arrayBuffer()
+    const html = decodeHtml(buffer, contentType)
     return parseOgp(html, url)
   } catch (e) {
     console.error(`Failed to fetch OGP for ${url}:`, e)
     return null
+  }
+}
+
+/**
+ * HTMLのバイト列を適切なcharsetでデコードする。
+ * charsetは「Content-Typeヘッダ → HTMLのmetaタグ → UTF-8」の順で判定する。
+ */
+const decodeHtml = (buffer: ArrayBuffer, contentType: string): string => {
+  const headerCharset = /charset=["']?([^"';\s]+)/i.exec(contentType)?.[1]
+
+  // meta判定用にまずlatin1でざっと読む(charset宣言はASCII範囲なので化けない)
+  const bytes = new Uint8Array(buffer)
+  const head = new TextDecoder('latin1').decode(bytes.subarray(0, 4096))
+  const metaCharset =
+    /<meta[^>]+charset=["']?([^"'>\s/]+)/i.exec(head)?.[1] ||
+    /<meta[^>]+content=["'][^"']*charset=([^"';\s]+)/i.exec(head)?.[1]
+
+  const charset = (headerCharset || metaCharset || 'utf-8').toLowerCase().trim()
+
+  try {
+    return new TextDecoder(charset).decode(bytes)
+  } catch {
+    // 未対応のcharsetラベルの場合はUTF-8にフォールバック
+    return new TextDecoder('utf-8').decode(bytes)
   }
 }
 
