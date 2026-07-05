@@ -16,7 +16,7 @@ import { convertMarkdownTextToHTML, convertHTMLTextToMarkdown } from '@/utils/ma
 export function useArticleEditor() {
   const { user, isAuth } = useAuthInject()
 
-  const inputTag = ref('')
+  const availableTags = ref<string[]>([])
   const isDirty = ref(false)
   const loading = ref(false)
 
@@ -93,12 +93,14 @@ export function useArticleEditor() {
       loading.value = false
     }
 
-    inputTag.value = article.value.tags.join()
     if (article.value.ogpImageUrl !== undefined) {
       ogpImageUrl.value = article.value.ogpImageUrl
     }
 
     customId.value = article.value.customId || ''
+
+    // コンボボックスの選択候補となる既存タグを取得
+    availableTags.value = await getArticleTags(user.value?.uid || '')
   })
 
   const updateArticle = async () => {
@@ -120,7 +122,6 @@ export function useArticleEditor() {
 
     const articlesPath = `users/${user.value?.uid}/articles`
 
-    article.value.tags = inputTag.value.replace(/\s+/g, '').split(',')
     article.value.ogpImageUrl = ogpImageUrl.value
     article.value.thumbnailImageUrl = thumbnailImageUrl.value
     article.value.customId = customId.value
@@ -172,6 +173,8 @@ export function useArticleEditor() {
         for (const tag of notExistsTags) {
           await db.addData(articleTagsPath, tag, {})
         }
+        // 新しく追加したタグを選択候補にも反映する
+        availableTags.value = [...availableTags.value, ...notExistsTags]
       } catch {
         showToast({
           title: 'Failed to update tags',
@@ -191,7 +194,7 @@ export function useArticleEditor() {
     isDirty,
     editor,
     article,
-    inputTag,
+    availableTags: readonly(availableTags),
     ogpImageUrl,
     customId,
     isValidCustomId: readonly(isValidCustomId),
